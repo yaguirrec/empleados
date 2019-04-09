@@ -1,0 +1,6 @@
+Options All -Indexes
+ErrorDocument 404 /empleados/404.php
+ErrorDocument 403 /empleados/404.php
+
+RewriteEngine On
+RewriteRule ^([a-zA-Z0-9/]+)$ index.php?request=$1
