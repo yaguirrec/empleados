@@ -1,5 +1,3 @@
-
-
 	<div class="container h-100">
 		<div class="d-flex justify-content-center h-100">
 			<div class="user_card">
@@ -23,7 +21,7 @@
 							<input type="password" id="txtClave" class="form-control input_pass" placeholder="Clave de acceso">
 						</div>
 						<hr>
-						<div class="d-flex justify-content-center mt-3 login_container">
+						<div class="d-flex justify-content-center mt-1 login_container">
 							<button type="submit" class="btn btn-block login_btn" id="btnEntrar">Ingresar</button>
 							<input type="hidden" id="type" value="login">
 						</div>
