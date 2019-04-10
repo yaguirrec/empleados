@@ -1,3 +1,5 @@
+document.addEventListener("DOMContentLoaded", function(event) {  
+
 eventListener();
 
 function eventListener()
@@ -105,3 +107,4 @@ function checkIN (e)
             xhr.send(datos);
     }
 }
+});

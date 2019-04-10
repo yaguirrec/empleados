@@ -1,11 +1,13 @@
 /* Coded with love by Mutiullah Samim */
 		body,
 		html {
-			margin: 0;
-			padding: 0;
+			margin: 0 !important;
+			padding: 0 !important;
+			overflow-x: hidden;
 			height: 100%;
 			background: #a5a5a5 !important;
 		}
+
 		.user_card {
 			height: 400px;
 			width: 350px;
@@ -23,6 +25,7 @@
 			border-radius: 5px;
 
 		}
+		
 		.brand_logo_container {
 			position: absolute;
 			height: 170px;
@@ -33,20 +36,24 @@
 			padding: 10px;
 			text-align: center;
 		}
+
 		.brand_logo {
 			height: 150px;
 			width: 150px;
 			border-radius: 50%;
 			border: 3px solid white;
 		}
+		
 		.form_container {
 			margin-top: 100px;
 		}
+
 		.login_btn {
 			width: 100%;
 			background: #139c13 !important;
 			color: white !important;
 		}
+		
 		.login_btn:focus {
 			box-shadow: none !important;
 			outline: 0px !important;
@@ -58,6 +65,7 @@
 			border: 0 !important;
 			border-radius: 0.25rem 0 0 0.25rem !important;
 		}
+		
 		.input_user,
 		.input_pass:focus {
 			box-shadow: none !important;
@@ -70,32 +78,61 @@
 
     .links:hover{
       color: #a5a5a5;
-    }
-    
+		}
+		
+		#sidebar-wrapper {
+			min-height: 100vh;
+			margin-left: -15rem;
+			-webkit-transition: margin .25s ease-out;
+			-moz-transition: margin .25s ease-out;
+			-o-transition: margin .25s ease-out;
+			transition: margin .25s ease-out;
+		}
+		
+		#sidebar-wrapper .sidebar-heading {
+			padding: 0.875rem 1.25rem;
+			font-size: 1.2rem;
+		}
+		
+		#sidebar-wrapper .list-group {
+			width: 20rem;
+		}
+		
+		#page-content-wrapper {
+			min-width: 100vw;
+		}
+		
+		#wrapper.toggled #sidebar-wrapper {
+			margin-left: 0;
+		}
+		
+		@media (min-width: 768px) {
+			#sidebar-wrapper {
+				margin-left: 0;
+			}
+		
+			#page-content-wrapper {
+				min-width: 0;
+				width: 100%;
+			}
+		
+			#wrapper.toggled #sidebar-wrapper {
+				margin-left: -18rem;
+			}
+		}
+
     .avatar{
       margin: 0;
-      color: #E9D460;
+      color: beige;
       padding:  1em 0;
-    }
-
-    .bg-lateral{
-      background: #17539e;
-      padding: 0 !important;
-      margin: 0 !important;
-    }
-
-    .menu{
-      height: 100%;
-      min-height: 100% !important;
-      position: fixed;
     }
 
     .card-header{
       padding:  .75rem 1.25rem;
       margin-bottom: 0;
-      background-color: #074999 !important;
+      /* background-color: #074999 !important; */
       border: none !important;
-    }
+    } 
 
     .card{
       border: none;
@@ -104,13 +141,13 @@
     }
 
     #accordion a{
-      color: #fde3a7 !important;
+      color: #ffffff !important;
       font-weight: 400;
       display: block;
     }
 
     #accordion a:hover{
-      color: #fde3a7 !important;
+      color: #fde19f !important;
       font-weight: 400;
       display: block;
       text-decoration: none;
