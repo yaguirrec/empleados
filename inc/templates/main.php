@@ -7,7 +7,7 @@
           <figure>
             <img src="<?php echo SERVERURL; ?>img/whiteLogo.png" width="150" alt="Logo MEXQ" class="responsive-img mb-2">
             <br>
-            <img class="rounded-circle" width="150" src="https://pbs.twimg.com/profile_images/929030268043845633/ilS1ri2v.jpg" alt="Imagen admin">
+            <img class="rounded-circle" width="150" src="<?php echo SERVERURL; ?>assets/profileimg/profile.jpg" alt="Imagen admin">
           </figure>
           <div class="tittle d-none d-lg-block">
             <p class="text-muted">Bienvenido a EliceWeb</p>
@@ -17,7 +17,7 @@
           <div class="btn-group" role="group" aria-label="Basic example">
             <button type="button" class="btn btn-success"><i class="fas fa-user-circle"></i></button>
             <button type="button" class="btn btn-info"><i class="fas fa-cog"></i></button>
-            <a role="button" href="../empleados/" class="btn btn-danger"><i class="fas fa-power-off"></i></a>
+            <a role="button" href="<?php echo SERVERURL; ?>" class="btn btn-danger"><i class="fas fa-power-off"></i></a>
           </div>
         </div>
       </div>
@@ -31,7 +31,7 @@
             <div class="card-block">
               <div class="card-header" role="tab" id="#">
                 <h5 class="mb-0">
-                  <a href="#" data-toggle="collapse" data-parent="#accordion" aria-expanded="true" aria-controls="#">
+                  <a href="../main/tablero">
                     Tablero
                   </a>
                 </h5>
@@ -54,7 +54,7 @@
           <div id="tab-first" class="collapse" role="tabpanel" aria-labelledby="first">
             <div class="card-block">
               <div class="list-group">
-                <a href="" class="list-group-item list-group-item-action">Consultar</a>
+                <a href="../main/empleado" class="list-group-item list-group-item-action">Consultar</a>
                 <a href="" class="list-group-item list-group-item-action">Nuevo</a>
                 <a href="" class="list-group-item list-group-item-action">Actualizar</a>
                 <a href="" class="list-group-item list-group-item-action">Baja</a>
@@ -97,35 +97,21 @@
 
       <div class="container-fluid">
 
-      <table class="table table-hover table-dark mt-5">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
-        </tbody>
-      </table>
+      <?php
+
+      switch ($request[1])
+      {
+        case 'tablero':
+          include 'panel/vista.php'; 
+          break;
+        case 'empleado':
+          include 'empleados/vista.php'; 
+          break;
+        default:
+          include 'panel/vista.php';      
+          break; 
+      } 
+      ?>
       </div>
     </div>
     <!-- /#page-content-wrapper -->
@@ -139,3 +125,4 @@
     $("#wrapper").toggleClass("toggled");
   });
 </script>
+<script src="<?php echo SERVERURL; ?>js/control.js"></script>

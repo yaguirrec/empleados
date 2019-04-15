@@ -10,6 +10,4 @@
 <!-- SWEEALERT 2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.8.1/dist/sweetalert2.all.min.js"></script>
 
-<!-- JS LOCALES -->
-<script async  src="<?php echo SERVERURL; ?>js/control.js"></script>
 
