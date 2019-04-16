@@ -4,12 +4,69 @@ $( document ).ready(function() {
     //     $('#sidebar').toggleClass('active');
     // });
 
+    //BUSQUEDA DE INFORMACION
+    $(document).ready(function(){
+        $("#searchBox").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#dataTable tr").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    /**CERRAR SESION */
+    $('.btnSalir').click(function(){
+        cerrarSesion();
+        // console.log('Salir');
+    });
+
+    function cerrarSesion(){
+        // console.log('Cerrar sesion');
+        var action = 'salir';
+        var cerrar_sesion = new FormData();
+        cerrar_sesion.append('action', action);
+        var xmlhr = new XMLHttpRequest();
+        xmlhr.open( 'POST', '../inc/model/control.php', true );
+        xmlhr.onload = function(){
+            if (this.status === 200){
+                var respuesta = JSON.parse(xmlhr.responseText);
+                console.log(respuesta);
+                var tipo = respuesta.tipo,
+                            titulo = respuesta.mensaje,
+                            mensaje = respuesta.informacion;
+                            Swal.fire({
+                                type: tipo,
+                                title: titulo,
+                                text: mensaje,
+                                timer: 1800,
+                                showConfirmButton: false,
+                                backdrop: `
+                                    rgba(13, 63, 114, 0.6)
+                                    center top
+                                    no-repeat
+                                `
+                            }).then(function(){ 
+                                location.reload();
+                                window.location.href = '../';
+                            })
+            } else {
+                swal({
+                    title: 'Error!',
+                    text: 'Hubo un error',
+                    type: 'error'
+                })            
+            }
+        }
+        xmlhr.send(cerrar_sesion);
+    }
+
+
     var seccionActual = $('#nombreSeccion').text();//VARIABLE DE DEPARTAMENTO DE TI
     console.log(seccionActual)
 
-    /**EMPLEADOS */
     switch (seccionActual)
     {
+        /**CARGAR TABLA EMPLEADOS */
         case 'empleado':
             console.log('Tabla de empleados');
             var action  = 'lista-empleados';
@@ -36,12 +93,16 @@ $( document ).ready(function() {
             function tablaEmpleados(rowInfo){
         
                 var st = rowInfo.status,
-                    status = '',
+                    status = 'Activo',
                     estado = '';
                 
                 if(st === 'B'){
                     estado = "table-warning text-danger";
-                    status = 'Activo';
+                    status = 'Baja';
+                }
+                if(st === 'R'){
+                    estado = "text-secondary";
+                    status = 'Re-ingreso';
                 }
                 var row = $("<tr class='" + estado + "'>");
                 
@@ -49,13 +110,13 @@ $( document ).ready(function() {
                 // NUMERO DE EQUIPO
                 row.append($("<td class='text-muted trCode'>" + rowInfo.numero_nomina + " </td>"));
                 // NOMINA DEL EMPLEADO
-                row.append($("<td> " + rowInfo.nombre_largo + " </td>"));
-                row.append($("<td> " + rowInfo.fecha_alta + " </td>"));
+                row.append($("<td class='text-uppercase'> " + rowInfo.nombre_largo + " </td>"));
+                row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
                 row.append($("<td> " + rowInfo.nombre + " </td>"));
+                row.append($("<td> " + status + " </td>"));
                 // COLUMNA ACCION
                     row.append($("<td class='text-center'>"
-                                + "<a tabindex='0' class='btn btn-sm btn-primary mx-1 btnEdit' data-code='"+rowInfo.id_correo+"' target='_blank' role='button' title='Editar registro'><i class='fas fa-pen-square'></i></a>"
-                                + "<a tabindex='1' class='btn btn-sm btn-danger mx-1 btnDelete' role='button' title='Eliminar registro'><i class='fas fa-trash'></i></a>" 
+                                + "<a tabindex='0' class='btn btn-sm btn-info mx-1 btnConsulta' data-code='"+rowInfo.id_correo+"' target='_blank' role='button' title='Ver información'><i class='fas fa-info-circle'></i></a>"
                                 + "</td>"));
         
                         

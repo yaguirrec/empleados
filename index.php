@@ -1,4 +1,5 @@
 <?php
+    session_start();
     header('Content-Type: text/html');
     include "inc/function/config.php";
     if(isset($_GET['request'])){
@@ -26,16 +27,23 @@
     <title>Empleados</title>
 </head>
 <body>
-
     <?php 
-        switch ($request[0]){
-        case 'main':
-            include 'inc/templates/main.php'; 
-            break;
-        default:
-            include 'inc/templates/login.php';      
-            break; 
-        } 
+        if (!isset($_SESSION['usuario_nombre']) || empty($_SESSION['usuario_nombre']))
+        {
+            include 'inc/templates/login.php';
+        }
+        else
+        {
+            switch ($request[0])
+            {
+            case 'main':
+                include 'inc/templates/main.php'; 
+                break;
+            default:
+                include 'inc/templates/login.php';      
+                break; 
+            } 
+        }
     ?>
 <!-- FOOTER -->
 <?php include 'inc/templates/footer.php'; ?>

@@ -11,13 +11,13 @@
           </figure>
           <div class="tittle d-none d-lg-block">
             <p class="text-muted">Bienvenido a EliceWeb</p>
-            <p class="text-muted">Marshall Bruce Mathers III</p>
+            <p class="text-muted"><?php echo $_SESSION['usuario_nombre'] ?></p>
           </div>
           <br>
           <div class="btn-group" role="group" aria-label="Basic example">
             <button type="button" class="btn btn-success"><i class="fas fa-user-circle"></i></button>
             <button type="button" class="btn btn-info"><i class="fas fa-cog"></i></button>
-            <a role="button" href="<?php echo SERVERURL; ?>" class="btn btn-danger"><i class="fas fa-power-off"></i></a>
+            <a role="button" class="btn btn-danger btnSalir"><i class="fas fa-power-off"></i></a>
           </div>
         </div>
       </div>
@@ -96,6 +96,18 @@
       <?php include 'inc/templates/header.php'; ?>
 
       <div class="container-fluid">
+
+      <div class="row">
+          <div class="col-md-5 ml-auto">
+              <div class="input-group mb-12">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroup-sizing-default"><i class="fas fa-search"></i></span>
+                  </div>
+                  <input type="text" class="form-control" aria-label="Sizing example input" id="searchBox" aria-describedby="inputGroup-sizing-default" placeholder="Buscar...">
+                  <button class="btn btn-success ml-3 exportTable"><i class="fas fa-file-excel" title='Exportar tabla'></i> Exportar</button>
+              </div>
+          </div>
+      </div>
 
       <?php
 

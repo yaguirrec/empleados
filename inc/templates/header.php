@@ -30,10 +30,11 @@
     </div> -->
   </nav>
 </head>
-
+<br>
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="#">Panel</a></li>
     <li class="breadcrumb-item text-capitalize active" aria-current="page" id="nombreSeccion"><?php echo $var1;?></li>
   </ol>
 </nav>
+<br>

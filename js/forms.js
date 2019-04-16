@@ -56,7 +56,7 @@ function checkIN (e)
                             if(sesion)
                             {
                                 //INICIAR SESION METODO (SEGURA)
-                                // asignarSesion(usuario_activo, usuario_nombre, usuario_departamento);
+                                asignarSesion(usuario_activo, usuario_nombre, usuario_departamento);
                                 Swal.fire({
                                     type: tipo,
                                     title: informacion,
@@ -106,5 +106,21 @@ function checkIN (e)
             // Enviar la petición
             xhr.send(datos);
     }
+}
+
+function asignarSesion( id, name, depto ){
+
+    var u_nombre = name,
+        u_depto = depto;
+        u_activo = id;
+
+    $.ajax({
+        url: 'inc/model/nueva-sesion.php',
+        type: 'GET',
+        data: 'id=' + u_activo + '&name=' + u_nombre + '&depto_id=' + u_depto,
+        error: function(xhr, status, error) {
+            alert("error");
+        }
+    });
 }
 });
