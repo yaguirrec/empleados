@@ -3,7 +3,7 @@
 		<div class="user_card">
 			<div class="d-flex justify-content-center">
 				<div class="brand_logo_container">
-					<img src="<?php echo SERVERURL; ?>img/login1.png" class="brand_logo" alt="Logo">
+					<img src="img/login1.png" class="brand_logo" alt="Logo">
 				</div>
 			</div>
 			<div class="d-flex justify-content-center form_container">
@@ -35,4 +35,4 @@
 		</div>
 	</div>
 </div>
-	<script async  src="<?php echo SERVERURL; ?>js/forms.js"></script>
+	<script async  src="js/forms.js"></script>

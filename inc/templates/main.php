@@ -1,3 +1,9 @@
+<?php 
+    if (empty($_REQUEST['solicitud']))
+    $request = null;
+    else
+    $request = $_REQUEST['solicitud'];
+?>
 <div class="d-flex" id="wrapper">
 
     <!-- Sidebar -->
@@ -5,9 +11,9 @@
       <div class="sidebar-heading">
         <div class="avatar text-center">
           <figure>
-            <img src="<?php echo SERVERURL; ?>img/whiteLogo.png" width="150" alt="Logo MEXQ" class="responsive-img mb-2">
+            <img src="img/whiteLogo.png" width="150" alt="Logo MEXQ" class="responsive-img mb-2">
             <br>
-            <img class="rounded-circle" width="150" src="<?php echo SERVERURL; ?>assets/profileimg/profile.jpg" alt="Imagen admin">
+            <img class="rounded-circle" width="150" src="assets/profileimg/profile.jpg" alt="Imagen admin">
           </figure>
           <div class="tittle d-none d-lg-block">
             <p class="text-muted">Bienvenido a EliceWeb</p>
@@ -31,7 +37,7 @@
             <div class="card-block">
               <div class="card-header" role="tab" id="#">
                 <h5 class="mb-0">
-                  <a href="../main/tablero">
+                  <a href="inc/templates/main.php?solicitud=tablero">
                     Tablero
                   </a>
                 </h5>
@@ -54,7 +60,7 @@
           <div id="tab-first" class="collapse" role="tabpanel" aria-labelledby="first">
             <div class="card-block">
               <div class="list-group">
-                <a href="../main/empleado" class="list-group-item list-group-item-action">Consultar</a>
+                <a href="inc/templates/main.php?solicitud=empleado" class="list-group-item list-group-item-action">Consultar</a>
                 <a href="" class="list-group-item list-group-item-action">Nuevo</a>
                 <a href="" class="list-group-item list-group-item-action">Actualizar</a>
                 <a href="" class="list-group-item list-group-item-action">Baja</a>
@@ -111,7 +117,7 @@
 
       <?php
 
-      switch ($request[1])
+      switch ($request)
       {
         case 'tablero':
           include 'panel/vista.php'; 
@@ -137,4 +143,4 @@
     $("#wrapper").toggleClass("toggled");
   });
 </script>
-<script src="<?php echo SERVERURL; ?>js/control.js"></script>
+<script src="js/control.js"></script>

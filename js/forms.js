@@ -70,7 +70,7 @@ function checkIN (e)
                                     `
                                 }).then(function(){ 
                                     // location.reload();
-                                    window.location.href = ubicacion + '/';
+                                    window.location.href = 'index.php?request=' + ubicacion;
                                 })
                             }else
                             {

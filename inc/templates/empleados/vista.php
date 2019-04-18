@@ -2,7 +2,7 @@
 <table class="table table-hover table-dark text-center text-uppercase">
   <thead>
     <tr>
-      <!-- <th scope="col">#</th> -->
+      <th class = "d-none" scope="col">#</th>
       <th scope="col">Nómina</th>
       <th scope="col">Nombres</th>
       <th scope="col">Fecha Alta</th>

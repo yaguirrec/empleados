@@ -26,7 +26,7 @@ $( document ).ready(function() {
         var cerrar_sesion = new FormData();
         cerrar_sesion.append('action', action);
         var xmlhr = new XMLHttpRequest();
-        xmlhr.open( 'POST', '../inc/model/control.php', true );
+        xmlhr.open( 'POST', 'inc/model/control.php', true );
         xmlhr.onload = function(){
             if (this.status === 200){
                 var respuesta = JSON.parse(xmlhr.responseText);
@@ -47,7 +47,7 @@ $( document ).ready(function() {
                                 `
                             }).then(function(){ 
                                 location.reload();
-                                window.location.href = '../';
+                                window.location.href = '../empleados/';
                             })
             } else {
                 swal({
@@ -77,7 +77,6 @@ $( document ).ready(function() {
             xmlhr.onload = function(){
                 if (this.status === 200) {
                 var respuesta = JSON.parse(xmlhr.responseText);
-                console.log(respuesta);
                 if (respuesta.estado === 'OK') {
                     var informacion = respuesta.informacion;
                     for(var i in informacion){
@@ -106,8 +105,9 @@ $( document ).ready(function() {
                 }
                 var row = $("<tr class='" + estado + "'>");
                 
-                $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it
+                $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
                 // NUMERO DE EQUIPO
+                row.append($("<td class='text-muted d-none'>" + rowInfo.id_empleado + " </td>"));
                 row.append($("<td class='text-muted trCode'>" + rowInfo.numero_nomina + " </td>"));
                 // NOMINA DEL EMPLEADO
                 row.append($("<td class='text-uppercase'> " + rowInfo.nombre_largo + " </td>"));
@@ -116,7 +116,7 @@ $( document ).ready(function() {
                 row.append($("<td> " + status + " </td>"));
                 // COLUMNA ACCION
                     row.append($("<td class='text-center'>"
-                                + "<a tabindex='0' class='btn btn-sm btn-info mx-1 btnConsulta' data-code='"+rowInfo.id_correo+"' target='_blank' role='button' title='Ver información'><i class='fas fa-info-circle'></i></a>"
+                                + "<a class='btn btn-sm btn-info btnConsulta' data-id='"+rowInfo.id_empleado+"' role='button' title='Ver información'><i class='fas fa-info-circle'></i></a>"
                                 + "</td>"));
         
                         
@@ -124,13 +124,16 @@ $( document ).ready(function() {
                     deleteComputer($(this));
                 });
         
-                $(".btnEdit").unbind().click(function() {
-                    var deviceCode = $((this)).data('code'),
-                        url = "index.php?request=editcomputer",
+                $(".btnConsulta").unbind().click(function() {
+                    var employeeID = $((this)).data('id'),
+                        url = "http://localhost/empleados/empleado/" + employeeID + "/",
                         newTab = window.open(url, '_blank');
-                    localStorage.setItem('deviceCode', deviceCode);//GUARADR CODIGO DEL EQUIPO EN LA MEMORIA LOCAL DEL NAVEGADOR
+
+
+                    // console.log(employeeID);
+                    // localStorage.setItem('employeeID', employeeID);//GUARADAR CODIGO DEL EMPLEADO EN LA MEMORIA LOCAL DEL NAVEGADOR
                     // $(location).attr('href',url);
-                    newTab.focus();
+                    // newTab.focus();
                 });
         
                 $(".btnHelp").unbind().click(function() {
