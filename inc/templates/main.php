@@ -1,9 +1,3 @@
-<?php 
-    if (empty($_REQUEST['solicitud']))
-    $request = null;
-    else
-    $request = $_REQUEST['solicitud'];
-?>
 <div class="d-flex" id="wrapper">
 
     <!-- Sidebar -->
@@ -37,7 +31,7 @@
             <div class="card-block">
               <div class="card-header" role="tab" id="#">
                 <h5 class="mb-0">
-                  <a href="inc/templates/main.php?solicitud=tablero">
+                  <a href="index.php?request=tablero">
                     Tablero
                   </a>
                 </h5>
@@ -60,7 +54,7 @@
           <div id="tab-first" class="collapse" role="tabpanel" aria-labelledby="first">
             <div class="card-block">
               <div class="list-group">
-                <a href="inc/templates/main.php?solicitud=empleado" class="list-group-item list-group-item-action">Consultar</a>
+                <a href="index.php?request=empleado" class="list-group-item list-group-item-action">Consultar</a>
                 <a href="" class="list-group-item list-group-item-action">Nuevo</a>
                 <a href="" class="list-group-item list-group-item-action">Actualizar</a>
                 <a href="" class="list-group-item list-group-item-action">Baja</a>
@@ -114,33 +108,5 @@
               </div>
           </div>
       </div>
-
-      <?php
-
-      switch ($request)
-      {
-        case 'tablero':
-          include 'panel/vista.php'; 
-          break;
-        case 'empleado':
-          include 'empleados/vista.php'; 
-          break;
-        default:
-          include 'panel/vista.php';      
-          break; 
-      } 
-      ?>
-      </div>
-    </div>
-    <!-- /#page-content-wrapper -->
-
-  </div>
-  <!-- /#wrapper -->
-
-<script>
-  $("#menu-toggle").click(function(e) {
-    e.preventDefault();
-    $("#wrapper").toggleClass("toggled");
-  });
-</script>
-<script src="js/control.js"></script>
+      <!-- CONTENT LATERAL MENU -->
+      

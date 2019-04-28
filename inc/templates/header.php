@@ -1,7 +1,6 @@
 <head>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <button class="btn text-white" id="menu-toggle"><i class="fas fa-ellipsis-v"></i></button>
-    <?php $var1 = $request[1]; ?>
 
     <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -34,7 +33,7 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="#">Panel</a></li>
-    <li class="breadcrumb-item text-capitalize active" aria-current="page" id="nombreSeccion"><?php echo $var1;?></li>
+    <li class="breadcrumb-item text-capitalize active" aria-current="page" id="nombreSeccion"><?php echo $section;?></li>
   </ol>
 </nav>
 <br>

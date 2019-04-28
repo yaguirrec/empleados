@@ -14,6 +14,12 @@ $( document ).ready(function() {
         });
     });
 
+    //TOGGLE BARSIDE
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+
     /**CERRAR SESION */
     $('.btnSalir').click(function(){
         cerrarSesion();

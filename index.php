@@ -3,10 +3,11 @@
     header('Content-Type: text/html');
     // include "inc/function/config.php";
     if (empty($_REQUEST['request']))
-    $request = null;
+        $request = null;
     else
-    $request = $_REQUEST['request'];
-    // echo $request[0];
+        $request = $_REQUEST['request'];
+
+    $section = $request;
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -33,15 +34,17 @@
         }
         else
         {
-            switch ($request)
-            {
-            case 'main':
-                include 'inc/templates/main.php'; 
-                break;
-            default:
-                include 'inc/templates/login.php';      
-                break; 
-            } 
+            include 'inc/templates/main.php';
+                switch ($request)
+                {
+                    case 'empleado':
+                        include 'inc/templates/empleados/vista.php';
+                        break;
+                    default:
+                        include 'inc/templates/panel/vista.php';
+                        break;
+                }
+            include 'inc/templates/main-footer.php';
         }
     ?>
 <!-- FOOTER -->
