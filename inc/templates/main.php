@@ -44,7 +44,7 @@
               <div class="card-header" role="tab" id="first">
                 <h5 class="mb-0">
                   <a href="#tab-first" data-toggle="collapse" data-parent="#accordion" aria-expanded="true" aria-controls="first">
-                    Empleados
+                    Ver Empleados
                   </a>
                 </h5>
               </div>
@@ -54,8 +54,8 @@
           <div id="tab-first" class="collapse" role="tabpanel" aria-labelledby="first">
             <div class="card-block">
               <div class="list-group">
-                <a href="index.php?request=empleado" class="list-group-item list-group-item-action">Consultar</a>
-                <a href="" class="list-group-item list-group-item-action">Nuevo</a>
+                <a href="index.php?request=empleado" class="list-group-item list-group-item-action">Activos</a>
+                <a href="index.php?request=bajas" class="list-group-item list-group-item-action">Bajas</a>
                 <a href="" class="list-group-item list-group-item-action">Actualizar</a>
                 <a href="" class="list-group-item list-group-item-action">Baja</a>
               </div>

@@ -74,16 +74,19 @@ $( document ).ready(function() {
     switch (seccionActual)
     {
         /**CARGAR TABLA EMPLEADOS */
-        case 'empleado':
-            // console.log('Tabla de empleados');
+        case 'empleado': case 'bajas':
+            console.log('Tabla de empleados');
             var action  = 'lista-empleados';
+            var prop = (seccionActual === 'empleado' ? 'activos' : 'bajas');
             var dataTable = new FormData();
             dataTable.append('action', action);
+            dataTable.append('prop', prop);
             var xmlhr = new XMLHttpRequest();
             xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
             xmlhr.onload = function(){
                 if (this.status === 200) {
                 var respuesta = JSON.parse(xmlhr.responseText);
+                console.log(respuesta);
                 if (respuesta.estado === 'OK') {
                     var informacion = respuesta.informacion;
                     for(var i in informacion){

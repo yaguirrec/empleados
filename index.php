@@ -38,7 +38,7 @@
             include 'inc/templates/main.php';
                 switch ($request)
                 {
-                    case 'empleado':
+                    case 'empleado': case'bajas':
                         include 'inc/templates/empleados/vista.php';
                         break;
                     case 'datos':
