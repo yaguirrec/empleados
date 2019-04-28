@@ -1,4 +1,1 @@
-<h1>Empleado </h1>
-<?php
-    
-?>
+<h1>Datos del Empleado</h1>

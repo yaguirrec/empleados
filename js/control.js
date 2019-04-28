@@ -36,7 +36,7 @@ $( document ).ready(function() {
         xmlhr.onload = function(){
             if (this.status === 200){
                 var respuesta = JSON.parse(xmlhr.responseText);
-                console.log(respuesta);
+                // console.log(respuesta);
                 var tipo = respuesta.tipo,
                             titulo = respuesta.mensaje,
                             mensaje = respuesta.informacion;
@@ -67,14 +67,15 @@ $( document ).ready(function() {
     }
 
 
-    var seccionActual = $('#nombreSeccion').text();//VARIABLE DE DEPARTAMENTO DE TI
-    console.log(seccionActual)
+    // VALUE OF THE ACTUAL SECTION
+    var seccionActual = $('#nombreSeccion').text();
+    // console.log(seccionActual)
 
     switch (seccionActual)
     {
         /**CARGAR TABLA EMPLEADOS */
         case 'empleado':
-            console.log('Tabla de empleados');
+            // console.log('Tabla de empleados');
             var action  = 'lista-empleados';
             var dataTable = new FormData();
             dataTable.append('action', action);
@@ -126,33 +127,41 @@ $( document ).ready(function() {
                                 + "</td>"));
         
                         
-                $(".btnDelete").unbind().click(function() {
-                    deleteComputer($(this));
-                });
+                // $(".btnDelete").unbind().click(function() {
+                //     deleteComputer($(this));
+                // });
         
                 $(".btnConsulta").unbind().click(function() {
                     var employeeID = $((this)).data('id'),
-                        url = "http://localhost/empleados/empleado/" + employeeID + "/",
-                        newTab = window.open(url, '_blank');
+                        url = "index.php?request=datos";
+                        // newTab = window.open(url, '_blank');
 
-
-                    // console.log(employeeID);
-                    // localStorage.setItem('employeeID', employeeID);//GUARADAR CODIGO DEL EMPLEADO EN LA MEMORIA LOCAL DEL NAVEGADOR
-                    // $(location).attr('href',url);
+                    //SAVE EMPLOYEE ID ON LOCAL STORAGE AS codigoEmpleado
+                    localStorage.setItem('codigoEmpleado', employeeID);
+                    
+                    // OPEN ON CURRENT TAB
+                    $(location).attr('href',url);
+                    
+                    // OPEN ON NEW TAB
                     // newTab.focus();
                 });
         
-                $(".btnHelp").unbind().click(function() {
-                    var deviceCode = $((this)).data('code'),
-                        newTab = window.open('inc/templates/responsive.php?deviceCode='+deviceCode, '_blank');
-                    newTab.focus();
-                });
+                // $(".btnHelp").unbind().click(function() {
+                //     var deviceCode = $((this)).data('code'),
+                //         newTab = window.open('inc/templates/responsive.php?deviceCode='+deviceCode, '_blank');
+                //     newTab.focus();
+                // });
         
             }
-
             break;
+        case 'datos':
+            //GET VALUE FROM LS
+            var codigoEmpleado = localStorage.getItem('codigoEmpleado');
+            //REMOVE VALUE FROM LS
+            localStorage.removeItem('codigoEmpleado');
+            console.log(codigoEmpleado);
         default:
-            console.log('Tablero');
+            // console.log('Tablero');
             break;
     }
 });
