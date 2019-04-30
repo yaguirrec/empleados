@@ -78,6 +78,8 @@ $( document ).ready(function() {
             console.log('Tabla de empleados');
             var action  = 'lista-empleados';
             var prop = (seccionActual === 'empleado' ? 'activos' : 'bajas');
+            var titulo = (seccionActual === 'empleado' ? 'Empleados activos' : 'Empleados inactivos');
+            $('#seccionTitulo').text(titulo);
             var dataTable = new FormData();
             dataTable.append('action', action);
             dataTable.append('prop', prop);
@@ -106,7 +108,7 @@ $( document ).ready(function() {
                     estado = '';
                 
                 if(st === 'B'){
-                    estado = "table-warning text-danger";
+                    estado = "alert-secondary";
                     status = 'Baja';
                 }
                 if(st === 'R'){

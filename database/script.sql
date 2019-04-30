@@ -83,6 +83,11 @@ ELSE IF @SUCURSAL_PRINCIPAL <> '0000'
 	END
 GO
 
+/**TRIGGER ACTUALIZA DATOS DEL EMPLEADO**/
+DECLARE @CODIGO_SUCURSAL VARCHAR(10);
+SELECT ins.nombrelargo FROM (SELECT * FROM [vEmpleadosNM] WHERE codigoempleado = '08444') ins;
+SELECT * FROM [vEmpleadosNM]
+
 /*CREAR TABLA AREAS*/
 USE [MEXQAPPPR]
 GO
@@ -208,6 +213,17 @@ AS
 	END 
 GO
 
+/**PROCEDIMIENTO ACTUALIZAR STATUS DEL EMPLEADO*/
+UPDATE empleados
+SET 
+status = tb2.estadoempleado,
+fecha_baja = tb2.fechabaja,
+updated_at = tb2.fechaCaptura,
+updated_by = '00001'
+FROM tbempleados AS empleados
+INNER JOIN [vEmpleadosNM] AS tb2
+ON empleados.numero_nomina COLLATE SQL_Latin1_General_CP1_CI_AS = tb2.codigoempleado
+
 --VALIDAR SI HAY DIFERENCIAS ENTRE NOMIPAQ Y SISTEMA
 SELECT * FROM [vEmpleadosNM]
 WHERE codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS NOT IN (SELECT numero_nomina FROM tbempleados) ORDER BY fechaCaptura DESC;
@@ -220,9 +236,17 @@ SELECT COUNT(*) FROM [vEmpleadosNM]
 EXEC pdemployeeInsert
 
 /*CONSULTAS*/
+SELECT * FROM [vEmpleadosNM] WHERE estadoempleado = 'B' ORDER BY fechaCaptura DESC 
+SELECT * FROM tbempleados WHERE status = 'B'
 SELECT * FROM tbempleados
 SELECT * FROM tbsucursal
 SELECT * FROM tbarea
 SELECT * FROM tbcelula
 SELECT * FROM tbcorreos
 SELECT * FROM tbpuesto
+
+SELECT te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaAlta, 
+ts.nombre,te.status,te.updated_at
+FROM tbempleados AS te
+INNER JOIN tbsucursal AS ts
+ON te.id_sucursal = ts.id_sucursal WHERE te.status = 'B' ORDER BY te.updated_at DESC
