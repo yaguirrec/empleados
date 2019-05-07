@@ -7,7 +7,7 @@
           <figure>
             <img src="img/whiteLogo.png" width="150" alt="Logo MEXQ" class="responsive-img mb-2">
             <br>
-            <img class="rounded-circle" width="150" src="assets/profileimg/profile.jpg" alt="Imagen admin">
+            <img class="rounded-circle" width="150" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR95Ahbudl_KiZlmMVMh_9yVp9sNO_O-oJWO9Kgw410e85xPB0B" alt="Imagen admin">
           </figure>
           <div class="tittle d-none d-lg-block">
             <p class="text-muted">Bienvenido a EliceWeb</p>
@@ -21,8 +21,6 @@
           </div>
         </div>
       </div>
-
-      
 
       <div class="list-group list-group-flush">
       <nav class="text-center" id="sidebar">
@@ -97,7 +95,7 @@
 
       <div class="container-fluid">
 
-      <div class="row">
+      <div class="row seccionBuscar">
           <div class="col-md-5 ml-auto">
               <div class="input-group mb-12">
                   <div class="input-group-prepend">

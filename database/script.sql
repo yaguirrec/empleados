@@ -128,6 +128,9 @@ CREATE TABLE [dbo].[tbcelula](
 ) ON [PRIMARY]
 GO
 
+/**
+DROP TABLE tbpuesto
+**/
 /*CREAR TABLA PUESTOS*/
 USE [MEXQAPPPR]
 GO
@@ -141,6 +144,29 @@ CREATE TABLE [dbo].[tbpuesto](
 	[nombre] [varchar](50) DEFAULT '',
 	[descripcion] [varchar](100) DEFAULT '',
 	[nombre_corto] [varchar](20) DEFAULT '',
+	[id_nivel] [int] NOT NULL,
+	[id_puestojefe] [int] NOT NULL,
+	[id_celula] [int] NOT NULL,
+	[id_clasificacion] [int] NOT NULL,
+	[created_at] [datetime],
+	[created_by] [char](10) DEFAULT '00001',
+	[updated_at] [datetime] default GETDATE(),
+	[updated_by] [char](10) DEFAULT '00001'
+) ON [PRIMARY]
+GO
+
+/*CREAR TABLA TIPO_PUESTOS*/
+USE [MEXQAPPPR]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbtipopuesto](
+	[id_puesto] [int] IDENTITY(1,1) NOT NULL,
+	[nombre] [varchar](50) DEFAULT '',
+	[descripcion] [varchar](100) DEFAULT '',
+	[nivel] [int] NOT NULL,
 	[created_at] [datetime],
 	[created_by] [char](10) DEFAULT '00001',
 	[updated_at] [datetime] default GETDATE(),
@@ -193,7 +219,7 @@ codigoempleado,nombrelargo,nombre,apellidopaterno,apellidomaterno,sexo,fechaalta
 curpi,curpf,rfc, homoclave,numerosegurosocial,fechanacimiento,estadoempleado,
 timestamp AS fechaCaptura
 FROM 
-[empleados_nomipaq]
+[empleados_nomipaq] WhERE codigoempleado = '19905'
 UNION 
 SELECT 
 codigoempleado,nombrelargo,nombre,apellidopaterno,apellidomaterno,sexo,fechaalta,fechabaja,REPLACE(campoextra2,'-','') AS Area,idpuesto,iddepartamento,
@@ -210,7 +236,7 @@ AS
 		SELECT *
 		FROM [vEmpleadosNM]
 		WHERE codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS NOT IN (SELECT numero_nomina FROM tbempleados)  ORDER BY fechaCaptura DESC;
-	END 
+	END
 GO
 
 /**PROCEDIMIENTO ACTUALIZAR STATUS DEL EMPLEADO*/
@@ -235,18 +261,51 @@ SELECT COUNT(*) FROM [vEmpleadosNM]
 /**SINCRONIZAR EMPLEADOS*/
 EXEC pdemployeeInsert
 
+/**
+DROP TABLE tbpuesto
+TRUNCATE TABLE tbpuesto
+**/
+
 /*CONSULTAS*/
 SELECT * FROM [vEmpleadosNM] WHERE estadoempleado = 'B' ORDER BY fechaCaptura DESC 
-SELECT * FROM tbempleados WHERE status = 'B'
+SELECT * FROM tbempleados WHERE numero_nomina = '02144'
 SELECT * FROM tbempleados
 SELECT * FROM tbsucursal
 SELECT * FROM tbarea
 SELECT * FROM tbcelula
 SELECT * FROM tbcorreos
 SELECT * FROM tbpuesto
+SELECT * FROM tbtipopuesto
 
-SELECT te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaAlta, 
+SELECT te.numero_nomina, te.nombre_largo, tp.nombre AS 'Puesto',ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento', tc.nombre AS 'Celula'
+FROM tbempleados AS te
+INNER JOIN tbsucursal AS ts
+ON te.id_sucursal = ts.id_sucursal
+INNER JOIN tbarea AS ta
+ON te.id_area = ta.id_area
+INNER JOIN tbcelula AS tc
+ON tc.id_celula = te.id_celula
+INNER JOIN tbpuesto AS tp
+ON te.id_puesto = tp.id_puesto
+WHERE te.numero_nomina = '19905'
+
+SELECT te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
 ts.nombre,te.status,te.updated_at
 FROM tbempleados AS te
 INNER JOIN tbsucursal AS ts
-ON te.id_sucursal = ts.id_sucursal WHERE te.status = 'B' ORDER BY te.updated_at DESC
+ON te.id_sucursal = ts.id_sucursal WHERE te.status <> 'B' ORDER BY te.updated_at DESC, te.status ASC, te.fecha_alta DESC
+
+SELECT * FROM rh_empelados2 where clasificacion = 'Administrativo'
+
+--9039
+SELECT * FROM [192.168.2.203\COMPAC].[ct2017_SERVICIOS_].[dbo].[nom10001]
+--9021
+SELECT * FROM [192.168.2.203\COMPAC].[ctM_2017_SERVICIO].[dbo].[nom10001]
+--2127
+SELECT * FROM [192.168.2.203\COMPAC].[ct2017_CALIDAD_DE].[dbo].[nom10001]
+--2127
+SELECT * FROM [192.168.2.203\COMPAC].[ctM_2017_CALIDAD_].[dbo].[nom10001]
+--2
+SELECT * FROM [192.168.2.203\COMPAC].[ctSERVICIOS_DE_AS].[dbo].[nom10001]
+
+--189.165.181.205

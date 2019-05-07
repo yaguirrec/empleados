@@ -6,6 +6,8 @@ $( document ).ready(function() {
 
     //BUSQUEDA DE INFORMACION
     $(document).ready(function(){
+
+
         $("#searchBox").on("keyup", function() {
             var value = $(this).val().toLowerCase();
             $("#dataTable tr").filter(function() {
@@ -75,6 +77,7 @@ $( document ).ready(function() {
     {
         /**CARGAR TABLA EMPLEADOS */
         case 'empleado': case 'bajas':
+            $( ".seccionBuscar" ).show();
             console.log('Tabla de empleados');
             var action  = 'lista-empleados';
             var prop = (seccionActual === 'empleado' ? 'activos' : 'bajas');
@@ -88,7 +91,7 @@ $( document ).ready(function() {
             xmlhr.onload = function(){
                 if (this.status === 200) {
                 var respuesta = JSON.parse(xmlhr.responseText);
-                console.log(respuesta);
+                // console.log(respuesta);
                 if (respuesta.estado === 'OK') {
                     var informacion = respuesta.informacion;
                     for(var i in informacion){
@@ -124,11 +127,12 @@ $( document ).ready(function() {
                 // NOMINA DEL EMPLEADO
                 row.append($("<td class='text-uppercase'> " + rowInfo.nombre_largo + " </td>"));
                 row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
-                row.append($("<td> " + rowInfo.nombre + " </td>"));
+                row.append($("<td> " + rowInfo.Sucursal + " </td>"));
+                row.append($("<td> " + rowInfo.Departamento + " </td>"));
                 row.append($("<td> " + status + " </td>"));
                 // COLUMNA ACCION
                     row.append($("<td class='text-center'>"
-                                + "<a class='btn btn-sm btn-info btnConsulta' data-id='"+rowInfo.id_empleado+"' role='button' title='Ver información'><i class='fas fa-info-circle'></i></a>"
+                                + "<a class='btn btn-sm btn-info btnConsulta' data-id='"+rowInfo.numero_nomina+"' role='button' title='Ver información'><i class='fas fa-info-circle'></i></a>"
                                 + "</td>"));
         
                         
@@ -146,7 +150,7 @@ $( document ).ready(function() {
                     
                     // OPEN ON CURRENT TAB
                     $(location).attr('href',url);
-                    
+
                     // OPEN ON NEW TAB
                     // newTab.focus();
                 });
@@ -160,13 +164,48 @@ $( document ).ready(function() {
             }
             break;
         case 'datos':
+            $( ".seccionBuscar" ).hide();
             //GET VALUE FROM LS
-            var codigoEmpleado = localStorage.getItem('codigoEmpleado');
+            var codigoEmpleado = localStorage.getItem('codigoEmpleado'),
+                action = 'mostrar-empleado';
             //REMOVE VALUE FROM LS
             localStorage.removeItem('codigoEmpleado');
             console.log(codigoEmpleado);
+            // $('#idemployee').val(codigoEmpleado);
+            var dataEmp = new FormData();
+            dataEmp.append('action', action);
+            dataEmp.append('prop', codigoEmpleado);
+            var xmlhr = new XMLHttpRequest();
+            xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlhr.onload = function(){
+                if (this.status === 200) {
+                var respuesta = JSON.parse(xmlhr.responseText);
+                console.log(respuesta);
+                if (respuesta.estado === 'OK') {
+                    var informacion = respuesta.informacion;
+                    for(var i in informacion){
+                        imprimirEmpleado(informacion[i]);
+                    }     
+                } else if(respuesta.status === 'error'){
+                    var informacion = respuesta.informacion;
+                }
+                }
+                }
+            xmlhr.send(dataEmp);
+
+            function imprimirEmpleado(rowInfo){
+                $('#txtNomina').text(rowInfo.numero_nomina);
+                $('#txtNombre').text(rowInfo.nombre_largo); 
+                $('#txtPuesto').text(rowInfo.Puesto);
+                $('#txtSucursal').text(rowInfo.Sucursal);
+                $('#txtDepartamento').text(rowInfo.Departamento);
+                $('#txtCelula').text(rowInfo.Celula);
+            }
+        case 'tablero':    
+            // $( ".seccionBuscar" ).show();
+            break;
         default:
-            // console.log('Tablero');
+            $( ".seccionBuscar" ).hide();
             break;
     }
 });
