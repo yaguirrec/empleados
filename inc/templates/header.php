@@ -37,5 +37,4 @@
 </nav>
 <br>
 <h1 class="display-3 text-center font-weight-bold" id="seccionTitulo"></h1>
-<br>
-
+<hr>

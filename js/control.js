@@ -202,7 +202,7 @@ $( document ).ready(function() {
                 $('#txtCelula').text(rowInfo.Celula);
             }
         case 'tablero':    
-            // $( ".seccionBuscar" ).show();
+            $( ".seccionBuscar" ).hide();
             break;
         default:
             $( ".seccionBuscar" ).hide();

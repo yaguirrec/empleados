@@ -1,31 +1,55 @@
-<br>
+<div class="row">
+  <div class="card-columns text-center mx-2">
 
-<table class="table table-hover table-dark">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td colspan="2">Larry the Bird</td>
-      <td>@twitter</td>
-    </tr>
-  </tbody>
-</table>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title h3">Empleados</h5>
+        <hr>
+        <p class="card-text text-muted display-2">1111</p>
+      </div>
+    </div>
+
+    <div class="card bg-info">
+      <div class="card-body">
+        <h5 class="card-title h3">Empleados</h5>
+        <hr>
+        <p class="card-text text-muted display-2">1111</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title h3">Empleados</h5>
+        <hr>
+        <p class="card-text text-muted display-2">1111</p>
+      </div>
+    </div>
+
+    <div class="card bg-info">
+      <div class="card-body">
+        <h5 class="card-title h3">Empleados</h5>
+        <hr>
+        <p class="card-text text-muted display-2">1111</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title h3">Empleados</h5>
+        <hr>
+        <p class="card-text text-muted display-2">1111</p>
+      </div>
+    </div>
+
+    <!-- <div class="card">
+      <img src="..." class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+      </div>
+    </div> -->
+
+    </div>
+  </div>
+</div>
