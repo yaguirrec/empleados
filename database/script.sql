@@ -219,7 +219,7 @@ codigoempleado,nombrelargo,nombre,apellidopaterno,apellidomaterno,sexo,fechaalta
 curpi,curpf,rfc, homoclave,numerosegurosocial,fechanacimiento,estadoempleado,
 timestamp AS fechaCaptura
 FROM 
-[empleados_nomipaq] WhERE codigoempleado = '19905'
+[empleados_nomipaq]
 UNION 
 SELECT 
 codigoempleado,nombrelargo,nombre,apellidopaterno,apellidomaterno,sexo,fechaalta,fechabaja,REPLACE(campoextra2,'-','') AS Area,idpuesto,iddepartamento,
@@ -227,6 +227,26 @@ curpi,curpf,rfc, homoclave,numerosegurosocial,fechanacimiento,estadoempleado,
 timestamp AS fechaCaptura
 FROM 
 [192.168.2.203\COMPAC].[ct2017_CALIDAD_DE].[dbo].[nom10001]
+
+/**VISTA DATOS DEL EMPLEADO**/
+CREATE VIEW [vDatosEmpleados] AS
+SELECT 
+codigoempleado,telefono,codigopostal,direccion,poblacion,estado,nombrepadre,nombremadre,estadocivil,timestamp AS fechaCaptura
+FROM 
+[empleados_nomipaq]
+UNION 
+SELECT 
+codigoempleado,telefono,codigopostal,direccion,poblacion,estado,nombrepadre,nombremadre,estadocivil,timestamp AS fechaCaptura
+FROM 
+[192.168.2.203\COMPAC].[ct2017_CALIDAD_DE].[dbo].[nom10001]
+
+
+/**TABLAS NOMIPAQ**/
+SELECT * FROM [vDatosEmpleados]
+SELECT * FROM [empleados_nomipaq]
+SELECT * FROM [192.168.2.203\COMPAC].[ct2017_CALIDAD_DE].[dbo].[nom10001]
+
+SELECT * FROM rh_empelados2
 
 /** PROCEDIMIENTO PARA INSERTAR NUEVOS EMPLEADOS*/
 CREATE PROCEDURE pdemployeeInsert
@@ -268,11 +288,11 @@ TRUNCATE TABLE tbpuesto
 
 /*CONSULTAS*/
 SELECT * FROM [vEmpleadosNM] WHERE estadoempleado = 'B' ORDER BY fechaCaptura DESC 
-SELECT * FROM tbempleados WHERE numero_nomina = '02144'
+SELECT * FROM tbempleados WHERE numero_nomina = '23306'
 SELECT * FROM tbempleados
 SELECT * FROM tbsucursal
-SELECT * FROM tbarea
-SELECT * FROM tbcelula
+SELECT * FROM tbarea 
+SELECT * FROM tbcelula where codigo = 'NTCHI0214'
 SELECT * FROM tbcorreos
 SELECT * FROM tbpuesto
 SELECT * FROM tbtipopuesto
@@ -287,7 +307,7 @@ INNER JOIN tbcelula AS tc
 ON tc.id_celula = te.id_celula
 INNER JOIN tbpuesto AS tp
 ON te.id_puesto = tp.id_puesto
-WHERE te.numero_nomina = '19905'
+WHERE te.numero_nomina = '23306'
 
 SELECT te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
 ts.nombre,te.status,te.updated_at
@@ -295,7 +315,7 @@ FROM tbempleados AS te
 INNER JOIN tbsucursal AS ts
 ON te.id_sucursal = ts.id_sucursal WHERE te.status <> 'B' ORDER BY te.updated_at DESC, te.status ASC, te.fecha_alta DESC
 
-SELECT * FROM rh_empelados2 where clasificacion = 'Administrativo'
+SELECT * FROM rh_empelados2 where no_trab = '23306'
 
 --9039
 SELECT * FROM [192.168.2.203\COMPAC].[ct2017_SERVICIOS_].[dbo].[nom10001]
@@ -308,4 +328,28 @@ SELECT * FROM [192.168.2.203\COMPAC].[ctM_2017_CALIDAD_].[dbo].[nom10001]
 --2
 SELECT * FROM [192.168.2.203\COMPAC].[ctSERVICIOS_DE_AS].[dbo].[nom10001]
 
---189.165.181.205
+/**COMPLETAR REGISTROS*/
+
+SELECT * FROM [departamentos_nomipaq]
+
+SELECT vde.*,te.status FROM [vDatosEmpleados] AS vde
+INNER JOIN	tbempleados AS te 
+ON vde.codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS = te.numero_nomina
+WHERE 
+te.status IN ('A','R') -- ACTIVOS
+AND vde.codigopostal = '' -- SIN CP
+
+--COMPLETAR SUCURSAL (OMITIR LOS YA ASIGNADOS)
+SELECT ts.id_sucursal,te.numero_nomina,te.nombre_largo,te.area_temp,te.id_celula FROM tbempleados AS te
+INNER JOIN tbsucursal AS ts 
+ON SUBSTRING(te.area_temp,1,5) = SUBSTRING(ts.codigo,1,5)
+AND te.numero_nomina = '08444'
+
+--COMPLETAR SUCURSAL (OMITIR LOS YA ASIGNADOS)
+SELECT tc.id_celula,tc.nombre,te.numero_nomina,te.nombre_largo,te.area_temp,te.id_celula FROM tbempleados AS te
+INNER JOIN tbcelula AS tc 
+ON te.area_temp = tc.codigo
+AND te.id_celula <> 0
+
+
+SELECT * FROM tbcelula WHERE nombre = 'SKF SEALING SOLUTIONS MEXICO'

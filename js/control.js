@@ -132,7 +132,7 @@ $( document ).ready(function() {
                 row.append($("<td> " + status + " </td>"));
                 // COLUMNA ACCION
                     row.append($("<td class='text-center'>"
-                                + "<a class='btn btn-sm btn-info btnConsulta' data-id='"+rowInfo.numero_nomina+"' role='button' title='Ver información'><i class='fas fa-info-circle'></i></a>"
+                                + "<a class='btn btn-info btnConsulta' data-id='"+rowInfo.numero_nomina+"' role='button' title='Ver información'><i class='fas fa-info-circle'></i></a>"
                                 + "</td>"));
         
                         
