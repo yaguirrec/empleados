@@ -277,6 +277,9 @@ WHERE codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS NOT IN (SELECT numero_
 SELECT COUNT(*) FROM tbempleados
 SELECT COUNT(*) FROM [vEmpleadosNM]
 
+SELECT COUNT(*) FROM tbempleados WHERE status = 'B'
+SELECT COUNT(*) FROM [vEmpleadosNM] WHERE estadoempleado = 'B'
+
 
 /**SINCRONIZAR EMPLEADOS*/
 EXEC pdemployeeInsert
@@ -332,11 +335,11 @@ SELECT * FROM [192.168.2.203\COMPAC].[ctSERVICIOS_DE_AS].[dbo].[nom10001]
 
 SELECT * FROM [departamentos_nomipaq]
 
-SELECT vde.*,te.status FROM [vDatosEmpleados] AS vde
+SELECT vde.*,te.fecha_alta,te.status FROM [vDatosEmpleados] AS vde
 INNER JOIN	tbempleados AS te 
 ON vde.codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS = te.numero_nomina
 WHERE 
-te.status IN ('A','R') -- ACTIVOS
+te.status <> 'B' -- ACTIVOS
 AND vde.codigopostal = '' -- SIN CP
 
 --COMPLETAR SUCURSAL (OMITIR LOS YA ASIGNADOS)

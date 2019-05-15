@@ -3,7 +3,7 @@
     PERFIL DEL EMPLEADO
   </div>
   <div class="card-body">
-    <h5 class="card-title">DATOS GENERALES</h5>
+    <h5 class="card-title">DATOS GENERALES EMPLEADO</h5>
 
     <table class="table table-sm text-uppercase card-text px-5">
         <tbody>
