@@ -2,7 +2,7 @@
     header('Access-Control-Allow-Origin: *');
     header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
     header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
-    header("Allow: GET, POST, OPTIONS, PUT, DELETE");
+    header("Allow: GET, POST, OPTIONS");
     $method = $_SERVER['REQUEST_METHOD'];
     if($method == "OPTIONS") {
         die();
@@ -106,27 +106,31 @@
             $props = $_POST['prop'];
             if ($props == 'activos')
             {
-                $query = "SELECT te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
-                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',te.status
+                $query = "SELECT TOP 100 te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
+                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
                             FROM tbempleados AS te
                             INNER JOIN tbsucursal AS ts
                             ON te.id_sucursal = ts.id_sucursal 
+                            INNER JOIN tbcelula AS tc
+                            ON tc.id_celula = te.id_celula
                             INNER JOIN tbarea AS ta
-                            ON ta.id_area = te.id_area
+                            ON ta.codigo = tc.codigo_area
                             WHERE te.status <> 'B' 
                             ORDER BY te.status ASC, te.fecha_alta DESC";
             } 
             else 
             {
-                $query = "SELECT te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaAlta, 
-                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',te.status
+                $query = "SELECT TOP 100 te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
+                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
                             FROM tbempleados AS te
                             INNER JOIN tbsucursal AS ts
-                            ON te.id_sucursal = ts.id_sucursal
+                            ON te.id_sucursal = ts.id_sucursal 
+                            INNER JOIN tbcelula AS tc
+                            ON tc.id_celula = te.id_celula
                             INNER JOIN tbarea AS ta
-                            ON ta.id_area = te.id_area
+                            ON ta.codigo = tc.codigo_area
                             WHERE te.status = 'B' 
-                            ORDER BY te.updated_at DESC";
+                            ORDER BY te.status ASC, te.fecha_alta DESC";
             }
             $stmt = sqlsrv_query( $con, $query);
 
@@ -162,15 +166,17 @@
         {
             // die(json_encode($_POST));
             $props = $_POST['prop'];
-            $query = "SELECT te.numero_nomina, te.nombre_largo, tp.nombre AS 'Puesto',ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento', tc.nombre AS 'Celula'
+            $query = "SELECT te.numero_nomina, te.nombre_largo, 
+                        CASE WHEN tp.nombre IS NULL THEN 'Sin asignar' ELSE tp.nombre END AS 'Puesto',
+                        ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento', tc.nombre AS 'Celula'
                         FROM tbempleados AS te
                         INNER JOIN tbsucursal AS ts
                         ON te.id_sucursal = ts.id_sucursal
-                        INNER JOIN tbarea AS ta
-                        ON te.id_area = ta.id_area
                         INNER JOIN tbcelula AS tc
                         ON tc.id_celula = te.id_celula
-                        INNER JOIN tbpuesto AS tp
+                        INNER JOIN tbarea AS ta
+                        ON tc.codigo_area = ta.codigo
+                        LEFT JOIN tbpuesto AS tp
                         ON te.id_puesto = tp.id_puesto
                         WHERE te.numero_nomina = ?";
 
@@ -206,4 +212,80 @@
             sqlsrv_free_stmt( $stmt);
             sqlsrv_close( $con );
         }
+        else if ($action == 'buscar-texto')
+        {
+            // die(json_encode($_POST));
+            $txtBuscado = $_POST['txtBuscado'];
+            $props = $_POST['prop'];
+
+            if ($props == 'activos')
+            {
+                $query = "SELECT TOP 250 te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
+                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
+                            FROM tbempleados AS te
+                            INNER JOIN tbsucursal AS ts
+                            ON te.id_sucursal = ts.id_sucursal 
+                            INNER JOIN tbcelula AS tc
+                            ON tc.id_celula = te.id_celula
+                            INNER JOIN tbarea AS ta
+                            ON ta.codigo = tc.codigo_area
+                            WHERE te.status <> 'B' ";
+                            if (empty($valorBuscado)){ 
+                                $query .= "AND (te.numero_nomina LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR te.nombre_largo LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR ts.nombre LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR ta.nombre LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR tc.nombre LIKE '%' + CONVERT(NVARCHAR, ?) + '%'
+                                            OR te.created_at LIKE '%' + CONVERT(NVARCHAR, ?) + '%')";
+                            }
+                            
+                            $query .= "ORDER BY te.status ASC, te.fecha_alta DESC";
+            } 
+            else 
+            {
+                $query = "SELECT TOP 250 te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
+                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
+                            FROM tbempleados AS te
+                            INNER JOIN tbsucursal AS ts
+                            ON te.id_sucursal = ts.id_sucursal 
+                            INNER JOIN tbcelula AS tc
+                            ON tc.id_celula = te.id_celula
+                            INNER JOIN tbarea AS ta
+                            ON ta.codigo = tc.codigo_area
+                            WHERE te.status = 'B'";
+                            if (empty($valorBuscado)){ 
+                                $query .= "AND (te.numero_nomina LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR te.nombre_largo LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR ts.nombre LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR ta.nombre LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR tc.nombre LIKE '%' + CONVERT(NVARCHAR, ?) + '%'
+                                            OR te.created_at LIKE '%' + CONVERT(NVARCHAR, ?) + '%')";
+                            }
+                            $query .= "ORDER BY te.status ASC, te.fecha_alta DESC";
+            }
+            $params = array($txtBuscado,$txtBuscado,$txtBuscado,$txtBuscado,$txtBuscado,$txtBuscado);
+
+            $stmt = sqlsrv_query( $con, $query, $params);
+
+            $result = array();
+            
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'                
+                );
+            } else {
+                do {
+                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                    $result[] = $row; 
+                    }
+                } while (sqlsrv_next_result($stmt));
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => $result,
+                    'mensaje' => 'Informacion obtenida'                
+                );
+            }
+
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+        }
+
 ?>

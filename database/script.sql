@@ -1,3 +1,11 @@
+/**FUNCION QUITAR ESPACIOS EN BLANCO DE TEXTO**/
+CREATE FUNCTION dbo.TRIM(@string VARCHAR(MAX))
+RETURNS VARCHAR(MAX)
+BEGIN
+RETURN LTRIM(RTRIM(@string))
+END
+GO
+
 /**CREAR TABLA EMPLEADOS**/
 USE [MEXQAPPPR]
 GO
@@ -5,7 +13,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[tbempleados](
+CREATE TABLE [dbo].[tbempleados2](
 	[id_empleado] [int] IDENTITY(1,1) NOT NULL,
 	[numero_nomina] [varchar](10) NOT NULL,
 	[nombre_largo] [varchar](50) DEFAULT '',
@@ -71,15 +79,15 @@ SELECT @NOMBRE_SUCURSAL = SUBSTRING(ins.project_desc,10 , 30) FROM INSERTED ins;
 SELECT @SUCURSAL_PRINCIPAL = SUBSTRING(ins.project,6 , 4) FROM INSERTED ins;
 SELECT @DESC_SUCURSAL = ins.project_desc FROM INSERTED ins;
 SELECT @FECHA_SUCURSAL = ins.crtd_datetime FROM INSERTED ins;
-SELECT @ABR_SUCURSAL = SUBSTRING(ins.project, 6, 4) FROM INSERTED ins;
+SELECT @ABR_SUCURSAL = '100';
 IF @SUCURSAL_PRINCIPAL = '0000'
 	BEGIN
 		INSERT INTO tbsucursal (codigo,nombre,descripcion,nombre_corto,created_at) VALUES (@CODIGO_SUCURSAL,@NOMBRE_SUCURSAL,@DESC_SUCURSAL,@ABR_SUCURSAL,@FECHA_SUCURSAL);
-		INSERT INTO tbcelula (codigo,nombre,descripcion,nombre_corto,created_at) VALUES (@CODIGO_SUCURSAL,@NOMBRE_SUCURSAL,'CELULA '+@NOMBRE_SUCURSAL,@ABR_SUCURSAL,@FECHA_SUCURSAL);
+		INSERT INTO tbcelula (codigo,nombre,descripcion,codigo_area,created_at) VALUES (@CODIGO_SUCURSAL,@NOMBRE_SUCURSAL,'CELULA '+@NOMBRE_SUCURSAL,@ABR_SUCURSAL,@FECHA_SUCURSAL);
 	END
 ELSE IF @SUCURSAL_PRINCIPAL <> '0000'
 	BEGIN
-		INSERT INTO tbcelula (codigo,nombre,descripcion,nombre_corto,created_at) VALUES (@CODIGO_SUCURSAL,@NOMBRE_SUCURSAL,@DESC_SUCURSAL,@ABR_SUCURSAL,@FECHA_SUCURSAL);
+		INSERT INTO tbcelula (codigo,nombre,descripcion,codigo_area,created_at) VALUES (@CODIGO_SUCURSAL,@NOMBRE_SUCURSAL,@DESC_SUCURSAL,@ABR_SUCURSAL,@FECHA_SUCURSAL);
 	END
 GO
 
@@ -127,6 +135,9 @@ CREATE TABLE [dbo].[tbcelula](
 	[updated_by] [char](10) DEFAULT '00001'
 ) ON [PRIMARY]
 GO
+
+EXEC sp_rename 'tbcelula.nombre_corto', 'codigo_area', 'COLUMN';
+select * from tbcelula
 
 /**
 DROP TABLE tbpuesto
@@ -199,6 +210,9 @@ CREATE TABLE [dbo].[tbcorreos](
 ) ON [PRIMARY]
 GO
 
+SELECT * FROM [dbo].[departamentos_nomipaq]
+SELECT * FROM [dbo].[puestos_nomipaq] where idpuesto = '520'
+
 /**SINONIMOS PARA TRABAJAR CON TABLAS **/
 CREATE SYNONYM [dbo].[empleados_nomipaq]
 FOR
@@ -242,13 +256,14 @@ FROM
 
 
 /**TABLAS NOMIPAQ**/
-SELECT * FROM [vDatosEmpleados]
+SELECT TOP 5 direccion, * FROM [vDatosEmpleados] WHERE direccion <> ''
+SELECT TOP 5 substring(direccion,CHARINDEX('#',direccion)-1,250) AS CALLE, * FROM [vDatosEmpleados] WHERE direccion <> ''
+
 SELECT * FROM [empleados_nomipaq]
 SELECT * FROM [192.168.2.203\COMPAC].[ct2017_CALIDAD_DE].[dbo].[nom10001]
 
-SELECT * FROM rh_empelados2
-
 /** PROCEDIMIENTO PARA INSERTAR NUEVOS EMPLEADOS*/
+--ANTIGUO
 CREATE PROCEDURE pdemployeeInsert
 AS 
 	BEGIN
@@ -284,44 +299,168 @@ SELECT COUNT(*) FROM [vEmpleadosNM] WHERE estadoempleado = 'B'
 /**SINCRONIZAR EMPLEADOS*/
 EXEC pdemployeeInsert
 
+/**ACTUALIZAR TB EMPLEADOS DESDE PJEMPLOY**/
+SELECT lupd_datetime AS ALTA, * FROM PJEMPLOY ORDER BY lupd_datetime
+--DELETE FROM PJEMPLOY WHERE employee IN ('77771','7777E','77772','77777')
+--TRUNCATE TABLE tbempleados2 
+SELECT * FROM tbempleados2 ORDER BY created_at
+
+ALTER TRIGGER _newEmployee ON PJEMPLOY
+FOR INSERT
+AS BEGIN
+	SET NOCOUNT ON;
+    DECLARE @numero_nomina VARCHAR(5),
+			@nombre_largo VARCHAR(50),
+			@fecha_alta DATETIME,
+			@fecha_baja DATETIME,
+			@empleado_status VARCHAR(1),
+			@fecha_captura DATETIME,
+			@campo_aux VARCHAR(25);
+
+	SELECT @numero_nomina = ins.employee FROM INSERTED ins;
+	SELECT @nombre_largo = dbo.TRIM(UPPER(ins.emp_name)) FROM INSERTED ins;
+	SELECT @fecha_alta = ins.date_hired FROM INSERTED ins;
+	SELECT @fecha_baja = ins.date_terminated FROM INSERTED ins;
+	SELECT @empleado_status = ins.emp_status FROM INSERTED ins;
+	SELECT @fecha_captura = ins.crtd_datetime FROM INSERTED ins;
+	SELECT @campo_aux = ins.em_id03 FROM INSERTED ins;
+IF ISNUMERIC(@numero_nomina) = 1 AND @campo_aux = ''
+	BEGIN
+		INSERT INTO tbempleados2(numero_nomina,nombre_largo,fecha_alta,fecha_baja,status,created_at)
+		VALUES (@numero_nomina,@nombre_largo,@fecha_alta,@fecha_baja,@empleado_status,@fecha_captura)
+	END
+ELSE
+	BEGIN
+		PRINT N'This user has SET NOCOUNT turned ON.';
+	END
+END
+GO
+
+
+ALTER TRIGGER _updateEmployee ON PJEMPLOY
+FOR UPDATE
+AS BEGIN
+	SET NOCOUNT ON;
+    DECLARE @numero_nomina VARCHAR(5),
+			@nombre_largo VARCHAR(50),
+			@fecha_baja DATETIME,
+			@empleado_status VARCHAR(1),
+			@fecha_captura DATETIME;
+
+	SELECT @numero_nomina = upd.employee FROM INSERTED upd;
+	SELECT @nombre_largo = dbo.TRIM(UPPER(upd.emp_name)) FROM INSERTED upd;
+	SELECT @fecha_baja = upd.date_terminated FROM INSERTED upd;
+	SELECT @empleado_status = upd.emp_status FROM INSERTED upd;
+	SELECT @fecha_captura = upd.lupd_datetime FROM INSERTED upd;
+	IF @empleado_status = 'I'
+		BEGIN
+			SET @empleado_status = 'B'
+		END
+	BEGIN
+		UPDATE tbempleados2 SET nombre_largo = @nombre_largo, fecha_baja = @fecha_baja, status = @empleado_status, updated_at = @fecha_captura WHERE numero_nomina = @numero_nomina;
+	END
+END
+GO
+
+SELECT TOP 1 * FROM [vEmpleadosNM] where codigoempleado = '08444'
+SELECT id_sucursal FROM tbsucursal WHERE SUBSTRING (codigo,1,5) = SUBSTRING ('CEAGS0583',1,5)
+SELECT * FROM tbempleados2
+
+--ACTUALIZAR DATOS DEL EMPLEADO DESDE NOMIPAQ
+UPDATE empleados
+SET 
+nombre_largo = dbo.TRIM(UPPER(tb2.nombrelargo)),
+nombre = dbo.TRIM(UPPER(tb2.nombre)),
+apellido_paterno = dbo.TRIM(UPPER(tb2.apellidopaterno)),
+apellido_materno = dbo.TRIM(UPPER(tb2.apellidomaterno)),
+sexo = tb2.sexo,
+curpini = tb2.curpi,
+curpfin = tb2.curpf,
+rfcini = tb2.rfc,
+rfcfin = tb2.homoclave,
+nss = tb2.numerosegurosocial,
+fecha_nacimiento = tb2.fechanacimiento,
+id_sucursal = (SELECT id_sucursal FROM tbsucursal WHERE SUBSTRING (codigo,1,5) COLLATE SQL_Latin1_General_CP1_CI_AS = SUBSTRING (tb2.Area,1,5)),
+id_celula = (SELECT id_celula FROM tbcelula WHERE codigo COLLATE SQL_Latin1_General_CP1_CI_AS = tb2.Area),
+area_temp = tb2.Area,
+departamento_temp = tb2.iddepartamento,
+puesto_temp = tb2.idpuesto,
+updated_at = tb2.fechaCaptura,
+updated_by = '00001'
+FROM tbempleados AS empleados
+INNER JOIN [vEmpleadosNM] AS tb2
+ON empleados.numero_nomina COLLATE SQL_Latin1_General_CP1_CI_AS = tb2.codigoempleado
+AND empleados.id_sucursal = 0 AND empleados.id_area = 0
+
+
 /**
 DROP TABLE tbpuesto
 TRUNCATE TABLE tbpuesto
 **/
+/**
+1. LABORALES ALTA DE EMPLEADO 
+2. PASA FORMATO A NOMINAS (CAPTURA EN ERP AL DIA, EN NOMIPAQ AL SIGUIENTE PERIODO) 
+3. 
+
+(PANEL, EMPLEADDOS, CAMBIOS DE PUESTOS, 
+(EXPORTAR A EXCEL, ALTAS A NOMINAS)
+erp como base numero nomina, nombre, fecha alta, estado.
+tb 34 nomipaq
+**/
 
 /*CONSULTAS*/
-SELECT * FROM [vEmpleadosNM] WHERE estadoempleado = 'B' ORDER BY fechaCaptura DESC 
-SELECT * FROM tbempleados WHERE numero_nomina = '23306'
-SELECT * FROM tbempleados
+SELECT * FROM [vEmpleadosNM] ORDER BY fechaCaptura DESC 
+SELECT * FROM tbempleados WHERE id_puesto <> 0 ORDER BY updated_at DESC
 SELECT * FROM tbsucursal
-SELECT * FROM tbarea 
-SELECT * FROM tbcelula where codigo = 'NTCHI0214'
+SELECT * FROM tbarea WHERE codigo = '3'
+SELECT * FROM tbcelula
 SELECT * FROM tbcorreos
 SELECT * FROM tbpuesto
 SELECT * FROM tbtipopuesto
 
-SELECT te.numero_nomina, te.nombre_largo, tp.nombre AS 'Puesto',ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento', tc.nombre AS 'Celula'
+SELECT te.numero_nomina, te.nombre_largo, 
+CASE WHEN tp.nombre IS NULL THEN 'Sin asignar' ELSE tp.nombre END AS 'Puesto',
+ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento', tc.nombre AS 'Celula'
 FROM tbempleados AS te
 INNER JOIN tbsucursal AS ts
 ON te.id_sucursal = ts.id_sucursal
-INNER JOIN tbarea AS ta
-ON te.id_area = ta.id_area
 INNER JOIN tbcelula AS tc
 ON tc.id_celula = te.id_celula
-INNER JOIN tbpuesto AS tp
+INNER JOIN tbarea AS ta
+ON tc.codigo_area = ta.codigo
+LEFT JOIN tbpuesto AS tp
 ON te.id_puesto = tp.id_puesto
-WHERE te.numero_nomina = '23306'
+WHERE te.numero_nomina = '08444'
+
+
 
 SELECT te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
 ts.nombre,te.status,te.updated_at
 FROM tbempleados AS te
 INNER JOIN tbsucursal AS ts
-ON te.id_sucursal = ts.id_sucursal WHERE te.status <> 'B' ORDER BY te.updated_at DESC, te.status ASC, te.fecha_alta DESC
+ON te.id_sucursal = ts.id_sucursal WHERE te.status <> 'B' 
+--AND te.numero_nomina = '24974'
+ORDER BY te.updated_at DESC, te.status ASC, te.fecha_alta DESC
+
+SELECT te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
+                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
+                            FROM tbempleados AS te
+                            INNER JOIN tbsucursal AS ts
+                            ON te.id_sucursal = ts.id_sucursal 
+							INNER JOIN tbcelula AS tc
+							ON tc.id_celula = te.id_celula
+							INNER JOIN tbarea AS ta
+                            ON ta.codigo = tc.codigo_area
+                            WHERE te.status = 'B' 
+							AND (te.numero_nomina LIKE '%19905%' OR te.nombre_largo LIKE '%19905%' OR ts.nombre LIKE '%19905%' OR ta.nombre LIKE '%19905%' OR tc.nombre LIKE '%19905%'
+							OR te.created_at LIKE '%19905%')
+                            ORDER BY te.status ASC, te.fecha_alta DESC
+						
 
 SELECT * FROM rh_empelados2 where no_trab = '23306'
 
 --9039
-SELECT * FROM [192.168.2.203\COMPAC].[ct2017_SERVICIOS_].[dbo].[nom10001]
+SELECT * FROM [192.168.2.203\COMPAC].[ct2017_SERVICIOS_].[dbo].[nom10034]
 --9021
 SELECT * FROM [192.168.2.203\COMPAC].[ctM_2017_SERVICIO].[dbo].[nom10001]
 --2127
@@ -345,8 +484,7 @@ AND vde.codigopostal = '' -- SIN CP
 --COMPLETAR SUCURSAL (OMITIR LOS YA ASIGNADOS)
 SELECT ts.id_sucursal,te.numero_nomina,te.nombre_largo,te.area_temp,te.id_celula FROM tbempleados AS te
 INNER JOIN tbsucursal AS ts 
-ON SUBSTRING(te.area_temp,1,5) = SUBSTRING(ts.codigo,1,5)
-AND te.numero_nomina = '08444'
+ON SUBSTRING(te.area_temp,1,5) = SUBSTRING(ts.codigo,1,5) AND te.id_celula = 0
 
 --COMPLETAR SUCURSAL (OMITIR LOS YA ASIGNADOS)
 SELECT tc.id_celula,tc.nombre,te.numero_nomina,te.nombre_largo,te.area_temp,te.id_celula FROM tbempleados AS te
@@ -355,4 +493,7 @@ ON te.area_temp = tc.codigo
 AND te.id_celula <> 0
 
 
-SELECT * FROM tbcelula WHERE nombre = 'SKF SEALING SOLUTIONS MEXICO'
+SELECT * FROM tbcelula-- WHERE codigo NOT LIKE '99COR%'
+SELECT * FROM PJEMPLOY WHERE employee = '17457'
+SELECT * FROM rh_empelados2 WHERE no_trab = '24856'
+select * from PJPROJ where project like '%121'

@@ -1,20 +1,62 @@
 //GENERAL
 $( document ).ready(function() {
-    // $('#sidebarCollapse').on('click',function(){
-    //     $('#sidebar').toggleClass('active');
-    // });
 
     //BUSQUEDA DE INFORMACION
-    $(document).ready(function(){
+    // $(document).ready(function(){
 
 
-        $("#searchBox").on("keyup", function() {
-            var value = $(this).val().toLowerCase();
-            $("#dataTable tr").filter(function() {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-            });
-        });
-    });
+    //     $("#searchBox").on("keyup", function() {
+    //         var value = $(this).val().toLowerCase();
+    //         $("#dataTable tr").filter(function() {
+    //         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    //         });
+    //     });
+    // });
+
+    $('#searchBox').keyup(function(event) {
+        var code = (event.keyCode ? event.keyCode : event.which);
+        if(code==13)event.preventDefault();
+        if(code==32||code==13||code==188||code==186){
+        var txtBuscado = this.value,
+            prop = (seccionActual === 'empleado' ? 'activos' : 'bajas');
+            action = 'buscar-texto';
+        // console.log(txtBuscado);
+        $('#dataTable').empty();
+        var consulta_parametros = new FormData();
+        consulta_parametros.append('txtBuscado', txtBuscado);
+        consulta_parametros.append('prop', prop);
+        consulta_parametros.append('action', action);
+        var xmlhr = new XMLHttpRequest();
+        xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlhr.onload = function()
+            {
+            if (this.status === 200) {
+              var respuesta = JSON.parse(xmlhr.responseText);
+              console.log(respuesta);
+              if (respuesta.estado === 'OK') {
+                var informacion = respuesta.informacion,
+                    datos = respuesta.informacion.length;
+                console.log(informacion.length);
+                if(datos < 1){
+                    $('#alertaM').removeClass('d-none');
+                } else {
+                    for(var i in informacion){
+                        tablaEmpleados(informacion[i]);
+                        $('#alertaM').addClass('d-none');
+                        // $('#avisoR').hide();
+                    }  
+                } 
+
+              } else if(respuesta.estado === 'NOK'){
+                var informacion = respuesta.informacion;
+                $('#alertaM').removeClass('d-none');
+                // $('#avisoR').hide();
+              }
+            }
+            }
+            xmlhr.send(consulta_parametros);
+        }
+      });
 
     //TOGGLE BARSIDE
     $("#menu-toggle").click(function(e) {
@@ -135,11 +177,6 @@ $( document ).ready(function() {
                                 + "<a class='btn btn-info btnConsulta' data-id='"+rowInfo.numero_nomina+"' role='button' title='Ver información'><i class='fas fa-info-circle'></i></a>"
                                 + "</td>"));
         
-                        
-                // $(".btnDelete").unbind().click(function() {
-                //     deleteComputer($(this));
-                // });
-        
                 $(".btnConsulta").unbind().click(function() {
                     var employeeID = $((this)).data('id'),
                         url = "index.php?request=datos";
@@ -153,14 +190,7 @@ $( document ).ready(function() {
 
                     // OPEN ON NEW TAB
                     // newTab.focus();
-                });
-        
-                // $(".btnHelp").unbind().click(function() {
-                //     var deviceCode = $((this)).data('code'),
-                //         newTab = window.open('inc/templates/responsive.php?deviceCode='+deviceCode, '_blank');
-                //     newTab.focus();
-                // });
-        
+                });        
             }
             break;
         case 'datos':
