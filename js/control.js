@@ -1,19 +1,13 @@
 //GENERAL
 $( document ).ready(function() {
 
-    //BUSQUEDA DE INFORMACION
-    // $(document).ready(function(){
-
-
-    //     $("#searchBox").on("keyup", function() {
-    //         var value = $(this).val().toLowerCase();
-    //         $("#dataTable tr").filter(function() {
-    //         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    //         });
-    //     });
-    // });
+    // VALUE OF THE ACTUAL SECTION
+    let searchParams = new URLSearchParams(window.location.search)
+    let seccionActual = searchParams.get('request');
+    console.log('Seccion ' + seccionActual);
 
     $('#searchBox').keyup(function(event) {
+        event.preventDefault();
         var code = (event.keyCode ? event.keyCode : event.which);
         if(code==13)event.preventDefault();
         if(code==32||code==13||code==188||code==186){
@@ -32,11 +26,11 @@ $( document ).ready(function() {
             {
             if (this.status === 200) {
               var respuesta = JSON.parse(xmlhr.responseText);
-              console.log(respuesta);
+            //   console.log(respuesta);
               if (respuesta.estado === 'OK') {
                 var informacion = respuesta.informacion,
                     datos = respuesta.informacion.length;
-                console.log(informacion.length);
+                // console.log(informacion.length);
                 if(datos < 1){
                     $('#alertaM').removeClass('d-none');
                 } else {
@@ -63,6 +57,24 @@ $( document ).ready(function() {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");
     });
+
+    //CONTADOR
+    $('.card').one('inview', function(event, visible) {
+		if (visible == true) {
+			$('.count').each(function() {
+				$(this).prop('Counter', 0).animate({
+					Counter: $(this).text()
+				}, {
+					duration: 5000,
+					easing: 'swing',
+					step: function(now) {
+						$(this).text(Math.ceil(now));
+					}
+				});
+			});
+		}
+	});
+
 
     /**CERRAR SESION */
     $('.btnSalir').click(function(){
@@ -110,17 +122,11 @@ $( document ).ready(function() {
         xmlhr.send(cerrar_sesion);
     }
 
-
-    // VALUE OF THE ACTUAL SECTION
-    var seccionActual = $('#nombreSeccion').text();
-    // console.log(seccionActual)
-
     switch (seccionActual)
     {
         /**CARGAR TABLA EMPLEADOS */
         case 'empleado': case 'bajas':
             $( ".seccionBuscar" ).show();
-            console.log('Tabla de empleados');
             var action  = 'lista-empleados';
             var prop = (seccionActual === 'empleado' ? 'activos' : 'bajas');
             var titulo = (seccionActual === 'empleado' ? 'Empleados activos' : 'Empleados inactivos');
@@ -170,11 +176,11 @@ $( document ).ready(function() {
                 row.append($("<td class='text-uppercase'> " + rowInfo.nombre_largo + " </td>"));
                 row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
                 row.append($("<td> " + rowInfo.Sucursal + " </td>"));
-                row.append($("<td> " + rowInfo.Departamento + " </td>"));
+                row.append($("<td> " + rowInfo.Celula + " </td>"));
                 row.append($("<td> " + status + " </td>"));
                 // COLUMNA ACCION
                     row.append($("<td class='text-center'>"
-                                + "<a class='btn btn-info btnConsulta' data-id='"+rowInfo.numero_nomina+"' role='button' title='Ver información'><i class='fas fa-info-circle'></i></a>"
+                                + "<a class='btn btn-info btnConsulta text-white btn-sm' data-id='"+rowInfo.numero_nomina+"' role='button' title='Ver información'><i class='fas fa-info-circle'></i></a>"
                                 + "</td>"));
         
                 $(".btnConsulta").unbind().click(function() {
@@ -184,6 +190,7 @@ $( document ).ready(function() {
 
                     //SAVE EMPLOYEE ID ON LOCAL STORAGE AS codigoEmpleado
                     localStorage.setItem('codigoEmpleado', employeeID);
+                    console.log(employeeID);
                     
                     // OPEN ON CURRENT TAB
                     $(location).attr('href',url);
@@ -195,13 +202,12 @@ $( document ).ready(function() {
             break;
         case 'datos':
             $( ".seccionBuscar" ).hide();
+            console.log('secion empleado');
             //GET VALUE FROM LS
             var codigoEmpleado = localStorage.getItem('codigoEmpleado'),
                 action = 'mostrar-empleado';
             //REMOVE VALUE FROM LS
-            localStorage.removeItem('codigoEmpleado');
-            console.log(codigoEmpleado);
-            // $('#idemployee').val(codigoEmpleado);
+            // localStorage.removeItem('codigoEmpleado');
             var dataEmp = new FormData();
             dataEmp.append('action', action);
             dataEmp.append('prop', codigoEmpleado);
@@ -209,8 +215,7 @@ $( document ).ready(function() {
             xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
             xmlhr.onload = function(){
                 if (this.status === 200) {
-                var respuesta = JSON.parse(xmlhr.responseText);
-                console.log(respuesta);
+                    var respuesta = JSON.parse(xmlhr.responseText);
                 if (respuesta.estado === 'OK') {
                     var informacion = respuesta.informacion;
                     for(var i in informacion){
@@ -231,12 +236,44 @@ $( document ).ready(function() {
                 $('#txtDepartamento').text(rowInfo.Departamento);
                 $('#txtCelula').text(rowInfo.Celula);
             }
-        case 'tablero':    
+            break;
+        case 'main': 
             $( ".seccionBuscar" ).hide();
+            odometerOptions = { auto: false }; // Disables auto-initialization
+            var action = 'highlights',
+                totalEmpleados = $("#txtEmpleados"),
+                totalEmpleadosA = $("#txtEmpleadosA"),
+                totalEmpleadosO = $("#txtEmpleadosO"),
+                totalEmpleadosN = $("#txtEmpleadosN"),
+                totalSucursales = $("#txtSucursales");
+            //REMOVE VALUE FROM LS
+            localStorage.removeItem('codigoEmpleado');
+            var dataEmp = new FormData();
+            dataEmp.append('action', action);
+            var xmlhr = new XMLHttpRequest();
+            xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlhr.onload = function(){
+                if (this.status === 200) {
+                var respuesta = JSON.parse(xmlhr.responseText);
+                // console.log(respuesta);
+                if (respuesta.estado === 'OK') {
+                    var informacion = respuesta.informacion;
+                    totalEmpleados.text(informacion[0].cifras);     
+                    totalEmpleadosA.text(informacion[1].cifras);     
+                    totalEmpleadosO.text(informacion[2].cifras);     
+                    totalEmpleadosN.text(informacion[3].cifras);     
+                    totalSucursales.text(informacion[4].cifras);     
+                } else if(respuesta.status === 'error'){
+                    var informacion = respuesta.informacion;
+                }
+                }
+                }
+            xmlhr.send(dataEmp);
             break;
         default:
             $( ".seccionBuscar" ).hide();
             break;
     }
+    
 });
 

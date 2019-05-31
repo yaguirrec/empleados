@@ -1,4 +1,4 @@
-<div class="card mt-5">
+<div class="card mx-5">
   <div class="card-header bg-primary text-white text-center">
     PERFIL DEL EMPLEADO
   </div>

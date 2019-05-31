@@ -326,7 +326,7 @@ AS BEGIN
 	SELECT @campo_aux = ins.em_id03 FROM INSERTED ins;
 IF ISNUMERIC(@numero_nomina) = 1 AND @campo_aux = ''
 	BEGIN
-		INSERT INTO tbempleados2(numero_nomina,nombre_largo,fecha_alta,fecha_baja,status,created_at)
+		INSERT INTO tbempleados(numero_nomina,nombre_largo,fecha_alta,fecha_baja,status,created_at)
 		VALUES (@numero_nomina,@nombre_largo,@fecha_alta,@fecha_baja,@empleado_status,@fecha_captura)
 	END
 ELSE
@@ -357,14 +357,14 @@ AS BEGIN
 			SET @empleado_status = 'B'
 		END
 	BEGIN
-		UPDATE tbempleados2 SET nombre_largo = @nombre_largo, fecha_baja = @fecha_baja, status = @empleado_status, updated_at = @fecha_captura WHERE numero_nomina = @numero_nomina;
+		UPDATE tbempleados SET nombre_largo = @nombre_largo, fecha_baja = @fecha_baja, status = @empleado_status, updated_at = @fecha_captura WHERE numero_nomina = @numero_nomina;
 	END
 END
 GO
 
 SELECT TOP 1 * FROM [vEmpleadosNM] where codigoempleado = '08444'
 SELECT id_sucursal FROM tbsucursal WHERE SUBSTRING (codigo,1,5) = SUBSTRING ('CEAGS0583',1,5)
-SELECT * FROM tbempleados2
+SELECT * FROM tbempleados
 
 --ACTUALIZAR DATOS DEL EMPLEADO DESDE NOMIPAQ
 UPDATE empleados
@@ -410,7 +410,7 @@ tb 34 nomipaq
 
 /*CONSULTAS*/
 SELECT * FROM [vEmpleadosNM] ORDER BY fechaCaptura DESC 
-SELECT * FROM tbempleados WHERE id_puesto <> 0 ORDER BY updated_at DESC
+SELECT * FROM tbempleados where nombre_largo like '%Acosta Tavarez%' ORDER BY updated_at DESC
 SELECT * FROM tbsucursal
 SELECT * FROM tbarea WHERE codigo = '3'
 SELECT * FROM tbcelula
@@ -430,7 +430,7 @@ INNER JOIN tbarea AS ta
 ON tc.codigo_area = ta.codigo
 LEFT JOIN tbpuesto AS tp
 ON te.id_puesto = tp.id_puesto
-WHERE te.numero_nomina = '08444'
+WHERE te.numero_nomina = '19721'
 
 
 
@@ -457,9 +457,7 @@ SELECT te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.
                             ORDER BY te.status ASC, te.fecha_alta DESC
 						
 
-SELECT * FROM rh_empelados2 where no_trab = '23306'
-
---9039
+--9039	
 SELECT * FROM [192.168.2.203\COMPAC].[ct2017_SERVICIOS_].[dbo].[nom10034]
 --9021
 SELECT * FROM [192.168.2.203\COMPAC].[ctM_2017_SERVICIO].[dbo].[nom10001]
@@ -492,8 +490,34 @@ INNER JOIN tbcelula AS tc
 ON te.area_temp = tc.codigo
 AND te.id_celula <> 0
 
+SELECT COUNT(*) AS cifras FROM tbempleados WHERE status <> 'B' UNION ALL
+SELECT COUNT(*) AS totalEmpleadosAdministrativos FROM tbempleados WHERE area_temp LIKE '99COR%' AND status <> 'B' UNION ALL
+SELECT COUNT(*) AS totalEmpleadosOperativos FROM tbempleados WHERE area_temp NOT LIKE '99COR%' AND status <> 'B' UNION ALL
+SELECT COUNT(*) AS totalEmpleadosActuales FROM tbempleados WHERE YEAR(fecha_alta) >= YEAR(GETDATE()) AND status <> 'B' UNION ALL
+select COUNT(*) AS totalSucursales from tbsucursal where codigo NOT IN ('000000000','99CON0000','99COR0000')
 
-SELECT * FROM tbcelula-- WHERE codigo NOT LIKE '99COR%'
-SELECT * FROM PJEMPLOY WHERE employee = '17457'
-SELECT * FROM rh_empelados2 WHERE no_trab = '24856'
-select * from PJPROJ where project like '%121'
+
+SELECT COUNT (*) AS contador,
+			FORMAT(fecha_alta, 'MMMM', 'es-es') AS 'Mes',
+             MONTH(fecha_alta) AS mes
+    FROM tbempleados
+   WHERE YEAR(fecha_alta)= YEAR(GETDATE())
+GROUP BY MONTH(fecha_alta), FORMAT(fecha_alta, 'MMMM', 'es-es')
+ORDER BY MONTH(fecha_alta) ASC;
+
+SELECT 
+SUM(CASE WHEN area_temp LIKE '99COR%' AND status <> 'B' THEN 1 ELSE 0 END) AS corporativo,
+SUM(CASE WHEN area_temp NOT LIKE '99COR%' AND status <> 'B' THEN 1 ELSE 0 END) AS operativo
+FROM tbempleados
+
+SELECT 
+SUM(CASE WHEN YEAR(fecha_alta)= YEAR(GETDATE()) AND status <> 'B' THEN 1 ELSE 0 END) AS altas,
+SUM(CASE WHEN YEAR(fecha_baja)= YEAR(GETDATE()) AND status = 'B' THEN 1 ELSE 0 END) AS bajas
+FROM tbempleados
+
+SELECT COUNT (*) AS contador,
+			SUM(CASE WHEN YEAR(fecha_alta)= YEAR(GETDATE()) AND status <> 'B' THEN 1 ELSE 0 END),
+             SUM(CASE WHEN YEAR(fecha_baja)= YEAR(GETDATE()) AND status = 'B' THEN 1 ELSE 0 END)
+    FROM tbempleados
+GROUP BY MONTH(fecha_alta), FORMAT(fecha_alta, 'MMMM', 'es-es')
+ORDER BY MONTH(fecha_alta) ASC;
