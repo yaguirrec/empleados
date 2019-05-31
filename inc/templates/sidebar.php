@@ -9,7 +9,7 @@
         </div>
         <!-- <div class="sidebar-brand-text mx-3">EliceWeb <sup>MEXQ</sup></div> -->
       </a>
-      
+
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
 
@@ -52,10 +52,10 @@
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Administrar empleados:</h6>
-            <a class="collapse-item" href="utilities-color.html">Alta de empleado</a>
-            <a class="collapse-item" href="utilities-border.html">Modificar de empleado</a>
-            <a class="collapse-item" href="utilities-animation.html">Baja de empleado</a>
-            <a class="collapse-item" href="utilities-other.html">Other</a>
+            <a class="collapse-item" href="#">Alta de empleado</a>
+            <a class="collapse-item" href="#">Modificar de empleado</a>
+            <a class="collapse-item" href="#">Baja de empleado</a>
+            <a class="collapse-item" href="#">Other</a>
           </div>
         </div>
       </li>

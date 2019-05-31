@@ -143,7 +143,7 @@
       <!-- Card Body -->
       <div class="card-body">
         <div class="chart-pie pt-4 pb-2">
-          <canvas id="chartSucursales"></canvas>
+          <canvas id="chartEmpleados"></canvas>
         </div>
         <div class="mt-4 text-center small">
           <span class="mr-2">
@@ -173,25 +173,8 @@
         <h6 class="m-0 font-weight-bold text-primary">Proyecto</h6>
       </div>
       <div class="card-body">
-        <h4 class="small font-weight-bold">Deploy <span class="float-right">20%</span></h4>
-        <div class="progress mb-4">
-          <div class="progress-bar bg-danger" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-        </div>
-        <h4 class="small font-weight-bold">Documentation <span class="float-right">40%</span></h4>
-        <div class="progress mb-4">
-          <div class="progress-bar bg-warning" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-        </div>
-        <h4 class="small font-weight-bold">Client control <span class="float-right">60%</span></h4>
-        <div class="progress mb-4">
-          <div class="progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-        </div>
-        <h4 class="small font-weight-bold">Security control access <span class="float-right">80%</span></h4>
-        <div class="progress mb-4">
-          <div class="progress-bar bg-info" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-        </div>
-        <h4 class="small font-weight-bold">DB Model <span class="float-right">Complete!</span></h4>
-        <div class="progress">
-          <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+        <div class="chart-pie pt-4 pb-2">
+          <canvas id="chartSucursales"></canvas>
         </div>
       </div>
     </div>
