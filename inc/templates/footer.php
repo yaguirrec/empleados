@@ -29,10 +29,9 @@
     <!-- <script src="js/demo/chart-area-demo.js"></script>  -->
     <!-- <script src="js/demo/chart-pie-demo.js"></script> -->
 
-    <script src="js/control.js"></script>
-    <script src="js/chart.js"></script>
-
     <!-- LOCAL JS -->
+    <script src="js/chart.js"></script>            
+    <script src="js/control.js"></script>
     <?php
         if ($controlInicio == "login.php")
         {

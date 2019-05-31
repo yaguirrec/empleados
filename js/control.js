@@ -78,6 +78,7 @@ $( document ).ready(function() {
 
     /**CERRAR SESION */
     $('.btnSalir').click(function(){
+        window.localStorage.clear();
         cerrarSesion();
         // console.log('Salir');
     });
@@ -108,7 +109,7 @@ $( document ).ready(function() {
                                     no-repeat
                                 `
                             }).then(function(){ 
-                                location.reload();
+                                // location.reload();
                                 window.location.href = '../empleados/';
                             })
             } else {

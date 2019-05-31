@@ -1,6 +1,4 @@
 $( document ).ready(function() {
-console.log('forms');
-
 eventListener();
 
 function eventListener()
@@ -14,7 +12,6 @@ function checkIN (e)
     var user = document.querySelector('#txtNomina').value,
         password = document.querySelector('#txtClave').value,
         action = document.querySelector('#type').value;
-    console.log(user + ' ' + password + ' ' + action);
     if(user === '' || password === '')
     {
         // la validación falló
@@ -42,7 +39,6 @@ function checkIN (e)
             xhr.onload = function(){
                 if(this.status === 200 && this.readyState === 4) {
                     var respuesta = JSON.parse(xhr.responseText);
-                    console.log(respuesta);
                     // Si la respuesta es correcta
                     if(respuesta.estado === 'OK') 
                     {
