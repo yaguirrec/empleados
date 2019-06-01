@@ -13,7 +13,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[tbempleados2](
+CREATE TABLE [dbo].[tbempleados](
 	[id_empleado] [int] IDENTITY(1,1) NOT NULL,
 	[numero_nomina] [varchar](10) NOT NULL,
 	[nombre_largo] [varchar](50) DEFAULT '',
@@ -210,6 +210,52 @@ CREATE TABLE [dbo].[tbcorreos](
 ) ON [PRIMARY]
 GO
 
+/*CREAR TABLA PERMISOS*/
+USE [MEXQApppr]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbprivilegios_emp](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[tipo] [varchar](25) NOT NULL,
+	[descripcion] [varchar](75) NOT NULL,
+	[created_at] [datetime],
+	[created_by] [char](10) DEFAULT '00001',
+	[updated_at] [datetime] default GETDATE(),
+	[updated_by] [char](10) DEFAULT '00001',
+	[panel_empleado] [int] DEFAULT 0,
+	[panel_control] [int] DEFAULT 0,
+	[panel_consultas] [int] DEFAULT 0,
+	[panel_administraremp] [int] DEFAULT 0,
+	[panel_administrar_usuarios] [int] DEFAULT 0
+) ON [PRIMARY]
+GO
+
+INSERT INTO tbprivilegios_emp (tipo,descripcion,created_at) VALUES ('Empleado normal','Solo acceso a su perfil sin realizar ningun cambio',GETDATE())
+INSERT INTO tbprivilegios_emp (tipo,descripcion,created_at) VALUES ('Administrador','Acceso completo',GETDATE())
+
+/*CREAR TABLA RELACION EMPLEADOS-PERMISOS*/
+USE [MEXQApppr]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbemp_permisos](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[numero_nomina] [varchar](10) NOT NULL,
+	[created_at] [datetime],
+	[created_by] [char](10) DEFAULT '00001',
+	[updated_at] [datetime] default GETDATE(),
+	[updated_by] [char](10) DEFAULT '00001',
+	[emp_proy] [int],
+) ON [PRIMARY]
+GO
+
+INSERT INTO tbemp_permisos (numero_nomina,created_at,emp_proy) VALUES ('08444',GETDATE(),1)
+
 SELECT * FROM [dbo].[departamentos_nomipaq]
 SELECT * FROM [dbo].[puestos_nomipaq] where idpuesto = '520'
 
@@ -225,6 +271,44 @@ FOR
 CREATE SYNONYM [dbo].[puestos_nomipaq]
 FOR
 [192.168.2.203\COMPAC].[ct2017_SERVICIOS_].[dbo].[nom10006]
+
+/**STORED FUINCTION LOGIN*/
+SELECT pe.numero_nomina, ui.badgenumber Bnomina,pe.nombre_largo, ui.name,ui.lastname,dp.code depto_id,dp.deptname,aw.password
+                        FROM 
+                        tbempleados as pe
+                        RIGHT JOIN P1ACCESOWEB aw
+                        ON pe.numero_nomina = aw.employee
+                        INNER JOIN userinfo ui
+                        ON RIGHT(ui.badgenumber, 5) = aw.employee
+                        INNER JOIN departments dp
+                        ON ui.defaultdeptid = dp.deptid
+                        WHERE pe.numero_nomina = '08444'
+
+ALTER PROCEDURE datos_empleado_acceso
+@NUMERO_NOMINA VARCHAR(10)
+AS
+	SELECT te.numero_nomina,te.nombre_largo,te.nombre,te.apellido_paterno,te.apellido_paterno,te.status,te.fecha_alta,te.fecha_baja,te.fecha_nacimiento,
+	ts.nombre,ta.id_area,ta.codigo,ta.nombre,tc.id_celula,tc.codigo,tc.nombre,
+	tp.emp_proy,tep.id AS nivel,tep.tipo,
+	pa.password
+	FROM tbempleados AS te 
+	INNER JOIN P1ACCESOWEB AS pa
+	ON te.numero_nomina = pa.employee
+	INNER JOIN tbsucursal AS ts
+	ON te.id_sucursal = ts.id_sucursal 
+	INNER JOIN tbcelula AS tc
+	ON tc.id_celula = te.id_celula
+	INNER JOIN tbarea AS ta
+	ON ta.codigo = tc.codigo_area
+	INNER JOIN tbemp_permisos AS tp
+	ON te.numero_nomina = tp.numero_nomina
+	INNER JOIN tbprivilegios_emp AS tep
+	ON tp.emp_proy = tp.id
+	AND te.numero_nomina = @NUMERO_NOMINA
+	ORDER BY te.numero_nomina
+GO
+
+EXEC datos_empleado_acceso @NUMERO_NOMINA = '08444'
 
 /** VISTA EMPLEADOS NOMIPAQ */
 ALTER VIEW [vEmpleadosNM] AS
@@ -417,6 +501,8 @@ SELECT * FROM tbcelula
 SELECT * FROM tbcorreos
 SELECT * FROM tbpuesto
 SELECT * FROM tbtipopuesto
+SELECT * FROM tbprivilegios_emp
+SELECT * FROM tbemp_permisos
 
 SELECT te.numero_nomina, te.nombre_largo, 
 CASE WHEN tp.nombre IS NULL THEN 'Sin asignar' ELSE tp.nombre END AS 'Puesto',
@@ -504,6 +590,14 @@ SELECT COUNT (*) AS contador,
    WHERE YEAR(fecha_alta)= YEAR(GETDATE())
 GROUP BY MONTH(fecha_alta), FORMAT(fecha_alta, 'MMMM', 'es-es')
 ORDER BY MONTH(fecha_alta) ASC;
+
+SELECT SUBSTRING(area_temp,3,3) AS sucursal,
+		COUNT (*) AS cantidad
+    FROM tbempleados
+   WHERE SUBSTRING(area_temp,3,3) <> '' AND status <> 'B'
+GROUP BY SUBSTRING(area_temp,3,3)
+ORDER BY SUBSTRING(area_temp,3,3) ASC;
+
 
 SELECT 
 SUM(CASE WHEN area_temp LIKE '99COR%' AND status <> 'B' THEN 1 ELSE 0 END) AS corporativo,

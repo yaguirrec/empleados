@@ -21,25 +21,11 @@
             $password = $_POST['clave'];
             $password = hash('sha512', $password);
 
-            $query = "SELECT pe.numero_nomina, ui.badgenumber Bnomina,pe.nombre_largo, ui.name,ui.lastname,dp.code depto_id,dp.deptname,aw.password
-                        FROM 
-                        tbempleados as pe
-                        RIGHT JOIN P1ACCESOWEB aw
-                        ON pe.numero_nomina = aw.employee
-                        INNER JOIN userinfo ui
-                        ON RIGHT(ui.badgenumber, 5) = aw.employee
-                        INNER JOIN departments dp
-                        ON ui.defaultdeptid = dp.deptid
-                        WHERE pe.numero_nomina = ?"; 
-
-            
+            $query = "EXEC datos_empleado_acceso @NUMERO_NOMINA = ?"; 
 
             $params = array($user);//Pasar parametros a las consulta ?
 
             $stmt = sqlsrv_query( $con, $query, $params );// Asignar parametros al Statement a ejecutar
-
-            // die(json_encode($params));
-
 
             if( !$stmt ) {
                 $respuesta = array(
@@ -57,7 +43,8 @@
                 if( strcasecmp($clave_bd, $password) == 0 )
                 {
                     $usuario_activo = trim($row['numero_nomina']);
-                    $usuario_departamento = trim($row['depto_id']);
+                    $usuario_nivel = trim($row['nivel']);
+                    $usuario_departamento = trim($row['id_area']);
                     $usuario_nombre = trim(ucwords(strtolower($row['nombre_largo'])));
                     $sesion = true;
                     // session_start();//INICIAR LA SESION
@@ -70,6 +57,7 @@
                         'usuario_activo' => $usuario_activo,
                         'usuario_departamento' => $usuario_departamento,
                         'usuario_nombre'    => $usuario_nombre,
+                        'usuario_nivel'    => $usuario_nivel,
                         'sesion' => $sesion
                     );
                 }else{
@@ -204,7 +192,7 @@
                     'estado' => 'OK',
                     'tipo' => 'success',
                     'informacion' => $result,
-                    'mensaje' => 'Informacion obtenida'                
+                    'mensaje' => 'Informacion obtenida de la BD de la Lista'                
                 );
             }
 
@@ -279,7 +267,162 @@
                     'estado' => 'OK',
                     'tipo' => 'success',
                     'informacion' => $result,
-                    'mensaje' => 'Informacion obtenida'                
+                    'mensaje' => 'Informacion obtenida de buscar'                
+                );
+            }
+
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+        }
+        else if ($action == 'highlights')
+        {
+            // die(json_encode($_POST));
+
+            $query = "SELECT COUNT(*) AS cifras FROM tbempleados WHERE status <> 'B' UNION ALL
+                        SELECT COUNT(*) AS totalEmpleadosAdministrativos FROM tbempleados WHERE area_temp LIKE '99COR%' AND status <> 'B' UNION ALL
+                        SELECT COUNT(*) AS totalEmpleadosOperativos FROM tbempleados WHERE area_temp NOT LIKE '99COR%' AND status <> 'B' UNION ALL
+                        SELECT COUNT(*) AS totalEmpleadosActuales FROM tbempleados WHERE YEAR(fecha_alta) >= YEAR(GETDATE()) AND status <> 'B' UNION ALL
+                        select COUNT(*) AS totalSucursales from tbsucursal where codigo NOT IN ('000000000','99CON0000','99COR0000')";
+                           
+            $stmt = sqlsrv_query( $con, $query);
+
+            $result = array();
+            
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'                
+                );
+            } else {
+                do {
+                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                    $result[] = $row; 
+                    }
+                } while (sqlsrv_next_result($stmt));
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => $result,
+                    'mensaje' => 'Informacion obtenida de high'                
+                );
+            }
+
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+        }else if ($action == 'obtener-empleados-mes'){
+            // die(json_encode($_POST));
+
+            $query = "SELECT COUNT (*) AS contador,
+                                    UPPER(FORMAT(fecha_alta, 'MMMM', 'es-es')) AS 'nombre_mes',
+                                    MONTH(fecha_alta) AS mes
+                            FROM tbempleados
+                        WHERE YEAR(fecha_alta) = YEAR(GETDATE())
+                        GROUP BY MONTH(fecha_alta), FORMAT(fecha_alta, 'MMMM', 'es-es')
+                        ORDER BY MONTH(fecha_alta) ASC;";
+                           
+            $stmt = sqlsrv_query( $con, $query);
+
+            $result = array();
+            
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'                
+                );
+            } else {
+                do {
+                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                    $result[] = $row; 
+                    }
+                } while (sqlsrv_next_result($stmt));
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => $result,
+                    'mensaje' => 'Informacion obtenida de empleados'                
+                );
+            }
+
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+        }else if ($action == 'obtener-datos-empleados'){
+            // die(json_encode($_POST));
+
+            $query = "SELECT 
+                        SUM(CASE WHEN YEAR(fecha_alta)= YEAR(GETDATE()) AND status <> 'B' THEN 1 ELSE 0 END) AS altas,
+                        SUM(CASE WHEN YEAR(fecha_baja)= YEAR(GETDATE()) AND status = 'B' THEN 1 ELSE 0 END) AS bajas
+                        FROM tbempleados;";
+                           
+            $stmt = sqlsrv_query( $con, $query);
+
+            $result = array();
+            
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'                
+                );
+            } else {
+                do {
+                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                    $result[] = $row; 
+                    }
+                } while (sqlsrv_next_result($stmt));
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => $result,
+                    'mensaje' => 'Informacion obtenida de surcusales'                
+                );
+            }
+
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+        }else if ($action == 'obtener-datos-sucursales'){
+            // die(json_encode($_POST));
+
+            $query = "SELECT SUBSTRING(area_temp,3,3) AS sucursal,COUNT (*) AS cantidad
+                        FROM tbempleados
+                        WHERE SUBSTRING(area_temp,3,3) <> '' AND status <> 'B'
+                        GROUP BY SUBSTRING(area_temp,3,3)
+                        ORDER BY SUBSTRING(area_temp,3,3) ASC;";
+                           
+            $stmt = sqlsrv_query( $con, $query);
+
+            $result = array();
+            
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'                
+                );
+            } else {
+                do {
+                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                    $result[] = $row; 
+                    }
+                } while (sqlsrv_next_result($stmt));
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => $result,
+                    'mensaje' => 'Informacion obtenida de surcusales'                
                 );
             }
 

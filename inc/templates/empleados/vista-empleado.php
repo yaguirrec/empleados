@@ -26,7 +26,7 @@
         </tbody>
     </table>
 
-
+    <hr>
     <a href="javascript:history.back();" class="btn btn-secondary btn-block px-5">Regresar</a>
   </div>
 </div>

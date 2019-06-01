@@ -49,11 +49,12 @@ function checkIN (e)
                             usuario_departamento = respuesta.usuario_departamento,
                             ubicacion = respuesta.ubicacion,
                             usuario_nombre = respuesta.usuario_nombre,
+                            usuario_nivel = respuesta.usuario_nivel;
                             sesion = respuesta.sesion;
                             if(sesion)
                             {
                                 //INICIAR SESION METODO (SEGURA)
-                                asignarSesion(usuario_activo, usuario_nombre, usuario_departamento);
+                                asignarSesion(usuario_activo, usuario_nombre, usuario_nivel);
                                 Swal.fire({
                                     type: tipo,
                                     title: informacion,
@@ -105,16 +106,16 @@ function checkIN (e)
     }
 }
 
-function asignarSesion( id, name, depto ){
+function asignarSesion( id, name, nivel ){
 
     var u_nombre = name,
-        u_depto = depto;
+        u_nivel = nivel;
         u_activo = id;
 
     $.ajax({
         url: 'inc/model/nueva-sesion.php',
         type: 'GET',
-        data: 'id=' + u_activo + '&name=' + u_nombre + '&depto_id=' + u_depto,
+        data: 'id=' + u_activo + '&name=' + u_nombre + '&nivel=' + u_nivel,
         error: function(xhr, status, error) {
             alert("error");
         }
