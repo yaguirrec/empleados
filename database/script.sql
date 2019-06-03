@@ -13,7 +13,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[tbempleados](
+CREATE TABLE [dbo].[tbempleados]( 
 	[id_empleado] [int] IDENTITY(1,1) NOT NULL,
 	[numero_nomina] [varchar](10) NOT NULL,
 	[nombre_largo] [varchar](50) DEFAULT '',
@@ -272,42 +272,53 @@ CREATE SYNONYM [dbo].[puestos_nomipaq]
 FOR
 [192.168.2.203\COMPAC].[ct2017_SERVICIOS_].[dbo].[nom10006]
 
+SELECT te.numero_nomina,te.nombre_largo,te.nombre,te.apellido_paterno,te.apellido_materno,te.status,te.fecha_alta,te.fecha_baja,te.fecha_nacimiento,
+                        ts.nombre,ta.id_area,ta.codigo,ta.nombre,tc.id_celula,tc.codigo,tc.nombre,
+                        pa.password
+                        FROM tbempleados AS te 
+                        INNER JOIN P1ACCESOWEB AS pa
+                        ON te.numero_nomina = pa.employee
+                        INNER JOIN tbsucursal AS ts
+                        ON te.id_sucursal = ts.id_sucursal 
+                        INNER JOIN tbcelula AS tc
+                        ON tc.id_celula = te.id_celula
+                        INNER JOIN tbarea AS ta
+                        ON ta.codigo = tc.codigo_area
+                        AND te.numero_nomina = '08444'
+
 /**STORED FUINCTION LOGIN*/
-SELECT pe.numero_nomina, ui.badgenumber Bnomina,pe.nombre_largo, ui.name,ui.lastname,dp.code depto_id,dp.deptname,aw.password
-                        FROM 
-                        tbempleados as pe
-                        RIGHT JOIN P1ACCESOWEB aw
-                        ON pe.numero_nomina = aw.employee
-                        INNER JOIN userinfo ui
-                        ON RIGHT(ui.badgenumber, 5) = aw.employee
-                        INNER JOIN departments dp
-                        ON ui.defaultdeptid = dp.deptid
-                        WHERE pe.numero_nomina = '08444'
 
 ALTER PROCEDURE datos_empleado_acceso
 @NUMERO_NOMINA VARCHAR(10)
 AS
-	SELECT te.numero_nomina,te.nombre_largo,te.nombre,te.apellido_paterno,te.apellido_paterno,te.status,te.fecha_alta,te.fecha_baja,te.fecha_nacimiento,
-	ts.nombre,ta.id_area,ta.codigo,ta.nombre,tc.id_celula,tc.codigo,tc.nombre,
-	tp.emp_proy,tep.id AS nivel,tep.tipo,
-	pa.password
-	FROM tbempleados AS te 
-	INNER JOIN P1ACCESOWEB AS pa
-	ON te.numero_nomina = pa.employee
-	INNER JOIN tbsucursal AS ts
-	ON te.id_sucursal = ts.id_sucursal 
-	INNER JOIN tbcelula AS tc
-	ON tc.id_celula = te.id_celula
-	INNER JOIN tbarea AS ta
-	ON ta.codigo = tc.codigo_area
-	INNER JOIN tbemp_permisos AS tp
-	ON te.numero_nomina = tp.numero_nomina
-	INNER JOIN tbprivilegios_emp AS tep
-	ON tp.emp_proy = tp.id
-	AND te.numero_nomina = @NUMERO_NOMINA
-	ORDER BY te.numero_nomina
+	BEGIN
+	DECLARE @PERMISOS INT
+		SET @PERMISOS = (SELECT emp_proy FROM tbemp_permisos WHERE numero_nomina= @NUMERO_NOMINA)
+		SELECT te.numero_nomina,te.nombre_largo,te.nombre,te.apellido_paterno,te.apellido_materno,te.status,te.fecha_alta,te.fecha_baja,te.fecha_nacimiento,
+		ts.nombre,ta.id_area,ta.codigo,ta.nombre,tc.id_celula,tc.codigo,tc.nombre,
+		CASE WHEN @PERMISOS = 0 THEN 0 ELSE @PERMISOS END AS emp_proy,
+		--tep.id AS nivel,tep.tipo,
+		pa.password
+		FROM tbempleados AS te 
+		INNER JOIN P1ACCESOWEB AS pa
+		ON te.numero_nomina = pa.employee
+		INNER JOIN tbsucursal AS ts
+		ON te.id_sucursal = ts.id_sucursal 
+		INNER JOIN tbcelula AS tc
+		ON tc.id_celula = te.id_celula
+		INNER JOIN tbarea AS ta
+		ON ta.codigo = tc.codigo_area
+		AND te.numero_nomina = @NUMERO_NOMINA
+	END
 GO
 
+--ver 
+select pa.*, PE.status from P1ACCESOWEB as pa
+INNER JOIN tbempleados AS pe
+on pa.employee = pe.numero_nomina
+and pe.status = 'B'
+
+SELECT * FROM tbemp_permisos WHERE numero_nomina='08444'
 EXEC datos_empleado_acceso @NUMERO_NOMINA = '08444'
 
 /** VISTA EMPLEADOS NOMIPAQ */

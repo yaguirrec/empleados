@@ -67,7 +67,6 @@ function checkIN (e)
                                         no-repeat
                                     `
                                 }).then(function(){ 
-                                    // location.reload();
                                     window.location.href = 'index.php?request=' + ubicacion;
                                 })
                             }else
@@ -91,10 +90,14 @@ function checkIN (e)
                     }
                     else if(respuesta.estado === 'NOK')
                     {
+                        var tipo = respuesta.tipo,
+                            mensaje = respuesta.mensaje,
+                            informacion = respuesta.informacion;
                         Swal.fire({
                             position: 'center',
                             type: 'error',
-                            title: 'Hay un problema con la Base de datos!',
+                            title: mensaje,
+                            text: informacion,
                             showConfirmButton: false,
                             timer: 1500
                         })

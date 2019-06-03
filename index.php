@@ -18,7 +18,6 @@
       include 'inc/templates/header.php';
       include 'inc/templates/sidebar.php';
       include 'inc/templates/inicio.php';
-
       switch ($request)
         {
             case 'empleado': case'bajas':

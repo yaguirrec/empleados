@@ -24,7 +24,7 @@
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/odometer@0.4.8/odometer.min.js"></script>
-  
+  <script src="js/level-control.js"></script>  
 
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.css" rel="stylesheet">
@@ -34,8 +34,9 @@
 </head>
 <?php 
     $nombre_usuario = $_SESSION['usuario_nombre'];
+    $nivel_usuario = $_SESSION['usuario_nivel'];
 ?>
-
+<input type="hidden" id="nivel_usuario" value="<?php echo $nivel_usuario; ?>">
 <body id="page-top">
 
   <!-- Page Wrapper -->

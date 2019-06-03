@@ -11,12 +11,11 @@
         include 'connection.php';   
         $con = connDB();
         $sesion = false;
-        // $conn -> query("SET NAMES utf8");
         $action  = $_POST['action'];
         
-        if($action == 'login')
-        {
-            // die(json_encode($_POST));
+        switch ($action){
+        
+        case 'login':
             $user = $_POST['usuario'];
             $password = $_POST['clave'];
             $password = hash('sha512', $password);
@@ -37,49 +36,61 @@
 
             //Verificar si la consulta regresa resultados, si el usuario exitse
             if ($row = sqlsrv_fetch_array( $stmt, SQLSRV_FETCH_ASSOC)) 
-            {  
-                // die(json_encode($_POST));
-                $clave_bd = trim($row['password']);
-                if( strcasecmp($clave_bd, $password) == 0 )
+            {
+                $empleado_status = trim($row['status']);
+                if ($empleado_status != 'B')
                 {
-                    $usuario_activo = trim($row['numero_nomina']);
-                    $usuario_nivel = trim($row['nivel']);
-                    $usuario_departamento = trim($row['id_area']);
-                    $usuario_nombre = trim(ucwords(strtolower($row['nombre_largo'])));
-                    $sesion = true;
-                    // session_start();//INICIAR LA SESION
-                    $respuesta = array(
-                        'estado' => 'OK',
-                        'ubicacion' => 'main',
-                        'tipo' => 'success',
-                        'mensaje' => 'Ingreso exitoso!',
-                        'informacion' => 'Bienvenido',
-                        'usuario_activo' => $usuario_activo,
-                        'usuario_departamento' => $usuario_departamento,
-                        'usuario_nombre'    => $usuario_nombre,
-                        'usuario_nivel'    => $usuario_nivel,
-                        'sesion' => $sesion
-                    );
+                    $clave_bd = trim($row['password']);
+                    if( strcasecmp($clave_bd, $password) == 0 )
+                    {
+                        $usuario_activo = trim($row['numero_nomina']);
+                        $usuario_nivel = trim($row['nivel']);
+                        $usuario_departamento = trim($row['id_area']);
+                        $usuario_nombre = trim(ucwords(strtolower($row['nombre_largo'])));
+                        $sesion = true;
+                        $respuesta = array(
+                            'estado' => 'OK',
+                            'ubicacion' => 'main',
+                            'tipo' => 'success',
+                            'mensaje' => 'Hola ',
+                            'informacion' => 'Bienvenido(a)',
+                            'usuario_activo' => $usuario_activo,
+                            'usuario_departamento' => $usuario_departamento,
+                            'usuario_nombre'    => $usuario_nombre,
+                            'usuario_nivel'    => $usuario_nivel,
+                            'sesion' => $sesion
+                        );
+                    }else{
+                        $sesion = false;
+                        $respuesta = array(
+                            'estado' => 'NOK',
+                            'tipo' => 'error',
+                            'mensaje' => 'Usuario y clave incorrectos.',
+                            'informacion' => 'Las credenciales ingresadas no son válidas.',
+                            'sesion' => $sesion
+                        );
+                    }
+                //EMPLEADO NO ACTIVO
                 }else{
                     $sesion = false;
-                    $respuesta = array(
-                        'estado' => 'OK',
-                        'tipo' => 'error',
-                        'mensaje' => 'Usuario y clave incorrectos.',
-                        'informacion' => 'Las credenciales ingresadas no son válidas.',
-                        'sesion' => $sesion
-                    );
+                        $respuesta = array(
+                            'estado' => 'NOK',
+                            'tipo' => 'error',
+                            'mensaje' => 'Número de nómina inválido',
+                            'informacion' => 'Su número de nómina ha sido dado de baja',
+                            'sesion' => $sesion
+                        );
                 }
             }
-            //El usuario no existe
+            //EMPLEADO NO EXISTE
             else 
             {
                 $sesion = true;
                 $respuesta = array(
-                    'estado' => 'OK',
+                    'estado' => 'NOK',
                     'tipo' => 'error',
-                    'informacion' => 'No existe usuario',
-                    'mensaje' => 'Usuario y/o clave incorrectos.',
+                    'informacion' => 'Usuario y clave incorrectos.',
+                    'mensaje' => 'Las credenciales ingresadas no son válidas.',
                     'sesion' => $sesion
                     
                 );
@@ -87,10 +98,8 @@
             echo json_encode($respuesta);
             sqlsrv_free_stmt( $stmt);
             sqlsrv_close( $con );
-        }
-        else if ($action == 'lista-empleados')
-        {
-            // die(json_encode($_POST));
+        break;
+        case 'lista-empleados':
             $props = $_POST['prop'];
             if ($props == 'activos')
             {
@@ -149,9 +158,8 @@
             echo json_encode($respuesta);
             sqlsrv_free_stmt( $stmt);
             sqlsrv_close( $con );
-        }
-        else if ($action == 'mostrar-empleado')
-        {
+        break;
+        case 'mostrar-empleado':
             // die(json_encode($_POST));
             $props = $_POST['prop'];
             $query = "SELECT te.numero_nomina, te.nombre_largo, 
@@ -199,9 +207,8 @@
             echo json_encode($respuesta);
             sqlsrv_free_stmt( $stmt);
             sqlsrv_close( $con );
-        }
-        else if ($action == 'buscar-texto')
-        {
+        break;
+        case 'buscar-texto':
             // die(json_encode($_POST));
             $txtBuscado = $_POST['txtBuscado'];
             $props = $_POST['prop'];
@@ -274,11 +281,9 @@
             echo json_encode($respuesta);
             sqlsrv_free_stmt( $stmt);
             sqlsrv_close( $con );
-        }
-        else if ($action == 'highlights')
-        {
+        break;
+        case 'highlights':
             // die(json_encode($_POST));
-
             $query = "SELECT COUNT(*) AS cifras FROM tbempleados WHERE status <> 'B' UNION ALL
                         SELECT COUNT(*) AS totalEmpleadosAdministrativos FROM tbempleados WHERE area_temp LIKE '99COR%' AND status <> 'B' UNION ALL
                         SELECT COUNT(*) AS totalEmpleadosOperativos FROM tbempleados WHERE area_temp NOT LIKE '99COR%' AND status <> 'B' UNION ALL
@@ -314,7 +319,8 @@
             echo json_encode($respuesta);
             sqlsrv_free_stmt( $stmt);
             sqlsrv_close( $con );
-        }else if ($action == 'obtener-empleados-mes'){
+            break;
+        case 'obtener-empleados-mes':
             // die(json_encode($_POST));
 
             $query = "SELECT COUNT (*) AS contador,
@@ -354,7 +360,8 @@
             echo json_encode($respuesta);
             sqlsrv_free_stmt( $stmt);
             sqlsrv_close( $con );
-        }else if ($action == 'obtener-datos-empleados'){
+            break;
+        case 'obtener-datos-empleados':
             // die(json_encode($_POST));
 
             $query = "SELECT 
@@ -391,7 +398,8 @@
             echo json_encode($respuesta);
             sqlsrv_free_stmt( $stmt);
             sqlsrv_close( $con );
-        }else if ($action == 'obtener-datos-sucursales'){
+            break;
+        case 'obtener-datos-sucursales':
             // die(json_encode($_POST));
 
             $query = "SELECT SUBSTRING(area_temp,3,3) AS sucursal,COUNT (*) AS cantidad
@@ -429,6 +437,10 @@
             echo json_encode($respuesta);
             sqlsrv_free_stmt( $stmt);
             sqlsrv_close( $con );
+            break;
+            default:
+            echo 'NO DATA RETRIVE.';
+            break;
         }
 
 ?>

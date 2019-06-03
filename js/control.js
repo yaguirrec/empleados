@@ -4,7 +4,6 @@ $( document ).ready(function() {
     // VALUE OF THE ACTUAL SECTION
     let searchParams = new URLSearchParams(window.location.search)
     let seccionActual = searchParams.get('request');
-    console.log('Seccion ' + seccionActual);
 
     $('#searchBox').keyup(function(event) {
         event.preventDefault();
@@ -272,6 +271,7 @@ $( document ).ready(function() {
             xmlhr.send(dataEmp);
             break;
         default:
+            console.log('Seccion ' + null);    
             $( ".seccionBuscar" ).hide();
             break;
     }
