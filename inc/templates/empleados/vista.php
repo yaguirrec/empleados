@@ -4,7 +4,7 @@
     <h6 class="m-0 font-weight-bold text-secondary">Empleados Activos</h6>
   </div>
   <div class="table-responsive">
-    <table class="table table-sm table-bordered table-hover table-dark text-center text-uppercase" width="80%" cellspacing="4">
+    <table class="table table-sm table-bordered table-hover table-secondary text-center text-uppercase" width="80%" cellspacing="4">
       
       <thead>
         <tr>

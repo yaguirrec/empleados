@@ -18,18 +18,30 @@
       include 'inc/templates/header.php';
       include 'inc/templates/sidebar.php';
       include 'inc/templates/inicio.php';
-      switch ($request)
-        {
-            case 'empleado': case'bajas':
-                include 'inc/templates/empleados/vista.php';
-                break;
-            case 'datos':
-                include 'inc/templates/empleados/vista-empleado.php';
-                break;
-            default:
-                include 'inc/templates/main-content.php';
-                break;
+      if(empty($nivel_usuario)){
+        // header("Location: index.php?request=datos");
+        switch($request){
+          case 'datos':
+            include 'inc/templates/empleados/vista-empleado.php';
+            break;
+          default:
+            include 'inc/templates/empleados/vista-empleado.php';
+            break;
         }
+      }else{
+        switch ($request)
+          {
+              case 'empleado': case'bajas':
+                  include 'inc/templates/empleados/vista.php';
+                  break;
+              case 'datos':
+                  include 'inc/templates/empleados/vista-empleado.php';
+                  break;
+              default:
+                  include 'inc/templates/main-content.php';
+                  break;
+          }
+      }
       include 'inc/templates/footer.php';
     }
 ?>

@@ -46,7 +46,6 @@ function checkIN (e)
                             mensaje = respuesta.mensaje,
                             informacion = respuesta.informacion,
                             usuario_activo = respuesta.usuario_activo,
-                            usuario_departamento = respuesta.usuario_departamento,
                             ubicacion = respuesta.ubicacion,
                             usuario_nombre = respuesta.usuario_nombre,
                             usuario_nivel = respuesta.usuario_nivel;

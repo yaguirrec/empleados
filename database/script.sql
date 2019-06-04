@@ -233,8 +233,8 @@ CREATE TABLE [dbo].[tbprivilegios_emp](
 ) ON [PRIMARY]
 GO
 
-INSERT INTO tbprivilegios_emp (tipo,descripcion,created_at) VALUES ('Empleado normal','Solo acceso a su perfil sin realizar ningun cambio',GETDATE())
-INSERT INTO tbprivilegios_emp (tipo,descripcion,created_at) VALUES ('Administrador','Acceso completo',GETDATE())
+INSERT INTO tbprivilegios_emp (tipo,descripcion,created_at) VALUES ('RH','Acceso a administración de empeados',GETDATE())
+SELECT * FROM tbprivilegios_emp
 
 /*CREAR TABLA RELACION EMPLEADOS-PERMISOS*/
 USE [MEXQApppr]
@@ -254,7 +254,7 @@ CREATE TABLE [dbo].[tbemp_permisos](
 ) ON [PRIMARY]
 GO
 
-INSERT INTO tbemp_permisos (numero_nomina,created_at,emp_proy) VALUES ('08444',GETDATE(),1)
+INSERT INTO tbemp_permisos (numero_nomina,created_at,emp_proy) VALUES ('26263',GETDATE(),1)
 
 SELECT * FROM [dbo].[departamentos_nomipaq]
 SELECT * FROM [dbo].[puestos_nomipaq] where idpuesto = '520'
@@ -296,8 +296,7 @@ AS
 		SET @PERMISOS = (SELECT emp_proy FROM tbemp_permisos WHERE numero_nomina= @NUMERO_NOMINA)
 		SELECT te.numero_nomina,te.nombre_largo,te.nombre,te.apellido_paterno,te.apellido_materno,te.status,te.fecha_alta,te.fecha_baja,te.fecha_nacimiento,
 		ts.nombre,ta.id_area,ta.codigo,ta.nombre,tc.id_celula,tc.codigo,tc.nombre,
-		CASE WHEN @PERMISOS = 0 THEN 0 ELSE @PERMISOS END AS emp_proy,
-		--tep.id AS nivel,tep.tipo,
+		CASE WHEN @PERMISOS = 0 THEN '0' ELSE @PERMISOS END  AS nivel,
 		pa.password
 		FROM tbempleados AS te 
 		INNER JOIN P1ACCESOWEB AS pa
@@ -316,10 +315,10 @@ GO
 select pa.*, PE.status from P1ACCESOWEB as pa
 INNER JOIN tbempleados AS pe
 on pa.employee = pe.numero_nomina
-and pe.status = 'B'
+and pe.status = 'A'
 
 SELECT * FROM tbemp_permisos WHERE numero_nomina='08444'
-EXEC datos_empleado_acceso @NUMERO_NOMINA = '08444'
+EXEC datos_empleado_acceso @NUMERO_NOMINA = '19905'
 
 /** VISTA EMPLEADOS NOMIPAQ */
 ALTER VIEW [vEmpleadosNM] AS
@@ -626,3 +625,4 @@ SELECT COUNT (*) AS contador,
     FROM tbempleados
 GROUP BY MONTH(fecha_alta), FORMAT(fecha_alta, 'MMMM', 'es-es')
 ORDER BY MONTH(fecha_alta) ASC;
+

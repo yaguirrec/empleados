@@ -13,8 +13,10 @@
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
 
+      <div id="sidePaneAdmin">
+
       <!-- Nav Item - Dashboard -->
-      <li class="nav-item active">
+      <li class="nav-item active seccionPanel">
         <a class="nav-link" href="index.php?request=main">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Panel de control</span></a>
@@ -102,6 +104,7 @@
           <span>Tables</span></a>
       </li> -->
 
+      </div>
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
 
@@ -109,6 +112,8 @@
       <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
       </div>
+
+      
 
     </ul>
     <!-- End of Sidebar -->

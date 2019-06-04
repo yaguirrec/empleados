@@ -1,4 +1,4 @@
-<div class="card mx-5">
+<div class="card mx-5 empCard">
   <div class="card-header bg-primary text-white text-center">
     PERFIL DEL EMPLEADO
   </div>
@@ -27,6 +27,11 @@
     </table>
 
     <hr>
-    <a href="javascript:history.back();" class="btn btn-secondary btn-block px-5">Regresar</a>
+    
+    <div class="row" id="backButton">
+      <a href="javascript:history.back();" class="btn btn-secondary btn-block px-5">Regresar</a>
+    </div>
+
   </div>
+
 </div>

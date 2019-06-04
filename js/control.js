@@ -1,5 +1,5 @@
 //GENERAL
-$( document ).ready(function() {
+$( document ).ready(function() {  
 
     // VALUE OF THE ACTUAL SECTION
     let searchParams = new URLSearchParams(window.location.search)
@@ -77,7 +77,7 @@ $( document ).ready(function() {
 
     /**CERRAR SESION */
     $('.btnSalir').click(function(){
-        window.localStorage.clear();
+        localStorage.removeItem('codigoEmpleado');
         cerrarSesion();
         // console.log('Salir');
     });
@@ -202,10 +202,15 @@ $( document ).ready(function() {
             break;
         case 'datos':
             $( ".seccionBuscar" ).hide();
-            console.log('secion empleado');
+            console.log('Seccion empleado');
             //GET VALUE FROM LS
             var codigoEmpleado = localStorage.getItem('codigoEmpleado'),
+                emp_activo = document.querySelector('#emp_activo').value,
+                sup_activo = document.querySelector('#sup_activo').value,
                 action = 'mostrar-empleado';
+            if (localStorage.getItem('codigoEmpleado') === null){
+                codigoEmpleado = emp_activo;
+            }
             //REMOVE VALUE FROM LS
             // localStorage.removeItem('codigoEmpleado');
             var dataEmp = new FormData();
@@ -239,7 +244,6 @@ $( document ).ready(function() {
             break;
         case 'main': 
             $( ".seccionBuscar" ).hide();
-            odometerOptions = { auto: false }; // Disables auto-initialization
             var action = 'highlights',
                 totalEmpleados = $("#txtEmpleados"),
                 totalEmpleadosA = $("#txtEmpleadosA"),
@@ -247,7 +251,7 @@ $( document ).ready(function() {
                 totalEmpleadosN = $("#txtEmpleadosN"),
                 totalSucursales = $("#txtSucursales");
             //REMOVE VALUE FROM LS
-            localStorage.removeItem('codigoEmpleado');
+            // localStorage.removeItem('codigoEmpleado');
             var dataEmp = new FormData();
             dataEmp.append('action', action);
             var xmlhr = new XMLHttpRequest();
@@ -271,9 +275,14 @@ $( document ).ready(function() {
             xmlhr.send(dataEmp);
             break;
         default:
-            console.log('Seccion ' + null);    
             $( ".seccionBuscar" ).hide();
+            console.log('Seccion ' + seccionActual); 
+            cleanLocal();
             break;
+    }
+
+    function cleanLocal(){
+        localStorage.clear();
     }
     
 });

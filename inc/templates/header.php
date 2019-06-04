@@ -24,7 +24,7 @@
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/odometer@0.4.8/odometer.min.js"></script>
-  <script src="js/level-control.js"></script>  
+    
 
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.css" rel="stylesheet">
@@ -33,10 +33,22 @@
   
 </head>
 <?php 
+    $emp_level = '';
+    $sup_level = '';
+    // echo $_SESSION['usuario_nivel'];
+
     $nombre_usuario = $_SESSION['usuario_nombre'];
+    $usuario_activo = $_SESSION['usuario_activo'];
     $nivel_usuario = $_SESSION['usuario_nivel'];
+
+    if(empty($nivel_usuario) || $nivel_usuario == 1)
+      $emp_level = $usuario_activo;
+    else
+      $sup_level = $usuario_activo;
 ?>
-<input type="hidden" id="nivel_usuario" value="<?php echo $nivel_usuario; ?>">
+<input type="hidden" id="nivel_usuario" value="<?php echo $nivel_usuario; ?>" readonly>
+<input type="hidden" id="emp_activo" value="<?php echo $emp_level; ?>" readonly>
+<input type="hidden" id="sup_activo" value="<?php echo $sup_level; ?>" readonly>
 <body id="page-top">
 
   <!-- Page Wrapper -->
