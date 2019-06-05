@@ -37,6 +37,9 @@
               case 'datos':
                   include 'inc/templates/empleados/vista-empleado.php';
                   break;
+              case 'direcciones':
+                  include 'inc/templates/transporte/vista.php';
+                  break;
               default:
                   include 'inc/templates/main-content.php';
                   break;

@@ -41,6 +41,7 @@
             <h6 class="collapse-header">Opciones de consulta:</h6>
             <a class="collapse-item" href="index.php?request=empleado">Empleados activos</a>
             <a class="collapse-item" href="index.php?request=bajas">Empleados inactivos</a>
+            <a class="collapse-item" href="index.php?request=direcciones">Transportes</a>
           </div>
         </div>
       </li>

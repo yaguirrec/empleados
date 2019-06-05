@@ -282,6 +282,82 @@ $( document ).ready(function() {
                 }
             xmlhr.send(dataEmp);
             break;
+        case 'direcciones':
+            $( ".seccionBuscar" ).hide();
+            var action  = 'lista-direcciones';
+            var prop = (seccionActual === 'empleado' ? 'activos' : 'bajas');
+            var titulo = 'Direcciones del personal';
+            $('.seccionTitulo').text(titulo);
+            var dataTable = new FormData();
+            dataTable.append('action', action);
+            // dataTable.append('prop', prop);
+            var xmlhr = new XMLHttpRequest();
+            xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlhr.onload = function(){
+                if (this.status === 200) {
+                var respuesta = JSON.parse(xmlhr.responseText);
+                // console.log(respuesta);
+                if (respuesta.estado === 'OK') {
+                    var informacion = respuesta.informacion;
+                    for(var i in informacion){
+                        tablaDirecciones(informacion[i]);
+                    }     
+                } else if(respuesta.status === 'error'){
+                    var informacion = respuesta.informacion;
+                }
+                }
+                }
+            xmlhr.send(dataTable);
+
+            function tablaDirecciones(rowInfo){
+        
+                var st = rowInfo.status,
+                    status = 'Activo',
+                    estado = '';
+                
+                if(st === 'B'){
+                    estado = "alert-secondary";
+                    status = 'Baja';
+                }
+                if(st === 'R'){
+                    estado = "text-secondary";
+                    status = 'Re-ingreso';
+                }
+                var row = $("<tr class='" + estado + " text-secondary'>");
+                
+                $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
+                // NUMERO DE EQUIPO
+                row.append($("<td class='d-none'>" + rowInfo.id_empleado + " </td>"));
+                row.append($("<td class='trCode'>" + rowInfo.numero_nomina + " </td>"));
+                // NOMINA DEL EMPLEADO
+                row.append($("<td class='text-uppercase'> " + rowInfo.nombre_largo + " </td>"));
+                row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
+                row.append($("<td> " + rowInfo.estado + " </td>"));
+                row.append($("<td> " + rowInfo.poblacion + " </td>"));
+                row.append($("<td> " + rowInfo.codigopostal + " </td>"));
+                row.append($("<td> " + rowInfo.direccion + " </td>"));
+                // COLUMNA ACCION
+                row.append($("<td class='text-center'>"
+                            + "<a class='btn btn-info btnConsulta text-white btn-sm' data-id='"+rowInfo.numero_nomina+"' role='button' title='Ver información'><i class='fas fa-info-circle'></i></a>"
+                            + "</td>"));
+        
+                $(".btnConsulta").unbind().click(function() {
+                    var employeeID = $((this)).data('id'),
+                        url = "index.php?request=datos";
+                        // newTab = window.open(url, '_blank');
+
+                    //SAVE EMPLOYEE ID ON LOCAL STORAGE AS codigoEmpleado
+                    localStorage.setItem('codigoEmpleado', employeeID);
+                    console.log(employeeID);
+                    
+                    // OPEN ON CURRENT TAB
+                    $(location).attr('href',url);
+
+                    // OPEN ON NEW TAB
+                    // newTab.focus();
+                });        
+            }
+            break;
         default:
             $( ".seccionBuscar" ).hide();
             console.log('Seccion ' + seccionActual); 

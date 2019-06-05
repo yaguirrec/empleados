@@ -535,10 +535,10 @@ ts.nombre,te.status,te.updated_at
 FROM tbempleados AS te
 INNER JOIN tbsucursal AS ts
 ON te.id_sucursal = ts.id_sucursal WHERE te.status <> 'B' 
---AND te.numero_nomina = '24974'
+AND te.numero_nomina = '21629'
 ORDER BY te.updated_at DESC, te.status ASC, te.fecha_alta DESC
 
-SELECT te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
+SELECT te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaBaja, 
                             ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
                             FROM tbempleados AS te
                             INNER JOIN tbsucursal AS ts
@@ -548,8 +548,7 @@ SELECT te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.
 							INNER JOIN tbarea AS ta
                             ON ta.codigo = tc.codigo_area
                             WHERE te.status = 'B' 
-							AND (te.numero_nomina LIKE '%19905%' OR te.nombre_largo LIKE '%19905%' OR ts.nombre LIKE '%19905%' OR ta.nombre LIKE '%19905%' OR tc.nombre LIKE '%19905%'
-							OR te.created_at LIKE '%19905%')
+							AND (te.numero_nomina LIKE '%21629%')
                             ORDER BY te.status ASC, te.fecha_alta DESC
 						
 
@@ -568,12 +567,13 @@ SELECT * FROM [192.168.2.203\COMPAC].[ctSERVICIOS_DE_AS].[dbo].[nom10001]
 
 SELECT * FROM [departamentos_nomipaq]
 
-SELECT vde.*,te.fecha_alta,te.status FROM [vDatosEmpleados] AS vde
+SELECT te.numero_nomina,te.nombre_largo,te.fecha_alta,te.id_sucursal,vde.estado,vde.poblacion,vde.codigopostal,te.status
+FROM [vDatosEmpleados] AS vde
 INNER JOIN	tbempleados AS te 
 ON vde.codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS = te.numero_nomina
-WHERE 
-te.status <> 'B' -- ACTIVOS
-AND vde.codigopostal = '' -- SIN CP
+AND codigopostal <> ''
+AND te.status <> 'B' 
+ORDER BY te.fecha_alta
 
 --COMPLETAR SUCURSAL (OMITIR LOS YA ASIGNADOS)
 SELECT ts.id_sucursal,te.numero_nomina,te.nombre_largo,te.area_temp,te.id_celula FROM tbempleados AS te
