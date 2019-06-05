@@ -12,7 +12,7 @@ $( document ).ready(function() {
         if(code==32||code==13||code==188||code==186){
         var txtBuscado = this.value,
             prop = (seccionActual === 'empleado' ? 'activos' : 'bajas');
-            action = 'buscar-texto-test';
+            action = 'buscar-texto';
         // console.log(txtBuscado);
         $('#dataTable').empty();
         var consulta_parametros = new FormData();
@@ -127,7 +127,7 @@ $( document ).ready(function() {
         /**CARGAR TABLA EMPLEADOS */
         case 'empleado': case 'bajas':
             $( ".seccionBuscar" ).show();
-            var action  = 'lista-empleados-test';
+            var action  = 'lista-empleados';
             var prop = (seccionActual === 'empleado' ? 'activos' : 'bajas');
             var titulo = (seccionActual === 'empleado' ? 'Empleados activos' : 'Empleados inactivos');
             $('.seccionTitulo').text(titulo);
