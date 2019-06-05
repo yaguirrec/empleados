@@ -1,17 +1,17 @@
-<hr>
 <div class="card-body">
   <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-secondary">Empleados Activos</h6>
+    <h4 class="m-0 font-weight-bold text-secondary seccionTitulo"></h4>
   </div>
   <div class="table-responsive">
-    <table class="table table-sm table-bordered table-hover table-secondary text-center text-uppercase" width="80%" cellspacing="4">
+    <table class="table table-sm table-bordered table-hover table-secondary text-center text-uppercase" cellspacing="4">
       
       <thead>
         <tr>
           <th class = "d-none" scope="col">#</th>
           <th scope="col">Nómina</th>
           <th scope="col">Nombres</th>
-          <th scope="col">Fecha</th>
+          <th scope="col">Fecha Alta</th>
+          <th scope="col" class="columna-baja">Fecha Baja</th>
           <th scope="col">Sucursal</th>
           <th scope="col">Area</th>
           <th scope="col">Estado</th>

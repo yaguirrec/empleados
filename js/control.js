@@ -12,7 +12,7 @@ $( document ).ready(function() {
         if(code==32||code==13||code==188||code==186){
         var txtBuscado = this.value,
             prop = (seccionActual === 'empleado' ? 'activos' : 'bajas');
-            action = 'buscar-texto';
+            action = 'buscar-texto-test';
         // console.log(txtBuscado);
         $('#dataTable').empty();
         var consulta_parametros = new FormData();
@@ -127,10 +127,15 @@ $( document ).ready(function() {
         /**CARGAR TABLA EMPLEADOS */
         case 'empleado': case 'bajas':
             $( ".seccionBuscar" ).show();
-            var action  = 'lista-empleados';
+            var action  = 'lista-empleados-test';
             var prop = (seccionActual === 'empleado' ? 'activos' : 'bajas');
             var titulo = (seccionActual === 'empleado' ? 'Empleados activos' : 'Empleados inactivos');
-            $('#seccionTitulo').text(titulo);
+            $('.seccionTitulo').text(titulo);
+            if(seccionActual === 'empleado'){
+                $('.columna-baja').addClass('d-none');
+            } else {
+                $('.columna-baja').removeClass('d-none');
+            }
             var dataTable = new FormData();
             dataTable.append('action', action);
             dataTable.append('prop', prop);
@@ -166,22 +171,25 @@ $( document ).ready(function() {
                     estado = "text-secondary";
                     status = 'Re-ingreso';
                 }
-                var row = $("<tr class='" + estado + "'>");
+                var row = $("<tr class='" + estado + " text-secondary'>");
                 
                 $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
                 // NUMERO DE EQUIPO
-                row.append($("<td class='text-muted d-none'>" + rowInfo.id_empleado + " </td>"));
-                row.append($("<td class='text-muted trCode'>" + rowInfo.numero_nomina + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.id_empleado + " </td>"));
+                row.append($("<td class='trCode'>" + rowInfo.numero_nomina + " </td>"));
                 // NOMINA DEL EMPLEADO
                 row.append($("<td class='text-uppercase'> " + rowInfo.nombre_largo + " </td>"));
                 row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
+                if(st === 'B'){
+                    row.append($("<td> " + rowInfo.fechaBaja + " </td>"));
+                }
                 row.append($("<td> " + rowInfo.Sucursal + " </td>"));
                 row.append($("<td> " + rowInfo.Celula + " </td>"));
                 row.append($("<td> " + status + " </td>"));
                 // COLUMNA ACCION
-                    row.append($("<td class='text-center'>"
-                                + "<a class='btn btn-info btnConsulta text-white btn-sm' data-id='"+rowInfo.numero_nomina+"' role='button' title='Ver información'><i class='fas fa-info-circle'></i></a>"
-                                + "</td>"));
+                row.append($("<td class='text-center'>"
+                            + "<a class='btn btn-info btnConsulta text-white btn-sm' data-id='"+rowInfo.numero_nomina+"' role='button' title='Ver información'><i class='fas fa-info-circle'></i></a>"
+                            + "</td>"));
         
                 $(".btnConsulta").unbind().click(function() {
                     var employeeID = $((this)).data('id'),
