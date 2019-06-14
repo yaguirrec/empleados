@@ -55,7 +55,7 @@
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Administrar empleados:</h6>
-            <a class="collapse-item" href="#">Alta de empleado</a>
+            <a class="collapse-item" href="index.php?request=alta-empleado">Alta de empleado</a>
             <a class="collapse-item" href="#">Modificar de empleado</a>
             <a class="collapse-item" href="#">Baja de empleado</a>
             <a class="collapse-item" href="#">Other</a>

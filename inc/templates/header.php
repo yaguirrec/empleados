@@ -19,13 +19,12 @@
 
   <!-- Custom fonts for this template-->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/odometer@0.4.8/odometer.min.js"></script>
-    
-
+  
   <!-- Custom styles for this template-->
   <link href="css/sb-admin-2.css" rel="stylesheet">
 
@@ -50,6 +49,6 @@
 <input type="hidden" id="emp_activo" value="<?php echo $emp_level; ?>" readonly>
 <input type="hidden" id="sup_activo" value="<?php echo $sup_level; ?>" readonly>
 <body id="page-top">
-
   <!-- Page Wrapper -->
-  <div id="wrapper">
+  
+<div id="wrapper">

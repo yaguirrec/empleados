@@ -308,7 +308,7 @@ $( document ).ready(function() {
                 }
                 }
             xmlhr.send(dataTable);
-
+              
             function tablaDirecciones(rowInfo){
         
                 var st = rowInfo.status,
@@ -355,8 +355,192 @@ $( document ).ready(function() {
 
                     // OPEN ON NEW TAB
                     // newTab.focus();
-                });        
+                });
             }
+
+                
+            break;
+        case 'alta-empleado':
+            $( ".seccionBuscar" ).hide();
+            var botonValidar = $("#btnValidar"),
+                vcurp = $(".validaCurp"),
+                altaEmpleado = $(".altaEmpleado"),
+                txtSucursal = $("#txtSucursal"),
+                txtNomina = $("#txtNomina"),
+                txtCelula = $("#txtCelula"),
+                txtPuesto = $("#txtPuesto"),
+                txtCURP = $("#txtCURP"),
+                txtFraccionamiento = $("#txtFraccionamiento"),
+                ccurp = $("#campo-curp"),
+                entidad = '',
+                genero = '';
+            botonValidar.hide();
+            altaEmpleado.hide();
+
+            //VALIDAR SI LA CURP TIENE 18 CARACTERES HABILITA BOTON DE ENVIO
+            ccurp.keyup(function(e){
+                if(ccurp.val().length === 18){
+                    textocurp = $("#campo-curp").val();
+                    botonValidar.show();
+                    txtCURP.val(textocurp);
+                    genero = textocurp.charAt(10);
+
+                    $("#txtGenero").val(genero);
+
+                    
+                    var url = 'inc/model/entidades.json',
+                        entidad = textocurp.substr(11, 2);
+
+                    $.getJSON(url, function (data) {
+                        var clave = '';
+                        for(var e in data.entidades){
+                            clave = data.entidades[e].clave;
+                            if (clave === entidad){
+                                console.log(data.entidades[e].nombre);
+                            }
+                        }
+                    });
+
+                } else if (ccurp.val().length < 18 || e.keyCode == 46) {
+                    botonValidar.hide();
+                }
+            });
+
+            botonValidar.on("click", function(e){
+                e.preventDefault();
+                vcurp.hide();
+                altaEmpleado.show();
+            });
+
+            //LLENAR SUCURSALES
+            var listaSUC = new FormData(),
+                action = 'buscarSucursal';
+            listaSUC.append('action', action);
+            var xmlSUC = new XMLHttpRequest();
+            xmlSUC.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlSUC.onload = function(){
+                if (this.status === 200) {
+                var respuesta = JSON.parse(xmlSUC.responseText);
+                if (respuesta.estado === 'OK') {
+                    var informacion = respuesta.informacion;
+                    var s = '<option value="-1" selected>Seleccionar una Sucursal</option>'; 
+                    for(var i in informacion){
+                        s += '<option value="'+ informacion[i].id_sucursal +'">' + informacion[i].nombre + '</option>';
+                    }     
+                    txtSucursal.html(s);
+                } else if(respuesta.status === 'error'){
+                    var informacion = respuesta.informacion;
+                }
+                }
+                }
+            xmlSUC.send(listaSUC);
+
+            //LLENAR NOMINA
+            var listaNOM = new FormData(),
+                action = 'buscarNomina';
+            listaNOM.append('action', action);
+            var xmlNOM = new XMLHttpRequest();
+            xmlNOM.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlNOM.onload = function(){
+                if (this.status === 200) {
+                var respuesta = JSON.parse(xmlNOM.responseText);
+                // console.log(respuesta);
+                if (respuesta.estado === 'OK') {
+                    var informacion = respuesta.informacion;
+                    var s = '<option value="-1">Seleccionar nomina</option>'; 
+                    for(var i in informacion){
+                        s += '<option value="'+ informacion[i].code_value +'">' + informacion[i].code_value_desc + '</option>';
+                    }     
+                    txtNomina.html(s);
+                } else if(respuesta.status === 'error'){
+                    var informacion = respuesta.informacion;
+                }
+                }
+                }
+            xmlNOM.send(listaNOM);
+
+            //LLENAR CELULAS
+            var listaCEL = new FormData(),
+                action = 'buscarCelula';
+            listaCEL.append('action', action);
+            var xmlCEL = new XMLHttpRequest();
+            xmlCEL.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlCEL.onload = function(){
+                if (this.status === 200) {
+                var respuesta = JSON.parse(xmlCEL.responseText);
+                if (respuesta.estado === 'OK') {
+                    var informacion = respuesta.informacion;
+                    var s = '<option value="-1">Seleccionar celula</option>'; 
+                    for(var i in informacion){
+                        s += '<option value="'+ informacion[i].id_celula +'">' + informacion[i].nombre + '</option>';
+                    }     
+                    txtCelula.html(s);
+                } else if(respuesta.status === 'error'){
+                    var informacion = respuesta.informacion;
+                }
+                }
+                }
+                xmlCEL.send(listaCEL);
+
+            //LLENAR PUESTOS
+            var listaP = new FormData(),
+            action = 'buscarP';
+            listaP.append('action', action);
+            var xmlP = new XMLHttpRequest();
+            xmlP.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlP.onload = function(){
+            if (this.status === 200) {
+            var respuesta = JSON.parse(xmlP.responseText);
+            if (respuesta.estado === 'OK') {
+                var informacion = respuesta.informacion;
+                var s = '<option value="-1">Seleccionar tipo de puesto</option>'; 
+                for(var i in informacion){
+                    s += '<option value="'+ informacion[i].id_puesto +'">' + informacion[i].nombre + '</option>';
+                }     
+                txtPuesto.html(s);
+            } else if(respuesta.status === 'error'){
+                var informacion = respuesta.informacion;
+            }
+            }
+            }
+            xmlP.send(listaP);
+
+            //CONTROL CODIGO POSTAL
+            $("#txtCP").focusout(function(){
+                var cp = $('#txtCP').val();
+                if(cp.length === 5){
+                    $.ajax({
+                        type:"GET",
+                        url: "https://api-codigos-postales.herokuapp.com/v2/codigo_postal/"+cp,
+                        success: function(data){
+                            $("#txtEdo").val(data.estado);
+                            $("#txtMunicipio").val(data.municipio);
+                            var colonias = data.colonias,
+                                s= '';
+                            for(var i in colonias){
+                                s += '<option value="'+ colonias[i] +'">' + colonias[i] + '</option>';
+                            }
+                            txtFraccionamiento.html(s);
+                        },
+                        error: function(jqXHR, textStatus, errorThrown){
+                            console.log(jqXHR.status);
+                        }
+                    });
+                } else {
+                    console.log("El CP debe ser de 5 digitos");
+                }
+            });
+
+            $("#txtPaterno").focusout(function(){
+                var ap = $("#txtPaterno").val();
+                $("#txtAPp").val(ap);
+            });
+
+            $("#txtMaterno").focusout(function(){
+                var ap = $("#txtMaterno").val();
+                $("#txtAPm").val(ap);
+            });
+
             break;
         default:
             $( ".seccionBuscar" ).hide();

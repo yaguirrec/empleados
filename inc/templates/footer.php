@@ -9,9 +9,7 @@
 <!-- SWEEALERT 2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.8.1/dist/sweetalert2.all.min.js"></script>
 
-
-<!-- Core plugin JavaScript-->
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/jquery-ui.min.js'></script>
 
 <!-- Custom scripts for all pages-->
 <script src="js/sb-admin-2.min.js"></script>
@@ -51,7 +49,8 @@
 
             <!-- Scroll to Top Button-->
             <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fas fa-angle-up"></i>
+                <!-- <i class="far fa-hand-point-up"></i> -->
+                <i class="fas fa-chevron-up"></i>
             </a>    
         <?php
                 }

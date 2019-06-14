@@ -32,17 +32,20 @@
         switch ($request)
           {
               case 'empleado': case'bajas':
-                  include 'inc/templates/empleados/vista.php';
-                  break;
+                include 'inc/templates/empleados/vista.php';
+                break;
+              case 'alta-empleado':
+                include 'inc/templates/empleados/alta-empleado.php';
+                break;
               case 'datos':
-                  include 'inc/templates/empleados/vista-empleado.php';
-                  break;
+                include 'inc/templates/empleados/vista-empleado.php';
+                break;
               case 'direcciones':
-                  include 'inc/templates/transporte/vista.php';
-                  break;
+                include 'inc/templates/transporte/vista.php';
+                break;
               default:
-                  include 'inc/templates/main-content.php';
-                  break;
+                include 'inc/templates/main-content.php';
+                break;
           }
       }
       include 'inc/templates/footer.php';

@@ -4,7 +4,7 @@
   </div>
   <div class="table-responsive">
     <table class="table table-sm table-bordered table-hover table-secondary text-center text-uppercase" cellspacing="4">
-      
+
       <thead>
         <tr>
           <th class = "d-none" scope="col">#</th>
@@ -21,7 +21,7 @@
       <tbody id="dataTable">
 
       </tbody>
-    </table>
+    </table>    
     <div class="alert alert-danger d-none text-uppercase text-center h4" id="alertaM" role="alert">
       No hay información disponible.
     </div>

@@ -1,3 +1,4 @@
+
 /**FUNCION QUITAR ESPACIOS EN BLANCO DE TEXTO**/
 CREATE FUNCTION dbo.TRIM(@string VARCHAR(MAX))
 RETURNS VARCHAR(MAX)
@@ -504,7 +505,7 @@ tb 34 nomipaq
 
 /*CONSULTAS*/
 SELECT * FROM [vEmpleadosNM] ORDER BY fechaCaptura DESC 
-SELECT * FROM tbempleados where nombre_largo like '%Acosta Tavarez%' ORDER BY updated_at DESC
+SELECT * FROM tbempleados ORDER BY updated_at DESC
 SELECT * FROM tbsucursal
 SELECT * FROM tbarea WHERE codigo = '3'
 SELECT * FROM tbcelula
@@ -567,7 +568,7 @@ SELECT * FROM [192.168.2.203\COMPAC].[ctSERVICIOS_DE_AS].[dbo].[nom10001]
 
 SELECT * FROM [departamentos_nomipaq]
 
-SELECT te.numero_nomina,te.nombre_largo,te.fecha_alta,te.id_sucursal,vde.estado,vde.poblacion,vde.codigopostal,te.status
+SELECT te.numero_nomina,te.nombre_largo,te.fecha_alta,te.id_sucursal,vde.estado,vde.poblacion,vde.codigopostal,te.status,vde.*
 FROM [vDatosEmpleados] AS vde
 INNER JOIN	tbempleados AS te 
 ON vde.codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS = te.numero_nomina
