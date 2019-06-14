@@ -76,7 +76,7 @@ FOR INSERT
 				@FECHA_SUCURSAL DATETIME,
 				@ABR_SUCURSAL VARCHAR(5);
 SELECT @CODIGO_SUCURSAL = ins.project FROM INSERTED ins;
-SELECT @NOMBRE_SUCURSAL = SUBSTRING(ins.project_desc,10 , 30) FROM INSERTED ins;
+SELECT @NOMBRE_SUCURSAL = ins.project_desc FROM INSERTED ins;
 SELECT @SUCURSAL_PRINCIPAL = SUBSTRING(ins.project,6 , 4) FROM INSERTED ins;
 SELECT @DESC_SUCURSAL = ins.project_desc FROM INSERTED ins;
 SELECT @FECHA_SUCURSAL = ins.crtd_datetime FROM INSERTED ins;
@@ -627,3 +627,11 @@ SELECT COUNT (*) AS contador,
 GROUP BY MONTH(fecha_alta), FORMAT(fecha_alta, 'MMMM', 'es-es')
 ORDER BY MONTH(fecha_alta) ASC;
 
+SELECT * FROM tbcelula
+SELECT * FROM PJCODE
+SELECT * FROM PJCODE where code_value = '520'
+select * from rh_empelados2
+/*
+FFA - 
+
+*/
