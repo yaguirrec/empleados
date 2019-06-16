@@ -372,7 +372,6 @@ $( document ).ready(function() {
                 txtCURP = $("#txtCURP"),
                 txtFraccionamiento = $("#txtFraccionamiento"),
                 ccurp = $("#campo-curp"),
-                entidad = '',
                 genero = '';
             botonValidar.hide();
             altaEmpleado.hide();
@@ -396,7 +395,7 @@ $( document ).ready(function() {
                         for(var e in data.entidades){
                             clave = data.entidades[e].clave;
                             if (clave === entidad){
-                                console.log(data.entidades[e].nombre);
+                                $("#txtLnacimiento").val(data.entidades[e].nombre);
                             }
                         }
                     });
@@ -531,7 +530,7 @@ $( document ).ready(function() {
                 }
             });
 
-            $("#txtPaterno").focusout(function(){
+            $("#txtPaterno").onkeyup(function(){
                 var ap = $("#txtPaterno").val();
                 $("#txtAPp").val(ap);
             });

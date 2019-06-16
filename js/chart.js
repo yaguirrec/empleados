@@ -6,6 +6,7 @@ $( document ).ready(function() {
     let seccionActual = searchParams.get('request');
     var meses = [],
         empleados = [],
+        empleadosB = [],
         empleados_activos = [],
         empleados_inactivos = [],
         nombre_sucursal = [],
@@ -15,13 +16,16 @@ $( document ).ready(function() {
     var hoverbgColors = ['SkyBlue','PaleGreen','SkyBlue','PaleGreen','SkyBlue','PaleGreen','SkyBlue','PaleGreen','SkyBlue','PaleGreen','SkyBlue','PaleGreen','SkyBlue','PaleGreen','SkyBlue','PaleGreen'];
 
         obtenerEmpleados();
+        obtenerEmpleadosB();
         obtenerEmpleadosAO();
         obtenerSucursales();
 
         function obtenerEmpleados(){
-            var action = 'obtener-empleados-mes';
+            var action = 'obtener-empleados-mes',
+                props = 'altas';
             var consulta_parametros = new FormData();
             consulta_parametros.append('action', action);
+            consulta_parametros.append('props', props);
             var xmlhr = new XMLHttpRequest();
             xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
                 xmlhr.onload = function()
@@ -39,6 +43,38 @@ $( document ).ready(function() {
                 xmlhr.send(consulta_parametros);
         }
 
+        function obtenerEmpleadosB(){
+            var action = 'obtener-empleados-mes',
+                props = 'bajas';
+            var consulta_parametros = new FormData();
+            consulta_parametros.append('action', action);
+            consulta_parametros.append('props', props);
+            var xmlhr = new XMLHttpRequest();
+            xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+                xmlhr.onload = function()
+                {
+                if (this.status === 200) {
+                var respuesta = JSON.parse(xmlhr.responseText);
+                if (respuesta.estado === 'OK') {
+                    var informacion = respuesta.informacion;
+                    obtenerDatosB(informacion);
+                } else if(respuesta.estado === 'NOK'){
+                    var informacion = respuesta.informacion;
+                }
+                }
+                }
+                xmlhr.send(consulta_parametros);
+        }
+
+        function obtenerDatosB(params){
+            for (var i = 0; i < params.length; i++) {
+                empleadosB.push(params[i].contador);
+            }
+            localStorage.setItem('empleadosB', empleadosB);
+        }
+
+        DempleadosB = localStorage.getItem('empleadosB').split(',');
+
         function obtenerDatos(params){
             for (var i = 0; i < params.length; i++) {
                 meses.push(params[i].nombre_mes);
@@ -51,28 +87,34 @@ $( document ).ready(function() {
         Dmeses = localStorage.getItem('meses').split(',');
         Dempleados = localStorage.getItem('empleados').split(',');
 
+        var datosAltas = {
+            label: "Altas del mes",
+            data: Dempleados,
+            lineTension: 0,
+            fill: false,
+            borderColor: 'blue'
+          };
+
+          var datosBajas = {
+            label: "Bajas del mes",
+            data: DempleadosB,
+            lineTension: 0,
+            fill: false,
+          borderColor: 'red',
+          };
+
+          var speedData = {
+            labels: Dmeses,
+            datasets: [datosAltas, datosBajas]
+          };
+
         // Area Chart Example
         var ctx = document.getElementById("chartMensual");
         var myLineChart = new Chart(ctx, {
         type: 'line',
-        data: {
-            labels: Dmeses,
-            datasets: [{
-            label: "Empleados",
-            lineTension: 0.3,
-            backgroundColor: "rgba(78, 115, 223, 0.05)",
-            borderColor: "rgba(78, 115, 223, 1)",
-            pointRadius: 3,
-            pointBackgroundColor: "rgba(78, 115, 223, 1)",
-            pointBorderColor: "rgba(78, 115, 223, 1)",
-            pointHoverRadius: 3,
-            pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-            pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-            pointHitRadius: 10,
-            pointBorderWidth: 2,
-            data: Dempleados,
-            }],
-        },
+        data: 
+            speedData
+        ,
         options: {
             maintainAspectRatio: false,
             layout: {
