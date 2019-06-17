@@ -14,11 +14,12 @@
 <!-- Custom scripts for all pages-->
 <script src="js/sb-admin-2.min.js"></script>
 
-<!-- <script src="vendor/chart.js/Chart.min.js"></script> -->
+<script src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
 
 <!-- LOCAL JS -->
 <script src="js/control.js"></script>
 <script src="js/level-control.js"></script>
+<script src="js/excelexportjs.js"></script>
 <script src="js/chart.js"></script>            
 
     <?php
@@ -57,6 +58,7 @@
         ?>
         <!-- Page level plugins -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+        <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
 
 </html>
 

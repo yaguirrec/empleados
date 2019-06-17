@@ -95,16 +95,5 @@
 
       <div class="container-fluid">
 
-      <div class="row seccionBuscar">
-          <div class="col-md-5 ml-auto">
-              <div class="input-group mb-12">
-                  <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroup-sizing-default"><i class="fas fa-search"></i></span>
-                  </div>
-                  <input type="text" class="form-control" aria-label="Sizing example input" id="searchBox" aria-describedby="inputGroup-sizing-default" placeholder="Buscar..." autofocus>
-                  <!-- <button class="btn btn-success ml-3 exportTable"><i class="fas fa-file-excel" title='Exportar tabla'></i> Exportar</button> -->
-              </div>
-          </div>
-      </div>
       <!-- CONTENT LATERAL MENU -->
       

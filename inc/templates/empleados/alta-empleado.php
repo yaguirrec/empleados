@@ -8,7 +8,7 @@
                 <div class="form-group row">
                     <label for="campo-curp" class="col-sm-2 col-form-label">CURP</label>
                     <div class="col-md-10">
-                    <input type="text" class="form-control" id="campo-curp" placeholder="CURP" maxlength="18" minlength="18">
+                    <input type="text" class="form-control" id="campo-curp" placeholder="CURP" maxlength="18" minlength="18" autofocus>
                     </div>
                 </div>
                 

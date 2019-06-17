@@ -103,7 +103,7 @@ $( document ).ready(function() {
           borderColor: 'red',
           };
 
-          var speedData = {
+          var datosEmpleados = {
             labels: Dmeses,
             datasets: [datosAltas, datosBajas]
           };
@@ -113,7 +113,7 @@ $( document ).ready(function() {
         var myLineChart = new Chart(ctx, {
         type: 'line',
         data: 
-            speedData
+            datosEmpleados
         ,
         options: {
             maintainAspectRatio: false,

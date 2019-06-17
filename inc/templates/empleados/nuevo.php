@@ -1,10 +1,10 @@
-<form>
+<form id="altaEmpleado">
   <div class="bg-gradient-success p-5 text-white text-center rounded-right">
   <h1>DATOS DE LA EMPRESA</h1>
     <div class="form-row">
       <div class="form-group col-md-2">
         <label for="txtNomina">Número de nomina</label>
-        <input type="text" class="form-control" id="txtNomina" placeholder="Nomina">
+        <input type="text" class="form-control" id="txtNomina" placeholder="Nomina" autofocus>
       </div>
       <div class="form-group col-md-2">
         <label for="txtTipo">Tipo</label>
@@ -12,7 +12,7 @@
       </div>
       <div class="form-group col-md-4">
         <label for="txtLote">Lote</label>
-        <input type="text" class="form-control" id="txtLote" placeholder="Lote" >
+        <input type="text" class="form-control" id="txtLote" placeholder="Lote" autofocus>
       </div>
       <div class="form-group col-md-4">
         <label for="txtCategoria">Categoria</label>
@@ -263,7 +263,7 @@
         <input type="text" class="form-control" id="txtNfonacot">
       </div>
       <div class="form-group col-md-1">
-        <label for="txtBanco">Tarjeta banco</label>
+        <label for="txtBanco">Tarjeta</label>
         <select class="form-control" id="txtBanco">
           <option value="" selected>SI</option>
           <option value="">NO</option>

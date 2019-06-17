@@ -29,6 +29,7 @@
   <link href="css/sb-admin-2.css" rel="stylesheet">
 
   <link rel="shortcut icon" href="img/whiteLogo2.ico">
+
   
 </head>
 <?php 

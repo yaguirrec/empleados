@@ -24,12 +24,10 @@ $( document ).ready(function() {
             xmlhr.onload = function()
             {
             if (this.status === 200) {
-              var respuesta = JSON.parse(xmlhr.responseText);
-            //   console.log(respuesta);
+                var respuesta = JSON.parse(xmlhr.responseText);
               if (respuesta.estado === 'OK') {
                 var informacion = respuesta.informacion,
                     datos = respuesta.informacion.length;
-                // console.log(informacion.length);
                 if(datos < 1){
                     $('#alertaM').removeClass('d-none');
                 } else {
@@ -72,9 +70,19 @@ $( document ).ready(function() {
 				});
 			});
 		}
-	});
-
-
+    });
+    
+    /**EXPORTAR A EXCEL */
+    $('.exportTable').click(function(){
+        $(".table").table2excel({
+            containerid: ".table", 
+            datatype: 'table',
+            name: "report",
+            filename: "Reporte " + seccionActual, // Here, you can assign exported file name
+            fileext: ".xls"
+        }); 
+    });  
+    
     /**CERRAR SESION */
     $('.btnSalir').click(function(){
         localStorage.removeItem('codigoEmpleado');
@@ -144,7 +152,6 @@ $( document ).ready(function() {
             xmlhr.onload = function(){
                 if (this.status === 200) {
                 var respuesta = JSON.parse(xmlhr.responseText);
-                // console.log(respuesta);
                 if (respuesta.estado === 'OK') {
                     var informacion = respuesta.informacion;
                     for(var i in informacion){
@@ -158,11 +165,12 @@ $( document ).ready(function() {
             xmlhr.send(dataTable);
 
             function tablaEmpleados(rowInfo){
-        
                 var st = rowInfo.status,
                     status = 'Activo',
                     estado = '';
                 
+                $('#loadingIndicator').addClass('d-none');
+
                 if(st === 'B'){
                     estado = "alert-secondary";
                     status = 'Baja';
@@ -175,7 +183,6 @@ $( document ).ready(function() {
                 
                 $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
                 // NUMERO DE EQUIPO
-                row.append($("<td class='d-none'>" + rowInfo.id_empleado + " </td>"));
                 row.append($("<td class='trCode'>" + rowInfo.numero_nomina + " </td>"));
                 // NOMINA DEL EMPLEADO
                 row.append($("<td class='text-uppercase'> " + rowInfo.nombre_largo + " </td>"));
@@ -314,6 +321,8 @@ $( document ).ready(function() {
                 var st = rowInfo.status,
                     status = 'Activo',
                     estado = '';
+
+                $('#loadingIndicator').addClass('d-none');
                 
                 if(st === 'B'){
                     estado = "alert-secondary";
@@ -372,6 +381,7 @@ $( document ).ready(function() {
                 txtCURP = $("#txtCURP"),
                 txtFraccionamiento = $("#txtFraccionamiento"),
                 ccurp = $("#campo-curp"),
+                validaCampos = 3,
                 genero = '';
             botonValidar.hide();
             altaEmpleado.hide();
@@ -514,6 +524,7 @@ $( document ).ready(function() {
                         success: function(data){
                             $("#txtEdo").val(data.estado);
                             $("#txtMunicipio").val(data.municipio);
+                            $("#txtLocalidad").val(data.municipio);
                             var colonias = data.colonias,
                                 s= '';
                             for(var i in colonias){
@@ -526,11 +537,17 @@ $( document ).ready(function() {
                         }
                     });
                 } else {
-                    console.log("El CP debe ser de 5 digitos");
+                    Swal.fire({
+                        position: 'center',
+                        type: 'warning',
+                        title: 'EL CP debe tener 5 digitos',
+                        showConfirmButton: false,
+                        timer: 1000
+                      })
                 }
             });
 
-            $("#txtPaterno").onkeyup(function(){
+            $("#txtPaterno").focusout(function(){
                 var ap = $("#txtPaterno").val();
                 $("#txtAPp").val(ap);
             });
@@ -539,6 +556,8 @@ $( document ).ready(function() {
                 var ap = $("#txtMaterno").val();
                 $("#txtAPm").val(ap);
             });
+
+            // VALIDAR CAMPOS
 
             break;
         default:
