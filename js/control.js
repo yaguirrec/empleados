@@ -130,6 +130,75 @@ $( document ).ready(function() {
         xmlhr.send(cerrar_sesion);
     }
 
+    $("#exportInfo").click(function(){
+        var action  = 'json-empleados';
+        var prop = (seccionActual === 'empleado' ? 'activos' : 'bajas');
+        var encabezados = (seccionActual === 'empleado' ? ["NOMINA", "NOMBRE","FECHA ALTA","SUCURSAL","AREA","CELULA","ESTADO"] : ["NOMINA", "NOMBRE","FECHA ALTA","FECHA BAJA","SUCURSAL","AREA","CELULA","ESTADO"]);
+        var titulo = (seccionActual === 'empleado' ? 'Empleados activos' : 'Empleados inactivos');
+        $('.seccionTitulo').text(titulo);
+        if(seccionActual === 'empleado'){
+            $('.columna-baja').addClass('d-none');
+        } else {
+            $('.columna-baja').removeClass('d-none');
+        }
+        var dataTable = new FormData();
+        dataTable.append('action', action);
+        dataTable.append('prop', prop);
+        var xmlhr = new XMLHttpRequest();
+        xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+        xmlhr.onload = function(){
+            if (this.status === 200) {
+            var respuesta = JSON.parse(xmlhr.responseText);
+            if (respuesta.estado === 'OK') {
+                var informacion = respuesta.informacion;
+
+                crearExcel(encabezados,informacion);
+                    
+            } else if(respuesta.status === 'error'){
+                var informacion = respuesta.informacion;
+            }
+            }
+            }
+        xmlhr.send(dataTable);
+
+        var createXLSLFormatObj = [];
+
+        function crearExcel(encabezados, informacion){
+            var xlsHeader = encabezados;
+            var xlsRows = informacion;
+
+            createXLSLFormatObj.push(xlsHeader);
+            $.each(xlsRows, function(index, value) {
+                var innerRowData = [];
+                $("tbody").append('<tr><td>' + value.numero_nomina + '</td><td>' + value.Nombre + '</td><td>' + value.fechaAlta + '</td><td>' + value.Sucursal + '</td><td>' + value.Celula + '</td><td>' + value.status + '</td></tr>');
+                $.each(value, function(ind, val) {
+                    innerRowData.push(val);
+                });
+                createXLSLFormatObj.push(innerRowData);
+            });
+
+
+            /* File Name */
+            var filename = "reporte-empleados-"+prop+".xlsx";
+
+            /* Sheet Name */
+            var ws_name = "Empleados";
+
+            if (typeof console !== 'undefined') console.log(new Date());
+            var wb = XLSX.utils.book_new(),
+                ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
+
+            /* Add worksheet to workbook */
+            XLSX.utils.book_append_sheet(wb, ws, ws_name);
+
+            /* Write workbook and Download */
+            if (typeof console !== 'undefined') console.log(new Date());
+            XLSX.writeFile(wb, filename);
+            if (typeof console !== 'undefined') console.log(new Date());
+        }
+
+    });
+
     switch (seccionActual)
     {
         /**CARGAR TABLA EMPLEADOS */
@@ -185,7 +254,7 @@ $( document ).ready(function() {
                 // NUMERO DE EQUIPO
                 row.append($("<td class='trCode'>" + rowInfo.numero_nomina + " </td>"));
                 // NOMINA DEL EMPLEADO
-                row.append($("<td class='text-uppercase'> " + rowInfo.nombre_largo + " </td>"));
+                row.append($("<td class='text-left'> " + rowInfo.Nombre + " </td>"));
                 row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
                 if(st === 'B'){
                     row.append($("<td> " + rowInfo.fechaBaja + " </td>"));
@@ -386,6 +455,28 @@ $( document ).ready(function() {
             botonValidar.hide();
             altaEmpleado.hide();
 
+            ccurp.focusout(function(){
+                textocurp = $("#campo-curp").val();
+                //ASIGNAR FECHA NACIMIENTO DESDE CURP
+                    
+                var aNacimiento = textocurp.substr(4, 2),
+                mNacimiento = textocurp.substr(6, 2),
+                dNacimiento = textocurp.substr(8, 2);
+                
+
+                var now = new Date(aNacimiento,mNacimiento-1,dNacimiento);
+                var nyear = now.getFullYear();
+
+                var fNacimiento = nyear + '-' + mNacimiento + '-' + dNacimiento;
+
+                $("#txtfechaNacimiento").val(fNacimiento);
+            });
+
+            //EVITAR ACCION AL PRESIONAR LA TECLA ENTER
+            ccurp.keypress(function(event){
+                if(event.keyCode == 13) return false;
+            });
+            
             //VALIDAR SI LA CURP TIENE 18 CARACTERES HABILITA BOTON DE ENVIO
             ccurp.keyup(function(e){
                 if(ccurp.val().length === 18){
@@ -393,12 +484,14 @@ $( document ).ready(function() {
                     botonValidar.show();
                     txtCURP.val(textocurp);
                     genero = textocurp.charAt(10);
-
+                    //ASIGNAR GENERO DESDE CURP
                     $("#txtGenero").val(genero);
 
-                    
+                    //ASIGNAR ENTIDAD DE NACIMIENTO DESDE CURP
                     var url = 'inc/model/entidades.json',
                         entidad = textocurp.substr(11, 2);
+
+                    
 
                     $.getJSON(url, function (data) {
                         var clave = '';
@@ -409,7 +502,7 @@ $( document ).ready(function() {
                             }
                         }
                     });
-
+                    
                 } else if (ccurp.val().length < 18 || e.keyCode == 46) {
                     botonValidar.hide();
                 }
@@ -432,9 +525,9 @@ $( document ).ready(function() {
                 var respuesta = JSON.parse(xmlSUC.responseText);
                 if (respuesta.estado === 'OK') {
                     var informacion = respuesta.informacion;
-                    var s = '<option value="-1" selected>Seleccionar una Sucursal</option>'; 
+                    var s = '<option value="" selected>Seleccionar una Sucursal</option>'; 
                     for(var i in informacion){
-                        s += '<option value="'+ informacion[i].id_sucursal +'">' + informacion[i].nombre + '</option>';
+                        s += '<option value="'+ informacion[i].id_sucursal +'">' + informacion[i].codigo.substr(0, 5) + ' - ' + informacion[i].nombre + '</option>';
                     }     
                     txtSucursal.html(s);
                 } else if(respuesta.status === 'error'){
@@ -456,7 +549,7 @@ $( document ).ready(function() {
                 // console.log(respuesta);
                 if (respuesta.estado === 'OK') {
                     var informacion = respuesta.informacion;
-                    var s = '<option value="-1">Seleccionar nomina</option>'; 
+                    var s = '<option value="">Seleccionar nomina</option>'; 
                     for(var i in informacion){
                         s += '<option value="'+ informacion[i].code_value +'">' + informacion[i].code_value_desc + '</option>';
                     }     
@@ -479,7 +572,7 @@ $( document ).ready(function() {
                 var respuesta = JSON.parse(xmlCEL.responseText);
                 if (respuesta.estado === 'OK') {
                     var informacion = respuesta.informacion;
-                    var s = '<option value="-1">Seleccionar celula</option>'; 
+                    var s = '<option value="">Seleccionar celula</option>'; 
                     for(var i in informacion){
                         s += '<option value="'+ informacion[i].id_celula +'">' + informacion[i].nombre + '</option>';
                     }     
@@ -557,7 +650,12 @@ $( document ).ready(function() {
                 $("#txtAPm").val(ap);
             });
 
-            // VALIDAR CAMPOS
+
+            // DESHABILITAR CAMPOS
+            function lockFields(){
+                if  ($("#txtGenerp").val().trim() === 0) $("#txtGenero").attr('disabled','disabled');
+
+            }
 
             break;
         default:

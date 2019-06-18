@@ -1,11 +1,11 @@
 <div class="card-body">
   <div class="card-header py-3">
-    <h4 class="m-0 font-weight-bold text-secondary seccionTitulo"></h4>
+    <h2 class="m-0 font-weight-bold text-secondary text-center text-uppercase seccionTitulo"></h2>
   </div>
   <div class="table-responsive">
-    <table class="table table-sm table-bordered table-hover table-secondary text-center text-uppercase " cellspacing="4">
+    <table class="table table-sm table-bordered table-hover bg-gray-200 text-center text-uppercase" cellspacing="4">
       
-      <thead>
+      <thead class="font-weight-bold">
         <tr>
           <th scope="col">Nómina</th>
           <th scope="col">Nombres</th>

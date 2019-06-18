@@ -48,9 +48,12 @@
                         $usuario_departamento = trim($row['id_area']);
                         $usuario_nombre = trim(ucwords(strtolower($row['nombre_largo'])));
                         $sesion = true;
+
+                        $ubicacion = ((empty($usuario_nivel) || $usuario_nivel < 2) ? 'datos' : 'main');
                         $respuesta = array(
                             'estado' => 'OK',
-                            'ubicacion' => 'main',
+                            'ubicacion' => $ubicacion,
+                            // 'ubicacion' => 'main',
                             'tipo' => 'success',
                             'mensaje' => 'Hola ',
                             'informacion' => 'Bienvenido(a)',
@@ -95,66 +98,6 @@
                     
                 );
             }
-            echo json_encode($respuesta);
-            sqlsrv_free_stmt( $stmt);
-            sqlsrv_close( $con );
-        break;
-        case 'lista-empleados':
-            $props = $_POST['prop'];
-            if ($props == 'activos')
-            {
-                $query = "SELECT TOP 100 te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
-                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
-                            FROM tbempleados AS te
-                            INNER JOIN tbsucursal AS ts
-                            ON te.id_sucursal = ts.id_sucursal 
-                            INNER JOIN tbcelula AS tc
-                            ON tc.id_celula = te.id_celula
-                            INNER JOIN tbarea AS ta
-                            ON ta.codigo = tc.codigo_area
-                            WHERE te.status <> 'B' 
-                            ORDER BY te.status ASC, te.fecha_alta DESC";
-            } 
-            else 
-            {
-                $query = "SELECT TOP 100 te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
-                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
-                            FROM tbempleados AS te
-                            INNER JOIN tbsucursal AS ts
-                            ON te.id_sucursal = ts.id_sucursal 
-                            INNER JOIN tbcelula AS tc
-                            ON tc.id_celula = te.id_celula
-                            INNER JOIN tbarea AS ta
-                            ON ta.codigo = tc.codigo_area
-                            WHERE te.status = 'B' 
-                            ORDER BY te.status ASC, te.fecha_alta DESC";
-            }
-            $stmt = sqlsrv_query( $con, $query);
-
-            $result = array();
-            
-            if( $stmt === false) {
-                die( print_r( sqlsrv_errors(), true) );
-                $respuesta = array(
-                    'estado' => 'NOK',
-                    'tipo' => 'error',
-                    'informacion' => 'No existe informacion',
-                    'mensaje' => 'No hay datos en la BD'                
-                );
-            } else {
-                do {
-                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
-                    $result[] = $row; 
-                    }
-                } while (sqlsrv_next_result($stmt));
-                $respuesta = array(
-                    'estado' => 'OK',
-                    'tipo' => 'success',
-                    'informacion' => $result,
-                    'mensaje' => 'Informacion obtenida'                
-                );
-            }
-
             echo json_encode($respuesta);
             sqlsrv_free_stmt( $stmt);
             sqlsrv_close( $con );
@@ -208,6 +151,132 @@
             sqlsrv_free_stmt( $stmt);
             sqlsrv_close( $con );
         break;
+        case 'lista-empleados':
+            $props = $_POST['prop'];
+            if ($props == 'activos')
+            {
+                $query = "SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
+                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
+                            FROM tbempleados AS te
+                            INNER JOIN tbsucursal AS ts
+                            ON te.id_sucursal = ts.id_sucursal 
+                            INNER JOIN tbcelula AS tc
+                            ON tc.id_celula = te.id_celula
+                            INNER JOIN tbarea AS ta
+                            ON ta.codigo = tc.codigo_area
+                            WHERE te.status <> 'B' 
+                            ORDER BY te.status ASC, te.fecha_alta DESC";
+            } 
+            else if ($props == 'bajas')
+            {
+                $query = "SELECT TOP 300 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
+                            CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaBaja,
+                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
+                            FROM tbempleados AS te
+                            INNER JOIN tbsucursal AS ts
+                            ON te.id_sucursal = ts.id_sucursal 
+                            INNER JOIN tbcelula AS tc
+                            ON tc.id_celula = te.id_celula
+                            INNER JOIN tbarea AS ta
+                            ON ta.codigo = tc.codigo_area
+                            WHERE te.status = 'B' 
+                            ORDER BY te.status ASC, te.fecha_alta DESC";
+            } 
+
+            $stmt = sqlsrv_query( $con, $query);
+
+            $result = array();
+            
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'                
+                );
+            } else {
+                do {
+                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                    $result[] = $row; 
+                    }
+                } while (sqlsrv_next_result($stmt));
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => $result,
+                    'mensaje' => 'Informacion obtenida'                
+                );
+            }
+
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+        break;
+
+        case 'json-empleados':
+            $props = $_POST['prop'];
+            if ($props == 'activos')
+            {
+                $query = "SELECT te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
+                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
+                            FROM tbempleados AS te
+                            INNER JOIN tbsucursal AS ts
+                            ON te.id_sucursal = ts.id_sucursal 
+                            INNER JOIN tbcelula AS tc
+                            ON tc.id_celula = te.id_celula
+                            INNER JOIN tbarea AS ta
+                            ON ta.codigo = tc.codigo_area
+                            WHERE te.status <> 'B' 
+                            ORDER BY te.status ASC, te.fecha_alta DESC";
+            } 
+            else if ($props == 'bajas')
+            {
+                $query = "SELECT te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
+                            CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaBaja,
+                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
+                            FROM tbempleados AS te
+                            INNER JOIN tbsucursal AS ts
+                            ON te.id_sucursal = ts.id_sucursal 
+                            INNER JOIN tbcelula AS tc
+                            ON tc.id_celula = te.id_celula
+                            INNER JOIN tbarea AS ta
+                            ON ta.codigo = tc.codigo_area
+                            WHERE te.status = 'B' 
+                            ORDER BY te.status ASC, te.fecha_alta DESC";
+            } 
+
+            $stmt = sqlsrv_query( $con, $query);
+
+            $result = array();
+            
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'                
+                );
+            } else {
+                do {
+                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                    $result[] = $row; 
+                    }
+                } while (sqlsrv_next_result($stmt));
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => $result,
+                    'mensaje' => 'Informacion obtenida'                
+                );
+            }
+
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+        break;
+
         case 'buscar-texto':
             // die(json_encode($_POST));
             $txtBuscado = $_POST['txtBuscado'];
@@ -215,7 +284,7 @@
 
             if ($props == 'activos')
             {
-                $query = "SELECT TOP 250 te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
+                $query = "SELECT te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
                             ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
                             FROM tbempleados AS te
                             INNER JOIN tbsucursal AS ts
@@ -234,7 +303,8 @@
             } 
             else 
             {
-                $query = "SELECT TOP 250 te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
+                $query = "SELECT TOP 250 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
+                            CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaBaja,
                             ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
                             FROM tbempleados AS te
                             INNER JOIN tbsucursal AS ts
@@ -322,15 +392,26 @@
             break;
         case 'obtener-empleados-mes':
             // die(json_encode($_POST));
-
-            $query = "SELECT COUNT (*) AS contador,
-                                    UPPER(FORMAT(fecha_alta, 'MMMM', 'es-es')) AS 'nombre_mes',
-                                    MONTH(fecha_alta) AS mes
+            $props = $_POST['props'];
+            if($props == 'bajas'){
+                $query = "SELECT COUNT (*) AS contador,
+                            UPPER(FORMAT(fecha_baja, 'MMMM', 'es-es')) AS 'nombre_mes',
+                            MONTH(fecha_baja) AS mes
                             FROM tbempleados
-                        WHERE YEAR(fecha_alta) = YEAR(GETDATE())
-                        GROUP BY MONTH(fecha_alta), FORMAT(fecha_alta, 'MMMM', 'es-es')
-                        ORDER BY MONTH(fecha_alta) ASC;";
+                            WHERE YEAR(fecha_baja) = YEAR(GETDATE())
+                            GROUP BY MONTH(fecha_baja), FORMAT(fecha_baja, 'MMMM', 'es-es')
+                            ORDER BY MONTH(fecha_baja) ASC;";
+            } else {
+                $query = "SELECT COUNT (*) AS contador,
+                            UPPER(FORMAT(fecha_alta, 'MMMM', 'es-es')) AS 'nombre_mes',
+                            MONTH(fecha_alta) AS mes
+                            FROM tbempleados
+                            WHERE YEAR(fecha_alta) = YEAR(GETDATE())
+                            GROUP BY MONTH(fecha_alta), FORMAT(fecha_alta, 'MMMM', 'es-es')
+                            ORDER BY MONTH(fecha_alta) ASC;";
+            }
                            
+
             $stmt = sqlsrv_query( $con, $query);
 
             $result = array();
@@ -406,7 +487,7 @@
                         FROM tbempleados
                         WHERE SUBSTRING(area_temp,3,3) <> '' AND status <> 'B'
                         GROUP BY SUBSTRING(area_temp,3,3)
-                        ORDER BY SUBSTRING(area_temp,3,3) ASC;";
+                        ORDER BY cantidad DESC;";
                            
             $stmt = sqlsrv_query( $con, $query);
 
@@ -438,8 +519,185 @@
             sqlsrv_free_stmt( $stmt);
             sqlsrv_close( $con );
             break;
+            case 'lista-direcciones':
+                // die(json_encode($_POST));
+                $query = "SELECT TOP 250 te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,vde.estado,vde.poblacion,vde.codigopostal,vde.direccion,te.status
+                FROM [vDatosEmpleados] AS vde
+                INNER JOIN	tbempleados AS te 
+                ON vde.codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS = te.numero_nomina
+                AND codigopostal <> ''
+                AND te.status <> 'B'
+                ORDER BY te.fecha_alta DESC";
+                
+                $stmt = sqlsrv_query( $con, $query);
+
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
+            case 'buscarSucursal':
+                // die(json_encode($_POST));
+                $query = "SELECT id_sucursal,codigo,nombre FROM tbsucursal ORDER BY nombre ASC";
+                
+                $stmt = sqlsrv_query( $con, $query);
+
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
+            case 'buscarNomina':
+                // die(json_encode($_POST));
+                $query = "SELECT code_value,code_value_desc FROM PJCODE WHERE code_type = 'FFA' ORDER BY code_value ASC";
+                
+                $stmt = sqlsrv_query( $con, $query);
+
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
+            case 'buscarCelula':
+                // die(json_encode($_POST));
+                $query = "SELECT id_celula,nombre FROM tbcelula ORDER BY id_celula ASC";
+                
+                $stmt = sqlsrv_query( $con, $query);
+
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
+            case 'buscarP':
+                // die(json_encode($_POST));
+                $query = "SELECT id_puesto,nombre FROM tbpuesto ORDER BY id_puesto ASC";
+                
+                $stmt = sqlsrv_query( $con, $query);
+
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
             default:
             echo 'NO DATA RETRIVE.';
+            
             break;
         }
 

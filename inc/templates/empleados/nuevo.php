@@ -1,14 +1,14 @@
-<form id="altaEmpleado">
+<form class="needs-validation" novalidate">
   <div class="bg-gradient-success p-5 text-white text-center rounded-right">
   <h1>DATOS DE LA EMPRESA</h1>
     <div class="form-row">
       <div class="form-group col-md-2">
         <label for="txtNomina">Número de nomina</label>
-        <input type="text" class="form-control" id="txtNomina" placeholder="Nomina" autofocus>
+        <input type="text" class="form-control" id="txtNomina" placeholder="Nomina">
       </div>
       <div class="form-group col-md-2">
         <label for="txtTipo">Tipo</label>
-        <input type="text" class="form-control" id="txtTipo" placeholder="Alta" disabled>
+        <input type="text" class="form-control" id="txtTipo" placeholder="Alta">
       </div>
       <div class="form-group col-md-4">
         <label for="txtLote">Lote</label>
@@ -23,12 +23,12 @@
     <div class="form-row">
       <div class="form-group col-md-4">
           <label for="txtSucursal">Sucursal</label>
-          <select class="form-control" id="txtSucursal"></select>  
+          <select class="form-control" id="txtSucursal" required></select>  
       </div>
       <div class="form-group col-md-4">
           <label for="txtClasificacion">Clasificación</label>
           <select class="form-control" id="txtClasificacion">
-            <option value="" selected>Selecciona una Clasificación</option>
+            <option value="" selected required>Selecciona una Clasificación</option>
             <option value="">Adm .Operativo</option>
             <option value="">Operativo</option>
             <option value="">Administrativo</option>
@@ -46,7 +46,7 @@
     <div class="form-row">
       <div class="form-group col-md-4">
           <label for="txtCelula">Celula</label>
-          <select class="form-control" id="txtCelula"></select>  
+          <select class="form-control" id="txtCelula" required></select>  
       </div>
       <div class="form-group col-md-4">
         <label for="txtfechaAlta">Fecha Alta</label>
@@ -63,7 +63,7 @@
     <div class="form-row">
       <div class="form-group col-md-4">
           <label for="txtPuesto">Puesto</label>
-          <select class="form-control" id="txtPuesto"></select>  
+          <select class="form-control" id="txtPuesto" required></select>  
       </div>
     </div>
   </div>
@@ -73,15 +73,15 @@
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="txtNombre">Nombre(s)</label>
-        <input type="text" class="form-control" id="txtNombre">
+        <input type="text" class="form-control" id="txtNombre" required>
       </div>
       <div class="form-group col-md-4">
         <label for="txtPaterno">Apellido Paterno</label>
-        <input type="text" class="form-control" id="txtPaterno">
+        <input type="text" class="form-control" id="txtPaterno" required>
       </div>
       <div class="form-group col-md-4">
         <label for="txtMaterno">Apellido Materno</label>
-        <input type="text" class="form-control" id="txtMaterno">
+        <input type="text" class="form-control" id="txtMaterno" required>
       </div>
     </div>
 
@@ -92,22 +92,22 @@
       </div>
       <div class="form-group col-md-4">
         <label for="txtRFC">RFC</label>
-        <input type="text" class="form-control" id="txtRFC">
+        <input type="text" class="form-control" id="txtRFC" required>
       </div>
       
       <div class="form-group col-md-3">
         <label for="txtNSS">NSS</label>
-        <input type="text" class="form-control" id="txtNSS">
+        <input type="text" class="form-control" id="txtNSS" required>
       </div>
       <div class="form-group col-md-1">
         <label for="txtDV">DV</label>
-        <input type="text" class="form-control" id="txtDV">
+        <input type="text" class="form-control" id="txtDV" required>
       </div>
     </div>
     <div class="form-row">
       <div class="form-group col-md-2">
         <label for="txtfechaNacimiento">Fecha Nacimiento</label>
-        <input type="date" class="form-control" id="txtfechaNacimiento" value="<?php echo date("Y-m-d");?>">
+        <input type="date" class="form-control" id="txtfechaNacimiento" value="<?php echo date("Y-m-d");?>" required>
       </div>
       <div class="form-group col-md-2">
         <label for="txtLnacimiento">Lugar de nacimiento</label>

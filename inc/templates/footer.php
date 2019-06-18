@@ -16,8 +16,11 @@
 
 <script src="https://cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
 
+<script type="text/javascript" src="//unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+
 <!-- LOCAL JS -->
 <script src="js/control.js"></script>
+<!-- <script src="js/excelexportjs"></script> -->
 <script src="js/level-control.js"></script>
 <script src="js/excelexportjs.js"></script>
 <script src="js/chart.js"></script>            
@@ -58,7 +61,8 @@
         ?>
         <!-- Page level plugins -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
-        <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.0/jquery.validate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
 
 </html>
 

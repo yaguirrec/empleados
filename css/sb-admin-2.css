@@ -216,6 +216,12 @@ svg {
 table {
   border-collapse: collapse;
 }
+th{
+  color: rgb(0, 32, 96);
+}
+td{
+  color: rgb(0, 32, 96);
+}
 
 caption {
   padding-top: 0.75rem;
@@ -10548,6 +10554,7 @@ a.text-dark:hover, a.text-dark:focus {
   .table-dark {
     color: inherit;
   }
+
   .table-dark th,
   .table-dark td,
   .table-dark thead th,
