@@ -20,9 +20,7 @@
 
 <!-- LOCAL JS -->
 <script src="js/control.js"></script>
-<!-- <script src="js/excelexportjs"></script> -->
 <script src="js/level-control.js"></script>
-<script src="js/excelexportjs.js"></script>
 <script src="js/chart.js"></script>            
 
     <?php

@@ -184,7 +184,7 @@ $( document ).ready(function() {
             /* Sheet Name */
             var ws_name = "Empleados";
 
-            if (typeof console !== 'undefined') console.log(new Date());
+            // if (typeof console !== 'undefined') console.log(new Date());
             var wb = XLSX.utils.book_new(),
                 ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
 
@@ -192,9 +192,9 @@ $( document ).ready(function() {
             XLSX.utils.book_append_sheet(wb, ws, ws_name);
 
             /* Write workbook and Download */
-            if (typeof console !== 'undefined') console.log(new Date());
+            // if (typeof console !== 'undefined') console.log(new Date());
             XLSX.writeFile(wb, filename);
-            if (typeof console !== 'undefined') console.log(new Date());
+            // if (typeof console !== 'undefined') console.log(new Date());
         }
 
     });
