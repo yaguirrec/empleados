@@ -116,6 +116,17 @@
         <div class="chart-area">
           <canvas id="chartMensual"></canvas>
         </div>
+        <div class="mt-4 text-center small">
+          <!-- <span class="mr-2">
+            <i class="fas fa-circle text-danger"></i> Altas
+          </span>
+          <span class="mr-2">
+            <i class="fas fa-circle text-primary"></i> Bajas
+          </span> -->
+          <!-- <span class="mr-2">
+            <i class="fas fa-circle text-info"></i> Referral
+          </span>  -->
+        </div>
       </div>
     </div>
   </div>
@@ -146,13 +157,13 @@
           <canvas id="chartEmpleados"></canvas>
         </div>
         <div class="mt-4 text-center small">
-          <span class="mr-2">
-            <i class="fas fa-circle text-primary"></i> Altas
-          </span>
-          <span class="mr-2">
-            <i class="fas fa-circle text-success"></i> Bajas
-          </span>
           <!-- <span class="mr-2">
+            <i class="fas fa-circle text-danger"></i> Altas
+          </span>
+          <span class="mr-2">
+            <i class="fas fa-circle text-primary"></i> Bajas
+          </span>
+          <span class="mr-2">
             <i class="fas fa-circle text-info"></i> Referral
           </span> -->
         </div>

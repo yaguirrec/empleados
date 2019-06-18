@@ -157,7 +157,7 @@ $( document ).ready(function() {
             }],
             },
             legend: {
-            display: false
+            display: true
             },
             tooltips: {
             backgroundColor: "rgb(255,255,255)",
@@ -229,8 +229,8 @@ $( document ).ready(function() {
             labels: ["Altas", "Bajas"],
             datasets: [{
             data: Dempleados_activos.concat(Dempleados_inactivos),
-            backgroundColor: bgColors,
-            hoverBackgroundColor: hoverbgColors,
+            backgroundColor: ['	#0000CD','#DC143C'],
+            hoverBackgroundColor: ['#191970','#B22222'],
             hoverBorderColor: "rgba(234, 236, 244, 1)",
             }],
         },
@@ -247,7 +247,7 @@ $( document ).ready(function() {
             caretPadding: 10,
             },
             legend: {
-            display: false
+            display: true
             },
             cutoutPercentage: 80,
         },
