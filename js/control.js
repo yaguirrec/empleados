@@ -4,6 +4,7 @@ $( document ).ready(function() {
     // VALUE OF THE ACTUAL SECTION
     let searchParams = new URLSearchParams(window.location.search)
     let seccionActual = searchParams.get('request');
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
 
     $('#searchBox').keyup(function(event) {
         event.preventDefault();
@@ -325,6 +326,26 @@ $( document ).ready(function() {
                 $('#txtDepartamento').text(rowInfo.Departamento);
                 $('#txtCelula').text(rowInfo.Celula);
             }
+
+            //GENERAR GAFETE
+            $("#btnGafete").click(function(){
+                var numero_nomina = $('#txtNomina').html(),
+                    action = 'datos-gafete';
+                // console.log(numero_nomina);
+
+                $.ajax({  
+                    type: 'POST',
+                    url: backendURL, 
+                    data: { action: action, nomina : numero_nomina },
+                    success: function(response) {
+                        console.log(response);
+                    }
+                });
+            });
+
+            
+
+
             break;
         case 'main': 
             $( ".seccionBuscar" ).hide();
@@ -444,13 +465,15 @@ $( document ).ready(function() {
                 vcurp = $(".validaCurp"),
                 altaEmpleado = $(".altaEmpleado"),
                 txtSucursal = $("#txtSucursal"),
+                txtClasificacion = $("#txtClasificacion"),
                 txtNomina = $("#txtNomina"),
                 txtCelula = $("#txtCelula"),
                 txtPuesto = $("#txtPuesto"),
                 txtCURP = $("#txtCURP"),
                 txtFraccionamiento = $("#txtFraccionamiento"),
+                sucursal = '',
+                clasificacion = '',
                 ccurp = $("#campo-curp"),
-                validaCampos = 3,
                 genero = '';
             botonValidar.hide();
             altaEmpleado.hide();
@@ -561,28 +584,44 @@ $( document ).ready(function() {
                 }
             xmlNOM.send(listaNOM);
 
-            //LLENAR CELULAS
-            var listaCEL = new FormData(),
-                action = 'buscarCelula';
-            listaCEL.append('action', action);
-            var xmlCEL = new XMLHttpRequest();
-            xmlCEL.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
-            xmlCEL.onload = function(){
-                if (this.status === 200) {
-                var respuesta = JSON.parse(xmlCEL.responseText);
-                if (respuesta.estado === 'OK') {
-                    var informacion = respuesta.informacion;
-                    var s = '<option value="">Seleccionar celula</option>'; 
-                    for(var i in informacion){
-                        s += '<option value="'+ informacion[i].id_celula +'">' + informacion[i].nombre + '</option>';
-                    }     
-                    txtCelula.html(s);
-                } else if(respuesta.status === 'error'){
-                    var informacion = respuesta.informacion;
-                }
-                }
-                }
-                xmlCEL.send(listaCEL);
+            txtClasificacion.focusout(function(){
+                clasificacion = $(this).val();
+                llenarCelulas();
+            });
+
+            txtSucursal.focusout(function(){
+                sucursal = $(this).val();
+            });
+
+            function llenarCelulas(){
+                //LLENAR CELULAS
+                var listaCEL = new FormData(),
+                    action = 'buscarCelula';
+                listaCEL.append('action', action);
+                listaCEL.append('sucursal', sucursal);
+                listaCEL.append('clasificacion', clasificacion);
+                var xmlCEL = new XMLHttpRequest();
+                xmlCEL.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+                xmlCEL.onload = function(){
+                    if (this.status === 200) {
+                    var respuesta = JSON.parse(xmlCEL.responseText);
+                    // console.log(respuesta);
+                    if (respuesta.estado === 'OK') {
+                        var informacion = respuesta.informacion;
+                        var s = '<option value="">Seleccionar celula</option>'; 
+                        for(var i in informacion){
+                            s += '<option value="'+ informacion[i].id_celula +'">' + informacion[i].codigo + ' - ' + informacion[i].nombre + '</option>';
+                        }     
+                        txtCelula.html(s);
+                    } else if(respuesta.status === 'error'){
+                        var informacion = respuesta.informacion;
+                    }
+                    }
+                    }
+                    xmlCEL.send(listaCEL);
+            }
+
+            
 
             //LLENAR PUESTOS
             var listaP = new FormData(),
@@ -649,7 +688,35 @@ $( document ).ready(function() {
                 var ap = $("#txtMaterno").val();
                 $("#txtAPm").val(ap);
             });
+            //VALIDAR NUMERO INFONAVIT
+            $("#txtInfonavit").change(function(){
+                var infonavit = $("#txtInfonavit").val();
+                if(infonavit === 'NO'){
+                    $("#txtNinfonavit").attr('disabled','disabled');
+                } else {
+                    $("#txtNinfonavit").removeAttr('disabled','disabled');
+                }
+            });
 
+            //VALIDAR NUMERO FONACOT
+            $("#txtFonacot").change(function(){
+                var infonavit = $("#txtFonacot").val();
+                if(infonavit === 'NO'){
+                    $("#txtNfonacot").attr('disabled','disabled');
+                } else {
+                    $("#txtNfonacot").removeAttr('disabled','disabled');
+                }
+            });
+
+            //VALIDAR NUMERO CUENTA BANCO
+            $("#txtBanco").change(function(){
+                var infonavit = $("#txtBanco").val();
+                if(infonavit === 'NO'){
+                    $("#txtCuenta").attr('disabled','disabled');
+                } else {
+                    $("#txtCuenta").removeAttr('disabled','disabled');
+                }
+            });
 
             // DESHABILITAR CAMPOS
             function lockFields(){

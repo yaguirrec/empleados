@@ -11,17 +11,6 @@
         <input type="text" class="form-control" id="txtTipo" placeholder="Alta">
       </div>
       <div class="form-group col-md-4">
-        <label for="txtLote">Lote</label>
-        <input type="text" class="form-control" id="txtLote" placeholder="Lote" autofocus>
-      </div>
-      <div class="form-group col-md-4">
-        <label for="txtCategoria">Categoria</label>
-        <input type="text" class="form-control" id="txtCategoria" placeholder="Categoria">
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-group col-md-4">
           <label for="txtSucursal">Sucursal</label>
           <select class="form-control" id="txtSucursal" required></select>  
       </div>
@@ -29,25 +18,33 @@
           <label for="txtClasificacion">Clasificación</label>
           <select class="form-control" id="txtClasificacion">
             <option value="" selected required>Selecciona una Clasificación</option>
-            <option value="">Adm .Operativo</option>
-            <option value="">Operativo</option>
-            <option value="">Administrativo</option>
-            <option value="">Especial</option>
-          </select>
-      </div>
-      <div class="form-group col-md-4">
-          <label for="txtNomina">Nomina</label>
-          <select class="form-control" id="txtNomina">
-            <option value="" selected>QUIN</option>
-            <option value="">SEM</option>
+            <option value="AO">Adm .Operativo</option>
+            <option value="O">Operativo</option>
+            <option value="A">Administrativo</option>
+            <option value="E">Especial</option>
+            <option value="B">Becario</option>
           </select>
       </div>
     </div>
     <div class="form-row">
       <div class="form-group col-md-4">
+        <label for="txtCategoria">Categoria</label>
+        <input type="text" class="form-control" id="txtCategoria" placeholder="Categoria">
+      </div>
+      <div class="form-group col-md-4">
+          <label for="txtNomina">Nomina</label>
+          <select class="form-control" id="txtNomina">
+            <option value="" selected required>Selecciona Nomina</option>
+            <option value="Q">QUIN</option>
+            <option value="S">SEM</option>
+          </select>
+      </div>
+      <div class="form-group col-md-4"> 
           <label for="txtCelula">Celula</label>
           <select class="form-control" id="txtCelula" required></select>  
       </div>
+    </div>
+    <div class="form-row">
       <div class="form-group col-md-4">
         <label for="txtfechaAlta">Fecha Alta</label>
         <input type="date" class="form-control" id="txtfechaAlta" value="<?php echo date("Y-m-d");?>">
@@ -55,16 +52,17 @@
       <div class="form-group col-md-4">
           <label for="txtClasificacion">Registro</label>
           <select class="form-control" id="txtClasificacion">
-            <option value="" selected>SAC</option>
-            <option value="">CNO</option>
+            <option value="SAC" selected>SAC</option>
+            <option value="CNO">CNO</option>
           </select>
       </div>
-    </div>
-    <div class="form-row">
       <div class="form-group col-md-4">
           <label for="txtPuesto">Puesto</label>
           <select class="form-control" id="txtPuesto" required></select>  
       </div>
+    </div>
+    <div class="form-row">
+      <!-- JEFE DIRECTO -->
     </div>
   </div>
 
@@ -160,12 +158,12 @@
         </select>
       </div>
       <div class="form-group col-md-6">
-        <label for="txtStescolaridad">Estatus de escolaridad</label>
+        <label for="txtStescolaridad">Constancia de escolar</label>
         <select class="form-control" id="txtStescolaridad">
-          <option value="" selected>Cursando</option>
-          <option value="">Trunca</option>
-          <option value="">Terminado</option>
-          <option value="">Titulado</option>
+          <option value="constancia" selected>Constancia</option>
+          <option value="boleta">Boleta</option>
+          <option value="certificado">Certificado</option>
+          <option value="titulo">Titulo</option>
         </select>
       </div>
     </div>
@@ -234,7 +232,6 @@
       </div>
       <div class="form-group col-md-6">
         <label for="txtFraccionamiento">Colonia / Fraccionamiento</label>
-        <!-- <input type="text" class="form-control" id="txtFraccionamiento"> -->
         <select class="form-control" id="txtFraccionamiento"></select>
       </div>
     </div>
@@ -243,8 +240,8 @@
       <div class="form-group col-md-1">
         <label for="txtInfonavit">Infonavit</label>
         <select class="form-control" id="txtInfonavit">
-          <option value="" selected>SI</option>
-          <option value="">NO</option>
+          <option value="SI" selected>SI</option>
+          <option value="NO">NO</option>
         </select>
       </div>
       <div class="form-group col-md-3">
@@ -254,8 +251,8 @@
       <div class="form-group col-md-1">
         <label for="txtFonacot">Fonacot</label>
         <select class="form-control" id="txtFonacot">
-          <option value="" selected>SI</option>
-          <option value="">NO</option>
+          <option value="SI" selected>SI</option>
+          <option value="NO">NO</option>
         </select>
       </div>
       <div class="form-group col-md-3">
@@ -265,8 +262,8 @@
       <div class="form-group col-md-1">
         <label for="txtBanco">Tarjeta</label>
         <select class="form-control" id="txtBanco">
-          <option value="" selected>SI</option>
-          <option value="">NO</option>
+          <option value="SI" selected>SI</option>
+          <option value="NO">NO</option>
         </select>
       </div>
       <div class="form-group col-md-3">
@@ -284,32 +281,24 @@
         <label for="txtCorreo">Correo electronico</label>
         <input type="mail" class="form-control" id="txtCorreo">
       </div>
-      <div class="form-group col-md-1">
-        <label for="txtLada1">Lada</label>
-        <input type="text" class="form-control" id="txtLada1">
-      </div>
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-4">
         <label for="txtTelefono">Telefono</label>
-        <input type="text" class="form-control" id="txtTelefono">
+        <input type="text" class="form-control" id="txtTelefono" maxlength="10" minlength="10" required placeholder="4499128686">
       </div>
-      <div class="form-group col-md-1">
-        <label for="txtLada2">Lada</label>
-        <input type="text" class="form-control" id="txtLada2">
-      </div>
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-4">
         <label for="txtCelular">Celular</label>
-        <input type="text" class="form-control" id="txtCelular">
+        <input type="text" class="form-control" id="txtCelular" maxlength="10" minlength="10" required placeholder="4499128686">
       </div>
     </div>
 
     <div class="form-row">
       <div class="form-group col-md-6">
-        <label for="txtContacto">Contacto emergencia</label>
+        <label for="txtContacto">Nombre contacto emergencia</label>
         <input type="text" class="form-control" id="txtContacto">
       </div>
       <div class="form-group col-md-6">
-        <label for="txtContacton">Contacto número de emergencia</label>
-        <input type="text" class="form-control" id="txtContacton">
+        <label for="txtContacton">Número contacto de emergencia</label>
+        <input type="text" class="form-control" id="txtContacton" maxlength="10" minlength="10" required placeholder="4499128686">
       </div>
     </div>
   </div>

@@ -627,11 +627,15 @@ SELECT COUNT (*) AS contador,
 GROUP BY MONTH(fecha_alta), FORMAT(fecha_alta, 'MMMM', 'es-es')
 ORDER BY MONTH(fecha_alta) ASC;
 
-SELECT * FROM tbcelula
-SELECT * FROM PJCODE
-SELECT * FROM PJCODE where code_value = '520'
-select * from rh_empelados2
-/*
-FFA - 
+select * from tbsucursal
 
-*/
+SELECT tc.codigo,tc.nombre FROM tbcelula AS tc
+INNER JOIN tbsucursal AS ts
+ON SUBSTRING(tc.codigo,1,5) = SUBSTRING(ts.codigo,1,5)
+WHERE SUBSTRING(tc.codigo,1,5) = '99COR'
+
+SELECT tc.codigo,tc.nombre FROM tbcelula AS tc
+INNER JOIN tbsucursal AS ts
+ON SUBSTRING(tc.codigo,1,5) = SUBSTRING(ts.codigo,1,5)
+WHERE SUBSTRING(tc.codigo,1,5) = SUBSTRING((SELECT codigo FROM tbsucursal WHERE id_sucursal = 3),1,5)
+ORDER BY tc.nombre

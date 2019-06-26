@@ -27,6 +27,8 @@
     </table>
 
     <hr>
+      <?php include 'inc/templates/empleados/menu.php'; ?>
+    <hr>
     
     <div class="row" id="backButton">
       <a href="javascript:history.back();" class="btn btn-secondary btn-block px-5">Regresar</a>
