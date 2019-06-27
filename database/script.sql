@@ -459,7 +459,7 @@ GO
 
 SELECT TOP 1 * FROM [vEmpleadosNM] where codigoempleado = '08444'
 SELECT id_sucursal FROM tbsucursal WHERE SUBSTRING (codigo,1,5) = SUBSTRING ('CEAGS0583',1,5)
-SELECT * FROM tbempleados
+SELECT * FROM rh_empelados2 where no_trab = '24976'
 
 --ACTUALIZAR DATOS DEL EMPLEADO DESDE NOMIPAQ
 UPDATE empleados
@@ -639,3 +639,8 @@ INNER JOIN tbsucursal AS ts
 ON SUBSTRING(tc.codigo,1,5) = SUBSTRING(ts.codigo,1,5)
 WHERE SUBSTRING(tc.codigo,1,5) = SUBSTRING((SELECT codigo FROM tbsucursal WHERE id_sucursal = 3),1,5)
 ORDER BY tc.nombre
+
+
+select top 1 b.nombre,puesto,convert(varchar,fecha_alta),telefono_emergencia as a , no_trab,no_imss,cp,calle,numero, fraccionamiento,estado,municipio,a.dv  from (select * from rh_empelados2 ) as a  inner join 
+(select emp_name as nombre,* from pjemploy ) as b on a.no_trab = b.employee
+where employee='26389' order by fecha_alta desc

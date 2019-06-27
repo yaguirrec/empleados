@@ -331,16 +331,25 @@ $( document ).ready(function() {
             $("#btnGafete").click(function(){
                 var numero_nomina = $('#txtNomina').html(),
                     action = 'datos-gafete';
-                // console.log(numero_nomina);
 
-                $.ajax({  
+                $.ajax({
                     type: 'POST',
                     url: backendURL, 
                     data: { action: action, nomina : numero_nomina },
                     success: function(response) {
-                        console.log(response);
+                        // console.log(response); 
+                        $(".divMenu").addClass('d-none');
+                        $(".btnRegresar").addClass('d-none');
+                        $(".footer").addClass('d-none');
+                        $(".divGafete").removeClass('d-none');
                     }
                 });
+
+                $("#btnPrint").click(function () {
+                    //Hide all other elements other than printarea.
+                    $("#divPrint").printThis();
+                });
+
             });
 
             

@@ -34,7 +34,7 @@
             
             <!-- Footer -->
 
-            <footer class="sticky-footer alert-info">
+            <footer class="footer sticky-footer alert-info mt-5">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
                 <span>Copyright &copy; MEXQ  <?php echo date("Y"); ?></span>

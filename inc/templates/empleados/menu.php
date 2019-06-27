@@ -5,7 +5,7 @@
     <div class="card-body">
       <h5 class="card-title">Generar Gafete</h5>
       <p class="card-text">Generar gafete del empleado actual</p>
-      <button class="btn btn-block btn-success" id="btnGafete">Generar <i class="far fa-id-card"></i></button>
+      <button class="btn btn-block btn-info" id="btnGafete">Generar <i class="far fa-id-card"></i></button>
     </div>
   </div>
   <div class="card">

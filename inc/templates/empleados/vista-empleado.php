@@ -27,10 +27,20 @@
     </table>
 
     <hr>
-      <?php include 'inc/templates/empleados/menu.php'; ?>
+      <div class="row divMenu">
+        <div class="col-md-12">
+          <?php include 'inc/templates/empleados/menu.php'; ?>
+        </div>
+      </div>
+    <hr>
+      <div class="row divGafete d-none">
+        <div class="col-md-12 divPrint">
+          <?php include 'inc/templates/empleados/gafete.php'; ?>
+        </div>
+      </div>
     <hr>
     
-    <div class="row" id="backButton">
+    <div class="row btnRegresar px-5" id="backButton">
       <a href="javascript:history.back();" class="btn btn-secondary btn-block px-5">Regresar</a>
     </div>
 
