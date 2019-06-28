@@ -21,7 +21,7 @@ $( document ).ready(function() {
         consulta_parametros.append('prop', prop);
         consulta_parametros.append('action', action);
         var xmlhr = new XMLHttpRequest();
-        xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+        xmlhr.open('POST', backendURL, true);
             xmlhr.onload = function()
             {
             if (this.status === 200) {
@@ -56,23 +56,6 @@ $( document ).ready(function() {
         $("#wrapper").toggleClass("toggled");
     });
 
-    //CONTADOR
-    $('.card').one('inview', function(event, visible) {
-		if (visible == true) {
-			$('.count').each(function() {
-				$(this).prop('Counter', 0).animate({
-					Counter: $(this).text()
-				}, {
-					duration: 5000,
-					easing: 'swing',
-					step: function(now) {
-						$(this).text(Math.ceil(now));
-					}
-				});
-			});
-		}
-    });
-    
     /**EXPORTAR A EXCEL */
     $('.exportTable').click(function(){
         $(".table").table2excel({
@@ -88,7 +71,6 @@ $( document ).ready(function() {
     $('.btnSalir').click(function(){
         localStorage.removeItem('codigoEmpleado');
         cerrarSesion();
-        // console.log('Salir');
     });
 
     function cerrarSesion(){
@@ -146,7 +128,7 @@ $( document ).ready(function() {
         dataTable.append('action', action);
         dataTable.append('prop', prop);
         var xmlhr = new XMLHttpRequest();
-        xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+        xmlhr.open('POST', backendURL, true);
         xmlhr.onload = function(){
             if (this.status === 200) {
             var respuesta = JSON.parse(xmlhr.responseText);
@@ -218,7 +200,7 @@ $( document ).ready(function() {
             dataTable.append('action', action);
             dataTable.append('prop', prop);
             var xmlhr = new XMLHttpRequest();
-            xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlhr.open('POST', backendURL, true);
             xmlhr.onload = function(){
                 if (this.status === 200) {
                 var respuesta = JSON.parse(xmlhr.responseText);
@@ -302,7 +284,7 @@ $( document ).ready(function() {
             dataEmp.append('action', action);
             dataEmp.append('prop', codigoEmpleado);
             var xmlhr = new XMLHttpRequest();
-            xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlhr.open('POST', backendURL, true);
             xmlhr.onload = function(){
                 if (this.status === 200) {
                     var respuesta = JSON.parse(xmlhr.responseText);
@@ -369,7 +351,7 @@ $( document ).ready(function() {
             var dataEmp = new FormData();
             dataEmp.append('action', action);
             var xmlhr = new XMLHttpRequest();
-            xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlhr.open('POST', backendURL, true);
             xmlhr.onload = function(){
                 if (this.status === 200) {
                 var respuesta = JSON.parse(xmlhr.responseText);
@@ -398,7 +380,7 @@ $( document ).ready(function() {
             dataTable.append('action', action);
             // dataTable.append('prop', prop);
             var xmlhr = new XMLHttpRequest();
-            xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlhr.open('POST', backendURL, true);
             xmlhr.onload = function(){
                 if (this.status === 200) {
                 var respuesta = JSON.parse(xmlhr.responseText);
@@ -551,7 +533,7 @@ $( document ).ready(function() {
                 action = 'buscarSucursal';
             listaSUC.append('action', action);
             var xmlSUC = new XMLHttpRequest();
-            xmlSUC.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlSUC.open('POST', backendURL, true);
             xmlSUC.onload = function(){
                 if (this.status === 200) {
                 var respuesta = JSON.parse(xmlSUC.responseText);
@@ -574,7 +556,7 @@ $( document ).ready(function() {
                 action = 'buscarNomina';
             listaNOM.append('action', action);
             var xmlNOM = new XMLHttpRequest();
-            xmlNOM.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlNOM.open('POST', backendURL, true);
             xmlNOM.onload = function(){
                 if (this.status === 200) {
                 var respuesta = JSON.parse(xmlNOM.responseText);
@@ -610,7 +592,7 @@ $( document ).ready(function() {
                 listaCEL.append('sucursal', sucursal);
                 listaCEL.append('clasificacion', clasificacion);
                 var xmlCEL = new XMLHttpRequest();
-                xmlCEL.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+                xmlCEL.open('POST', backendURL, true);
                 xmlCEL.onload = function(){
                     if (this.status === 200) {
                     var respuesta = JSON.parse(xmlCEL.responseText);
@@ -637,7 +619,7 @@ $( document ).ready(function() {
             action = 'buscarP';
             listaP.append('action', action);
             var xmlP = new XMLHttpRequest();
-            xmlP.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlP.open('POST', backendURL, true);
             xmlP.onload = function(){
             if (this.status === 200) {
             var respuesta = JSON.parse(xmlP.responseText);
