@@ -311,27 +311,13 @@ $( document ).ready(function() {
 
             //GENERAR GAFETE
             $("#btnGafete").click(function(){
-                var numero_nomina = $('#txtNomina').html(),
-                    action = 'datos-gafete';
-
-                $.ajax({
-                    type: 'POST',
-                    url: backendURL, 
-                    data: { action: action, nomina : numero_nomina },
-                    success: function(response) {
-                        // console.log(response); 
-                        $(".divMenu").addClass('d-none');
-                        $(".btnRegresar").addClass('d-none');
-                        $(".footer").addClass('d-none');
-                        $(".divGafete").removeClass('d-none');
-                    }
-                });
-
-                $("#btnPrint").click(function () {
-                    //Hide all other elements other than printarea.
-                    $("#divPrint").printThis();
-                });
-
+                var numero_nomina = $('#txtNomina').html();
+                    
+                
+                var url = "http://localhost/empleados/gafete.php?emp="+numero_nomina,
+                newTab = window.open(url, '_blank');
+                newTab.focus();
+               
             });
 
             
