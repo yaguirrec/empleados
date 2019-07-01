@@ -5,6 +5,7 @@ $( document ).ready(function() {
     let searchParams = new URLSearchParams(window.location.search)
     let seccionActual = searchParams.get('request');
     let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let url_final = 'http://mexq.mx/';
 
     $('#searchBox').keyup(function(event) {
         event.preventDefault();
@@ -314,7 +315,7 @@ $( document ).ready(function() {
                 var numero_nomina = $('#txtNomina').html();
                     
                 
-                var url = "http://localhost/empleados/gafete.php?emp="+numero_nomina,
+                var url = url_final+"empleados/gafete.php?emp="+numero_nomina,
                 newTab = window.open(url, '_blank');
                 newTab.focus();
                
