@@ -305,6 +305,6 @@
 
   <hr>
 
-  <button type="submit" class="btn btn-primary btn-block" id="btnGuardarempleado">GUARDAR <i class="far fa-save"></i></button>
+  <!-- <button type="submit" class="btn btn-primary btn-block" id="btnGuardarempleado">GUARDAR <i class="far fa-save"></i></button> -->
   <br>
 </form>
