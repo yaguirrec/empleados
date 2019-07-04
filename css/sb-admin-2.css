@@ -12074,3 +12074,12 @@ body.sidebar-toggled footer.sticky-footer {
 .card-login{
   margin-top: 12rem;
 }
+
+#empImagen{
+  height:4cm; 
+  width:4cm; 
+  /* border-radius: 94%;  */
+  border: solid;
+  border-width: medium;
+  border-color: #919294;
+}

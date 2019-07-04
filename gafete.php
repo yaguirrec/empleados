@@ -4,7 +4,7 @@
 <div id='front'>
 <img src="img/gafete/gafete.png" style="width:5.9cm;height:9.2cm;position: absolute; z-index: 1;">
 
-<img  class='img-circle'  style="height:3.8cm; width:3.8cm; border-radius: 94%; position: absolute;z-index: 2;top:3.4cm;left:.7cm;" src="img/gafete/027.png" > 
+<img  class='img-circle' style="height:3.8cm; width:3.8cm; border-radius: 94%; position: absolute;z-index: 2;top:3.4cm;left:.7cm;" id="empFoto" alt="Foto"> 
 <center>
 <p style="position: absolute; text-align: center;left:0.15cm; width: 5.4cm; top:7.6cm;font-size:9px;z-index: 3;" id="empNombre">
 <!-- Mi nombre -->
@@ -61,7 +61,7 @@
  style="transform:rotate(180deg);
 -ms-transform:rotate(180deg); /* IE 9 */
 -webkit-transform:rotate(180deg);position: absolute;text-align: center;width: 3.7cm;height: 1.7cm; top:10.3cm;z-index: 10;left: 1.1cm;" 
- alt='Barcode Generator TEC-IT' id="empNomina"/>
+ alt='MEXQ' id="empNomina"/>
 </center>
 </div>
 </div>

@@ -16,9 +16,11 @@ if (check) {
         success: function(response) {
             var respuesta = JSON.parse(response);
             var informacion = respuesta.informacion[0];
-            var url = 'http://barcode.tec-it.com/barcode.ashx?data='+informacion.no_trab+'&code=Code128&dpi=210';
+            var nomina = $.trim(informacion.no_trab);
+            var url = 'http://barcode.tec-it.com/barcode.ashx?data='+ nomina +'&code=Code128&dpi=210';
             console.log(url);
             console.log(informacion); 
+            $("#empFoto").attr("src","http://187.188.159.205:8090/web_serv/empService/imagenes/" + nomina + "/" + nomina + ".jpg");
             $("#empNombre").html(informacion.nombre);
             $("#empPuesto").html(informacion.puesto);
             $("#empAlta").html(informacion.empAlta);

@@ -3,28 +3,34 @@
     PERFIL DEL EMPLEADO
   </div>
   <div class="card-body">
-    <h5 class="card-title">DATOS GENERALES EMPLEADO</h5>
-
-    <table class="table table-sm text-uppercase card-text px-5">
-        <tbody>
-            <tr>
-                <th>Nomina:</th>
-                <td><dd id="txtNomina"></dd></td>
-                <th>Nombre:</th>
-                <td><dd id="txtNombre"></dd></td>
-                <th>Puesto:</th>
-                <td><dd id="txtPuesto"></dd></td>
-            </tr>
-            <tr>
-                <th>Sucursal:</th>
-                <td><dd id="txtSucursal"></dd></td>
-                <th>Departamento:</th>
-                <td><dd id="txtDepartamento"></dd></td>
-                <th>Celula:</th>
-                <td><dd id="txtCelula"></dd></td>
-            </tr>
-        </tbody>
-    </table>
+    <h5 class="card-title text-center">DATOS GENERALES EMPLEADO</h5>
+    <div class="row">
+      <div class="col-md-1.5">
+        <img id="empImagen" class='img-circle'>
+      </div>
+      <div class="col-md-10">
+        <table class="table table-sm text-uppercase card-text px-5">
+            <tbody>
+                <tr>
+                    <th>Nomina:</th>
+                    <td><dd id="txtNomina"></dd></td>
+                    <th>Nombre:</th>
+                    <td><dd id="txtNombre"></dd></td>
+                    <th>Puesto:</th>
+                    <td><dd id="txtPuesto"></dd></td>
+                </tr>
+                <tr>
+                    <th>Sucursal:</th>
+                    <td><dd id="txtSucursal"></dd></td>
+                    <th>Departamento:</th>
+                    <td><dd id="txtDepartamento"></dd></td>
+                    <th>Celula:</th>
+                    <td><dd id="txtCelula"></dd></td>
+                </tr>
+            </tbody>
+        </table>
+      </div>
+    </div>
 
     <hr>
       <div class="row divMenu">

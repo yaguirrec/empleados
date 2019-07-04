@@ -303,15 +303,40 @@ $( document ).ready(function() {
             xmlhr.send(dataEmp);
 
             function imprimirEmpleado(rowInfo){
+                var nomina = rowInfo.numero_nomina,
+                    urlFoto = 'http://187.188.159.205:8090/web_serv/empService/imagenes/' + nomina + '/' + nomina + '.jpg',
+                    action = 'revisarImagen';
+                $("#empImagen").attr('src',urlFoto);
                 $('#txtNomina').text(rowInfo.numero_nomina);
                 $('#txtNombre').text(rowInfo.nombre_largo); 
                 $('#txtPuesto').text(rowInfo.Puesto);
                 $('#txtSucursal').text(rowInfo.Sucursal);
                 $('#txtDepartamento').text(rowInfo.Departamento);
                 $('#txtCelula').text(rowInfo.Celula);
+                
+
+                $.ajax({
+                    type: 'POST',
+                    url: backendURL, 
+                    data: { action: action, nomina : nomina },
+                    success: function(response) {
+                        var respuesta = JSON.parse(response);
+                        if(respuesta.estado === 0)
+                        {
+                            $("#empImagen").attr('src','img/gafete/no-image.png'); 
+                            $("#btnGafete").prop('disabled', true);
+                            $("#lblImagen").hide();
+                        }
+                        else
+                        {
+                            $("#btnGafete").prop('disabled', false);
+                            $("#lblImagen").show();
+                        }
+                    }
+                });
             }
 
-            $("#btnGafete").prop('disabled', true);
+                    
 
             
             var archivoImagen = $("#txtFoto")[0].files.length;
@@ -322,36 +347,37 @@ $( document ).ready(function() {
                     $("#btnGafete").prop('disabled', true);
                 }
             });
-            
-            
+
+                        
             //GENERAR GAFETE
             $("#btnGafete").click(function(){
                 var numero_nomina = $('#txtNomina').html(),
-                    empFoto = document.getElementById('txtFoto'),
+                    invoiceAttach = document.getElementById('txtFoto');
+                    empFoto = invoiceAttach.files[0],
                     action = 'guardarFoto';
 
 
-                // var datosGafete = new FormData();
-                //     datosGafete.append('empNomina', numero_nomina);
-                //     datosGafete.append('empFoto', empFoto);
-                //     datosGafete.append('action', action);
-                // console.log(action + ' ' + numero_nomina);
-                // var xhr = new XMLHttpRequest();
-                // xhr.open('POST', backendURL, true);
-                // xhr.send(datosGafete);
-                // xhr.onload = function(){
-                //     if (this.status === 200) {
-                //         var respuesta = JSON.parse(xhr.responseText);
-                //         console.log(respuesta);
-                //         console.log('ok');
-                //     } else {
-                //         var respuesta = JSON.parse(xhr.responseText);
-                //         console.log(respuesta);
-                //         console.log('error');
-                //     }
-                //     }
+                var datosGafete = new FormData();
+                    datosGafete.append('empNomina', numero_nomina);
+                    datosGafete.append('empFoto', empFoto);
+                    datosGafete.append('action', action);
+                console.log(action + ' ' + numero_nomina);
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', backendURL, true);
+                xhr.send(datosGafete);
+                xhr.onload = function(){
+                    if (this.status === 200) {
+                        var respuesta = JSON.parse(xhr.responseText);
+                        console.log(respuesta);
+                        console.log('ok');
+                    } else {
+                        var respuesta = JSON.parse(xhr.responseText);
+                        console.log(respuesta);
+                        console.log('error');
+                    }
+                    }
                 
-                var url = url_final + "empleados/gafete.php?emp="+numero_nomina,
+                var url = url_final + "empleados/gafete.php?emp=" + numero_nomina,
                 newTab = window.open(url, '_blank');
                 newTab.focus();
                

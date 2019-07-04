@@ -9,6 +9,7 @@
         <div class="form-group">
           <label for="txtFoto">Fotografia</label>
           <input type="file" class="form-control-file" id="txtFoto">
+          <label id="lblImagen" class="text-success">El empleado ya cuenta con imagen</label>
         </div>
       </form>
       <button class="btn btn-block btn-success" id="btnGafete">Generar <i class="far fa-id-card"></i></button>
