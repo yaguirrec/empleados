@@ -6,6 +6,7 @@ $( document ).ready(function() {
     let seccionActual = searchParams.get('request');
     let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
     let url_final = 'http://mexq.mx/';
+    let url_dev = 'http://localhost/';
 
     $('#searchBox').keyup(function(event) {
         event.preventDefault();
@@ -310,12 +311,47 @@ $( document ).ready(function() {
                 $('#txtCelula').text(rowInfo.Celula);
             }
 
+            $("#btnGafete").prop('disabled', true);
+
+            
+            var archivoImagen = $("#txtFoto")[0].files.length;
+            $("#txtFoto").on('click',function(){
+                if(archivoImagen === 0){
+                    $("#btnGafete").prop('disabled', false);
+                } else {
+                    $("#btnGafete").prop('disabled', true);
+                }
+            });
+            
+            
             //GENERAR GAFETE
             $("#btnGafete").click(function(){
-                var numero_nomina = $('#txtNomina').html();
-                    
+                var numero_nomina = $('#txtNomina').html(),
+                    empFoto = document.getElementById('txtFoto'),
+                    action = 'guardarFoto';
+
+
+                // var datosGafete = new FormData();
+                //     datosGafete.append('empNomina', numero_nomina);
+                //     datosGafete.append('empFoto', empFoto);
+                //     datosGafete.append('action', action);
+                // console.log(action + ' ' + numero_nomina);
+                // var xhr = new XMLHttpRequest();
+                // xhr.open('POST', backendURL, true);
+                // xhr.send(datosGafete);
+                // xhr.onload = function(){
+                //     if (this.status === 200) {
+                //         var respuesta = JSON.parse(xhr.responseText);
+                //         console.log(respuesta);
+                //         console.log('ok');
+                //     } else {
+                //         var respuesta = JSON.parse(xhr.responseText);
+                //         console.log(respuesta);
+                //         console.log('error');
+                //     }
+                //     }
                 
-                var url = url_final+"empleados/gafete.php?emp="+numero_nomina,
+                var url = url_final + "empleados/gafete.php?emp="+numero_nomina,
                 newTab = window.open(url, '_blank');
                 newTab.focus();
                

@@ -19,9 +19,11 @@ if (check) {
             var url = 'http://barcode.tec-it.com/barcode.ashx?data='+informacion.no_trab+'&code=Code128&dpi=210';
             console.log(url);
             console.log(informacion); 
-            console.log(informacion.nombre); 
             $("#empNombre").html(informacion.nombre);
             $("#empPuesto").html(informacion.puesto);
+            $("#empAlta").html(informacion.empAlta);
+            $("#empNS").html('IMSS: ' + informacion.no_imss);
+            $("#empDireccion").html(informacion.calle + ' #' + informacion.numero + ' <br/>' + informacion.fraccionamiento + ' <br/> CP: ' + informacion.cp + ', ' + informacion.estado);
             $("#empNomina").attr("src",url);
         }
     });

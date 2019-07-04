@@ -4,21 +4,21 @@
 <div id='front'>
 <img src="img/gafete/gafete.png" style="width:5.9cm;height:9.2cm;position: absolute; z-index: 1;">
 
-<img  class='img-circle'  style="height:3.8cm; width:3.8cm; border-radius: 94%; position: absolute;z-index: 2;top:3.4cm;left:1cm;" src="img/gafete/027.png" > 
+<img  class='img-circle'  style="height:3.8cm; width:3.8cm; border-radius: 94%; position: absolute;z-index: 2;top:3.4cm;left:.7cm;" src="img/gafete/027.png" > 
 <center>
-<p style="position: absolute; text-align: center;left:0.15cm; width: 5.4cm; top:7.6cm;font-size:11px;z-index: 3;" id="empNombre">
+<p style="position: absolute; text-align: center;left:0.15cm; width: 5.4cm; top:7.6cm;font-size:9px;z-index: 3;" id="empNombre">
 <!-- Mi nombre -->
 </p>
 </center>
 <center>
-<p style="position: absolute; text-align: center;left:0.25cm; width: 5.4cm; top:8cm;z-index: 4; font-size:11px;color:#009743;" id="empPuesto">
+<p style="position: absolute; text-align: center;left:0.25cm; width: 5.4cm; top:8cm;z-index: 4; font-size:9px;color:#009743;" id="empPuesto">
  <!-- Mi Puesto -->
 </p>
 </center>
 
 <center>
-<p style="position: absolute;left:0.25cm;  top:8.4cm; z-index: 5;text-align: center;width: 5.4cm;font-size:9.6px;">
-Ingreso : 20/02/2012    
+<p style="position: absolute;left:0.25cm;  top:8.4cm; z-index: 5;text-align: center;width: 5.4cm;font-size:8.2px;" id="empAlta">
+<!-- Ingreso : 20/02/2012     -->
 </p>
 </div>
 <div id="back">
@@ -32,7 +32,9 @@ Ingreso : 20/02/2012
 
 <p  style="position: absolute; text-align: center;width: 5.4cm; font-size:16px;z-index: 7;left:0.25cm; top:16.8cm;color:#009743;transform:rotate(180deg);
 -ms-transform:rotate(180deg); /* IE 9 */
--webkit-transform:rotate(180deg);"> No.IMSS: #####</p>
+-webkit-transform:rotate(180deg);" id="empNS">
+<!-- No.IMSS: ##### -->
+</p>
 </center>
 
 
@@ -49,7 +51,9 @@ Ingreso : 20/02/2012
 <center>
 <p  style="transform:rotate(180deg);
 -ms-transform:rotate(180deg); /* IE 9 */
--webkit-transform:rotate(180deg);position: absolute; text-align: center;width: 5.4cm; top:12.2cm;font-size:12px;z-index: 9;left: 0.35cm;color:#000;">Mi direccion</p>
+-webkit-transform:rotate(180deg);position: absolute; text-align: center;width: 5.4cm; top:12.2cm;font-size:9px;z-index: 9;left: 0.35cm;color:#000;" id="empDireccion">
+<!-- Mi direccion -->
+</p>
 </center>
 
 <center>
@@ -65,6 +69,8 @@ Ingreso : 20/02/2012
 <br>
     <a class="btn btn-lg btn-success" id="btnPrint" style="position: absolute; width: 3.2cm;top:19.4cm;font-size:12px;z-index: 12;left: 1cm;">IMPRIMIR</a>
 </div>
+
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="js/gafete.js"></script>
