@@ -19,7 +19,7 @@
         <div class="col-sm-5 ml-4">
             <div class="input-group mb-10">
                 <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroup-sizing-default"><i class="fas fa-search"></i></span>
+                    <span class="input-group-text iconSearch" id="inputGroup-sizing-default"><i class="fas fa-search"></i></span>
                 </div>
                 <input type="text" class="form-control" aria-label="Sizing example input" id="searchBox" aria-describedby="inputGroup-sizing-default" placeholder="Buscar..." autofocus>
                 <button class="btn btn-success ml-3 exportTable" title="Exportar tabla"><i class="fas fa-file-excel"></i> Exportar tabla</button>

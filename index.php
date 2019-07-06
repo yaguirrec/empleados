@@ -43,6 +43,9 @@
               case 'direcciones':
                 include 'inc/templates/transporte/vista.php';
                 break;
+              case 'fecha1': case 'fecha2':
+                include 'inc/templates/dh/vista.php';
+                break;
               default:
                 include 'inc/templates/main-content.php';
                 break;

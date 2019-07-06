@@ -504,8 +504,10 @@ tb 34 nomipaq
 **/
 
 /*CONSULTAS*/
-SELECT * FROM [vEmpleadosNM] ORDER BY fechaCaptura DESC 
-SELECT * FROM tbempleados ORDER BY updated_at DESC
+SELECT * FROM PJEMPLOY WHERE employee = '08444'
+SELECT TOP 1 * FROM [vEmpleadosNM] where codigoempleado = '08444' ORDER BY fechaCaptura DESC 
+SELECT * FROM tbempleados where numero_nomina = '08444' ORDER BY updated_at DESC
+UPDATE tbempleados SET status = 'B' where numero_nomina = '08444'
 SELECT * FROM tbsucursal
 SELECT * FROM tbarea WHERE codigo = '3'
 SELECT * FROM tbcelula
@@ -644,3 +646,68 @@ ORDER BY tc.nombre
 select top 1 b.nombre,puesto,convert(varchar,fecha_alta),telefono_emergencia as a , no_trab,no_imss,cp,calle,numero, fraccionamiento,estado,municipio,a.dv  from (select * from rh_empelados2 ) as a  inner join 
 (select emp_name as nombre,* from pjemploy ) as b on a.no_trab = b.employee
 where employee='26389' order by fecha_alta desc
+
+SELECT TOP 10 * FROM tbempleados 
+
+/**CUMPLEAÑEROS***/
+SELECT te.numero_nomina, te.nombre_largo, 
+        CASE WHEN tp.nombre IS NULL THEN 'Sin asignar' ELSE tp.nombre END AS 'Puesto',
+        ts.nombre AS 'Sucursal',
+		ta.nombre AS 'Departamento', 
+		tc.nombre AS 'Celula',
+		CONVERT(VARCHAR(10), te.fecha_nacimiento, 105) AS fechaNacimiento,
+		DATEDIFF(YY, fecha_nacimiento, GETDATE()) - 
+		CASE WHEN RIGHT(CONVERT(VARCHAR(6), GETDATE(), 12), 4) >= 
+				RIGHT(CONVERT(VARCHAR(6), fecha_nacimiento, 12), 4) 
+		THEN 0 ELSE 1 END AS field1,
+		CASE 
+		WHEN 
+			DATEDIFF(DAY, GETDATE(),CAST(YEAR(GETDATE()) AS VARCHAR) + '-' + CAST(MONTH(fecha_nacimiento) AS VARCHAR) + '-' + CAST(DAY(fecha_nacimiento) AS VARCHAR)) < 1 
+			THEN
+			DATEDIFF(DAY, GETDATE(),CAST(YEAR(GETDATE())+1 AS VARCHAR) + '-' + CAST(MONTH(fecha_nacimiento) AS VARCHAR) + '-' + CAST(DAY(fecha_nacimiento) AS VARCHAR))
+			ELSE
+			DATEDIFF(DAY, GETDATE(),CAST(YEAR(GETDATE()) AS VARCHAR) + '-' + CAST(MONTH(fecha_nacimiento) AS VARCHAR) + '-' + CAST(DAY(fecha_nacimiento) AS VARCHAR))
+			END AS diasFaltantes
+        FROM tbempleados AS te
+        INNER JOIN tbsucursal AS ts
+        ON te.id_sucursal = ts.id_sucursal
+        INNER JOIN tbcelula AS tc
+        ON tc.id_celula = te.id_celula
+        INNER JOIN tbarea AS ta
+        ON tc.codigo_area = ta.codigo
+        LEFT JOIN tbpuesto AS tp
+        ON te.id_puesto = tp.id_puesto
+		WHERE MONTH(fecha_nacimiento) = MONTH(GETDATE()) AND DAY(fecha_nacimiento) >= DAY(GETDATE())
+		ORDER BY DAY(fecha_nacimiento) ASC
+
+/**ANTIGUEDAD**/
+SELECT te.numero_nomina, te.nombre_largo, 
+        CASE WHEN tp.nombre IS NULL THEN 'Sin asignar' ELSE tp.nombre END AS 'Puesto',
+        ts.nombre AS 'Sucursal',
+		ta.nombre AS 'Departamento', 
+		tc.nombre AS 'Celula',
+		CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
+		DATEDIFF(YY, fecha_alta, GETDATE()) - 
+		CASE WHEN RIGHT(CONVERT(VARCHAR(6), GETDATE(), 12), 4) >= 
+				RIGHT(CONVERT(VARCHAR(6), fecha_alta, 12), 4) 
+		THEN 0 ELSE 1 END AS field1,
+		CASE 
+		WHEN 
+			DATEDIFF(DAY, GETDATE(),CAST(YEAR(GETDATE()) AS VARCHAR) + '-' + CAST(MONTH(fecha_alta) AS VARCHAR) + '-' + CAST(DAY(fecha_alta) AS VARCHAR)) < 1 
+			THEN
+			DATEDIFF(DAY, GETDATE(),CAST(YEAR(GETDATE())+1 AS VARCHAR) + '-' + CAST(MONTH(fecha_alta) AS VARCHAR) + '-' + CAST(DAY(fecha_alta) AS VARCHAR))
+			ELSE
+			DATEDIFF(DAY, GETDATE(),CAST(YEAR(GETDATE()) AS VARCHAR) + '-' + CAST(MONTH(fecha_alta) AS VARCHAR) + '-' + CAST(DAY(fecha_alta) AS VARCHAR))
+			END AS diasFaltantes
+        FROM tbempleados AS te
+        INNER JOIN tbsucursal AS ts
+        ON te.id_sucursal = ts.id_sucursal
+        INNER JOIN tbcelula AS tc
+        ON tc.id_celula = te.id_celula
+        INNER JOIN tbarea AS ta
+        ON tc.codigo_area = ta.codigo
+        LEFT JOIN tbpuesto AS tp
+        ON te.id_puesto = tp.id_puesto
+		WHERE 
+		MONTH(fecha_alta) = MONTH(GETDATE()) AND DAY(fecha_alta) >= DAY(GETDATE()) 
+		ORDER BY MONTH(fecha_alta),DAY(fecha_alta) ASC
