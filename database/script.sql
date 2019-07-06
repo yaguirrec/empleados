@@ -678,7 +678,7 @@ SELECT te.numero_nomina, te.nombre_largo,
         LEFT JOIN tbpuesto AS tp
         ON te.id_puesto = tp.id_puesto
 		WHERE MONTH(fecha_nacimiento) = MONTH(GETDATE()) AND DAY(fecha_nacimiento) >= DAY(GETDATE())
-		ORDER BY DAY(fecha_nacimiento) ASC
+		ORDER BY MONTH(fecha_nacimiento),DAY(fecha_nacimiento) ASC
 
 /**ANTIGUEDAD**/
 SELECT te.numero_nomina, te.nombre_largo, 
@@ -709,5 +709,6 @@ SELECT te.numero_nomina, te.nombre_largo,
         LEFT JOIN tbpuesto AS tp
         ON te.id_puesto = tp.id_puesto
 		WHERE 
-		MONTH(fecha_alta) = MONTH(GETDATE()) AND DAY(fecha_alta) >= DAY(GETDATE()) 
+		MONTH(fecha_alta) >= MONTH(GETDATE()) AND DAY(fecha_alta) >= DAY(GETDATE()) 
+		AND te.status <> 'B'
 		ORDER BY MONTH(fecha_alta),DAY(fecha_alta) ASC

@@ -5,6 +5,7 @@ $( document ).ready(function() {
     let searchParams = new URLSearchParams(window.location.search)
     let seccionActual = searchParams.get('request');
     let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let localBackend = 'inc/model/control.php';
     let url_final = 'http://mexq.mx/';
     let url_dev = 'http://localhost/';
 
@@ -271,7 +272,7 @@ $( document ).ready(function() {
             break;
         case 'datos':
             $( ".seccionBuscar" ).hide();
-            console.log('Seccion empleado');
+            // console.log('Seccion empleado');
             //GET VALUE FROM LS
             var codigoEmpleado = localStorage.getItem('codigoEmpleado'),
                 emp_activo = document.querySelector('#emp_activo').value,
@@ -304,7 +305,7 @@ $( document ).ready(function() {
 
             function imprimirEmpleado(rowInfo){
                 var nomina = rowInfo.numero_nomina,
-                    urlFoto = 'http://187.188.159.205:8090/web_serv/empService/imagenes/' + nomina + '/' + nomina + '.jpg',
+                    urlFoto = 'assets/files/' + nomina + '/' + nomina + '.jpg',
                     action = 'revisarImagen';
                 $("#empImagen").attr('src',urlFoto);
                 $('#txtNomina').text(rowInfo.numero_nomina);
@@ -317,7 +318,7 @@ $( document ).ready(function() {
 
                 $.ajax({
                     type: 'POST',
-                    url: backendURL, 
+                    url: localBackend, 
                     data: { action: action, nomina : nomina },
                     success: function(response) {
                         var respuesta = JSON.parse(response);
@@ -363,7 +364,7 @@ $( document ).ready(function() {
                     datosGafete.append('action', action);
                 console.log(action + ' ' + numero_nomina);
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST', backendURL, true);
+                xhr.open('POST', localBackend, true);
                 xhr.send(datosGafete);
                 xhr.onload = function(){
                     if (this.status === 200) {

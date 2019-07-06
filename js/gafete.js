@@ -8,7 +8,6 @@ let check = searchParams.has('emp'); // SI ALGUN PARAMETRO ES IGUAL A emp LA VAR
 if (check) {
     let param = searchParams.get('emp'), //GUARDAR EL VALOR DE PARAMETRO
         action = 'datos-gafete';
-    console.log('OK');
     $.ajax({
         type: 'POST',
         url: backendURL, 
@@ -18,9 +17,7 @@ if (check) {
             var informacion = respuesta.informacion[0];
             var nomina = $.trim(informacion.no_trab);
             var url = 'http://barcode.tec-it.com/barcode.ashx?data='+ nomina +'&code=Code128&dpi=210';
-            console.log(url);
-            console.log(informacion); 
-            $("#empFoto").attr("src","http://187.188.159.205:8090/web_serv/empService/imagenes/" + nomina + "/" + nomina + ".jpg");
+            $("#empFoto").attr("src","assets/files/" + nomina + "/" + nomina + ".jpg");
             $("#empNombre").html(informacion.nombre);
             $("#empPuesto").html(informacion.puesto);
             $("#empAlta").html(informacion.empAlta);
