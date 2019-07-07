@@ -559,6 +559,107 @@
                 sqlsrv_free_stmt( $stmt);
                 sqlsrv_close( $con );
             break;
+            case 'fecha':
+                // die(json_encode($_POST));
+                $props = $_POST['prop'];
+                $mes = $_POST['mes'];
+                
+                if ($props == 'cumple')
+                {
+                    $query = "SELECT te.numero_nomina, te.nombre_largo, 
+                                CASE WHEN tp.nombre IS NULL THEN 'Sin asignar' ELSE tp.nombre END AS 'Puesto',
+                                ts.nombre AS 'Sucursal',
+                                ta.nombre AS 'Departamento', 
+                                tc.nombre AS 'Celula',
+                                CONVERT(VARCHAR(10), te.fecha_nacimiento, 105) AS fecha,
+                                DATEDIFF(YY, fecha_nacimiento, GETDATE()) - 
+                                CASE WHEN RIGHT(CONVERT(VARCHAR(6), GETDATE(), 12), 4) >= 
+                                        RIGHT(CONVERT(VARCHAR(6), fecha_nacimiento, 12), 4) 
+                                THEN 0 ELSE 1 END AS field1,
+                                CASE 
+                                WHEN 
+                                    DATEDIFF(DAY, GETDATE(),CAST(YEAR(GETDATE()) AS VARCHAR) + '-' + CAST(MONTH(fecha_nacimiento) AS VARCHAR) + '-' + CAST(DAY(fecha_nacimiento) AS VARCHAR)) < 1 
+                                    THEN
+                                    DATEDIFF(DAY, GETDATE(),CAST(YEAR(GETDATE())+1 AS VARCHAR) + '-' + CAST(MONTH(fecha_nacimiento) AS VARCHAR) + '-' + CAST(DAY(fecha_nacimiento) AS VARCHAR))
+                                    ELSE
+                                    DATEDIFF(DAY, GETDATE(),CAST(YEAR(GETDATE()) AS VARCHAR) + '-' + CAST(MONTH(fecha_nacimiento) AS VARCHAR) + '-' + CAST(DAY(fecha_nacimiento) AS VARCHAR))
+                                    END AS diasFaltantes
+                                FROM tbempleados AS te
+                                INNER JOIN tbsucursal AS ts
+                                ON te.id_sucursal = ts.id_sucursal
+                                INNER JOIN tbcelula AS tc
+                                ON tc.id_celula = te.id_celula
+                                INNER JOIN tbarea AS ta
+                                ON tc.codigo_area = ta.codigo
+                                LEFT JOIN tbpuesto AS tp
+                                ON te.id_puesto = tp.id_puesto
+                                WHERE te.status <> 'B' AND MONTH(fecha_nacimiento) = ?
+                                ORDER BY MONTH(fecha_nacimiento),DAY(fecha_nacimiento) ASC";
+                }elseif($props == 'antig'){
+                    $query = "SELECT te.numero_nomina, te.nombre_largo, 
+                                CASE WHEN tp.nombre IS NULL THEN 'Sin asignar' ELSE tp.nombre END AS 'Puesto',
+                                ts.nombre AS 'Sucursal',
+                                ta.nombre AS 'Departamento', 
+                                tc.nombre AS 'Celula',
+                                CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fecha,
+                                DATEDIFF(YY, fecha_alta, GETDATE()) - 
+                                CASE WHEN RIGHT(CONVERT(VARCHAR(6), GETDATE(), 12), 4) >= 
+                                        RIGHT(CONVERT(VARCHAR(6), fecha_alta, 12), 4) 
+                                THEN 0 ELSE 1 END AS field1,
+                                CASE 
+                                WHEN 
+                                    DATEDIFF(DAY, GETDATE(),CAST(YEAR(GETDATE()) AS VARCHAR) + '-' + CAST(MONTH(fecha_alta) AS VARCHAR) + '-' + CAST(DAY(fecha_alta) AS VARCHAR)) < 1 
+                                    THEN
+                                    DATEDIFF(DAY, GETDATE(),CAST(YEAR(GETDATE())+1 AS VARCHAR) + '-' + CAST(MONTH(fecha_alta) AS VARCHAR) + '-' + CAST(DAY(fecha_alta) AS VARCHAR))
+                                    ELSE
+                                    DATEDIFF(DAY, GETDATE(),CAST(YEAR(GETDATE()) AS VARCHAR) + '-' + CAST(MONTH(fecha_alta) AS VARCHAR) + '-' + CAST(DAY(fecha_alta) AS VARCHAR))
+                                    END AS diasFaltantes
+                                FROM tbempleados AS te
+                                INNER JOIN tbsucursal AS ts
+                                ON te.id_sucursal = ts.id_sucursal
+                                INNER JOIN tbcelula AS tc
+                                ON tc.id_celula = te.id_celula
+                                INNER JOIN tbarea AS ta
+                                ON tc.codigo_area = ta.codigo
+                                LEFT JOIN tbpuesto AS tp
+                                ON te.id_puesto = tp.id_puesto
+                                WHERE 
+                                te.status <> 'B' AND MONTH(fecha_alta) = ?
+                                ORDER BY MONTH(fecha_alta),DAY(fecha_alta) ASC";
+                }    
+
+                $params = array($mes);
+
+                $stmt = sqlsrv_query( $con, $query, $params);
+
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
             case 'buscarSucursal':
                 // die(json_encode($_POST));
                 $query = "SELECT id_sucursal,codigo,nombre FROM tbsucursal ORDER BY nombre ASC";
@@ -629,9 +730,25 @@
             break;
             case 'buscarCelula':
                 // die(json_encode($_POST));
-                $query = "SELECT id_celula,nombre FROM tbcelula ORDER BY id_celula ASC";
-                
-                $stmt = sqlsrv_query( $con, $query);
+                $sucursal =  $_POST['sucursal'];
+                $clasificacion =  $_POST['clasificacion'];
+                if ($clasificacion === 'A'){
+                    $query = "SELECT tc.codigo,tc.nombre FROM tbcelula AS tc
+                                INNER JOIN tbsucursal AS ts
+                                ON SUBSTRING(tc.codigo,1,5) = SUBSTRING(ts.codigo,1,5)
+                                WHERE SUBSTRING(tc.codigo,1,5) = '99COR'";
+
+                    $stmt = sqlsrv_query( $con, $query);
+                    
+                } else {
+                    $query = "SELECT tc.codigo,tc.nombre FROM tbcelula AS tc
+                                INNER JOIN tbsucursal AS ts
+                                ON SUBSTRING(tc.codigo,1,5) = SUBSTRING(ts.codigo,1,5)
+                                WHERE SUBSTRING(tc.codigo,1,5) <> '99COR'";
+                    $params = array($sucursal);
+                    $stmt = sqlsrv_query( $con, $query);
+                }
+
 
                 $result = array();
                 
@@ -695,9 +812,89 @@
                 sqlsrv_free_stmt( $stmt);
                 sqlsrv_close( $con );
             break;
+            case 'datos-gafete':
+                // die(json_encode($_POST));
+                $nomina =  $_POST['nomina'];
+                $query = "SELECT top 1 b.nombre,puesto,convert(varchar,fecha_alta) AS empAlta,telefono_emergencia as a , no_trab,no_imss,cp,calle,numero, fraccionamiento,estado,municipio,a.dv  from rh_empelados2  as a  inner join 
+                            (select emp_name as nombre,* from pjemploy ) as b on a.no_trab = b.employee
+                            where employee = ? order by fecha_alta desc";
+
+                $params = array($nomina);
+                
+                $stmt = sqlsrv_query( $con, $query, $params);
+                
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
+            case 'guardarFoto':
+                // die(json_encode($_POST));
+                $empNomina = $_POST['empNomina'];
+                
+                if(isset($_FILES["empFoto"]["name"])){
+                    $respuesta = array(
+                        'estado' => 'OK'
+                    );
+                    $directorio = 'imagenes/'.$empNomina;
+                    $targetDir = $directorio."/";       
+                    if(!file_exists($directorio))
+                    {
+                        mkdir($directorio, 0777,true);
+                    }
+                    $temp = explode(".", $_FILES["empFoto"]["name"]);
+                    $newfilename = $empNomina . '.jpg';
+                    
+                    move_uploaded_file($_FILES["empFoto"]["tmp_name"], $targetDir . $newfilename);
+                } else {
+                    $respuesta = array(
+                        'estado' => 'NOK'
+                    );
+                }
+
+            echo json_encode($respuesta);
+            break;
+            case 'revisarImagen':
+                // die(json_encode($_POST));
+                $ruta = 'imagenes/';
+                $empNomina = $_POST['nomina'];
+                $respuesta = array(
+                    'estado' => 1
+                );
+
+                if (!file_exists($ruta.$empNomina.'/'.$empNomina.'.jpg')) {   
+                    $respuesta = array(
+                        'estado' => 0
+                    );                        
+                }
+                    
+                echo json_encode($respuesta);
+            break;
             default:
             echo 'NO DATA RETRIVE.';
-            
             break;
         }
 

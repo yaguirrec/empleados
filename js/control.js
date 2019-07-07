@@ -499,39 +499,53 @@ $( document ).ready(function() {
 
                 
             break;
-        // CUMPLEAÑOS Y ANTIGUEDAD
+        // CUMPLEAÑOS / ANTIGUEDAD
         case 'fecha1': case 'fecha2':
             $( ".iconSearch" ).hide();
             $( "#searchBox" ).hide();
             $( "#exportInfo" ).hide();
-            var action  = 'fecha';
-            var prop = (seccionActual === 'fecha1' ? 'cumple' : 'antig');
             var titulo = (seccionActual === 'fecha1' ? 'Fechas de cumpleaños' : 'Antigüedad del personal');
             var columna = (seccionActual === 'fecha1' ? 'Fecha Nacimiento' : 'Fecha Alta');
             var columna2 = (seccionActual === 'fecha1' ? 'Edad' : 'Atigüedad');
+            let btnObtener = $("#btnObtener");
+
             $('.seccionTitulo').text(titulo);
             $('#colType').text(columna);
             $('#colKind').text(columna2);
-            var dataTable = new FormData();
-            dataTable.append('action', action);
-            dataTable.append('prop', prop);
-            var xmlhr = new XMLHttpRequest();
-            xmlhr.open('POST', backendURL, true);
-            xmlhr.onload = function(){
-                if (this.status === 200) {
-                var respuesta = JSON.parse(xmlhr.responseText);
-                if (respuesta.estado === 'OK') {
-                    var informacion = respuesta.informacion;
-                    // console.log(respuesta);
-                    for(var i in informacion){
-                        tablaFechas(informacion[i]);
-                    }     
-                } else if(respuesta.status === 'error'){
-                    var informacion = respuesta.informacion;
+
+            btnObtener.on('click',function(){
+                var mes = $("#txtMes").val();
+                if(mes != '0'){
+                    obtenerFechas(mes);
+                    $('#dataTable').empty();
                 }
-                }
-                }
-            xmlhr.send(dataTable);
+            });
+
+            function obtenerFechas(mes){
+                var action  = 'fecha';
+                var prop = (seccionActual === 'fecha1' ? 'cumple' : 'antig');
+                var dataTable = new FormData();
+                dataTable.append('action', action);
+                dataTable.append('prop', prop);
+                dataTable.append('mes', mes);
+                var xmlhr = new XMLHttpRequest();
+                xmlhr.open('POST', backendURL, true);
+                xmlhr.onload = function(){
+                    if (this.status === 200) {
+                    var respuesta = JSON.parse(xmlhr.responseText);
+                    if (respuesta.estado === 'OK') {
+                        var informacion = respuesta.informacion;
+                        // console.log(respuesta);
+                        for(var i in informacion){
+                            tablaFechas(informacion[i]);
+                        }     
+                    } else if(respuesta.status === 'error'){
+                        var informacion = respuesta.informacion;
+                    }
+                    }
+                    }
+                xmlhr.send(dataTable);
+            }
               
             function tablaFechas(rowInfo){
         
