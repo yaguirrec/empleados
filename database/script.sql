@@ -234,7 +234,10 @@ CREATE TABLE [dbo].[tbprivilegios_emp](
 ) ON [PRIMARY]
 GO
 
-INSERT INTO tbprivilegios_emp (tipo,descripcion,created_at) VALUES ('RH','Acceso a administración de empeados',GETDATE())
+ALTER TABLE tbprivilegios_emp
+ADD [panel_dh] [int] DEFAULT 0;
+
+INSERT INTO tbprivilegios_emp (tipo,descripcion,created_at) VALUES ('Laborales','Acceso a Laborales',GETDATE())
 SELECT * FROM tbprivilegios_emp
 
 /*CREAR TABLA RELACION EMPLEADOS-PERMISOS*/

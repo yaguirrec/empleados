@@ -1,18 +1,49 @@
 $( document ).ready(function() {
-    var nivel_usuario = document.querySelector('#nivel_usuario').value;
-    var usuario_activo = document.querySelector('#emp_activo').value;
-    var super_activo = document.querySelector('#sup_activo').value;
+    /***NIVELES DE USUARIO
+     * 
+     * 1 - USUARIO NBORMAL
+     * 2 - ADMINISTRADOR
+     * 3 - RH
+     * 4 - DH
+     */
+    let nivel_usuario = document.querySelector('#nivel_usuario').value;
+    let usuario_activo = document.querySelector('#emp_activo').value;
+    let super_activo = document.querySelector('#sup_activo').value;
 
-    var backButton = $( "#backButton" ),
-        seccionLateral = $("#sidePaneAdmin");
+    let backButton = $( "#backButton" ),
+        seccionLateral = $("#sidePaneAdmin"),
+        transportes = $(".transportes"),
+        dh = $(".dh"),
+        dh1 = $(".dh1"),
+        rh = $(".rh"),
+        rh1 = $(".rh1"),
+        rh2 = $(".rh2");
 
     console.log('mi nivel ' + nivel_usuario);
 
     switch (nivel_usuario){
         case '': 
+            rh.hide();
+            rh1.hide();
+            rh2.hide();
+            break;
         case '1':
-            backButton.hide();
-            seccionLateral.hide();
+            
+            break;
+        case '2':
+        
+            break;
+        case '3':
+            transportes.hide();
+            break;
+        case '4':
+            transportes.hide();
+            rh1.hide();
+            rh2.hide();
+            break;
+        case '5':
+            transportes.hide();
+            dh.hide();
             break;
         default:
             //**/ */

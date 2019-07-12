@@ -20,7 +20,6 @@
 
 <!-- LOCAL JS -->
 <script src="js/control.js"></script>
-<script src="js/level-control.js"></script>
 <script src="js/chart.js"></script>            
 
     <?php

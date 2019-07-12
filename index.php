@@ -46,6 +46,9 @@
               case 'fecha1': case 'fecha2':
                 include 'inc/templates/dh/vista.php';
                 break;
+              case 'puestos':
+                include 'inc/templates/modulos/puestos_vista.php';
+                break;
               default:
                 include 'inc/templates/main-content.php';
                 break;

@@ -16,7 +16,7 @@
       <div id="sidePaneAdmin">
 
       <!-- Nav Item - Dashboard -->
-      <li class="nav-item active seccionPanel">
+      <li class="nav-item active seccionPanel rh">
         <a class="nav-link" href="index.php?request=main">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Panel de control</span></a>
@@ -26,12 +26,12 @@
       <hr class="sidebar-divider">
 
       <!-- Heading -->
-      <div class="sidebar-heading">
+      <div class="sidebar-heading rh">
         Empleados
       </div>
 
       <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
+      <li class="nav-item rh">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-cog"></i>
           <span>Consultas</span>
@@ -39,17 +39,17 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Opciones de consulta:</h6>
-            <a class="collapse-item" href="index.php?request=empleado">Empleados activos</a>
-            <a class="collapse-item" href="index.php?request=bajas">Empleados inactivos</a>
-            <a class="collapse-item" href="index.php?request=direcciones">Transportes</a>
-            <a class="collapse-item" href="index.php?request=fecha1">Cumpleañeros</a>
-            <a class="collapse-item" href="index.php?request=fecha2">Antiguedad</a>
+            <a class="collapse-item rh1" href="index.php?request=empleado">Empleados activos</a>
+            <a class="collapse-item rh1" href="index.php?request=bajas">Empleados inactivos</a>
+            <a class="collapse-item transportes" href="index.php?request=direcciones">Transportes</a>
+            <a class="collapse-item dh" href="index.php?request=fecha1">Cumpleañeros</a>
+            <a class="collapse-item dh" href="index.php?request=fecha2">Antiguedad</a>
           </div>
         </div>
       </li>
 
       <!-- Nav Item - Utilities Collapse Menu -->
-      <li class="nav-item">
+      <li class="nav-item rh1">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
           <i class="fas fa-fw fa-wrench"></i>
           <span>Administrar</span>
@@ -57,10 +57,16 @@
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Administrar empleados:</h6>
-            <a class="collapse-item" href="index.php?request=alta-empleado">Alta de empleado</a>
-            <a class="collapse-item" href="#">Modificar de empleado</a>
-            <a class="collapse-item" href="#">Baja de empleado</a>
-            <a class="collapse-item" href="#">Other</a>
+            <a class="collapse-item rh2" href="index.php?request=alta-empleado">Alta de empleado</a>
+            <a class="collapse-item rh2" href="#">Modificar de empleado</a>
+            <a class="collapse-item rh2" href="#">Baja de empleado</a>
+          </div>
+        </div>
+        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Modulos</h6>
+            <a class="collapse-item" href="index.php?request=puestos">Puestos</a>
+            <a class="collapse-item" href="#">Celulas</a>
           </div>
         </div>
       </li>

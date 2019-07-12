@@ -830,6 +830,25 @@ $( document ).ready(function() {
             }
 
             break;
+        case 'puestos':
+            $( ".seccionBuscar" ).hide();
+            let btnNuevo = $('#btnnPuesto'),
+                panelNuevo = $('#nuevo-puesto'),
+                btnCancelar = $('#btnCancelar'),
+                form_nPuesto = $('#form_nPuesto');
+
+            btnNuevo.on('click',function(){
+                panelNuevo.removeClass('d-none');
+                btnNuevo.addClass('d-none');
+            });
+
+            btnCancelar.on('click',function(){
+                panelNuevo.addClass('d-none');
+                btnNuevo.removeClass('d-none');
+                form_nPuesto.trigger("reset");
+            });
+
+        break;
         default:
             $( ".seccionBuscar" ).hide();
             console.log('Seccion ' + seccionActual); 
