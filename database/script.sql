@@ -64,6 +64,55 @@ CREATE TABLE [dbo].[tbsucursal](
 	[updated_by] [char](10) DEFAULT '00001'
 ) ON [PRIMARY]
 GO
+select top 1 * from rh_empelados2
+/**CREAR TABLA DATOS EMPLEADOS*/
+USE [MEXQAppTemp]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbdatos_empleados]( 
+	[id_registro] [int] IDENTITY(1,1) NOT NULL,
+	[numero_nomina] [varchar](10) NOT NULL,
+	[clasificacion] [varchar](5) DEFAULT '',
+	[categoria] [varchar](25) DEFAULT '',
+	[nomina] [varchar](1) DEFAULT '',
+	[registro_patronal] [varchar](10) DEFAULT 'SAC',
+	[lote] [varchar](15) DEFAULT '',
+	[dv] [varchar](3),
+	[lugar_nacimiento] [varchar](45),
+	[identificacion] [varchar](15),
+	[numero_identificacion] [varchar](55),
+	[estado_civil] [varchar](5),
+	[escolaridad] [varchar](25),
+	[constancia] [varchar](25),
+	[nombre_padre] [varchar](65),
+	[nombre_madre] [varchar](65),
+	[domicilio] [varchar](65),
+	[codigo_postal] [varchar](5),
+	[estado] [varchar](5),
+	[municipio] [varchar](5),
+	[localidad] [varchar](5),
+	[infonavit] [varchar](2),
+	[numero_infonavit] [varchar](35),
+	[fonacot] [varchar](2),
+	[numero_fonacot] [varchar](35),
+	[cuenta] [varchar](2),
+	[numero_cuenta] [varchar](35),
+	[correo] [varchar](35) DEFAULT '',
+	[telefono] [varchar](15) DEFAULT '',
+	[celular] [varchar](15) DEFAULT '',
+	[contacto_emergencia_nombre] [varchar](40) DEFAULT '',
+	[contacto_emergencia_numero] [varchar](15) DEFAULT '',
+	[created_at] [datetime],
+	[created_by] [char](10) DEFAULT '00001',
+	[updated_at] [datetime] default GETDATE(),
+	[updated_by] [char](10) DEFAULT '00001'
+) ON [PRIMARY]
+GO
+
+select * from tbdatos_empleados
 
 /*TRIGGER INSERTAR NUEVAS SUCURSALES / CELULAS*/
 ALTER TRIGGER nuevaSucursal
@@ -512,7 +561,7 @@ SELECT TOP 1 * FROM [vEmpleadosNM] where codigoempleado = '08444' ORDER BY fecha
 SELECT * FROM tbempleados where numero_nomina = '08444' ORDER BY updated_at DESC
 UPDATE tbempleados SET status = 'B' where numero_nomina = '08444'
 SELECT * FROM tbsucursal
-SELECT * FROM tbarea WHERE codigo = '3'
+SELECT * FROM tbarea
 SELECT * FROM tbcelula
 SELECT * FROM tbcorreos
 SELECT * FROM tbpuesto
@@ -715,3 +764,63 @@ SELECT te.numero_nomina, te.nombre_largo,
 		MONTH(fecha_alta) >= MONTH(GETDATE()) AND DAY(fecha_alta) >= DAY(GETDATE()) 
 		AND te.status <> 'B'
 		ORDER BY MONTH(fecha_alta),DAY(fecha_alta) ASC
+
+SELECT * FROM tbpuesto where id_celula = 28
+
+SELECT * FROM tbpuesto
+
+update tbpuesto set id_celula = 361 where id_puesto = 7 
+update tbpuesto set id_celula = 360 where id_puesto = 42
+
+SELECT tp.id_nivel,tp.id_puesto,tp.nombre,UPPER(te.nombre_largo) as nombre_largo,te.numero_nomina FROM 
+tbpuesto AS tp
+INNER JOIN tbempleados AS te
+ON tp.id_puesto = te.id_puesto
+INNER JOIN tbcelula AS tc
+ON te.id_celula = tc.id_celula
+INNER JOIN tbarea AS ta
+ON tc.codigo_area = ta.codigo
+AND tp.id_nivel < (SELECT id_nivel FROM tbpuesto WHERE id_puesto = 17)
+AND (tp.id_celula = (SELECT id_celula FROM tbpuesto WHERE id_puesto = 17)) 
+AND te.status <> 'B'
+UNION ALL
+SELECT tp.id_nivel,tp.id_puesto,tp.nombre,UPPER(te.nombre_largo) as nombre_largo,te.numero_nomina FROM tbpuesto AS tp
+INNER JOIN tbempleados AS te
+ON tp.id_puesto = te.id_puesto
+INNER JOIN (SELECT id_celula FROM tbcelula WHERE codigo_area =
+(SELECT area_superior FROM tbarea WHERE codigo = (SELECT codigo_area FROM tbcelula WHERE id_celula = 15)))
+AS temp
+ON temp.id_celula = tp.id_celula
+ORDER BY id_nivel
+
+
+
+SELECT * FROM tbarea
+EXEC sp_RENAME 'tbarea.nombre_corto', 'area_superior', 'COLUMN'
+UPDATE tbarea SET area_superior = ''
+INSERT INTO tbarea (codigo,nombre,descripcion,area_superior,created_at) VALUES ('122','Subdireccion Operativa','Area Subdireccion Operativa','102',getdate())
+INSERT INTO tbarea (codigo,nombre,descripcion,area_superior,created_at) VALUES ('123','Subdireccion Comercial','Area Subdireccion Comercial','102',getdate())
+UPDATE tbarea SET area_superior = '123' where id_area = 1
+UPDATE tbarea SET area_superior = '122' where id_area = 2
+UPDATE tbarea SET area_superior = '122' where id_area = 3
+UPDATE tbarea SET area_superior = '102' where id_area = 4
+UPDATE tbarea SET area_superior = '102' where id_area = 5
+UPDATE tbarea SET area_superior = '102' where id_area = 6
+UPDATE tbarea SET area_superior = '103' where id_area = 7
+UPDATE tbarea SET area_superior = '123' where id_area = 8
+UPDATE tbarea SET area_superior = '123' where id_area = 9
+UPDATE tbarea SET area_superior = '102' where id_area = 10
+UPDATE tbarea SET area_superior = '122' where id_area = 11
+UPDATE tbarea SET area_superior = '123' where id_area = 12
+UPDATE tbarea SET area_superior = '121' where id_area = 13
+
+select * from tbcelula
+select * from tbcelula where codigo LIKE '99COR%'
+INSERT INTO tbcelula (codigo,nombre,descripcion,codigo_area,created_at) VALUES ('99CORD017','Subdireccion Operativa','Area Subdireccion Operativa','122',getdate())
+INSERT INTO tbcelula (codigo,nombre,descripcion,codigo_area,created_at) VALUES ('99CORD018','Subdireccion Comercial','Area Subdireccion Comercial','123',getdate())
+UPDATE tbcelula SET codigo = '99CORD016' WHERE id_celula = 2
+
+SELECT * FROM tbempleados WHERE numero_nomina = '01885'
+UPDATE tbempleados SET id_celula = 361 WHERE numero_nomina = '01885'
+
+SELECT id_puesto,nombre FROM tbpuesto WHERE id_celula = 28 ORDER BY id_nivel ASC

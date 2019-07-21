@@ -574,6 +574,7 @@ $( document ).ready(function() {
                 txtNomina = $("#txtNomina"),
                 txtCelula = $("#txtCelula"),
                 txtPuesto = $("#txtPuesto"),
+                txtJefe = $("#txtJefe"),
                 txtCURP = $("#txtCURP"),
                 txtFraccionamiento = $("#txtFraccionamiento"),
                 sucursal = '',
@@ -726,30 +727,64 @@ $( document ).ready(function() {
                     xmlCEL.send(listaCEL);
             }
 
-            
+            //LLENAR PUESTOS POR CELULA SELECCIONADA
+            $('#txtCelula').focusout(function(){
+                var listaP = new FormData(),
+                    action = 'buscarP',
+                    paramCel =  $('#txtCelula option:selected').val();
+                listaP.append('action', action);
+                listaP.append('param', paramCel);
+                listaP.append('clasificacion', clasificacion);
+                var xmlP = new XMLHttpRequest();
+                xmlP.open('POST', backendURL, true);
+                xmlP.onload = function(){
+                if (this.status === 200) {
+                var respuesta = JSON.parse(xmlP.responseText);
+                if (respuesta.estado === 'OK') {
+                    var informacion = respuesta.informacion;
+                    var s = '<option value="-1">Seleccionar tipo de puesto</option>'; 
+                    for(var i in informacion){
+                        s += '<option value="'+ informacion[i].id_puesto +'">' + informacion[i].nombre + '</option>';
+                    }     
+                    txtPuesto.html(s);
+                } else if(respuesta.status === 'error'){
+                    var informacion = respuesta.informacion;
+                }
+                }
+                }
+                xmlP.send(listaP);
+            });
 
-            //LLENAR PUESTOS
-            var listaP = new FormData(),
-            action = 'buscarP';
-            listaP.append('action', action);
-            var xmlP = new XMLHttpRequest();
-            xmlP.open('POST', backendURL, true);
-            xmlP.onload = function(){
-            if (this.status === 200) {
-            var respuesta = JSON.parse(xmlP.responseText);
-            if (respuesta.estado === 'OK') {
-                var informacion = respuesta.informacion;
-                var s = '<option value="-1">Seleccionar tipo de puesto</option>'; 
-                for(var i in informacion){
-                    s += '<option value="'+ informacion[i].id_puesto +'">' + informacion[i].nombre + '</option>';
-                }     
-                txtPuesto.html(s);
-            } else if(respuesta.status === 'error'){
-                var informacion = respuesta.informacion;
-            }
-            }
-            }
-            xmlP.send(listaP);
+
+            //LLENAR JEFE DIRECTO POR NIVEL DE PUESTO SELECCIONADO
+            $('#txtPuesto').focusout(function(){
+                var listaJefe = new FormData(),
+                    action = 'buscarJefe',
+                    paramPuesto =  $('#txtPuesto option:selected').val(),
+                    paramCel =  $('#txtCelula option:selected').val();
+                console.log(`${paramCel} ${paramPuesto}`);
+                listaJefe.append('action', action);
+                listaJefe.append('param', paramPuesto);
+                listaJefe.append('param2', paramCel);
+                var xmlJefe = new XMLHttpRequest();
+                xmlJefe.open('POST', backendURL, true);
+                xmlJefe.onload = function(){
+                if (this.status === 200) {
+                var respuesta = JSON.parse(xmlJefe.responseText);
+                if (respuesta.estado === 'OK') {
+                    var informacion = respuesta.informacion;
+                    var s = '<option value="-1">Seleccionar jefe directo</option>'; 
+                    for(var i in informacion){
+                        s += '<option class="text-uppercase" value="'+ informacion[i].numero_nomina +'">' + informacion[i].numero_nomina + ' - ' + informacion[i].nombre_largo + '</option>';
+                    }     
+                    txtJefe.html(s);
+                } else if(respuesta.status === 'error'){
+                    var informacion = respuesta.informacion;
+                }
+                }
+                }
+                xmlJefe.send(listaJefe);
+            });
 
             //CONTROL CODIGO POSTAL
             $("#txtCP").focusout(function(){
@@ -828,6 +863,28 @@ $( document ).ready(function() {
                 if  ($("#txtGenerp").val().trim() === 0) $("#txtGenero").attr('disabled','disabled');
 
             }
+
+            let btnGuardarEmpleado = $('#btnGuardarEmpleado');
+
+            //BOTON GUARDAR EMPLEADO
+            btnGuardarEmpleado.on('click',function(e){
+                e.preventDefault();
+                let nomina = $('#txtNomina').val(),
+                    tipo = $('#txtTipo').val(),
+                    sucursal = $('#txtSucursal').val(),
+                    clasificacion = $('#txtClasificacion').val(),
+                    categoria = $('#txtCategoria').val(),
+                    celula = $('#txtCelula').val(),
+                    fecha_alta = $('#txtfechaAlta').val(),
+                    registro = $('#txtRegistro').val(),
+                    puesto = $('#txtPuesto').val();
+
+                console.log(`${nomina} ${clasificacion}`);
+
+
+            });
+
+
 
             break;
         case 'puestos':

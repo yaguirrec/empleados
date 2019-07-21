@@ -8,7 +8,7 @@
         die();
     }
 
-        include 'connection.php';   
+        include 'connection_.php';   
         $con = connDB();
         $sesion = false;
         $action  = $_POST['action'];
@@ -733,7 +733,7 @@
                 $sucursal =  $_POST['sucursal'];
                 $clasificacion =  $_POST['clasificacion'];
                 if ($clasificacion === 'A'){
-                    $query = "SELECT tc.codigo,tc.nombre FROM tbcelula AS tc
+                    $query = "SELECT tc.id_celula,tc.codigo,tc.nombre FROM tbcelula AS tc
                                 INNER JOIN tbsucursal AS ts
                                 ON SUBSTRING(tc.codigo,1,5) = SUBSTRING(ts.codigo,1,5)
                                 WHERE SUBSTRING(tc.codigo,1,5) = '99COR'";
@@ -741,7 +741,7 @@
                     $stmt = sqlsrv_query( $con, $query);
                     
                 } else {
-                    $query = "SELECT tc.codigo,tc.nombre FROM tbcelula AS tc
+                    $query = "SELECT tc.id_celula,tc.codigo,tc.nombre FROM tbcelula AS tc
                                 INNER JOIN tbsucursal AS ts
                                 ON SUBSTRING(tc.codigo,1,5) = SUBSTRING(ts.codigo,1,5)
                                 WHERE SUBSTRING(tc.codigo,1,5) <> '99COR'";
@@ -780,9 +780,79 @@
             break;
             case 'buscarP':
                 // die(json_encode($_POST));
-                $query = "SELECT id_puesto,nombre FROM tbpuesto ORDER BY id_puesto ASC";
+                $param = $_POST['param'];
+                $clasificacion = $_POST['clasificacion'];
+                if ($clasificacion === 'A'){
+                    $query = "SELECT id_puesto,nombre FROM tbpuesto WHERE id_celula = ? ORDER BY id_nivel ASC";
+                    
+                    $params = array($param);
+
+                    $stmt = sqlsrv_query( $con, $query, $params);
+                }else{
+                    $query = "SELECT id_puesto,nombre FROM tbpuesto ORDER BY id_nivel ASC";
+                    
+                    $stmt = sqlsrv_query( $con, $query);
+
+                }
+               
+
+                $result = array();
                 
-                $stmt = sqlsrv_query( $con, $query);
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
+            case 'buscarJefe':
+                // die(json_encode($_POST));
+                $param = $_POST['param'];
+                $param2 = $_POST['param2'];
+
+                $query = "SELECT tp.id_nivel,tp.id_puesto,tp.nombre,UPPER(te.nombre_largo) as nombre_largo,te.numero_nomina FROM 
+                            tbpuesto AS tp
+                            INNER JOIN tbempleados AS te
+                            ON tp.id_puesto = te.id_puesto
+                            INNER JOIN tbcelula AS tc
+                            ON te.id_celula = tc.id_celula
+                            INNER JOIN tbarea AS ta
+                            ON tc.codigo_area = ta.codigo
+                            AND tp.id_nivel < (SELECT id_nivel FROM tbpuesto WHERE id_puesto = ?)
+                            AND (tp.id_celula = (SELECT id_celula FROM tbpuesto WHERE id_puesto = ?)) 
+                            AND te.status <> 'B'
+                            UNION ALL
+                            SELECT tp.id_nivel,tp.id_puesto,tp.nombre,UPPER(te.nombre_largo) as nombre_largo,te.numero_nomina FROM tbpuesto AS tp
+                            INNER JOIN tbempleados AS te
+                            ON tp.id_puesto = te.id_puesto
+                            INNER JOIN (SELECT id_celula FROM tbcelula WHERE codigo_area =
+                            (SELECT area_superior FROM tbarea WHERE codigo = (SELECT codigo_area FROM tbcelula WHERE id_celula = ?)))
+                            AS temp
+                            ON temp.id_celula = tp.id_celula
+                            ORDER BY id_nivel";
+                
+                $params = array($param,$param,$param2);
+
+                $stmt = sqlsrv_query( $con, $query, $params);
 
                 $result = array();
                 

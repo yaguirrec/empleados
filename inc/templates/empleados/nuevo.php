@@ -50,8 +50,8 @@
         <input type="date" class="form-control" id="txtfechaAlta" value="<?php echo date("Y-m-d");?>">
       </div>
       <div class="form-group col-md-4">
-          <label for="txtClasificacion">Registro</label>
-          <select class="form-control" id="txtClasificacion">
+          <label for="txtRegistro">Registro</label>
+          <select class="form-control" id="txtRegistro">
             <option value="SAC" selected>SAC</option>
             <option value="CNO">CNO</option>
           </select>
@@ -63,6 +63,11 @@
     </div>
     <div class="form-row">
       <!-- JEFE DIRECTO -->
+      <div class="form-group col-md-12">
+          <label for="txtJefe">Jefe directo</label>
+          <select class="form-control text-uppercase" id="txtJefe">
+          </select>
+      </div>
     </div>
   </div>
 
@@ -121,7 +126,7 @@
       <div class="form-group col-md-2">
         <label for="txtTI">Tipo Identificación</label>
         <select class="form-control" id="txtTI">
-          <option value="" selected>INE / IFE</option>
+          <option value="IFE" selected>INE / IFE</option>
           <option value="">PASAPORTE</option>
           <option value="">CEDULA PROFESIONAL</option>
         </select>
@@ -133,10 +138,10 @@
       <div class="form-group col-md-2">
         <label for="txtCivil">Estado Civil</label>
         <select class="form-control" id="txtCivil">
-          <option value="" selected>Soltero(a)</option>
-          <option value="">Casado(a)</option>
-          <option value="">Divorciado(a)</option>
-          <option value="">Viudo(a)</option>
+          <option value="S" selected>Soltero(a)</option>
+          <option value="C">Casado(a)</option>
+          <option value="D">Divorciado(a)</option>
+          <option value="V">Viudo(a)</option>
         </select>
       </div>
     </div>
@@ -145,16 +150,16 @@
       <div class="form-group col-md-6">
         <label for="txtEscolaridad">Escolaridad</label>
         <select class="form-control" id="txtEscolaridad">
-          <option value="" selected>Primaria</option>
-          <option value="">Secundaria</option>
-          <option value="">Preparatoria o Bachillerato</option>
-          <option value="">Bachillerato Técnico</option>
-          <option value="">Carrera Técnica</option>
-          <option value="">Técnico Superior Universitario</option>
-          <option value="">Licenciatura</option>
-          <option value="">Posgrado</option>
-          <option value="">Maestria</option>
-          <option value="">Doctorado</option>
+          <option value="primaria" selected>Primaria</option>
+          <option value="secundaria">Secundaria</option>
+          <option value="preparatoria">Preparatoria o Bachillerato</option>
+          <option value="b_tecnico">Bachillerato Técnico</option>
+          <option value="carrera_tecnica">Carrera Técnica</option>
+          <option value="tsu">Técnico Superior Universitario</option>
+          <option value="licenciatura">Licenciatura</option>
+          <option value="posgrado">Posgrado</option>
+          <option value="maestria">Maestria</option>
+          <option value="doctorado">Doctorado</option>
         </select>
       </div>
       <div class="form-group col-md-6">
@@ -305,6 +310,6 @@
 
   <hr>
 
-  <!-- <button type="submit" class="btn btn-primary btn-block" id="btnGuardarempleado">GUARDAR <i class="far fa-save"></i></button> -->
+  <button type="submit" class="btn btn-primary btn-block" id="btnGuardarEmpleado">GUARDAR <i class="far fa-save"></i></button>
   <br>
 </form>
