@@ -4,11 +4,11 @@
     <div class="form-row">
       <div class="form-group col-md-2">
         <label for="txtNomina">Número de nomina</label>
-        <input type="text" class="form-control" id="txtNomina" placeholder="Nomina">
+        <input type="text" class="form-control" id="txtNomina" placeholder="Nomina" readonly>
       </div>
       <div class="form-group col-md-2">
         <label for="txtTipo">Tipo</label>
-        <input type="text" class="form-control" id="txtTipo" placeholder="Alta">
+        <input type="text" class="form-control" id="txtTipo" readonly>
       </div>
       <div class="form-group col-md-4">
           <label for="txtSucursal">Sucursal</label>
@@ -18,9 +18,9 @@
           <label for="txtClasificacion">Clasificación</label>
           <select class="form-control" id="txtClasificacion">
             <option value="" selected required>Selecciona una Clasificación</option>
+            <option value="A">Administrativo</option>
             <option value="AO">Adm .Operativo</option>
             <option value="O">Operativo</option>
-            <option value="A">Administrativo</option>
             <option value="E">Especial</option>
             <option value="B">Becario</option>
           </select>
@@ -245,7 +245,8 @@
       <div class="form-group col-md-1">
         <label for="txtInfonavit">Infonavit</label>
         <select class="form-control" id="txtInfonavit">
-          <option value="SI" selected>SI</option>
+          <option value="" selected>---</option>
+          <option value="SI">SI</option>
           <option value="NO">NO</option>
         </select>
       </div>
@@ -256,7 +257,8 @@
       <div class="form-group col-md-1">
         <label for="txtFonacot">Fonacot</label>
         <select class="form-control" id="txtFonacot">
-          <option value="SI" selected>SI</option>
+          <option value="" selected>---</option>
+          <option value="SI">SI</option>
           <option value="NO">NO</option>
         </select>
       </div>
@@ -267,7 +269,8 @@
       <div class="form-group col-md-1">
         <label for="txtBanco">Tarjeta</label>
         <select class="form-control" id="txtBanco">
-          <option value="SI" selected>SI</option>
+          <option value="" selected>---</option>
+          <option value="SI">SI</option>
           <option value="NO">NO</option>
         </select>
       </div>
@@ -302,8 +305,8 @@
         <input type="text" class="form-control" id="txtContacto">
       </div>
       <div class="form-group col-md-6">
-        <label for="txtContacton">Número contacto de emergencia</label>
-        <input type="text" class="form-control" id="txtContacton" maxlength="10" minlength="10" required placeholder="4499128686">
+        <label for="txtNcontacto">Número contacto de emergencia</label>
+        <input type="text" class="form-control" id="txtNcontacto" maxlength="10" minlength="10" required placeholder="4499128686">
       </div>
     </div>
   </div>

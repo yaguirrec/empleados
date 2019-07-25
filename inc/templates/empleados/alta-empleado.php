@@ -14,7 +14,7 @@
                 
                 <div class="form-group row seccion-validar">
                     <div class="col-md-12">
-                    <button type="submit" class="btn btn-primary btn-block" id="btnValidar">Verificar <i class="fas fa-check"></i></button>
+                    <button type="submit" class="btn btn-primary btn-block d-none" id="btnValidar">Verificar <i class="fas fa-check"></i></button>
                     </div>
                 </div>
             </form>
@@ -22,12 +22,22 @@
     </div>
 </div>
 
-<div class="altaEmpleado">
+<div class="altaEmpleado d-none">
     <div class="row">
         <div class="col-md-10 offset-1">
             <h1>Nuevo empleado</h1>
             <hr>
             <?php include 'inc/templates/empleados/nuevo.php'; ?>
+        </div>
+    </div>
+</div>
+
+<div class="editarEmpleado d-none">
+    <div class="row">
+        <div class="col-md-10 offset-1">
+            <h1>Re ingreso de empleado</h1>
+            <hr>
+            
         </div>
     </div>
 </div>

@@ -568,6 +568,7 @@ SELECT * FROM tbpuesto
 SELECT * FROM tbtipopuesto
 SELECT * FROM tbprivilegios_emp
 SELECT * FROM tbemp_permisos
+SELECT * FROM tbdatos_empleados
 
 SELECT te.numero_nomina, te.nombre_largo, 
 CASE WHEN tp.nombre IS NULL THEN 'Sin asignar' ELSE tp.nombre END AS 'Puesto',
@@ -582,8 +583,6 @@ ON tc.codigo_area = ta.codigo
 LEFT JOIN tbpuesto AS tp
 ON te.id_puesto = tp.id_puesto
 WHERE te.numero_nomina = '19721'
-
-
 
 SELECT te.id_empleado,te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
 ts.nombre,te.status,te.updated_at
@@ -824,3 +823,31 @@ SELECT * FROM tbempleados WHERE numero_nomina = '01885'
 UPDATE tbempleados SET id_celula = 361 WHERE numero_nomina = '01885'
 
 SELECT id_puesto,nombre FROM tbpuesto WHERE id_celula = 28 ORDER BY id_nivel ASC
+
+SELECT CONCAT(curpini + RIGHT(YEAR(fecha_nacimiento),2) , FORMAT(fecha_nacimiento,'MM') , CONVERT(CHAR(2),fecha_nacimiento,103) , curpfin), * FROM tbempleados
+WHERE CONCAT(curpini + RIGHT(YEAR(fecha_nacimiento),2) , FORMAT(fecha_nacimiento,'MM') , CONVERT(CHAR(2),fecha_nacimiento,103) , curpfin) = 'VAFC920220HASLNS06'
+SELECT top 1  CONCAT(curpini + RIGHT(YEAR(fecha_nacimiento),2) , FORMAT(fecha_nacimiento,'MM') , CONVERT(CHAR(2),fecha_nacimiento,103) , curpfin) AS curp, * FROM tbempleados where numero_nomina = '08444'
+
+SELECT MAX(CAST(REPLACE(no_trab, ' ', '') AS INT)) as NUMERO FROM rh_empelados2 WHERE no_trab <> '----------' AND no_trab NOT LIKE '´%' AND DATALENGTH(CAST(REPLACE(no_trab, ' ', '') AS INT)) < 6
+SELECT no_trab,* FROM rh_empelados2 WHERE no_trab = '----------'                                             
+SELECT TOP 100 no_trab n,* FROM rh_empelados2 WHERE fecha_alta > '2019-06-01' order by no_trab DESC
+
+/*OBTENER ULTIMO NUMERO DE NOMINA EN PJEMPLOYEE**/
+SELECT top 1 MAX(CAST(REPLACE(employee, ' ', '') AS INT)) AS numeroNomina FROM PJEMPLOY WHERE ISNUMERIC(employee) = 1 AND em_id03 = '' GROUP BY crtd_datetime ORDER BY crtd_datetime DESC
+SELECT MAX(CAST(numero_nomina AS INT)) AS numeroNomina FROM tbempleados
+
+SELECT * FROM tbempleados where numero_nomina = '26443'
+delete from tbempleados where numero_nomina = '26443'
+
+SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
+                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
+                            FROM tbempleados AS te
+                            INNER JOIN tbsucursal AS ts
+                            ON te.id_sucursal = ts.id_sucursal 
+                            INNER JOIN tbcelula AS tc
+                            ON tc.id_celula = te.id_celula
+                            INNER JOIN tbarea AS ta
+                            ON ta.codigo = tc.codigo_area
+                            WHERE te.status <> 'B' 
+                            ORDER BY te.status ASC, te.updated_at DESC
+

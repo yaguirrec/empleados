@@ -43,14 +43,8 @@
       </tbody>
     </table>
     <div id="loadingIndicator" class="text-center mt-4">
-      <div class="h1 spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-        <span class="sr-only">...</span>
-      </div>
-      <div class="h1 spinner-border text-success" style="width: 3rem; height: 3rem;" role="status">
-        <span class="sr-only">...</span>
-      </div>
-      <div class="h1 spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-        <span class="sr-only">...</span>
+      <div class="alert alert-primary" role="alert">
+        Seleccionar un mes de la lista
       </div>
     </div>
 

@@ -4,7 +4,8 @@ $( document ).ready(function() {
     // VALUE OF THE ACTUAL SECTION
     let searchParams = new URLSearchParams(window.location.search)
     let seccionActual = searchParams.get('request');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let seccionBuscar = $( ".seccionBuscar" );
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/control.php';
     let url_final = 'http://mexq.mx/';
     let url_dev = 'http://localhost/';
@@ -189,7 +190,7 @@ $( document ).ready(function() {
     {
         /**CARGAR TABLA EMPLEADOS */
         case 'empleado': case 'bajas':
-            $( ".seccionBuscar" ).show();
+            seccionBuscar.removeClass('d-none');
             var action  = 'lista-empleados';
             var prop = (seccionActual === 'empleado' ? 'activos' : 'bajas');
             var titulo = (seccionActual === 'empleado' ? 'Empleados activos' : 'Empleados inactivos');
@@ -271,8 +272,6 @@ $( document ).ready(function() {
             }
             break;
         case 'datos':
-            $( ".seccionBuscar" ).hide();
-            // console.log('Seccion empleado');
             //GET VALUE FROM LS
             var codigoEmpleado = localStorage.getItem('codigoEmpleado'),
                 emp_activo = document.querySelector('#emp_activo').value,
@@ -389,7 +388,6 @@ $( document ).ready(function() {
 
             break;
         case 'main': 
-            $( ".seccionBuscar" ).hide();
             var action = 'highlights',
                 totalEmpleados = $("#txtEmpleados"),
                 totalEmpleadosA = $("#txtEmpleadosA"),
@@ -421,7 +419,6 @@ $( document ).ready(function() {
             xmlhr.send(dataEmp);
             break;
         case 'direcciones':
-            $( ".seccionBuscar" ).hide();
             var action  = 'lista-direcciones';
             var prop = (seccionActual === 'empleado' ? 'activos' : 'bajas');
             var titulo = 'Direcciones del personal';
@@ -565,7 +562,6 @@ $( document ).ready(function() {
 
             break;
         case 'alta-empleado':
-            $( ".seccionBuscar" ).hide();
             var botonValidar = $("#btnValidar"),
                 vcurp = $(".validaCurp"),
                 altaEmpleado = $(".altaEmpleado"),
@@ -576,29 +572,18 @@ $( document ).ready(function() {
                 txtPuesto = $("#txtPuesto"),
                 txtJefe = $("#txtJefe"),
                 txtCURP = $("#txtCURP"),
+                txtTipo = $('#txtTipo'),
                 txtFraccionamiento = $("#txtFraccionamiento"),
                 sucursal = '',
                 clasificacion = '',
                 ccurp = $("#campo-curp"),
                 genero = '';
-            botonValidar.hide();
-            altaEmpleado.hide();
 
             ccurp.focusout(function(){
                 textocurp = $("#campo-curp").val();
                 //ASIGNAR FECHA NACIMIENTO DESDE CURP
                     
-                var aNacimiento = textocurp.substr(4, 2),
-                mNacimiento = textocurp.substr(6, 2),
-                dNacimiento = textocurp.substr(8, 2);
                 
-
-                var now = new Date(aNacimiento,mNacimiento-1,dNacimiento);
-                var nyear = now.getFullYear();
-
-                var fNacimiento = nyear + '-' + mNacimiento + '-' + dNacimiento;
-
-                $("#txtfechaNacimiento").val(fNacimiento);
             });
 
             //EVITAR ACCION AL PRESIONAR LA TECLA ENTER
@@ -610,38 +595,94 @@ $( document ).ready(function() {
             ccurp.keyup(function(e){
                 if(ccurp.val().length === 18){
                     textocurp = $("#campo-curp").val();
-                    botonValidar.show();
-                    txtCURP.val(textocurp);
-                    genero = textocurp.charAt(10);
-                    //ASIGNAR GENERO DESDE CURP
-                    $("#txtGenero").val(genero);
-
-                    //ASIGNAR ENTIDAD DE NACIMIENTO DESDE CURP
-                    var url = 'inc/model/entidades.json',
-                        entidad = textocurp.substr(11, 2);
-
-                    
-
-                    $.getJSON(url, function (data) {
-                        var clave = '';
-                        for(var e in data.entidades){
-                            clave = data.entidades[e].clave;
-                            if (clave === entidad){
-                                $("#txtLnacimiento").val(data.entidades[e].nombre);
-                            }
-                        }
-                    });
-                    
+                    botonValidar.removeClass('d-none');
                 } else if (ccurp.val().length < 18 || e.keyCode == 46) {
-                    botonValidar.hide();
+                    botonValidar.addClass('d-none');
                 }
             });
 
+            //VALIDAR CURP
             botonValidar.on("click", function(e){
                 e.preventDefault();
-                vcurp.hide();
-                altaEmpleado.show();
+                txtCURP.val(textocurp);
+                let action = 'validaCURP',
+                    curp = txtCURP.val();
+                // console.log(`${action} ${curp}`);
+                $.ajax({
+                    type: 'POST',
+                    url: backendURL, 
+                    data: { action: action, curp : curp },
+                    success: function(response) {
+                        var respuesta = JSON.parse(response);
+                        if(respuesta.informacion.length === 0){
+                            vcurp.addClass('d-none');
+                            camposClave();
+                            obtenerNomina();
+                            txtTipo.val('Alta');
+                            altaEmpleado.removeClass('d-none'); 
+                        }else{
+                            txtTipo.val('Re-ingreso');
+                            Swal.fire({
+                                title: 'Aviso',
+                                text: 'La persona ya existe en la Base de datos!',
+                                type: 'info'
+                            })
+                            .then(resultado => {
+                                    if(resultado.value) {
+                                        location.reload();
+                                    }
+                                })
+                        }
+                    }
+                });
+
             });
+
+            //LLENAR CAMPOS CLAVE SI NO EXISTE EN LA BD
+            let camposClave = () =>
+            {
+                genero = textocurp.charAt(10);
+                $("#txtGenero").val(genero);
+                var aNacimiento = textocurp.substr(4, 2),
+                mNacimiento = textocurp.substr(6, 2),
+                dNacimiento = textocurp.substr(8, 2);
+                var now = new Date(aNacimiento,mNacimiento-1,dNacimiento);
+                var nyear = now.getFullYear();
+                
+                var fNacimiento = nyear + '-' + mNacimiento + '-' + dNacimiento;
+
+                $("#txtfechaNacimiento").val(fNacimiento);
+
+                //ASIGNAR ENTIDAD DE NACIMIENTO DESDE CURP
+                var url = 'inc/model/entidades.json',
+                    entidad = textocurp.substr(11, 2);
+                $.getJSON(url, function (data) {
+                    var clave = '';
+                    for(var e in data.entidades){
+                        clave = data.entidades[e].clave;
+                        if (clave === entidad){
+                            $("#txtLnacimiento").val(data.entidades[e].nombre);
+                        }
+                    }
+                });
+            }
+
+            let obtenerNomina = () => {
+                var action = 'obtenerNomina';
+                var numeroNomina = 'error!';
+                $.ajax({
+                    type: 'POST',
+                    url: backendURL, 
+                    data: { action: action },
+                    success: function(response) {
+                        var respuesta = JSON.parse(response);
+                        if(respuesta.informacion.length === 1){
+                            numeroNomina = respuesta.informacion[0].numeroNomina;
+                            txtNomina.val(numeroNomina+1);
+                        }
+                    }
+                });
+            }
 
             //LLENAR SUCURSALES
             var listaSUC = new FormData(),
@@ -833,8 +874,10 @@ $( document ).ready(function() {
                 var infonavit = $("#txtInfonavit").val();
                 if(infonavit === 'NO'){
                     $("#txtNinfonavit").attr('disabled','disabled');
+                    $("#txtNinfonavit").val('NA');
                 } else {
                     $("#txtNinfonavit").removeAttr('disabled','disabled');
+                    $("#txtNinfonavit").val('Retenido');
                 }
             });
 
@@ -843,8 +886,10 @@ $( document ).ready(function() {
                 var infonavit = $("#txtFonacot").val();
                 if(infonavit === 'NO'){
                     $("#txtNfonacot").attr('disabled','disabled');
+                    $("#txtNfonacot").val('NA');
                 } else {
                     $("#txtNfonacot").removeAttr('disabled','disabled');
+                    $("#txtNfonacot").val('Retenido');
                 }
             });
 
@@ -853,8 +898,10 @@ $( document ).ready(function() {
                 var infonavit = $("#txtBanco").val();
                 if(infonavit === 'NO'){
                     $("#txtCuenta").attr('disabled','disabled');
+                    $("#txtCuenta").val('NA');
                 } else {
                     $("#txtCuenta").removeAttr('disabled','disabled');
+                    $("#txtCuenta").val('Retenido');
                 }
             });
 
@@ -875,11 +922,160 @@ $( document ).ready(function() {
                     clasificacion = $('#txtClasificacion').val(),
                     categoria = $('#txtCategoria').val(),
                     celula = $('#txtCelula').val(),
-                    fecha_alta = $('#txtfechaAlta').val(),
+                    fechaAlta = $('#txtfechaAlta').val(),
                     registro = $('#txtRegistro').val(),
-                    puesto = $('#txtPuesto').val();
+                    puesto = $('#txtPuesto').val(),
+                    nombre = $('#txtNombre').val(),
+                    aPaterno = $('#txtPaterno').val(),
+                    aMaterno = $('#txtMaterno').val(),
+                    curp = $('#txtCURP').val(),
+                    rfc = $('#txtRFC').val(),
+                    nss = $('#txtNSS').val(),
+                    dv = $('#txtDV').val(),
+                    fechaNacimiento = $('#txtfechaNacimiento').val(),
+                    lNacimiento = $('#txtLnacimiento').val(),
+                    genero = $('#txtGenero').val(),
+                    tIdentificacion = $('#txtTI').val(),
+                    id = $('#txtID').val(),
+                    eCivil = $('#txtCivil').val(),
+                    escolaridad = $('#txtEscolaridad').val(),
+                    cEscolaridad = $('#txtStescolaridad').val(),
+                    nPadre = $('#txtNombre').val(),
+                    nMadre = $('#txtNombre').val(),
+                    calle = $('#txtCalle').val(),
+                    numE = $('#txtNume').val(),
+                    numI = $('#txtNumi').val(),
+                    cp = $('#txtCP').val(),
+                    edo = $('#txtEdo').val(),
+                    municipio = $('#txtMunicipio').val(),
+                    localidad = $('#txtLocalidad').val(),
+                    fraccionamiento = $('#txtFraccionamiento').val(),
+                    infonavit = $('#txtInfonavit').val(),
+                    nInfonavit = $('#txtNinfonavit').val(),
+                    fonacot = $('#txtFonacot').val(),
+                    nFonacot = $('#txtNfonacot').val(),
+                    banco = $('#txtBanco').val(),
+                    cuenta = $('#txtCuenta').val(),
+                    correo = $('#txtCorreo').val(),
+                    telefono = $('#txtTelefono').val(),
+                    celular = $('#txtCelular').val(),
+                    contacto = $('#txtContacto').val(),
+                    nContacto = $('#txtNcontacto').val(),
+                    curpini = curp.substr(0, 4),
+                    curpfin = curp.substr(10, 8);
 
-                console.log(`${nomina} ${clasificacion}`);
+                if
+                (
+                    categoria.trim() === '' || celula.trim() === '' || 
+                    registro.trim() === '' || puesto.trim() === '' ||
+                    nombre.trim() === '' || aPaterno.trim() === '' ||
+                    aMaterno.trim() === '' || rfc.trim() === '' ||
+                    nss.trim() === '' || dv.trim() === '' ||
+                    id.trim() === '' || nPadre.trim() === '' ||
+                    nMadre.trim() === '' || calle.trim() === '' ||
+                    numI.trim() === '' || numE.trim() === '' ||
+                    cp.trim() === '' || nInfonavit.trim() === '' ||
+                    nFonacot.trim() === '' || cuenta.trim() === '' ||
+                    correo.trim() === '' || telefono.trim() === '' ||
+                    celular.trim() === '' || contacto.trim() === '' ||
+                    nContacto.trim() === ''
+                )
+                {
+                    Swal.fire({
+                        position: 'center',
+                        type: 'warning',
+                        title: 'Debe llenar todos los datos',
+                        showConfirmButton: false,
+                        timer: 1000
+                      })
+                }
+                else
+                {
+                    var nombreLargo = `${aPaterno} ${aMaterno} ${nombre}`;
+                    $.ajax({
+                        type: 'POST',
+                        url: backendURL, 
+                        data: { action: 'guardarEmpleado',
+                                nomina: nomina,
+                                tipo: tipo,
+                                sucursal : sucursal,
+                                clasificacion : clasificacion,
+                                categoria : categoria,
+                                celula : celula,
+                                fechaAlta : fechaAlta,
+                                registro : registro,
+                                puesto : puesto,
+                                nombre : nombre,
+                                aPaterno : aPaterno,
+                                aMaterno : aMaterno,
+                                nombreLargo : nombreLargo,
+                                curpini : curpini,
+                                curpfin : curpfin,
+                                rfc : rfc,
+                                nss : nss,
+                                dv : dv,
+                                fechaNacimiento : fechaNacimiento,
+                                lNacimiento : lNacimiento,
+                                genero : genero,
+                                tIdentificacion : tIdentificacion,
+                                id : id,
+                                eCivil : eCivil,
+                                escolaridad : escolaridad,
+                                cEscolaridad : cEscolaridad,
+                                nPadre : nPadre,
+                                nMadre : nMadre,
+                                calle : calle,
+                                numE : numE,
+                                numI : numI,
+                                cp : cp,
+                                edo : edo,
+                                municipio : municipio,
+                                localidad : localidad,
+                                fraccionamiento : fraccionamiento,
+                                infonavit : infonavit,
+                                nInfonavit : nInfonavit,
+                                fonacot : fonacot,
+                                nFonacot : nFonacot,
+                                banco : banco,
+                                cuenta : cuenta,
+                                correo : correo,
+                                telefono : telefono,
+                                celular : celular,
+                                contacto : contacto,
+                                nContacto : nContacto
+                             },
+                        success: function(response) {
+                            var respuesta = JSON.parse(response);
+                            console.log(respuesta);
+                            if(respuesta.estado === 'OK'){
+                                Swal.fire({
+                                    title: 'Correcto',
+                                    text: 'Guardado exitoso!',
+                                    type: 'success'
+                                })
+                                .then(resultado => {
+                                        if(resultado.value) {
+                                            location.reload();
+                                            window.location.href = 'index.php?request=empleado';
+                                        }
+                                    })
+                            } else {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: 'No se realizo el guardado',
+                                    type: 'error'
+                                })
+                                .then(resultado => {
+                                        if(resultado.value) {
+                                            // location.reload();
+                                        }
+                                    })
+                            }
+                        }
+                    });
+                }
+                
+
 
 
             });
@@ -888,7 +1084,6 @@ $( document ).ready(function() {
 
             break;
         case 'puestos':
-            $( ".seccionBuscar" ).hide();
             let btnNuevo = $('#btnnPuesto'),
                 panelNuevo = $('#nuevo-puesto'),
                 btnCancelar = $('#btnCancelar'),
@@ -907,7 +1102,6 @@ $( document ).ready(function() {
 
         break;
         default:
-            $( ".seccionBuscar" ).hide();
             console.log('Seccion ' + seccionActual); 
             cleanLocal();
             break;

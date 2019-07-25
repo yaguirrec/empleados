@@ -15,7 +15,7 @@
             include 'inc/templates/topbar.php';
         ?>
 
-    <div class="row seccionBuscar">
+    <div class="row seccionBuscar d-none">
         <div class="col-sm-5 ml-4">
             <div class="input-group mb-10">
                 <div class="input-group-prepend">
