@@ -5,7 +5,7 @@ $( document ).ready(function() {
     let searchParams = new URLSearchParams(window.location.search)
     let seccionActual = searchParams.get('request');
     let seccionBuscar = $( ".seccionBuscar" );
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
     let localBackend = 'inc/model/control.php';
     let url_final = 'http://mexq.mx/';
     let url_dev = 'http://localhost/';
