@@ -25,6 +25,11 @@
         </div>
       </div>
   </div>
+  <div class="row toolsDH d-none">
+    <div class="col-md-12 m-4">
+      <button class="btn btn-success ml-3 exportTable" title="Exportar tabla"><i class="fas fa-file-excel"></i> Exportar tabla</button>
+    </div>
+  </div>
   <div class="table-responsive">
     <table class="table table-sm table-bordered table-hover bg-gray-200 text-center text-uppercase" cellspacing="4">
       

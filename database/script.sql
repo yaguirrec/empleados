@@ -65,6 +65,9 @@ CREATE TABLE [dbo].[tbsucursal](
 ) ON [PRIMARY]
 GO
 select top 1 * from rh_empelados2
+
+DROP TABLE tbdatos_empleados
+
 /**CREAR TABLA DATOS EMPLEADOS*/
 USE [MEXQAppTemp]
 GO
@@ -89,7 +92,11 @@ CREATE TABLE [dbo].[tbdatos_empleados](
 	[constancia] [varchar](25),
 	[nombre_padre] [varchar](65),
 	[nombre_madre] [varchar](65),
-	[domicilio] [varchar](65),
+	[calle] [varchar](65),
+	[numero_interior] [varchar](10),
+	[numero_exterior] [varchar](10),
+	[fraccionamiento] [varchar](65),
+	[domicilio_completo] [varchar](65),
 	[codigo_postal] [varchar](5),
 	[estado] [varchar](5),
 	[municipio] [varchar](5),
@@ -105,6 +112,7 @@ CREATE TABLE [dbo].[tbdatos_empleados](
 	[celular] [varchar](15) DEFAULT '',
 	[contacto_emergencia_nombre] [varchar](40) DEFAULT '',
 	[contacto_emergencia_numero] [varchar](15) DEFAULT '',
+	[posicion] [int],
 	[created_at] [datetime],
 	[created_by] [char](10) DEFAULT '00001',
 	[updated_at] [datetime] default GETDATE(),
@@ -112,7 +120,7 @@ CREATE TABLE [dbo].[tbdatos_empleados](
 ) ON [PRIMARY]
 GO
 
-select * from tbdatos_empleados
+
 
 /*TRIGGER INSERTAR NUEVAS SUCURSALES / CELULAS*/
 ALTER TRIGGER nuevaSucursal
@@ -390,14 +398,14 @@ FROM
 [192.168.2.203\COMPAC].[ct2017_CALIDAD_DE].[dbo].[nom10001]
 
 /**VISTA DATOS DEL EMPLEADO**/
-CREATE VIEW [vDatosEmpleados] AS
+ALTER VIEW [vDatosEmpleados] AS
 SELECT 
-codigoempleado,telefono,codigopostal,direccion,poblacion,estado,nombrepadre,nombremadre,estadocivil,timestamp AS fechaCaptura
+codigoempleado,telefono,codigopostal,direccion,poblacion,estado,nombrepadre,nombremadre,estadocivil,timestamp AS fechaCaptura,estadoempleado
 FROM 
 [empleados_nomipaq]
 UNION 
 SELECT 
-codigoempleado,telefono,codigopostal,direccion,poblacion,estado,nombrepadre,nombremadre,estadocivil,timestamp AS fechaCaptura
+codigoempleado,telefono,codigopostal,direccion,poblacion,estado,nombrepadre,nombremadre,estadocivil,timestamp AS fechaCaptura,estadoempleado
 FROM 
 [192.168.2.203\COMPAC].[ct2017_CALIDAD_DE].[dbo].[nom10001]
 
@@ -851,3 +859,19 @@ SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, CONVERT(VARCHA
                             WHERE te.status <> 'B' 
                             ORDER BY te.status ASC, te.updated_at DESC
 
+
+/**
+16775
+**/
+select TOP 10 no_trab AS A, * from rh_empelados2 WHERE interior <> '' ORDER BY fecha_alta DESC
+select * from [vDatosEmpleados] WHERE codigoempleado = '16775'
+select * from tbdatos_empleados
+select * from [vDatosEmpleados] where estadoempleado <> 'B' and codigopostal <> 0
+
+select TOP 20 no_trab,categoria,nomina,registro,lote,dv,lugar_nacimiento,'',ide_oficial,estado_civil,escolaridad,'',
+CONCAT(REPLACE(ape_pat_padre,' ',''),' ',REPLACE(ape_mat_padre,' ',''),' ',REPLACE(nombres_padre,' ','')) AS nombre_padre,
+CONCAT(REPLACE(ape_pat_madre,' ',''),' ',REPLACE(ape_mat_madre,' ',''),' ',REPLACE(nombres_madre,' ','')) AS nombre_madre,
+calle,numero,interior,fraccionamiento,'domicilio',cp,estado,municipio,localidad,
+infonavit,no_infonavit,fonacot,no_fonacot,tarjeta_nomina,cuenta,
+correo_electronico,telefono_casa,celular,telefono_emergencia,'','',GETDATE()
+from rh_empelados2                      

@@ -498,12 +498,9 @@ $( document ).ready(function() {
             break;
         // CUMPLEAÑOS / ANTIGUEDAD
         case 'fecha1': case 'fecha2':
-            $( ".iconSearch" ).hide();
-            $( "#searchBox" ).hide();
-            $( "#exportInfo" ).hide();
             var titulo = (seccionActual === 'fecha1' ? 'Fechas de cumpleaños' : 'Antigüedad del personal');
             var columna = (seccionActual === 'fecha1' ? 'Fecha Nacimiento' : 'Fecha Alta');
-            var columna2 = (seccionActual === 'fecha1' ? 'Edad' : 'Atigüedad');
+            var columna2 = (seccionActual === 'fecha1' ? 'Edad' : 'Antigüedad');
             let btnObtener = $("#btnObtener");
 
             $('.seccionTitulo').text(titulo);
@@ -547,6 +544,7 @@ $( document ).ready(function() {
             function tablaFechas(rowInfo){
         
                 $('#loadingIndicator').addClass('d-none');
+                $('.toolsDH').removeClass('d-none');
                 
                 var row = $("<tr class='text-center'>");
                 
