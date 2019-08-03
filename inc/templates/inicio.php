@@ -27,3 +27,15 @@
             </div>
         </div>
     </div>
+
+<div class="row toolsDH d-none">
+  <div class="col-sm-5 ml-4">
+      <div class="input-group mb-10">
+          <div class="input-group-prepend">
+              <span class="input-group-text iconSearch" id="inputGroup-sizing-default"><i class="fas fa-search"></i></span>
+          </div>
+          <input type="text" class="form-control searchBox" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="Buscar..." autofocus>
+          <button class="btn btn-success ml-3 exportTable" title="Exportar tabla"><i class="fas fa-file-excel"></i> Exportar tabla</button>
+      </div>
+  </div>
+</div>

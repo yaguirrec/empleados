@@ -70,6 +70,17 @@ $( document ).ready(function() {
             fileext: ".xls"
         }); 
     });  
+
+    /***BUSQUEDAD DE TEXTO GENERICA */
+    $(document).ready(function(){
+        $(".searchBox").on("keyup", function() {
+          var value = $(this).val().toLowerCase();
+          $("#dataTable tr").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+          });
+        });
+      });
+    
     
     /**CERRAR SESION */
     $('.btnSalir').click(function(){
@@ -120,7 +131,7 @@ $( document ).ready(function() {
     $("#exportInfo").click(function(){
         var action  = 'json-empleados';
         var prop = (seccionActual === 'empleado' ? 'activos' : 'bajas');
-        var encabezados = (seccionActual === 'empleado' ? ["NOMINA", "NOMBRE","FECHA ALTA","SUCURSAL","AREA","CELULA","ESTADO"] : ["NOMINA", "NOMBRE","FECHA ALTA","FECHA BAJA","SUCURSAL","AREA","CELULA","ESTADO"]);
+        var encabezados = (seccionActual === 'empleado' ? ["NOMINA", "NOMBRE","PUESTO","FECHA ALTA","SUCURSAL","AREA","CELULA","ESTADO"] : ["NOMINA", "NOMBRE","PUESTO","FECHA ALTA","FECHA BAJA","SUCURSAL","AREA","CELULA","ESTADO"]);
         var titulo = (seccionActual === 'empleado' ? 'Empleados activos' : 'Empleados inactivos');
         $('.seccionTitulo').text(titulo);
         if(seccionActual === 'empleado'){
@@ -157,7 +168,7 @@ $( document ).ready(function() {
             createXLSLFormatObj.push(xlsHeader);
             $.each(xlsRows, function(index, value) {
                 var innerRowData = [];
-                $("tbody").append('<tr><td>' + value.numero_nomina + '</td><td>' + value.Nombre + '</td><td>' + value.fechaAlta + '</td><td>' + value.Sucursal + '</td><td>' + value.Celula + '</td><td>' + value.status + '</td></tr>');
+                $("tbody").append('<tr><td>' + value.numero_nomina + '</td><td>' + value.Nombre + '</td><td>' + value.Puesto + '</td><td>' + '</td><td>' + value.fechaAlta + '</td><td>' + value.Sucursal + '</td><td>' + value.Celula + '</td><td>' + value.status + '</td></tr>');
                 $.each(value, function(ind, val) {
                     innerRowData.push(val);
                 });
@@ -242,6 +253,7 @@ $( document ).ready(function() {
                 row.append($("<td class='trCode'>" + rowInfo.numero_nomina + " </td>"));
                 // NOMINA DEL EMPLEADO
                 row.append($("<td class='text-left'> " + rowInfo.Nombre + " </td>"));
+                row.append($("<td class='text-left'> " + rowInfo.Puesto + " </td>"));
                 row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
                 if(st === 'B'){
                     row.append($("<td> " + rowInfo.fechaBaja + " </td>"));
@@ -551,6 +563,7 @@ $( document ).ready(function() {
                 $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
                 row.append($("<td class='trCode'>" + rowInfo.numero_nomina + " </td>"));
                 row.append($("<td class='text-uppercase'> " + rowInfo.nombre_largo + " </td>"));
+                row.append($("<td class='text-uppercase'> " + rowInfo.Puesto + " </td>"));
                 row.append($("<td> " + rowInfo.Sucursal + " </td>"));
                 row.append($("<td> " + rowInfo.Celula + " </td>"));
                 row.append($("<td> " + rowInfo.fecha + " </td>"));

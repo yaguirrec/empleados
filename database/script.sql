@@ -381,6 +381,13 @@ and pe.status = 'A'
 SELECT * FROM tbemp_permisos WHERE numero_nomina='08444'
 EXEC datos_empleado_acceso @NUMERO_NOMINA = '19905'
 
+/**VISTA PUESTOS NOMPIAQ**/
+ALTER VIEW PUESTOS_NOMINAS AS
+SELECT CAST(idpuesto AS VARCHAR(10)) COLLATE SQL_Latin1_General_CP1_CI_AS AS idpuesto,
+descripcion COLLATE SQL_Latin1_General_CP1_CI_AS AS descripcion
+FROM [192.168.2.203\COMPAC].[ct2017_SERVICIOS_].[dbo].[nom10006]
+
+
 /** VISTA EMPLEADOS NOMIPAQ */
 ALTER VIEW [vEmpleadosNM] AS
 SELECT 
@@ -517,7 +524,7 @@ AS BEGIN
 END
 GO
 
-SELECT TOP 1 * FROM [vEmpleadosNM] where codigoempleado = '08444'
+SELECT TOP 1 * FROM [vEmpleadosNM] where codigoempleado = '26354'
 SELECT id_sucursal FROM tbsucursal WHERE SUBSTRING (codigo,1,5) = SUBSTRING ('CEAGS0583',1,5)
 SELECT * FROM rh_empelados2 where no_trab = '24976'
 
@@ -546,6 +553,17 @@ FROM tbempleados AS empleados
 INNER JOIN [vEmpleadosNM] AS tb2
 ON empleados.numero_nomina COLLATE SQL_Latin1_General_CP1_CI_AS = tb2.codigoempleado
 AND empleados.id_sucursal = 0 AND empleados.id_area = 0
+
+/**BAJAS DESDE NOMIPAQ**/
+UPDATE empleadosE
+SET
+fecha_baja = tbN.fechabaja
+FROM tbempleados empleadosE
+INNER JOIN [vEmpleadosNM] AS tbN
+ON empleadosE.numero_nomina COLLATE SQL_Latin1_General_CP1_CI_AS = tbN.codigoempleado
+AND empleadosE.fecha_baja = '01-01-1900' AND empleadosE.status = 'B'
+
+SELECT * FROM tbempleados WHERE fecha_baja = '01-01-1900' AND status = 'B'
 
 
 /**
@@ -710,7 +728,12 @@ SELECT TOP 10 * FROM tbempleados
 
 /**CUMPLEAÑEROS***/
 SELECT te.numero_nomina, te.nombre_largo, 
-        CASE WHEN tp.nombre IS NULL THEN 'Sin asignar' ELSE tp.nombre END AS 'Puesto',
+        CASE 
+			WHEN tp.nombre IS NULL 
+			THEN 
+				b.descripcion
+			ELSE tp.nombre 
+		END AS 'Puesto',
         ts.nombre AS 'Sucursal',
 		ta.nombre AS 'Departamento', 
 		tc.nombre AS 'Celula',
@@ -728,6 +751,8 @@ SELECT te.numero_nomina, te.nombre_largo,
 			DATEDIFF(DAY, GETDATE(),CAST(YEAR(GETDATE()) AS VARCHAR) + '-' + CAST(MONTH(fecha_nacimiento) AS VARCHAR) + '-' + CAST(DAY(fecha_nacimiento) AS VARCHAR))
 			END AS diasFaltantes
         FROM tbempleados AS te
+		INNER JOIN PUESTOS_NOMINAS b
+		ON te.puesto_temp = b.idpuesto
         INNER JOIN tbsucursal AS ts
         ON te.id_sucursal = ts.id_sucursal
         INNER JOIN tbcelula AS tc
@@ -739,9 +764,15 @@ SELECT te.numero_nomina, te.nombre_largo,
 		WHERE MONTH(fecha_nacimiento) = MONTH(GETDATE()) AND DAY(fecha_nacimiento) >= DAY(GETDATE())
 		ORDER BY MONTH(fecha_nacimiento),DAY(fecha_nacimiento) ASC
 
+
 /**ANTIGUEDAD**/
 SELECT te.numero_nomina, te.nombre_largo, 
-        CASE WHEN tp.nombre IS NULL THEN 'Sin asignar' ELSE tp.nombre END AS 'Puesto',
+        CASE 
+			WHEN tp.nombre IS NULL 
+			THEN 
+				b.descripcion
+			ELSE tp.nombre 
+		END AS 'Puesto',
         ts.nombre AS 'Sucursal',
 		ta.nombre AS 'Departamento', 
 		tc.nombre AS 'Celula',
@@ -759,6 +790,8 @@ SELECT te.numero_nomina, te.nombre_largo,
 			DATEDIFF(DAY, GETDATE(),CAST(YEAR(GETDATE()) AS VARCHAR) + '-' + CAST(MONTH(fecha_alta) AS VARCHAR) + '-' + CAST(DAY(fecha_alta) AS VARCHAR))
 			END AS diasFaltantes
         FROM tbempleados AS te
+		INNER JOIN PUESTOS_NOMINAS b
+		ON te.puesto_temp = b.idpuesto
         INNER JOIN tbsucursal AS ts
         ON te.id_sucursal = ts.id_sucursal
         INNER JOIN tbcelula AS tc
@@ -772,7 +805,35 @@ SELECT te.numero_nomina, te.nombre_largo,
 		AND te.status <> 'B'
 		ORDER BY MONTH(fecha_alta),DAY(fecha_alta) ASC
 
-SELECT * FROM tbpuesto where id_celula = 28
+/**LISTA DE EMPLEADOS**/
+SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
+			CASE 
+			WHEN tp.nombre IS NULL 
+			THEN 
+				b.descripcion
+			ELSE tp.nombre
+			END AS 'Puesto',
+			CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
+            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
+            FROM tbempleados AS te
+			INNER JOIN PUESTOS_NOMINAS b
+			ON te.puesto_temp = b.idpuesto
+            INNER JOIN tbsucursal AS ts
+            ON te.id_sucursal = ts.id_sucursal 
+            INNER JOIN tbcelula AS tc
+            ON tc.id_celula = te.id_celula
+            INNER JOIN tbarea AS ta
+            ON ta.codigo = tc.codigo_area
+			LEFT JOIN tbpuesto AS tp
+			ON te.id_puesto = tp.id_puesto
+            WHERE te.status <> 'B' 
+            ORDER BY te.status ASC, te.created_at DESC
+
+SELECT * FROM tbempleados where numero_nomina = '26539'
+
+SELECT * FROM PUESTOS_NOMINAS where idpuesto = '227'
+
+SELECT * FROM [vEmpleadosNM] WHERE codigoempleado = '26539'
 
 SELECT * FROM tbpuesto
 
@@ -844,34 +905,19 @@ SELECT TOP 100 no_trab n,* FROM rh_empelados2 WHERE fecha_alta > '2019-06-01' or
 SELECT top 1 MAX(CAST(REPLACE(employee, ' ', '') AS INT)) AS numeroNomina FROM PJEMPLOY WHERE ISNUMERIC(employee) = 1 AND em_id03 = '' GROUP BY crtd_datetime ORDER BY crtd_datetime DESC
 SELECT MAX(CAST(numero_nomina AS INT)) AS numeroNomina FROM tbempleados
 
-SELECT * FROM tbempleados where numero_nomina = '26443'
-delete from tbempleados where numero_nomina = '26443'
-
-SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
-                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
-                            FROM tbempleados AS te
-                            INNER JOIN tbsucursal AS ts
-                            ON te.id_sucursal = ts.id_sucursal 
-                            INNER JOIN tbcelula AS tc
-                            ON tc.id_celula = te.id_celula
-                            INNER JOIN tbarea AS ta
-                            ON ta.codigo = tc.codigo_area
-                            WHERE te.status <> 'B' 
-                            ORDER BY te.status ASC, te.updated_at DESC
-
-
 /**
 16775
 **/
 select TOP 10 no_trab AS A, * from rh_empelados2 WHERE interior <> '' ORDER BY fecha_alta DESC
 select * from [vDatosEmpleados] WHERE codigoempleado = '16775'
 select * from tbdatos_empleados
-select * from [vDatosEmpleados] where estadoempleado <> 'B' and codigopostal <> 0
+select * from [vDatosEmpleados] where codigopostal <> 0
 
-select TOP 20 no_trab,categoria,nomina,registro,lote,dv,lugar_nacimiento,'',ide_oficial,estado_civil,escolaridad,'',
+select REPLACE(no_trab,' ','') as NOMINA,REPLACE(categoria,'$','') AS categoria,SUBSTRING(nomina,1,1) AS nomina,SUBSTRING(clasificacion,1,1) AS clasificacion,registro,lote,dv,lugar_nacimiento,'ID',ide_oficial,
+SUBSTRING(estado_civil,1,1) AS estado_civil,escolaridad,'constancia_escolar',
 CONCAT(REPLACE(ape_pat_padre,' ',''),' ',REPLACE(ape_mat_padre,' ',''),' ',REPLACE(nombres_padre,' ','')) AS nombre_padre,
 CONCAT(REPLACE(ape_pat_madre,' ',''),' ',REPLACE(ape_mat_madre,' ',''),' ',REPLACE(nombres_madre,' ','')) AS nombre_madre,
 calle,numero,interior,fraccionamiento,'domicilio',cp,estado,municipio,localidad,
 infonavit,no_infonavit,fonacot,no_fonacot,tarjeta_nomina,cuenta,
 correo_electronico,telefono_casa,celular,telefono_emergencia,'','',GETDATE()
-from rh_empelados2                      
+from rh_empelados2       

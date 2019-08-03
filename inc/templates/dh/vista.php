@@ -25,11 +25,6 @@
         </div>
       </div>
   </div>
-  <div class="row toolsDH d-none">
-    <div class="col-md-12 m-4">
-      <button class="btn btn-success ml-3 exportTable" title="Exportar tabla"><i class="fas fa-file-excel"></i> Exportar tabla</button>
-    </div>
-  </div>
   <div class="table-responsive">
     <table class="table table-sm table-bordered table-hover bg-gray-200 text-center text-uppercase" cellspacing="4">
       
@@ -37,11 +32,12 @@
         <tr>
           <th scope="col">Nómina</th>
           <th scope="col">Nombres</th>
+          <th scope="col">Puesto</th>
           <th scope="col">Sucursal</th>
-          <th scope="col">Celula</th>
+          <th scope="col">Departamento</th>
           <th scope="col" id="colType">...</th>
           <th scope="col" id="colKind">...</th>
-          <th scope="col">Dias</th>
+          <th scope="col">Faltan</th>
         </tr>
       </thead>
       <tbody id="dataTable">

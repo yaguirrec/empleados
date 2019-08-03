@@ -9,6 +9,7 @@
         <tr>
           <th scope="col">Nómina</th>
           <th scope="col">Nombres</th>
+          <th scope="col">Puesto</th>
           <th scope="col">Fecha Alta</th>
           <th scope="col" class="columna-baja">Fecha Baja</th>
           <th scope="col">Sucursal</th>

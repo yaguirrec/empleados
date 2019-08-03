@@ -1,7 +1,8 @@
 <h2 class="text-center mb-1">Nuevo Puesto</h2>
+<br>
 <form action="" id="form_nPuesto">
     <div class="form-row">
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
             <label for="txttPuesto">Tipo de puesto</label>
             <select class="form-control" id="txttPuesto">
                 <option value="0" selected required>Selecciona un nivel</option>
@@ -12,9 +13,13 @@
                 <option value="5">Coordinador</option>
             </select>
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
             <label for="txtnPuesto">Nombre del puesto</label>
             <input type="text" class="form-control" id="txtnPuesto" placeholder="Nombre del puesto">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="txtnCelula">Departamento</label>
+            <input type="text" class="form-control" id="txtnCelula" placeholder="Nombre del departamento">
         </div>
     </div>
     <div class="form-row">
