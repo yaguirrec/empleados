@@ -3,6 +3,7 @@
     header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
     header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
     header("Allow: GET, POST, OPTIONS");
+    
     $method = $_SERVER['REQUEST_METHOD'];
     if($method == "OPTIONS") {
         die();
@@ -155,7 +156,13 @@
             $props = $_POST['prop'];
             if ($props == 'activos')
             {
-                $query = "SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
+                $query = "SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
+                            CASE
+                                WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
+                                THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
+                                ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                            END AS Puesto,
+                            CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
                             ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
                             FROM tbempleados AS te
                             INNER JOIN tbsucursal AS ts
@@ -165,11 +172,17 @@
                             INNER JOIN tbarea AS ta
                             ON ta.codigo = tc.codigo_area
                             WHERE te.status <> 'B' 
-                            ORDER BY te.status ASC, te.fecha_alta DESC";
+                            ORDER BY te.status ASC, te.created_at DESC";
             } 
             else if ($props == 'bajas')
             {
-                $query = "SELECT TOP 300 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
+                $query = "SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
+                            CASE
+                                WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
+                                THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
+                                ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                            END AS Puesto,
+                            CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
                             CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaBaja,
                             ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
                             FROM tbempleados AS te
@@ -180,7 +193,7 @@
                             INNER JOIN tbarea AS ta
                             ON ta.codigo = tc.codigo_area
                             WHERE te.status = 'B' 
-                            ORDER BY te.status ASC, te.fecha_alta DESC";
+                            ORDER BY te.status ASC, te.created_at DESC";
             } 
 
             $stmt = sqlsrv_query( $con, $query);
@@ -218,7 +231,13 @@
             $props = $_POST['prop'];
             if ($props == 'activos')
             {
-                $query = "SELECT te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
+                $query = "SELECT te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
+                            CASE
+                                WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
+                                THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
+                                ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                            END AS Puesto,
+                            CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
                             ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
                             FROM tbempleados AS te
                             INNER JOIN tbsucursal AS ts
@@ -228,11 +247,17 @@
                             INNER JOIN tbarea AS ta
                             ON ta.codigo = tc.codigo_area
                             WHERE te.status <> 'B' 
-                            ORDER BY te.status ASC, te.fecha_alta DESC";
+                            ORDER BY te.status ASC, te.created_at DESC";
             } 
             else if ($props == 'bajas')
             {
-                $query = "SELECT te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
+                $query = "SELECT te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
+                            CASE
+                                WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
+                                THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
+                                ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                            END AS Puesto,
+                            CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
                             CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaBaja,
                             ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
                             FROM tbempleados AS te
@@ -243,7 +268,7 @@
                             INNER JOIN tbarea AS ta
                             ON ta.codigo = tc.codigo_area
                             WHERE te.status = 'B' 
-                            ORDER BY te.status ASC, te.fecha_alta DESC";
+                            ORDER BY te.status ASC, te.created_at DESC";
             } 
 
             $stmt = sqlsrv_query( $con, $query);
@@ -276,7 +301,58 @@
             sqlsrv_free_stmt( $stmt);
             sqlsrv_close( $con );
         break;
+        case 'altas':
+            $props = $_POST['prop'];
+            $query = "SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
+                        CASE
+                            WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
+                            THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
+                            ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                        END AS Puesto,
+                        CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
+                        ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
+                        FROM tbempleados AS te
+                        INNER JOIN tbsucursal AS ts
+                        ON te.id_sucursal = ts.id_sucursal 
+                        INNER JOIN tbcelula AS tc
+                        ON tc.id_celula = te.id_celula
+                        INNER JOIN tbarea AS ta
+                        ON ta.codigo = tc.codigo_area
+                        AND te.status <> 'B' AND te.fecha_alta = ?
+                        ORDER BY te.status ASC, te.created_at DESC";
+            $params = array($props);
 
+            $stmt = sqlsrv_query( $con, $query, $params);
+
+            $result = array();
+
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'                
+                );
+            } else {
+                do {
+                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                    $result[] = $row; 
+                    }
+                } while (sqlsrv_next_result($stmt));
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => $result,
+                    'mensaje' => 'Informacion obtenida de buscar'                
+                );
+            }
+
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+
+        break;
         case 'buscar-texto':
             // die(json_encode($_POST));
             $txtBuscado = $_POST['txtBuscado'];
@@ -284,7 +360,13 @@
 
             if ($props == 'activos')
             {
-                $query = "SELECT te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
+                $query = "SELECT te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
+                            CASE
+                                WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
+                                THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
+                                ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                            END AS Puesto,
+                            CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
                             ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
                             FROM tbempleados AS te
                             INNER JOIN tbsucursal AS ts
@@ -299,11 +381,17 @@
                                             OR te.created_at LIKE '%' + CONVERT(NVARCHAR, ?) + '%')";
                             }
                             
-                            $query .= "ORDER BY te.status ASC, te.fecha_alta DESC";
+                            $query .= "ORDER BY te.status ASC, te.created_at DESC";
             } 
             else 
             {
-                $query = "SELECT TOP 250 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
+                $query = "SELECT TOP 250 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
+                            CASE
+                                WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
+                                THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
+                                ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                            END AS Puesto,
+                            CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
                             CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaBaja,
                             ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
                             FROM tbempleados AS te
@@ -567,7 +655,11 @@
                 if ($props == 'cumple')
                 {
                     $query = "SELECT te.numero_nomina, te.nombre_largo, 
-                                CASE WHEN tp.nombre IS NULL THEN 'Sin asignar' ELSE tp.nombre END AS 'Puesto',
+                                CASE
+                                    WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
+                                    THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
+                                    ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                                END AS Puesto,
                                 ts.nombre AS 'Sucursal',
                                 ta.nombre AS 'Departamento', 
                                 tc.nombre AS 'Celula',
@@ -591,13 +683,15 @@
                                 ON tc.id_celula = te.id_celula
                                 INNER JOIN tbarea AS ta
                                 ON tc.codigo_area = ta.codigo
-                                LEFT JOIN tbpuesto AS tp
-                                ON te.id_puesto = tp.id_puesto
                                 WHERE te.status <> 'B' AND MONTH(fecha_nacimiento) = ?
                                 ORDER BY MONTH(fecha_nacimiento),DAY(fecha_nacimiento) ASC";
                 }elseif($props == 'antig'){
                     $query = "SELECT te.numero_nomina, te.nombre_largo, 
-                                CASE WHEN tp.nombre IS NULL THEN 'Sin asignar' ELSE tp.nombre END AS 'Puesto',
+                                CASE
+                                    WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
+                                    THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
+                                    ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                                END AS Puesto,
                                 ts.nombre AS 'Sucursal',
                                 ta.nombre AS 'Departamento', 
                                 tc.nombre AS 'Celula',
@@ -614,15 +708,13 @@
                                     ELSE
                                     DATEDIFF(DAY, GETDATE(),CAST(YEAR(GETDATE()) AS VARCHAR) + '-' + CAST(MONTH(fecha_alta) AS VARCHAR) + '-' + CAST(DAY(fecha_alta) AS VARCHAR))
                                     END AS diasFaltantes
-                                FROM tbempleados AS te
+                                FROM tbempleados AS te                                
                                 INNER JOIN tbsucursal AS ts
                                 ON te.id_sucursal = ts.id_sucursal
                                 INNER JOIN tbcelula AS tc
                                 ON tc.id_celula = te.id_celula
                                 INNER JOIN tbarea AS ta
                                 ON tc.codigo_area = ta.codigo
-                                LEFT JOIN tbpuesto AS tp
-                                ON te.id_puesto = tp.id_puesto
                                 WHERE 
                                 te.status <> 'B' AND MONTH(fecha_alta) = ?
                                 ORDER BY MONTH(fecha_alta),DAY(fecha_alta) ASC";
@@ -877,6 +969,231 @@
                         'mensaje' => 'Informacion obtenida'                
                     );
                 }
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
+            case 'validaCURP':
+                // die(json_encode($_POST));
+                $curp =  $_POST['curp'];
+                $query = "SELECT numero_nomina FROM tbempleados
+                            WHERE CONCAT(curpini + RIGHT(YEAR(fecha_nacimiento),2) , FORMAT(fecha_nacimiento,'MM') , CONVERT(CHAR(2),fecha_nacimiento,103) , curpfin) = ?";
+
+                $params = array($curp);
+                
+                $stmt = sqlsrv_query( $con, $query, $params);
+                
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
+            case 'obtenerNomina':
+                // die(json_encode($_POST));
+                // $query = "SELECT top 1 MAX(CAST(REPLACE(employee, ' ', '') AS INT)) AS numeroNomina 
+                //             FROM PJEMPLOY 
+                //             WHERE ISNUMERIC(employee) = 1 AND em_id03 = '' 
+                //             GROUP BY crtd_datetime 
+                //             ORDER BY crtd_datetime DESC";
+
+                $query = "SELECT MAX(CAST(numero_nomina AS INT)) AS numeroNomina FROM tbempleados";
+
+                $stmt = sqlsrv_query( $con, $query);
+                
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
+            case 'guardarEmpleado':
+                // die(json_encode($_POST));
+                    $nomina =  $_POST['nomina'];
+                    $nombre =  $_POST['nombre'];
+                    $aPaterno =  $_POST['aPaterno'];
+                    $aMaterno =  $_POST['aMaterno'];
+                    $nombreLargo = $_POST['nombreLargo'];
+                    $genero =  $_POST['genero'];
+                    $curpini =  $_POST['curpini'];
+                    $curpfin =  $_POST['curpfin'];
+                    $rfcini =  $_POST['rfcini'];
+                    $rfcfin =  $_POST['rfcfin'];
+                    $nss =  $_POST['nss'];
+                    $fechaNacimiento =  $_POST['fechaNacimiento'];
+                    $fechaAlta =  $_POST['fechaAlta'];
+                    $fechaBaja =  '1990-01-01';
+                    $status =  'A';
+                    $sucursal =  $_POST['sucursal'];
+                    $area =  0;
+                    $celula =  $_POST['celula'];
+                    $puesto =  $_POST['puesto'];
+
+                    $clasificacion =  $_POST['clasificacion'];
+                    $categoria =  $_POST['categoria'];
+                    $tipoNomina =  $_POST['tipoNomina'];
+                    $registro =  $_POST['registro'];
+                    $lote =  '';
+                    $dv =  $_POST['dv'];
+                    $lNacimiento =  $_POST['lNacimiento'];
+                    $tIdentificacion =  $_POST['tIdentificacion'];
+                    $id =  $_POST['id'];
+                    $eCivil =  $_POST['eCivil'];
+                    $escolaridad =  $_POST['escolaridad'];
+                    $cEscolaridad =  $_POST['cEscolaridad'];
+                    $nPadre =  $_POST['nPadre'];
+                    $nMadre =  $_POST['nMadre'];
+                    $calle =  $_POST['calle'];
+                    $numE =  $_POST['numE'];
+                    $numI =  $_POST['numI'];
+                    $fraccionamiento =  $_POST['fraccionamiento'];
+                    $domicilio =  $_POST['domicilio'];
+                    $cp =  $_POST['cp'];
+                    $edo =  $_POST['edo'];
+                    $municipio =  $_POST['municipio'];
+                    $localidad =  $_POST['localidad'];
+                    $infonavit =  $_POST['infonavit'];
+                    $nInfonavit =  $_POST['nInfonavit'];
+                    $fonacot =  $_POST['fonacot'];
+                    $nFonacot =  $_POST['nFonacot'];
+                    $banco =  $_POST['banco'];
+                    $cuenta =  $_POST['cuenta'];
+                    $correo =  $_POST['correo'];
+                    $telefono =  $_POST['telefono'];
+                    $celular =  $_POST['celular'];
+                    $contacto =  $_POST['contacto'];
+                    $nContacto =  $_POST['nContacto'];
+                    $posicion =  0;
+
+
+                    $fechaControl =  date('Y-m-d H:i:s');
+                    $userControl =  'testUser';
+                    
+                    $insert = "EXEC insertEmployeeData @nnomina = ?, 
+                                                        @nlargo = ?, 
+                                                        @nombre = ?,
+                                                        @apaterno = ?,
+                                                        @amaterno = ?,
+                                                        @sexo = ?,
+                                                        @curpi = ?,
+                                                        @curpf = ?,
+                                                        @rfcini = ?,
+                                                        @rfcfin = ?,
+                                                        @nss = ?,
+                                                        @fechan = ?,
+                                                        @fechaa = ?,
+                                                        @fechab = ?,
+                                                        @status = ?,
+                                                        @ids = ?,
+                                                        @ida = ?,
+                                                        @idc = ?,
+                                                        @idp = ?,
+                                                        @clasificacion  = ?,
+                                                        @categoria  = ?,
+                                                        @nomina  = ?,
+                                                        @registro_patronal  = ?,
+                                                        @lote  = ?,
+                                                        @dv  = ?,
+                                                        @lugar_nacimiento  = ?,
+                                                        @identificacion  = ?,
+                                                        @numero_identificacion  = ?,
+                                                        @estado_civil  = ?,
+                                                        @escolaridad  = ?,
+                                                        @constancia  = ?,
+                                                        @nombre_padre  = ?,
+                                                        @nombre_madre  = ?,
+                                                        @calle  = ?,
+                                                        @numero_exterior  = ?,
+                                                        @numero_interior  = ?,
+                                                        @fraccionamiento  = ?,
+                                                        @domicilio_completo  = ?,
+                                                        @codigo_postal  = ?,
+                                                        @estado  = ?,
+                                                        @municipio  = ?,
+                                                        @localidad  = ?,
+                                                        @infonavit  = ?,
+                                                        @numero_infonavit  = ?,
+                                                        @fonacot  = ?,
+                                                        @numero_fonacot  = ?,
+                                                        @cuenta  = ?,
+                                                        @numero_cuenta  = ?,
+                                                        @correo  = ?,
+                                                        @telefono  = ?,
+                                                        @celular  = ?,
+                                                        @contacto_emergencia_nombre  = ?,
+                                                        @contacto_emergencia_numero  = ?,
+                                                        @posicion = ?";
+
+
+                    $params = array($nomina,$nombreLargo,$nombre,$aPaterno,$aMaterno,$genero,$curpini,$curpfin,$rfcini,$rfcfin,$nss,$fechaNacimiento,$fechaAlta,$fechaBaja,$status,$sucursal,$area,$celula,$puesto,
+                                    $clasificacion,$categoria,$tipoNomina,$registro,$lote,$dv,$lNacimiento,$tIdentificacion,$id,$eCivil,$escolaridad,$cEscolaridad,$nPadre,$nMadre,$calle,$numE,$numI,$fraccionamiento,
+                                    $domicilio,$cp,$edo,$municipio,$localidad,$infonavit,$nInfonavit,$fonacot,$nFonacot,$banco,$cuenta,$correo,$telefono,$celular,$contacto,$nContacto,$posicion);
+                    
+                    $stmt = sqlsrv_query( $con, $insert, $params);
+
+                    if( $stmt ) {
+                        $respuesta = array(
+                            'estado' => 'OK',
+                            'tipo' => 'success',
+                            'informacion' => 'Insertado',
+                            'mensaje' => 'Informacion obtenida'                  
+                        );
+                    } 
+                    else {
+                        $respuesta = array(
+                            'estado' => 'NOK',
+                            'tipo' => 'error',
+                            'informacion' => 'No existe informacion',
+                            'mensaje' => 'No hay datos en la BD'             
+                        );
+                    }
+
+                
 
                 echo json_encode($respuesta);
                 sqlsrv_free_stmt( $stmt);

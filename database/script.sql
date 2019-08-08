@@ -78,15 +78,15 @@ GO
 CREATE TABLE [dbo].[tbdatos_empleados]( 
 	[id_registro] [int] IDENTITY(1,1) NOT NULL,
 	[numero_nomina] [varchar](10) NOT NULL,
-	[clasificacion] [varchar](5) DEFAULT '',
+	[clasificacion] [varchar](8) DEFAULT '',
 	[categoria] [varchar](25) DEFAULT '',
 	[nomina] [varchar](1) DEFAULT '',
-	[registro_patronal] [varchar](10) DEFAULT 'SAC',
+	[registro_patronal] [varchar](10) DEFAULT 'CNO',
 	[lote] [varchar](15) DEFAULT '',
 	[dv] [varchar](3),
 	[lugar_nacimiento] [varchar](45),
 	[identificacion] [varchar](15),
-	[numero_identificacion] [varchar](55),
+	[numero_identificacion] [varchar](65),
 	[estado_civil] [varchar](5),
 	[escolaridad] [varchar](25),
 	[constancia] [varchar](25),
@@ -98,18 +98,18 @@ CREATE TABLE [dbo].[tbdatos_empleados](
 	[fraccionamiento] [varchar](65),
 	[domicilio_completo] [varchar](65),
 	[codigo_postal] [varchar](5),
-	[estado] [varchar](5),
-	[municipio] [varchar](5),
-	[localidad] [varchar](5),
+	[estado] [varchar](55),
+	[municipio] [varchar](55),
+	[localidad] [varchar](55),
 	[infonavit] [varchar](2),
 	[numero_infonavit] [varchar](35),
 	[fonacot] [varchar](2),
 	[numero_fonacot] [varchar](35),
 	[cuenta] [varchar](2),
 	[numero_cuenta] [varchar](35),
-	[correo] [varchar](35) DEFAULT '',
-	[telefono] [varchar](15) DEFAULT '',
-	[celular] [varchar](15) DEFAULT '',
+	[correo] [varchar](55) DEFAULT '',
+	[telefono] [varchar](25) DEFAULT '',
+	[celular] [varchar](25) DEFAULT '',
 	[contacto_emergencia_nombre] [varchar](40) DEFAULT '',
 	[contacto_emergencia_numero] [varchar](15) DEFAULT '',
 	[posicion] [int],
@@ -477,6 +477,7 @@ AS BEGIN
 			@fecha_baja DATETIME,
 			@empleado_status VARCHAR(1),
 			@fecha_captura DATETIME,
+			@ctr_user VARCHAR(10),
 			@campo_aux VARCHAR(25);
 
 	SELECT @numero_nomina = ins.employee FROM INSERTED ins;
@@ -485,8 +486,9 @@ AS BEGIN
 	SELECT @fecha_baja = ins.date_terminated FROM INSERTED ins;
 	SELECT @empleado_status = ins.emp_status FROM INSERTED ins;
 	SELECT @fecha_captura = ins.crtd_datetime FROM INSERTED ins;
+	SELECT @ctr_user = ins.crtd_user FROM INSERTED ins;
 	SELECT @campo_aux = ins.em_id03 FROM INSERTED ins;
-IF ISNUMERIC(@numero_nomina) = 1 AND @campo_aux = ''
+IF ISNUMERIC(@numero_nomina) = 1 AND @campo_aux = '' AND @ctr_user <> 'WEBSYS' 
 	BEGIN
 		INSERT INTO tbempleados(numero_nomina,nombre_largo,fecha_alta,fecha_baja,status,created_at)
 		VALUES (@numero_nomina,@nombre_largo,@fecha_alta,@fecha_baja,@empleado_status,@fecha_captura)
@@ -807,31 +809,26 @@ SELECT te.numero_nomina, te.nombre_largo,
 
 /**LISTA DE EMPLEADOS**/
 SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
-			CASE 
-			WHEN tp.nombre IS NULL 
-			THEN 
-				b.descripcion
-			ELSE tp.nombre
-			END AS 'Puesto',
+			CASE
+				WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
+				THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
+				ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+			END AS Puesto,
 			CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
             ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
             FROM tbempleados AS te
-			INNER JOIN PUESTOS_NOMINAS b
-			ON te.puesto_temp = b.idpuesto
             INNER JOIN tbsucursal AS ts
             ON te.id_sucursal = ts.id_sucursal 
             INNER JOIN tbcelula AS tc
             ON tc.id_celula = te.id_celula
             INNER JOIN tbarea AS ta
             ON ta.codigo = tc.codigo_area
-			LEFT JOIN tbpuesto AS tp
-			ON te.id_puesto = tp.id_puesto
-            WHERE te.status <> 'B' 
+            AND te.status <> 'B'
             ORDER BY te.status ASC, te.created_at DESC
 
-SELECT * FROM tbempleados where numero_nomina = '26539'
+SELECT * FROM tbpuesto
 
-SELECT * FROM PUESTOS_NOMINAS where idpuesto = '227'
+SELECT * FROM PUESTOS_NOMINAS ORDER BY idpuesto
 
 SELECT * FROM [vEmpleadosNM] WHERE codigoempleado = '26539'
 
@@ -909,15 +906,172 @@ SELECT MAX(CAST(numero_nomina AS INT)) AS numeroNomina FROM tbempleados
 16775
 **/
 select TOP 10 no_trab AS A, * from rh_empelados2 WHERE interior <> '' ORDER BY fecha_alta DESC
-select * from [vDatosEmpleados] WHERE codigoempleado = '16775'
-select * from tbdatos_empleados
+select TOP 40 * from rh_empelados2
 select * from [vDatosEmpleados] where codigopostal <> 0
 
-select REPLACE(no_trab,' ','') as NOMINA,REPLACE(categoria,'$','') AS categoria,SUBSTRING(nomina,1,1) AS nomina,SUBSTRING(clasificacion,1,1) AS clasificacion,registro,lote,dv,lugar_nacimiento,'ID',ide_oficial,
-SUBSTRING(estado_civil,1,1) AS estado_civil,escolaridad,'constancia_escolar',
+select top 45 REPLACE(no_trab,' ','') as NOMINA,REPLACE(REPLACE(categoria,'$',''),' ','') AS categoria,SUBSTRING(nomina,1,1) AS nomina,
+SUBSTRING(clasificacion,1,1) AS clasificacion,REPLACE(registro,' ',''),REPLACE(lote,' ','') AS lote,REPLACE(dv,' ','') AS dv,REPLACE(lugar_nacimiento,' ','') AS lugar_nacimiento,'ID',
+REPLACE(ide_oficial,' ','') AS ide_oficial,
+SUBSTRING(estado_civil,1,1) AS estado_civil,REPLACE(escolaridad,' ','') AS escolaridad,'constancia_escolar',
 CONCAT(REPLACE(ape_pat_padre,' ',''),' ',REPLACE(ape_mat_padre,' ',''),' ',REPLACE(nombres_padre,' ','')) AS nombre_padre,
 CONCAT(REPLACE(ape_pat_madre,' ',''),' ',REPLACE(ape_mat_madre,' ',''),' ',REPLACE(nombres_madre,' ','')) AS nombre_madre,
-calle,numero,interior,fraccionamiento,'domicilio',cp,estado,municipio,localidad,
-infonavit,no_infonavit,fonacot,no_fonacot,tarjeta_nomina,cuenta,
-correo_electronico,telefono_casa,celular,telefono_emergencia,'','',GETDATE()
-from rh_empelados2       
+REPLACE(calle,' ','') AS calle,REPLACE(interior,' ','') AS interior,REPLACE(numero,' ','') AS exterior,REPLACE(fraccionamiento,' ','') AS fraccionamiento,'domicilio',REPLACE(cp,' ','') AS cp,REPLACE(estado,' ','') AS estado,
+REPLACE(municipio,' ','') AS municipio,REPLACE(localidad,' ','') AS localidad,
+REPLACE(infonavit,' ','') AS infonavit,REPLACE(no_infonavit,' ','') AS no_infonavit,REPLACE(fonacot,' ','') AS fonacot,REPLACE(no_fonacot,' ','') AS no_fonacot,REPLACE(tarjeta_nomina,' ','') AS tarjeta_nomina,REPLACE(cuenta,' ','') AS cuenta,
+REPLACE(correo_electronico,' ','') AS correo_electronico,REPLACE(telefono_casa,' ','') AS telefono_casa,REPLACE(celular,' ','') AS celular,REPLACE(telefono_emergencia,' ','') AS telefono_emergencia,'','',GETDATE()
+from rh_empelados2
+WHERE no_trab <> ''
+
+SELECT * FROM tbdatos_empleados
+SELECT * FROM tbempleados WHERE numero_nomina = '77777'
+SELECT * FROM PJEMPLOY WHERE employee ='77777'
+
+select * FROM PJEMPPJT WHERE employee = '08444'
+
+/*
+TRUNCATE TABLE tbdatos_empleados
+DELETE FROM tbempleados WHERE numero_nomina = '26548'
+DELETE FROM PJEMPLOY WHERE employee = '26548'
+*/
+SELECT REPLACE(employee,' ','') AS employee,emp_status FROM PJEMPLOY
+
+EXEC insertEmployeeData '88888','HERNANDEZ IBARRA GABRIELA','gabriela','hernandez','ibarra','f','HEIG','MAS01582','HEIG','XYC','1234567','1992-11-23','2019-08-04','1900-01-01','A',1,2,35,40,
+						'O','200','Q','CNO','987654321','8','AGUASCALIENTeS','IFE','8523969741','C','PREPARATORIA','CERTIFICADO','HERNANDEZ JUAN MANUEL','IBARRA LOPEZ MARIA DE JESUS','PRIVADA SAN ANTONIO DE LOS HORCONES',
+						'125','2','SAN ANTONIO DE LOS HORCONES','PRIVADA SAN ANTONIO DE LOS HORCONES #125 INT 2 SAN ANTONIO DE LOS HORCONES','55632','AGUASCALIENTES','JESUS MARIA','SAN ANTONIO DE LOS HORCONES','NO','','NO','','SI','RETENIDO',
+						'g@gmail.com','9128574','4493216547','Juana Ibarra','4498754631',0;
+
+/**insert empleados en PJEMPLOY / TBEMPLEADOS / TBEMPLEADOS_DATOIS**/
+ALTER PROCEDURE insertEmployeeData(
+								@nnomina varchar(10), 
+								@nlargo varchar(85), 
+								@nombre varchar(35), 
+								@apaterno varchar(35),
+								@amaterno varchar(35),
+								@sexo varchar(5),
+								@curpi varchar(25),
+								@curpf varchar(25),
+								@rfcini varchar(25),
+								@rfcfin varchar(25),
+								@nss varchar(25),
+								@fechan DATE,
+								@fechaa DATE,
+								@fechab DATE,
+								@status varchar(2),
+								@ids INT,
+								@ida INT,
+								@idc INT,
+								@idp INT,
+								@clasificacion  varchar(8)
+							   ,@categoria  varchar(25)
+							   ,@nomina  varchar(1)
+							   ,@registro_patronal  varchar(10)
+							   ,@lote  varchar(15)
+							   ,@dv  varchar(3)
+							   ,@lugar_nacimiento  varchar(45)
+							   ,@identificacion  varchar(15)
+							   ,@numero_identificacion  varchar(65)
+							   ,@estado_civil  varchar(5)
+							   ,@escolaridad  varchar(25)
+							   ,@constancia  varchar(25)
+							   ,@nombre_padre  varchar(65)
+							   ,@nombre_madre  varchar(65)
+							   ,@calle  varchar(65)
+							   ,@numero_interior  varchar(10)
+							   ,@numero_exterior  varchar(10)
+							   ,@fraccionamiento  varchar(65)
+							   ,@domicilio_completo  varchar(65)
+							   ,@codigo_postal  varchar(5)
+							   ,@estado  varchar(55)
+							   ,@municipio  varchar(55)
+							   ,@localidad  varchar(55)
+							   ,@infonavit  varchar(2)
+							   ,@numero_infonavit  varchar(35)
+							   ,@fonacot  varchar(2)
+							   ,@numero_fonacot  varchar(35)
+							   ,@cuenta  varchar(2)
+							   ,@numero_cuenta  varchar(35)
+							   ,@correo  varchar(55)
+							   ,@telefono  varchar(25)
+							   ,@celular  varchar(25)
+							   ,@contacto_emergencia_nombre  varchar(40)
+							   ,@contacto_emergencia_numero  varchar(15)
+							   ,@posicion int)
+AS
+BEGIN TRY
+     BEGIN TRANSACTION
+           INSERT INTO [tbempleados]
+                            ([numero_nomina]
+                            ,[nombre_largo]
+                            ,[nombre]
+                            ,[apellido_paterno]
+                            ,[apellido_materno]
+                            ,[sexo]
+                            ,[curpini]
+                            ,[curpfin]
+                            ,[rfcini]
+                            ,[rfcfin]
+                            ,[nss]
+                            ,[fecha_nacimiento]
+                            ,[fecha_alta]
+                            ,[fecha_baja]
+                            ,[status]
+                            ,[id_sucursal]
+                            ,[id_area]
+                            ,[id_celula]
+                            ,[id_puesto]
+                            ,[created_at])
+                            VALUES
+                            (@nnomina,UPPER(@nlargo),UPPER(@nombre),UPPER(@apaterno),UPPER(@amaterno),UPPER(@sexo),UPPER(@curpi),UPPER(@curpf),UPPER(@rfcini),UPPER(@rfcfin),@nss,@fechan,@fechaa,@fechab,@status,@ids,@ida,@idc,@idp,GETDATE());
+           INSERT INTO [tbdatos_empleados]
+										(	[numero_nomina],
+											[clasificacion],
+											[categoria],
+											[nomina],
+											[registro_patronal],
+											[lote],
+											[dv],
+											[lugar_nacimiento],
+											[identificacion],
+											[numero_identificacion],
+											[estado_civil],
+											[escolaridad],
+											[constancia],
+											[nombre_padre],
+											[nombre_madre],
+											[calle],
+											[numero_exterior],
+											[numero_interior],
+											[fraccionamiento],
+											[domicilio_completo],
+											[codigo_postal],
+											[estado],
+											[municipio],
+											[localidad],
+											[infonavit],
+											[numero_infonavit],
+											[fonacot],
+											[numero_fonacot],
+											[cuenta],
+											[numero_cuenta],
+											[correo],
+											[telefono],
+											[celular],
+											[contacto_emergencia_nombre],
+											[contacto_emergencia_numero],
+											[posicion],
+											[created_at]
+										)
+										VALUES
+										(@nnomina,@clasificacion,@categoria,@nomina,@registro_patronal,@lote,@dv,UPPER(@lugar_nacimiento),@identificacion,@numero_identificacion,@estado_civil,@escolaridad,@constancia,
+										UPPER(@nombre_padre),UPPER(@nombre_madre),UPPER(@calle),@numero_exterior,@numero_interior,@fraccionamiento,UPPER(@domicilio_completo),@codigo_postal,@estado,@municipio,@localidad,@infonavit,@numero_infonavit,
+										@fonacot,@numero_fonacot,@cuenta,@numero_cuenta,UPPER(@correo),@telefono,@celular,UPPER(@contacto_emergencia_nombre),@contacto_emergencia_numero,@posicion,GETDATE());
+
+										INSERT INTO [PJEMPLOY] ([BaseCuryId], [CpnyId], [crtd_datetime], [crtd_prog], [crtd_user], [CuryId], [CuryRateType], [date_hired], [date_terminated], [employee], [emp_name], [emp_status], [emp_type_cd], [em_id01], [em_id02], [em_id03], [em_id04], [em_id05], [em_id06], [em_id07], [em_id08], [em_id09], [em_id10], [em_id11], [em_id12], [em_id13], [em_id14], [em_id15], [em_id16], [em_id17], [em_id18], [em_id19], [em_id20], [em_id21], [em_id22], [em_id23], [em_id24], [em_id25], [exp_approval_max], [gl_subacct], [lupd_datetime], [lupd_prog], [lupd_user], [manager1], [manager2], [MSPData], [MSPInterface], [MSPRes_UID], [MSPType], [noteid], [placeholder], [stdday], [Stdweek], [Subcontractor], [user1], [user2], [user3], [user4], [user_id])
+										VALUES
+										(N'    ', N'0011      ', CAST(GETDATE() AS SmallDateTime), N'PAEMP   ', N'WEBSYS', N'    ', N'      ', CAST(GETDATE() AS SmallDateTime), CAST(N'1900-01-01T00:00:00' AS SmallDateTime), @nnomina, UPPER(@nlargo), N'A', N'', N'                              ', N'                              ', N'                                                  ', N'                ', N'    ', 0, 0, CAST(N'1900-01-01T00:00:00' AS SmallDateTime), CAST(N'1900-01-01T00:00:00' AS SmallDateTime), 0, N'                              ', N'                              ', N'                    ', N'                    ', N'          ', N'          ', N'    ', 0, CAST(N'1900-01-01T00:00:00' AS SmallDateTime), 0, N'          ', N'          ', N'          ', N'          ', N'          ', 0, N'01                      ', CAST(GETDATE() AS SmallDateTime), N'WEBEMP   ', N'WEBADMIN  ', N'          ', N'          ', N'                                                  ', N' ', 0, N' ', 0, N' ', 8, 40, N' ', N'                              ', N'                              ', 0, 0, N'                                                  ');
+     COMMIT
+ END TRY
+ BEGIN CATCH
+  ROLLBACK
+ END CATCH
+

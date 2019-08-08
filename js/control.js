@@ -5,7 +5,7 @@ $( document ).ready(function() {
     let searchParams = new URLSearchParams(window.location.search)
     let seccionActual = searchParams.get('request');
     let seccionBuscar = $( ".seccionBuscar" );
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/control.php';
     let url_final = 'http://mexq.mx/';
     let url_dev = 'http://localhost/';
@@ -282,6 +282,60 @@ $( document ).ready(function() {
                     // newTab.focus();
                 });        
             }
+            break;
+            case 'altas':
+                let btnConsultarAltas = $('#btnConsultaAltas');
+                obtenerAltas();
+                btnConsultarAltas.on('click',function(e){
+                    e.preventDefault();
+                    $('#dataTable').empty();
+                    obtenerAltas();
+                });
+                function obtenerAltas(){
+                    var action  = 'altas',
+                        fecha = $('#txtFechaAltas').val();
+                    var dataTable = new FormData();
+                    dataTable.append('action', action);
+                    dataTable.append('prop', fecha);
+                    var xmlhr = new XMLHttpRequest();
+                    xmlhr.open('POST', backendURL, true);
+                    xmlhr.onload = function(){
+                        if (this.status === 200) {
+                        var respuesta = JSON.parse(xmlhr.responseText);
+                        if (respuesta.estado === 'OK') {
+                            var datos = respuesta.informacion.length;
+                            var informacion = respuesta.informacion;
+                            if(datos < 1)
+                            {
+                                $('#alertaM').removeClass('d-none');
+                            } 
+                            else 
+                            {
+                                $('#alertaM').addClass('d-none');
+                                for(var i in informacion){
+                                    tablaAltas(informacion[i]);
+                                }    
+                            } 
+                        } else if(respuesta.status === 'error'){
+                            var informacion = respuesta.informacion;
+                            $('#alertaM').removeClass('d-none');
+                        }
+                        }
+                        }
+                    xmlhr.send(dataTable);
+        
+                    function tablaAltas(rowInfo){
+                        var row = $("<tr>");
+                        
+                        $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
+                        row.append($("<td class='trCode'>" + rowInfo.numero_nomina + " </td>"));
+                        row.append($("<td class='text-left'> " + rowInfo.Nombre + " </td>"));
+                        row.append($("<td class='text-left'> " + rowInfo.Puesto + " </td>"));
+                        row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
+                        row.append($("<td> " + rowInfo.Sucursal + " </td>"));
+                        row.append($("<td> " + rowInfo.Celula + " </td>"));
+                    }
+                }
             break;
         case 'datos':
             //GET VALUE FROM LS
@@ -928,6 +982,7 @@ $( document ).ready(function() {
             btnGuardarEmpleado.on('click',function(e){
                 e.preventDefault();
                 let nomina = $('#txtNomina').val(),
+                    tipoNomina = $('#txtTipoNomina').val(),
                     tipo = $('#txtTipo').val(),
                     sucursal = $('#txtSucursal').val(),
                     clasificacion = $('#txtClasificacion').val(),
@@ -974,6 +1029,9 @@ $( document ).ready(function() {
                     nContacto = $('#txtNcontacto').val(),
                     curpini = curp.substr(0, 4),
                     curpfin = curp.substr(10, 8);
+                    rfcini = rfc.substr(0, 4);
+                    rfcfin = rfc.substr(10, 3);
+                    domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
 
                 if
                 (
@@ -1008,6 +1066,7 @@ $( document ).ready(function() {
                         url: backendURL, 
                         data: { action: 'guardarEmpleado',
                                 nomina: nomina,
+                                tipoNomina: tipoNomina,
                                 tipo: tipo,
                                 sucursal : sucursal,
                                 clasificacion : clasificacion,
@@ -1022,7 +1081,8 @@ $( document ).ready(function() {
                                 nombreLargo : nombreLargo,
                                 curpini : curpini,
                                 curpfin : curpfin,
-                                rfc : rfc,
+                                rfcini : rfcini,
+                                rfcfin: rfcfin,
                                 nss : nss,
                                 dv : dv,
                                 fechaNacimiento : fechaNacimiento,
@@ -1043,6 +1103,7 @@ $( document ).ready(function() {
                                 municipio : municipio,
                                 localidad : localidad,
                                 fraccionamiento : fraccionamiento,
+                                domicilio: domicilio,
                                 infonavit : infonavit,
                                 nInfonavit : nInfonavit,
                                 fonacot : fonacot,

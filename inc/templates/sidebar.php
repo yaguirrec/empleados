@@ -58,8 +58,9 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Administrar empleados:</h6>
             <a class="collapse-item rh2" href="index.php?request=alta-empleado">Alta de empleado</a>
-            <a class="collapse-item rh2" href="#">Modificar de empleado</a>
-            <a class="collapse-item rh2" href="#">Baja de empleado</a>
+            <a class="collapse-item rh2" href="index.php?request=altas">Envio de altas</a>
+            <!-- <a class="collapse-item rh2" href="#">Modificar de empleado</a>
+            <a class="collapse-item rh2" href="#">Baja de empleado</a> -->
           </div>
         </div>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">

@@ -1,4 +1,4 @@
-<form class="needs-validation" novalidate">
+<form>
   <div class="bg-gradient-success p-5 text-white text-center rounded-right">
   <h1>DATOS DE LA EMPRESA</h1>
     <div class="form-row">
@@ -12,7 +12,7 @@
       </div>
       <div class="form-group col-md-4">
           <label for="txtSucursal">Sucursal</label>
-          <select class="form-control" id="txtSucursal" required></select>  
+          <select class="form-control" id="txtSucursal"></select>  
       </div>
       <div class="form-group col-md-4">
           <label for="txtClasificacion">Clasificación</label>
@@ -32,16 +32,16 @@
         <input type="text" class="form-control" id="txtCategoria" placeholder="Categoria">
       </div>
       <div class="form-group col-md-4">
-          <label for="txtNomina">Nomina</label>
-          <select class="form-control" id="txtNomina">
+          <label for="txtTipoNomina">Nomina</label>
+          <select class="form-control" id="txtTipoNomina">
             <option value="" selected required>Selecciona Nomina</option>
             <option value="Q">QUIN</option>
             <option value="S">SEM</option>
           </select>
       </div>
       <div class="form-group col-md-4"> 
-          <label for="txtCelula">Celula</label>
-          <select class="form-control" id="txtCelula" required></select>  
+          <label for="txtCelula">Departamento</label>
+          <select class="form-control" id="txtCelula"></select>  
       </div>
     </div>
     <div class="form-row">
@@ -58,7 +58,7 @@
       </div>
       <div class="form-group col-md-4">
           <label for="txtPuesto">Puesto</label>
-          <select class="form-control" id="txtPuesto" required></select>  
+          <select class="form-control" id="txtPuesto"></select>  
       </div>
     </div>
     <div class="form-row">
@@ -76,41 +76,41 @@
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="txtNombre">Nombre(s)</label>
-        <input type="text" class="form-control" id="txtNombre" required>
+        <input type="text" class="form-control" id="txtNombre">
       </div>
       <div class="form-group col-md-4">
         <label for="txtPaterno">Apellido Paterno</label>
-        <input type="text" class="form-control" id="txtPaterno" required>
+        <input type="text" class="form-control" id="txtPaterno">
       </div>
       <div class="form-group col-md-4">
         <label for="txtMaterno">Apellido Materno</label>
-        <input type="text" class="form-control" id="txtMaterno" required>
+        <input type="text" class="form-control" id="txtMaterno">
       </div>
     </div>
 
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="txtCURP">CURP</label>
-        <input type="text" class="form-control" id="txtCURP" readonly>
+        <input type="text" class="form-control" id="txtCURP">
       </div>
       <div class="form-group col-md-4">
         <label for="txtRFC">RFC</label>
-        <input type="text" class="form-control" id="txtRFC" required>
+        <input type="text" class="form-control" id="txtRFC">
       </div>
       
       <div class="form-group col-md-3">
         <label for="txtNSS">NSS</label>
-        <input type="text" class="form-control" id="txtNSS" required>
+        <input type="text" class="form-control" id="txtNSS">
       </div>
       <div class="form-group col-md-1">
         <label for="txtDV">DV</label>
-        <input type="text" class="form-control" id="txtDV" required>
+        <input type="text" class="form-control" id="txtDV">
       </div>
     </div>
     <div class="form-row">
       <div class="form-group col-md-2">
         <label for="txtfechaNacimiento">Fecha Nacimiento</label>
-        <input type="date" class="form-control" id="txtfechaNacimiento" value="<?php echo date("Y-m-d");?>" required>
+        <input type="date" class="form-control" id="txtfechaNacimiento" value="<?php echo date("Y-m-d");?>">
       </div>
       <div class="form-group col-md-2">
         <label for="txtLnacimiento">Lugar de nacimiento</label>
@@ -127,8 +127,8 @@
         <label for="txtTI">Tipo Identificación</label>
         <select class="form-control" id="txtTI">
           <option value="IFE" selected>INE / IFE</option>
-          <option value="">PASAPORTE</option>
-          <option value="">CEDULA PROFESIONAL</option>
+          <option value="PASAPORTE">PASAPORTE</option>
+          <option value="CEDULA">CEDULA PROFESIONAL</option>
         </select>
       </div>
       <div class="form-group col-md-2">
@@ -291,11 +291,11 @@
       </div>
       <div class="form-group col-md-4">
         <label for="txtTelefono">Telefono</label>
-        <input type="text" class="form-control" id="txtTelefono" maxlength="10" minlength="10" required placeholder="4499128686">
+        <input type="text" class="form-control" id="txtTelefono" maxlength="10" minlength="10" placeholder="4499128686">
       </div>
       <div class="form-group col-md-4">
         <label for="txtCelular">Celular</label>
-        <input type="text" class="form-control" id="txtCelular" maxlength="10" minlength="10" required placeholder="4499128686">
+        <input type="text" class="form-control" id="txtCelular" maxlength="10" minlength="10" placeholder="4499128686">
       </div>
     </div>
 
@@ -306,7 +306,7 @@
       </div>
       <div class="form-group col-md-6">
         <label for="txtNcontacto">Número contacto de emergencia</label>
-        <input type="text" class="form-control" id="txtNcontacto" maxlength="10" minlength="10" required placeholder="4499128686">
+        <input type="text" class="form-control" id="txtNcontacto" maxlength="10" minlength="10" placeholder="4499128686">
       </div>
     </div>
   </div>
