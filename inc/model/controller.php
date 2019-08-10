@@ -1013,13 +1013,6 @@
                 sqlsrv_close( $con );
             break;
             case 'obtenerNomina':
-                // die(json_encode($_POST));
-                // $query = "SELECT top 1 MAX(CAST(REPLACE(employee, ' ', '') AS INT)) AS numeroNomina 
-                //             FROM PJEMPLOY 
-                //             WHERE ISNUMERIC(employee) = 1 AND em_id03 = '' 
-                //             GROUP BY crtd_datetime 
-                //             ORDER BY crtd_datetime DESC";
-
                 $query = "SELECT MAX(CAST(numero_nomina AS INT)) AS numeroNomina FROM tbempleados";
 
                 $stmt = sqlsrv_query( $con, $query);
@@ -1191,9 +1184,109 @@
                             'informacion' => 'No existe informacion',
                             'mensaje' => 'No hay datos en la BD'             
                         );
-                    }
+                    }               
 
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
+            case 'obtenerTipoPuesto':
+                // die(json_encode($_POST));
+                $query = "SELECT id_puesto,nivel,nombre FROM tbtipopuesto WHERE id_puesto > 1  ORDER BY id_puesto DESC";
                 
+                $stmt = sqlsrv_query( $con, $query);
+                
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }               
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con ); 
+            break;
+            case 'obtenerDepartamento':
+                // die(json_encode($_POST));
+                $query = "SELECT id_celula,UPPER(nombre) AS nombre FROM tbcelula WHERE codigo LIKE '99COR%' OR id_celula = 5 ORDER BY codigo";
+                
+                $stmt = sqlsrv_query( $con, $query);
+                
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }               
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con ); 
+            break;
+            case 'obtenerPuestos':
+                // die(json_encode($_POST));
+                $query = "SELECT * FROM tbpuesto";
+                
+                $stmt = sqlsrv_query( $con, $query);
+
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }
 
                 echo json_encode($respuesta);
                 sqlsrv_free_stmt( $stmt);

@@ -21,6 +21,7 @@
 <!-- LOCAL JS -->
 <script src="js/control.js"></script>
 <script src="js/chart.js"></script>            
+<script src="js/hotjar.js"></script>            
 
     <?php
         if ($controlInicio == "login.php")

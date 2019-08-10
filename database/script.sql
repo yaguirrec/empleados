@@ -382,7 +382,7 @@ SELECT * FROM tbemp_permisos WHERE numero_nomina='08444'
 EXEC datos_empleado_acceso @NUMERO_NOMINA = '19905'
 
 /**VISTA PUESTOS NOMPIAQ**/
-ALTER VIEW PUESTOS_NOMINAS AS
+CREATE VIEW PUESTOS_NOMINAS AS
 SELECT CAST(idpuesto AS VARCHAR(10)) COLLATE SQL_Latin1_General_CP1_CI_AS AS idpuesto,
 descripcion COLLATE SQL_Latin1_General_CP1_CI_AS AS descripcion
 FROM [192.168.2.203\COMPAC].[ct2017_SERVICIOS_].[dbo].[nom10006]
@@ -590,10 +590,12 @@ SELECT * FROM tbempleados where numero_nomina = '08444' ORDER BY updated_at DESC
 UPDATE tbempleados SET status = 'B' where numero_nomina = '08444'
 SELECT * FROM tbsucursal
 SELECT * FROM tbarea
-SELECT * FROM tbcelula
+SELECT * FROM tbcelula where id_celula = 360
+SELECT id_celula,nombre FROM tbcelula WHERE codigo LIKE '99COR%' OR id_celula = 5 ORDER BY codigo
 SELECT * FROM tbcorreos
 SELECT * FROM tbpuesto
 SELECT * FROM tbtipopuesto
+SELECT id_puesto,nivel,nombre FROM tbtipopuesto
 SELECT * FROM tbprivilegios_emp
 SELECT * FROM tbemp_permisos
 SELECT * FROM tbdatos_empleados
@@ -923,15 +925,18 @@ from rh_empelados2
 WHERE no_trab <> ''
 
 SELECT * FROM tbdatos_empleados
-SELECT * FROM tbempleados WHERE numero_nomina = '77777'
-SELECT * FROM PJEMPLOY WHERE employee ='77777'
+SELECT * FROM tbempleados WHERE numero_nomina = '26550'
+SELECT * FROM PJEMPLOY WHERE employee ='26550'
+SELECT * FROM PJEMPPJT WHERE employee ='26550'
 
 select * FROM PJEMPPJT WHERE employee = '08444'
+select MAX(CAST(employee AS INT)) AS numeroNomina FROM PJEMPPJT WHERE ISNUMERIC(employee) = 1
 
 /*
 TRUNCATE TABLE tbdatos_empleados
 DELETE FROM tbempleados WHERE numero_nomina = '26548'
 DELETE FROM PJEMPLOY WHERE employee = '26548'
+DELETE FROM PJEMPPJT WHERE employee = '26548'
 */
 SELECT REPLACE(employee,' ','') AS employee,emp_status FROM PJEMPLOY
 
@@ -999,6 +1004,7 @@ ALTER PROCEDURE insertEmployeeData(
 AS
 BEGIN TRY
      BEGIN TRANSACTION
+		/*ALTA EN TABLA TBEMPLEADOS PARA MANEJO DE PERFILES*/
            INSERT INTO [tbempleados]
                             ([numero_nomina]
                             ,[nombre_largo]
@@ -1022,7 +1028,8 @@ BEGIN TRY
                             ,[created_at])
                             VALUES
                             (@nnomina,UPPER(@nlargo),UPPER(@nombre),UPPER(@apaterno),UPPER(@amaterno),UPPER(@sexo),UPPER(@curpi),UPPER(@curpf),UPPER(@rfcini),UPPER(@rfcfin),@nss,@fechan,@fechaa,@fechab,@status,@ids,@ida,@idc,@idp,GETDATE());
-           INSERT INTO [tbdatos_empleados]
+           /*ALTA EN TABLA TBDATOS_EMPLEADOS PARA CONTROL DE INFORMACION DEL EMPLEADO*/
+		   INSERT INTO [tbdatos_empleados]
 										(	[numero_nomina],
 											[clasificacion],
 											[categoria],
@@ -1065,13 +1072,19 @@ BEGIN TRY
 										(@nnomina,@clasificacion,@categoria,@nomina,@registro_patronal,@lote,@dv,UPPER(@lugar_nacimiento),@identificacion,@numero_identificacion,@estado_civil,@escolaridad,@constancia,
 										UPPER(@nombre_padre),UPPER(@nombre_madre),UPPER(@calle),@numero_exterior,@numero_interior,@fraccionamiento,UPPER(@domicilio_completo),@codigo_postal,@estado,@municipio,@localidad,@infonavit,@numero_infonavit,
 										@fonacot,@numero_fonacot,@cuenta,@numero_cuenta,UPPER(@correo),@telefono,@celular,UPPER(@contacto_emergencia_nombre),@contacto_emergencia_numero,@posicion,GETDATE());
-
+										/*ALTA EN TABLA PJEMPLOY PARA CONTROL EN ERP*/
 										INSERT INTO [PJEMPLOY] ([BaseCuryId], [CpnyId], [crtd_datetime], [crtd_prog], [crtd_user], [CuryId], [CuryRateType], [date_hired], [date_terminated], [employee], [emp_name], [emp_status], [emp_type_cd], [em_id01], [em_id02], [em_id03], [em_id04], [em_id05], [em_id06], [em_id07], [em_id08], [em_id09], [em_id10], [em_id11], [em_id12], [em_id13], [em_id14], [em_id15], [em_id16], [em_id17], [em_id18], [em_id19], [em_id20], [em_id21], [em_id22], [em_id23], [em_id24], [em_id25], [exp_approval_max], [gl_subacct], [lupd_datetime], [lupd_prog], [lupd_user], [manager1], [manager2], [MSPData], [MSPInterface], [MSPRes_UID], [MSPType], [noteid], [placeholder], [stdday], [Stdweek], [Subcontractor], [user1], [user2], [user3], [user4], [user_id])
 										VALUES
 										(N'    ', N'0011      ', CAST(GETDATE() AS SmallDateTime), N'PAEMP   ', N'WEBSYS', N'    ', N'      ', CAST(GETDATE() AS SmallDateTime), CAST(N'1900-01-01T00:00:00' AS SmallDateTime), @nnomina, UPPER(@nlargo), N'A', N'', N'                              ', N'                              ', N'                                                  ', N'                ', N'    ', 0, 0, CAST(N'1900-01-01T00:00:00' AS SmallDateTime), CAST(N'1900-01-01T00:00:00' AS SmallDateTime), 0, N'                              ', N'                              ', N'                    ', N'                    ', N'          ', N'          ', N'    ', 0, CAST(N'1900-01-01T00:00:00' AS SmallDateTime), 0, N'          ', N'          ', N'          ', N'          ', N'          ', 0, N'01                      ', CAST(GETDATE() AS SmallDateTime), N'WEBEMP   ', N'WEBADMIN  ', N'          ', N'          ', N'                                                  ', N' ', 0, N' ', 0, N' ', 8, 40, N' ', N'                              ', N'                              ', 0, 0, N'                                                  ');
+										/*ALTA EN TABLA PJEMPPJT PARA CAPTURA DE REPORTES*/
+										INSERT [dbo].[PJEMPPJT] 
+										([crtd_datetime], [crtd_prog], [crtd_user], [employee], [ep_id01], [ep_id02], [ep_id03], [ep_id04], [ep_id05], [ep_id06], [ep_id07], [ep_id08], [ep_id09], [ep_id10], [effect_date], [labor_class_cd], [labor_rate], [lupd_datetime], [lupd_prog], [lupd_user], [noteid], [project], [user1], [user2], [user3], [user4]) 
+										VALUES (CAST(GETDATE() AS SmallDateTime), N'TMEPJ   ', N'WEBSYS  ', @nnomina, N'                              ', N'                              ', N'                ', N'                ', N'HR  ', 0, 0, CAST(N'1900-01-01T00:00:00' AS SmallDateTime), CAST(N'1900-01-01T00:00:00' AS SmallDateTime), 0, CAST(GETDATE() AS SmallDateTime), N'MO  ', 1, CAST(GETDATE() AS SmallDateTime), N'TMEPJ   ', N'WEBSYS  ', 0, N'na              ', N'                              ', N'                              ', 0, 0)
      COMMIT
  END TRY
  BEGIN CATCH
   ROLLBACK
  END CATCH
 
+
+ UPDATE tbpuesto SET id_celula = 5 WHERE id_puesto = 42

@@ -67,7 +67,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Modulos</h6>
             <a class="collapse-item" href="index.php?request=puestos">Puestos</a>
-            <a class="collapse-item" href="#">Celulas</a>
+            <!-- <a class="collapse-item" href="#">Celulas</a> -->
           </div>
         </div>
       </li>

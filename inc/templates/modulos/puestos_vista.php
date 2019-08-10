@@ -12,7 +12,7 @@
     </div>
 
     <div class="table-responsive">
-        <table class="table table-sm table-bordered table-hover bg-gray-200 text-center text-uppercase" cellspacing="4">
+        <table class="table table-sm table-bordered table-hover bg-gray-200 text-uppercase" cellspacing="4">
         
         <thead class="font-weight-bold">
             <tr>

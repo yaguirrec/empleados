@@ -60,6 +60,11 @@ $( document ).ready(function() {
         $("#wrapper").toggleClass("toggled");
     });
 
+    //VACIAR TABLA DE DATOS
+    let limpiarTabla = () => {
+        $('#dataTable').empty();
+    }
+
     /**EXPORTAR A EXCEL */
     $('.exportTable').click(function(){
         $(".table").table2excel({
@@ -904,7 +909,7 @@ $( document ).ready(function() {
                             $("#txtMunicipio").val(data.municipio);
                             $("#txtLocalidad").val(data.municipio);
                             var colonias = data.colonias,
-                                s= '';
+                                s = '';
                             for(var i in colonias){
                                 s += '<option value="'+ colonias[i] +'">' + colonias[i] + '</option>';
                             }
@@ -1042,7 +1047,7 @@ $( document ).ready(function() {
                     nss.trim() === '' || dv.trim() === '' ||
                     id.trim() === '' || nPadre.trim() === '' ||
                     nMadre.trim() === '' || calle.trim() === '' ||
-                    numI.trim() === '' || numE.trim() === '' ||
+                    numE.trim() === '' ||
                     cp.trim() === '' || nInfonavit.trim() === '' ||
                     nFonacot.trim() === '' || cuenta.trim() === '' ||
                     correo.trim() === '' || telefono.trim() === '' ||
@@ -1159,19 +1164,159 @@ $( document ).ready(function() {
             let btnNuevo = $('#btnnPuesto'),
                 panelNuevo = $('#nuevo-puesto'),
                 btnCancelar = $('#btnCancelar'),
-                form_nPuesto = $('#form_nPuesto');
+                form_nPuesto = $('#form_nPuesto'),
+                btnGuardarPuesto = $('#btnGuardarPuesto'),
+                btnEditarPuesto = $('#btnEditarPuesto'),
+                txtPuestoL = $('#txttPuesto'),
+                txtCelulaL = $('#txtnDepartamento');
 
             btnNuevo.on('click',function(){
+                limpiarCampos();
                 panelNuevo.removeClass('d-none');
+                btnGuardarPuesto.removeClass('d-none');
                 btnNuevo.addClass('d-none');
+                btnEditarPuesto.addClass('d-none');
+                $('.btnEditarRegistro').disable(1);
+                llenarTipoPuesto();
+                llenarDepartamento();
             });
 
             btnCancelar.on('click',function(){
                 panelNuevo.addClass('d-none');
                 btnNuevo.removeClass('d-none');
                 form_nPuesto.trigger("reset");
+                $('.btnEditarRegistro').disable(0);
             });
 
+            let llenarTipoPuesto = () => {
+                let action = 'obtenerTipoPuesto';
+                $.ajax({
+                    type: 'POST',
+                    url: backendURL, 
+                    data: { action: action },
+                    success: function(response) {
+                        let respuesta = JSON.parse(response);
+                        let puestoTipo = respuesta.informacion,
+                            campo = '';
+                        for(var i in puestoTipo){
+                            campo += '<option value="'+ puestoTipo[i].id_puesto +'">' + puestoTipo[i].nivel + ' - ' + puestoTipo[i].nombre + '</option>';
+                        }
+                        txtPuestoL.html(campo);
+                    }
+                });
+            }
+
+            let llenarDepartamento = () => {
+                let action = 'obtenerDepartamento';
+                $.ajax({
+                    type: 'POST',
+                    url: backendURL, 
+                    data: { action: action },
+                    success: function(response) {
+                        let respuesta = JSON.parse(response);
+                        let departamento = respuesta.informacion,
+                            campo = '';
+                        for(var i in departamento){
+                            campo += '<option value="'+ departamento[i].id_celula +'">' + departamento[i].nombre + '</option>';
+                        }
+                        txtCelulaL.html(campo);
+                    }
+                });
+            }
+
+            let limpiarCampos = () => {
+                $('#txttPuesto').val(''),
+                $('#txtnPuesto').val(''),
+                $('#txtnDepartamento').val(''),
+                $('#txtdPuesto').val('');
+            }
+
+            let llenarTablaPuestos = () => {
+                let action = 'obtenerPuestos';
+                $.ajax({
+                    type: 'POST',
+                    url: backendURL, 
+                    data: { action: action },
+                    success: function(response) {
+                        let respuesta = JSON.parse(response);
+                        let puesto = respuesta.informacion;
+                        for(var i in puesto){
+                            $('#dataTable').append
+                            ("<tr><td class='trCode'>" + puesto[i].codigo + " </td>" +
+                            "<td>" + puesto[i].nombre + " </td>" + 
+                            "<td>" + puesto[i].descripcion + " </td>" +
+                            "<td>" + puesto[i].id_nivel + " </td>" +
+                            "<td>" + puesto[i].created_at.date + " </td>" +
+                            "<td>" + puesto[i].updated_at.date + " </td>" +
+                            "<td>" + puesto[i].updated_by + " </td>" +
+                            "<td><a class='btn btn-primary btnEditarRegistro text-white btn-block'"+
+                            "data-codigo='" +puesto[i].codigo + "'" +
+                            "data-id_nivel='" +puesto[i].id_nivel + "'" +
+                            "data-nombre='" + puesto[i].nombre + "'" +
+                            "data-departamento='" + puesto[i].id_celula + "'" +
+                            "data-descripcion='" + puesto[i].descripcion + "'" +
+                            "role='button' title='Editar Registro'><i class='fas fa-edit'></i></a> </td></tr>");
+                        }
+                        $(".btnEditarRegistro").click(function() {
+                            llenarTipoPuesto();
+                            llenarDepartamento();
+                            btnGuardarPuesto.addClass('d-none');
+                            $("html, body").animate({scrollTop: 0}, 500);
+                            let codigoPuesto = $((this)).data('codigo'),
+                                id_nivel = $((this)).data('id_nivel'),
+                                departamento = $((this)).data('departamento'),
+                                descripcion = $((this)).data('descripcion'),
+                                nombre = $((this)).data('nombre');
+                            btnNuevo.addClass('d-none');
+                            btnEditarPuesto.removeClass('d-none');
+                            panelNuevo.removeClass('d-none');
+                            setTimeout(function() {
+                                $("#txttPuesto").val(id_nivel).attr('selected', true);
+                             }, 150);
+                            $('#txtnPuesto').val(nombre);
+                            setTimeout(function() {
+                                if(departamento === 0)
+                                    $("#txtnDepartamento").val(5).attr('selected', true);
+                                else
+                                    $("#txtnDepartamento").val(departamento).attr('selected', true);
+                             }, 150);
+                             $('#txtdPuesto').val(descripcion);
+                        });
+                          
+                    }
+                });
+            }     
+
+
+            llenarTablaPuestos();
+
+            btnGuardarPuesto.on('click',function(e){
+                e.preventDefault();
+                let puestoNivel = $('#txttPuesto').val(),
+                    puestoNombre = $('#txtnPuesto').val(),
+                    puestoDepartamento = $('#txtnDepartamento').val(),
+                    puestoDescripcion = $('#txtdPuesto').val();
+
+                    if(puestoNombre.trim() === '' || puestoDescripcion.trim() === '')
+                    {
+                        Swal.fire({
+                            position: 'center',
+                            type: 'warning',
+                            title: 'Debe llenar todos los datos',
+                            showConfirmButton: false,
+                            timer: 1000
+                        })
+                    } else {
+                        Swal.fire({
+                            position: 'center',
+                            type: 'success',
+                            title: 'Bien',
+                            showConfirmButton: false,
+                            timer: 1000
+                          })
+                    }
+            });
+            
         break;
         default:
             console.log('Seccion ' + seccionActual); 

@@ -19,7 +19,6 @@
       include 'inc/templates/sidebar.php';
       include 'inc/templates/inicio.php';
       if(empty($nivel_usuario)){
-        // header("Location: index.php?request=datos");
         switch($request){
           case 'datos':
             include 'inc/templates/empleados/vista-empleado.php';
