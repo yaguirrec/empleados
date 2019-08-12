@@ -590,12 +590,12 @@ SELECT * FROM tbempleados where numero_nomina = '08444' ORDER BY updated_at DESC
 UPDATE tbempleados SET status = 'B' where numero_nomina = '08444'
 SELECT * FROM tbsucursal
 SELECT * FROM tbarea
-SELECT * FROM tbcelula where id_celula = 360
+SELECT * FROM tbcelula
 SELECT id_celula,nombre FROM tbcelula WHERE codigo LIKE '99COR%' OR id_celula = 5 ORDER BY codigo
 SELECT * FROM tbcorreos
 SELECT * FROM tbpuesto
 SELECT * FROM tbtipopuesto
-SELECT id_puesto,nivel,nombre FROM tbtipopuesto
+SELECT id_puesto,nivel,nombre FROM tbtipopuesto WHERE id_puesto > 1 ORDER BY id_puesto DESC
 SELECT * FROM tbprivilegios_emp
 SELECT * FROM tbemp_permisos
 SELECT * FROM tbdatos_empleados

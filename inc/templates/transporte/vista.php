@@ -1,13 +1,12 @@
 <div class="card-body">
   <div class="card-header py-3">
-    <h4 class="m-0 font-weight-bold text-secondary seccionTitulo"></h4>
+    <h4 class="m-0 font-weight-bold text-center text-uppercase text-secondary seccionTitulo"></h4>
   </div>
   <div class="table-responsive">
-    <table class="table table-sm table-bordered table-hover table-secondary text-center text-uppercase" cellspacing="4">
+    <table class="table table-sm table-bordered table-hover text-uppercase" cellspacing="4">
 
-      <thead>
+      <thead class="bg-gray-500">
         <tr>
-          <th class = "d-none" scope="col">#</th>
           <th scope="col">Nómina</th>
           <th scope="col">Nombres</th>
           <th scope="col">Fecha Alta</th>
@@ -15,10 +14,10 @@
           <th scope="col">Poblacion</th>
           <th scope="col">CP</th>
           <th scope="col">Dirección</th>
-          <th scope="col">Acciones</th>
+          <!-- <th scope="col">Acciones</th> -->
         </tr>
       </thead>
-      <tbody id="dataTable">
+      <tbody class="bg-gray-200" id="dataTable">
 
       </tbody>
     </table>   

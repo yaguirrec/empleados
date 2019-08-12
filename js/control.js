@@ -5,6 +5,7 @@ $( document ).ready(function() {
     let searchParams = new URLSearchParams(window.location.search)
     let seccionActual = searchParams.get('request');
     let seccionBuscar = $( ".seccionBuscar" );
+    let seccionEnvioAltas = $('.seccionEnvioAltas');
     let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
     let localBackend = 'inc/model/control.php';
     let url_final = 'http://mexq.mx/';
@@ -268,7 +269,7 @@ $( document ).ready(function() {
                 row.append($("<td> " + status + " </td>"));
                 // COLUMNA ACCION
                 row.append($("<td class='text-center'>"
-                            + "<a class='btn btn-info btnConsulta text-white btn-sm' data-id='"+rowInfo.numero_nomina+"' role='button' title='Ver información'><i class='fas fa-info-circle'></i></a>"
+                            + "<a class='btn btnConsulta text-white btn-facebook btn-circle btn-sm' data-id='"+rowInfo.numero_nomina+"' role='button' title='Ver información'><i class='fas fa-info'></i></a>"
                             + "</td>"));
         
                 $(".btnConsulta").unbind().click(function() {
@@ -289,7 +290,8 @@ $( document ).ready(function() {
             }
             break;
             case 'altas':
-                let btnConsultarAltas = $('#btnConsultaAltas');
+                let btnConsultarAltas = $('#btnConsultaAltas'),
+                    btnEnviarAltas = $('#btnEnviarAltas');
                 obtenerAltas();
                 btnConsultarAltas.on('click',function(e){
                     e.preventDefault();
@@ -313,10 +315,12 @@ $( document ).ready(function() {
                             if(datos < 1)
                             {
                                 $('#alertaM').removeClass('d-none');
+                                seccionEnvioAltas.addClass('d-none');
                             } 
                             else 
                             {
                                 $('#alertaM').addClass('d-none');
+                                seccionEnvioAltas.removeClass('d-none');
                                 for(var i in informacion){
                                     tablaAltas(informacion[i]);
                                 }    
@@ -341,6 +345,17 @@ $( document ).ready(function() {
                         row.append($("<td> " + rowInfo.Celula + " </td>"));
                     }
                 }
+
+            btnEnviarAltas.click(function(e){
+                e.preventDefault();
+                Swal.fire({
+                    position: 'center',
+                    type: 'success',
+                    title: 'Informe de altas enviado a Nominas',
+                    showConfirmButton: false,
+                    timer: 1800
+                  })
+            });
             break;
         case 'datos':
             //GET VALUE FROM LS
@@ -434,7 +449,7 @@ $( document ).ready(function() {
                     datosGafete.append('action', action);
                 console.log(action + ' ' + numero_nomina);
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST', localBackend, true);
+                xhr.open('POST', backendURL , true);
                 xhr.send(datosGafete);
                 xhr.onload = function(){
                     if (this.status === 200) {
@@ -490,6 +505,7 @@ $( document ).ready(function() {
             xmlhr.send(dataEmp);
             break;
         case 'direcciones':
+            $('.toolsDH').removeClass('d-none');
             var action  = 'lista-direcciones';
             var prop = (seccionActual === 'empleado' ? 'activos' : 'bajas');
             var titulo = 'Direcciones del personal';
@@ -533,36 +549,14 @@ $( document ).ready(function() {
                 var row = $("<tr class='" + estado + " text-secondary'>");
                 
                 $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
-                // NUMERO DE EQUIPO
-                row.append($("<td class='d-none'>" + rowInfo.id_empleado + " </td>"));
                 row.append($("<td class='trCode'>" + rowInfo.numero_nomina + " </td>"));
-                // NOMINA DEL EMPLEADO
                 row.append($("<td class='text-uppercase'> " + rowInfo.nombre_largo + " </td>"));
                 row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
                 row.append($("<td> " + rowInfo.estado + " </td>"));
                 row.append($("<td> " + rowInfo.poblacion + " </td>"));
                 row.append($("<td> " + rowInfo.codigopostal + " </td>"));
                 row.append($("<td> " + rowInfo.direccion + " </td>"));
-                // COLUMNA ACCION
-                row.append($("<td class='text-center'>"
-                            + "<a class='btn btn-info btnConsulta text-white btn-sm' data-id='"+rowInfo.numero_nomina+"' role='button' title='Ver información'><i class='fas fa-info-circle'></i></a>"
-                            + "</td>"));
-        
-                $(".btnConsulta").unbind().click(function() {
-                    var employeeID = $((this)).data('id'),
-                        url = "index.php?request=datos";
-                        // newTab = window.open(url, '_blank');
-
-                    //SAVE EMPLOYEE ID ON LOCAL STORAGE AS codigoEmpleado
-                    localStorage.setItem('codigoEmpleado', employeeID);
-                    console.log(employeeID);
-                    
-                    // OPEN ON CURRENT TAB
-                    $(location).attr('href',url);
-
-                    // OPEN ON NEW TAB
-                    // newTab.focus();
-                });
+                
             }
 
                 
@@ -1171,12 +1165,11 @@ $( document ).ready(function() {
                 txtCelulaL = $('#txtnDepartamento');
 
             btnNuevo.on('click',function(){
-                limpiarCampos();
+                // limpiarCampos();
                 panelNuevo.removeClass('d-none');
                 btnGuardarPuesto.removeClass('d-none');
                 btnNuevo.addClass('d-none');
                 btnEditarPuesto.addClass('d-none');
-                $('.btnEditarRegistro').disable(1);
                 llenarTipoPuesto();
                 llenarDepartamento();
             });
@@ -1185,7 +1178,6 @@ $( document ).ready(function() {
                 panelNuevo.addClass('d-none');
                 btnNuevo.removeClass('d-none');
                 form_nPuesto.trigger("reset");
-                $('.btnEditarRegistro').disable(0);
             });
 
             let llenarTipoPuesto = () => {

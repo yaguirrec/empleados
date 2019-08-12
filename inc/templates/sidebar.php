@@ -42,8 +42,8 @@
             <a class="collapse-item rh1" href="index.php?request=empleado">Empleados activos</a>
             <a class="collapse-item rh1" href="index.php?request=bajas">Empleados inactivos</a>
             <a class="collapse-item transportes" href="index.php?request=direcciones">Transportes</a>
-            <a class="collapse-item dh" href="index.php?request=fecha1">Cumpleañeros</a>
             <a class="collapse-item dh" href="index.php?request=fecha2">Antiguedad</a>
+            <a class="collapse-item dh" href="index.php?request=fecha1">Cumpleañeros</a>
           </div>
         </div>
       </li>

@@ -43,6 +43,10 @@
         </tbody>
         </table>
 
+        <div class="col-md-8 offset-2 seccionEnvioAltas d-none">
+            <button class="btn btn-primary btn-block" id="btnEnviarAltas">ENVIAR</button>
+        </div>
+
         <div class="alert alert-danger d-none text-uppercase text-center h4" id="alertaM" role="alert">
             <p>No hay información disponible de la fecha seleccionada.</p>
         </div>
