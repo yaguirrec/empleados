@@ -1,3 +1,10 @@
+<style>
+/* This text is in Century Gothic */
+.class { 
+	font-family: Century Gothic,CenturyGothic,AppleGothic,sans-serif; 
+}
+
+</style>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <div class="row mb-5">
 
@@ -6,52 +13,114 @@
 
 <img  class='img-circle' style="height:3.8cm; width:3.8cm; border-radius: 94%; position: absolute;z-index: 2;top:3.4cm;left:.7cm;" id="empFoto" alt="Foto"> 
 <center>
-<p style="position: absolute; text-align: center;left:0.15cm; width: 5.4cm; top:7.6cm;font-size:9px;z-index: 3;" id="empNombre">
+<p style="position: absolute; 
+text-align: center;
+left:0.15cm; 
+width: 5.4cm; 
+top:7.5cm;
+color:#052467;
+font-size:9.5px;
+z-index: 3;" id="empNombre">
 <!-- Mi nombre -->
 </p>
 </center>
 <center>
-<p style="position: absolute; text-align: center;left:0.25cm; width: 5.4cm; top:8cm;z-index: 4; font-size:9px;color:#009743;" id="empPuesto">
+<p style="position: absolute; 
+text-align: center;
+left:0.15cm; 
+width: 5.4cm; 
+top:7.88cm;
+font-weight: bold;
+z-index: 4; 
+font-size:9px;
+color:#009743;" id="empPuesto">
  <!-- Mi Puesto -->
 </p>
 </center>
 
 <center>
-<p style="position: absolute;left:0.25cm;  top:8.4cm; z-index: 5;text-align: center;width: 5.4cm;font-size:8.2px;" id="empAlta">
+<p style="position: absolute;
+left:0.15cm;  
+top:8.58cm; 
+z-index: 5;
+color:#052467;
+text-align: center;
+width: 5.4cm;
+font-size:8.5px;" id="empAlta">
 <!-- Ingreso : 20/02/2012     -->
 </p>
 </div>
 <div id="back">
 </center>
- <img  name="back" src="img/gafete/revers_ gafete.png" style="width:5.9cm;height:8.9cm;position: absolute; z-index: 6;top:9.4cm;border-left: dotted #000 1px;transform:rotate(180deg);
+ <img  name="back" src="img/gafete/reverso.png" 
+ style="width:5.9cm;height:8.9cm;position: 
+ absolute; z-index: 6;top:9.4cm;border-left: 
+ dotted #000 1px;transform:rotate(180deg);
 -ms-transform:rotate(180deg); /* IE 9 */
 -webkit-transform:rotate(180deg); /* Opera, Chrome, and Safari */"> 
 
-
-<center>
-
-<p  style="position: absolute; text-align: center;width: 5.4cm; font-size:16px;z-index: 7;left:0.25cm; top:16.8cm;color:#009743;transform:rotate(180deg);
+<p style="
+position: absolute; 
+text-align: left;
+left: -0.38cm;
+width: 5cm;
+font-weight: bold;
+font-size: 7.6px;
+z-index: 7;
+top:17.2cm;
+color:#052467;
+transform:rotate(180deg);
 -ms-transform:rotate(180deg); /* IE 9 */
 -webkit-transform:rotate(180deg);" id="empNS">
 <!-- No.IMSS: ##### -->
 </p>
-</center>
 
-
+<p style="position: absolute; 
+text-align: right;
+width: 5cm; 
+font-weight: bold;
+font-size: 7.6px;
+z-index: 7;
+left: .52cm; 
+top:17.2cm;
+color:#052467;
+transform:rotate(180deg);
+-ms-transform:rotate(180deg); /* IE 9 */
+-webkit-transform:rotate(180deg);" id="empEmergencia">
+<!-- TELEFONO EMERGENCIA -->
+</p>
 
 <?
     
     // displaying 
-   echo '<center><img style="position: absolute; text-align: center;width: 3.4cm; top:13.4cm;font-size:2px;z-index: 8;left:1.1cm; transform:rotate(180deg);
+echo '<center>
+<img style="position: absolute; 
+text-align: center;
+width: 4.53cm; 
+top:12.7cm;
+font-size:2px;
+z-index: 7;
+left: 0.47cm; 
+transform:rotate(180deg);
 -ms-transform:rotate(180deg); /* IE 9 */
--webkit-transform:rotate(180deg);"src="img/gafete/027.png"/> </center>'; 
+-webkit-transform:rotate(180deg);"src="img/gafete/qr_gen.png"/> </center>'; 
     
 
 ?>
 <center>
-<p  style="transform:rotate(180deg);
--ms-transform:rotate(180deg); /* IE 9 */
--webkit-transform:rotate(180deg);position: absolute; text-align: center;width: 5.4cm; top:12.2cm;font-size:9px;z-index: 9;left: 0.35cm;color:#000;" id="empDireccion">
+<p  style="
+transform:rotate(180deg);
+-ms-transform:rotate(180deg); 
+/* IE 9 */
+-webkit-transform:rotate(180deg);
+position: absolute; 
+text-align: center;
+width: 3.6cm; 
+top:11.9cm;
+font-size: 9px;
+z-index: 9;
+left: 1cm;
+color:#279b60;" id="empDireccion">
 <!-- Mi direccion -->
 </p>
 </center>
@@ -60,17 +129,26 @@
 <img
  style="transform:rotate(180deg);
 -ms-transform:rotate(180deg); /* IE 9 */
--webkit-transform:rotate(180deg);position: absolute;text-align: center;width: 3.7cm;height: 1.7cm; top:10.3cm;z-index: 10;left: 1.1cm;" 
+-webkit-transform:rotate(180deg);
+position: absolute;
+text-align: center;
+width: 3.6cm;
+height: 1.5cm; 
+top:10.3cm;z-index: 10;
+left: 1cm;" 
  alt='MEXQ' id="empNomina"/>
+ <svg id="barcode"></svg>
 </center>
 </div>
 </div>
 
 <br>
-    <a class="btn btn-lg btn-success" id="btnPrint" style="position: absolute; width: 3.2cm;top:19.4cm;font-size:12px;z-index: 12;left: 1cm;">IMPRIMIR</a>
+    <a onclick="window.print()" class="btn btn-lg btn-success" id="btnPrint" style="position: absolute; width: 3.2cm;top:19.4cm;font-size:12px;z-index: 12;left: 1cm;">IMPRIMIR</a>
 </div>
 
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/barcodes/JsBarcode.code128.min.js"></script>
+
 <script src="js/gafete.js"></script>

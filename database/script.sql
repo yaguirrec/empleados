@@ -69,7 +69,7 @@ select top 1 * from rh_empelados2
 DROP TABLE tbdatos_empleados
 
 /**CREAR TABLA DATOS EMPLEADOS*/
-USE [MEXQAppTemp]
+USE [MEXQApppr]
 GO
 SET ANSI_NULLS ON
 GO
@@ -925,18 +925,18 @@ from rh_empelados2
 WHERE no_trab <> ''
 
 SELECT * FROM tbdatos_empleados
-SELECT * FROM tbempleados WHERE numero_nomina = '26550'
-SELECT * FROM PJEMPLOY WHERE employee ='26550'
-SELECT * FROM PJEMPPJT WHERE employee ='26550'
+SELECT * FROM tbempleados WHERE numero_nomina = '77777'
+SELECT * FROM PJEMPLOY WHERE employee ='77777'
+SELECT * FROM PJEMPPJT WHERE employee ='77777'
 
 select * FROM PJEMPPJT WHERE employee = '08444'
 select MAX(CAST(employee AS INT)) AS numeroNomina FROM PJEMPPJT WHERE ISNUMERIC(employee) = 1
 
 /*
 TRUNCATE TABLE tbdatos_empleados
-DELETE FROM tbempleados WHERE numero_nomina = '26548'
-DELETE FROM PJEMPLOY WHERE employee = '26548'
-DELETE FROM PJEMPPJT WHERE employee = '26548'
+DELETE FROM tbempleados WHERE numero_nomina = '26550'
+DELETE FROM PJEMPLOY WHERE employee = '26550'
+DELETE FROM PJEMPPJT WHERE employee = '26550'
 */
 SELECT REPLACE(employee,' ','') AS employee,emp_status FROM PJEMPLOY
 
@@ -946,7 +946,7 @@ EXEC insertEmployeeData '88888','HERNANDEZ IBARRA GABRIELA','gabriela','hernande
 						'g@gmail.com','9128574','4493216547','Juana Ibarra','4498754631',0;
 
 /**insert empleados en PJEMPLOY / TBEMPLEADOS / TBEMPLEADOS_DATOIS**/
-ALTER PROCEDURE insertEmployeeData(
+CREATE PROCEDURE insertEmployeeData(
 								@nnomina varchar(10), 
 								@nlargo varchar(85), 
 								@nombre varchar(35), 
