@@ -1086,5 +1086,9 @@ BEGIN TRY
   ROLLBACK
  END CATCH
 
+SELECT * FROM rh_empelados2
 
- UPDATE tbpuesto SET id_celula = 5 WHERE id_puesto = 42
+
+ SELECT top 1 b.nombre,puesto,convert(varchar,fecha_alta) AS empAlta,telefono_emergencia as a , no_trab,no_imss,cp,calle,numero, fraccionamiento,estado,municipio,a.dv,a.telefono_emergencia  from rh_empelados2  as a  inner join 
+                            (select emp_name as nombre,* from pjemploy ) as b on a.no_trab = b.employee
+                            where employee = '19905' order by fecha_alta desc
