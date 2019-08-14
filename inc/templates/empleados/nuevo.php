@@ -4,7 +4,7 @@
     <div class="form-row">
       <div class="form-group col-md-2">
         <label for="txtNomina">Número de nomina</label>
-        <input type="text" class="form-control" id="txtNomina" placeholder="Nomina">
+        <input type="text" class="form-control" id="txtNomina" placeholder="Nomina" readonly>
       </div>
       <div class="form-group col-md-2">
         <label for="txtTipo">Tipo</label>
