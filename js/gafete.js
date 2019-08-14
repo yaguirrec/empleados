@@ -3,6 +3,8 @@ let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php
 //VARIABLE QUE GUARADARA LOS PARAMETROS DE LA URL
 let searchParams = new URLSearchParams(window.location.search);
 let check = searchParams.has('emp'); // SI ALGUN PARAMETRO ES IGUAL A emp LA VARIABLE SERA true
+let botonImprimir = $('#btnPrint');
+let seccionBotonImprimir = $('.seccionBotonImprimir');
 
 
 if (check) {
@@ -37,3 +39,9 @@ if (check) {
     // SI NO EXISTE UN  PARAMETRO CIERRA LA PESTAÑA
     window.close();
 }
+
+botonImprimir.on('click',function(){
+    // console.log('dsadasdasd');
+    botonImprimir.addClass('d-none');
+    window.print();
+});
