@@ -25,13 +25,14 @@ if (check) {
             telefonoEmergencia = `${telefonoEmergencia.substr(0, 3)} - ${telefonoEmergencia.substr(3, 3)} - ${telefonoEmergencia.substr(6, 4)}`;
             $("#empFoto").attr("src","assets/files/" + nomina + "/" + nomina + ".jpg");
             $("#empNombre").html(informacion.nombre);
+            $("#empNumero").html(nomina);
             $("#empPuesto").html(informacion.puesto);
             $("#empAlta").html('Ingreso: ' + informacion.empAlta);
             $("#empNS").html(imss);
             $("#empEmergencia").html(telefonoEmergencia);
             $("#empDireccion").html(`Calle ${informacion.calle} #${informacion.numero}  <br/> Fracc. ${informacion.fraccionamiento} <br/> C.P. ${informacion.cp} ${informacion.estado}`);
             // $("#empNomina").attr("src",url);
-            JsBarcode("#empNomina", nomina,{lineColor: "#052467", font: "arial"});
+            JsBarcode("#empNomina", nomina,{lineColor: "#052467", font: "arial",displayValue: false});
         }
     });
 
