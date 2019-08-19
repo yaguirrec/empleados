@@ -100,7 +100,7 @@ $( document ).ready(function() {
         var action = 'salir';
         var cerrar_sesion = new FormData();
         cerrar_sesion.append('action', action);
-        var xmlhr = new XMLHttpRequest();w 
+        var xmlhr = new XMLHttpRequest();
         xmlhr.open( 'POST', 'inc/model/control.php', true );
         xmlhr.onload = function(){
             if (this.status === 200){
@@ -326,7 +326,7 @@ $( document ).ready(function() {
                                 seccionEnvioAltas.removeClass('d-none');
                                 for(var i in informacion){
                                     tablaAltas(informacion[i]);
-                                    datosEmpleados[i] = `${informacion[i].numeroNomina} - ${informacion[i].nombre_largo}.`;
+                                    datosEmpleados[i] = `${informacion[i].numero_nomina} - ${informacion[i].nombre_largo}.`;
                                 }    
                             } 
                         } else if(respuesta.status === 'error'){
@@ -341,7 +341,7 @@ $( document ).ready(function() {
                         var row = $("<tr>");
                         
                         $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
-                        row.append($("<td class='trCode'>" + rowInfo.numeroNomina + " </td>"));
+                        row.append($("<td class='trCode'>" + rowInfo.numero_nomina + " </td>"));
                         row.append($("<td class='text-left'> " + rowInfo.nombre_largo + " </td>"));
                         row.append($("<td class='text-left'> " + rowInfo.puesto + " </td>"));
                         row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
@@ -359,8 +359,7 @@ $( document ).ready(function() {
                     url: localBackend + 'sender.php', 
                     data: { action: action, fecha: fecha, datos: datosEmpleados },
                     success: function(response) {
-                        let respuesta = JSON.parse(response);
-                        console.log(respuesta);
+                        // let respuesta = JSON.parse(response);
                     }
                 });
                 Swal.fire({

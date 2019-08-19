@@ -12,7 +12,7 @@ switch ($action){
         $datos = $_POST['datos'];
         $headers = 'Content-Type: text/html; charset=UTF-8';
         foreach($datos as $dato){
-            $datos .=$dato . "\n";
+            $datos .=$dato . PHP_EOL;
         }
         $contenido = 	'
 						<html>
