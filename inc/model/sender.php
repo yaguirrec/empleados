@@ -4,7 +4,7 @@ $action  = $_POST['action'];
 switch ($action){
         
     case 'envioAltas':
-        die(json_encode($_POST));
+        // die(json_encode($_POST));
         $fechaAlta = $_POST['fechaAlta'];
         $correo_destinatario = 'cesar.fonseca20@outlook.com';
         $nombre_destinatario = 'César Valenciano';

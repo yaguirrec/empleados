@@ -324,7 +324,6 @@ $( document ).ready(function() {
                             {
                                 $('#alertaM').addClass('d-none');
                                 seccionEnvioAltas.removeClass('d-none');
-                                console.log(informacion);
                                 for(var i in informacion){
                                     tablaAltas(informacion[i]);
                                     datosEmpleados[i] = `${informacion[i].numeroNomina} - ${informacion[i].nombre_largo}.`;
