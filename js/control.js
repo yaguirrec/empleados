@@ -7,7 +7,8 @@ $( document ).ready(function() {
     let seccionBuscar = $( ".seccionBuscar" );
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
-    let localBackend = 'inc/model/control.php';
+    let localBackend = 'inc/model/';
+    let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
     let url_dev = 'http://localhost/';
 
@@ -99,7 +100,7 @@ $( document ).ready(function() {
         var action = 'salir';
         var cerrar_sesion = new FormData();
         cerrar_sesion.append('action', action);
-        var xmlhr = new XMLHttpRequest();
+        var xmlhr = new XMLHttpRequest();w 
         xmlhr.open( 'POST', 'inc/model/control.php', true );
         xmlhr.onload = function(){
             if (this.status === 200){
@@ -289,9 +290,11 @@ $( document ).ready(function() {
                 });        
             }
             break;
+            // ENVIAR ALTAS A NOMINAS
             case 'altas':
                 let btnConsultarAltas = $('#btnConsultaAltas'),
-                    btnEnviarAltas = $('#btnEnviarAltas');
+                    btnEnviarAltas = $('#btnEnviarAltas'),
+                    datosEmpleados = [];
                 obtenerAltas();
                 btnConsultarAltas.on('click',function(e){
                     e.preventDefault();
@@ -321,8 +324,10 @@ $( document ).ready(function() {
                             {
                                 $('#alertaM').addClass('d-none');
                                 seccionEnvioAltas.removeClass('d-none');
+                                console.log(informacion);
                                 for(var i in informacion){
                                     tablaAltas(informacion[i]);
+                                    datosEmpleados[i] = `${informacion[i].numeroNomina} - ${informacion[i].nombre_largo}.`;
                                 }    
                             } 
                         } else if(respuesta.status === 'error'){
@@ -337,17 +342,28 @@ $( document ).ready(function() {
                         var row = $("<tr>");
                         
                         $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
-                        row.append($("<td class='trCode'>" + rowInfo.numero_nomina + " </td>"));
-                        row.append($("<td class='text-left'> " + rowInfo.Nombre + " </td>"));
-                        row.append($("<td class='text-left'> " + rowInfo.Puesto + " </td>"));
+                        row.append($("<td class='trCode'>" + rowInfo.numeroNomina + " </td>"));
+                        row.append($("<td class='text-left'> " + rowInfo.nombre_largo + " </td>"));
+                        row.append($("<td class='text-left'> " + rowInfo.puesto + " </td>"));
                         row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
-                        row.append($("<td> " + rowInfo.Sucursal + " </td>"));
-                        row.append($("<td> " + rowInfo.Celula + " </td>"));
+                        row.append($("<td> " + rowInfo.sucursal + " </td>"));
+                        row.append($("<td> " + rowInfo.planta + " </td>"));
                     }
                 }
 
             btnEnviarAltas.click(function(e){
                 e.preventDefault();
+                var action = 'envioAltas',
+                    fecha = $('#txtFechaAltas').val();;
+                $.ajax({
+                    type: 'POST',
+                    url: localBackend + 'sender.php', 
+                    data: { action: action, fecha: fecha, datos: datosEmpleados },
+                    success: function(response) {
+                        let respuesta = JSON.parse(response);
+                        console.log(respuesta);
+                    }
+                });
                 Swal.fire({
                     position: 'center',
                     type: 'success',
@@ -403,7 +419,7 @@ $( document ).ready(function() {
 
                 $.ajax({
                     type: 'POST',
-                    url: localBackend, 
+                    url: localBackend + 'control.php', 
                     data: { action: action, nomina : nomina },
                     success: function(response) {
                         var respuesta = JSON.parse(response);

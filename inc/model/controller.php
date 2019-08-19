@@ -303,14 +303,14 @@
         break;
         case 'altas':
             $props = $_POST['prop'];
-            $query = "SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
+            $query = "SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS nombre_largo, 
                         CASE
                             WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
                             THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
                             ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
-                        END AS Puesto,
+                        END AS puesto,
                         CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
-                        ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
+                        ts.nombre AS 'sucursal',ta.nombre AS 'Departamento',tc.nombre as 'planta',te.status,te.created_at
                         FROM tbempleados AS te
                         INNER JOIN tbsucursal AS ts
                         ON te.id_sucursal = ts.id_sucursal 

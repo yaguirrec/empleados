@@ -67,9 +67,11 @@ GO
 select top 1 * from rh_empelados2
 
 DROP TABLE tbdatos_empleados
+SELECT * FROM tbdatos_empleados
+TRUNCATE TABLE tbdatos_empleados
 
 /**CREAR TABLA DATOS EMPLEADOS*/
-USE [MEXQApppr]
+USE [MEXQApptemp]
 GO
 SET ANSI_NULLS ON
 GO
@@ -85,7 +87,7 @@ CREATE TABLE [dbo].[tbdatos_empleados](
 	[lote] [varchar](15) DEFAULT '',
 	[dv] [varchar](3),
 	[lugar_nacimiento] [varchar](45),
-	[identificacion] [varchar](15),
+	[identificacion] [varchar](45),
 	[numero_identificacion] [varchar](65),
 	[estado_civil] [varchar](5),
 	[escolaridad] [varchar](25),
@@ -911,16 +913,16 @@ select TOP 10 no_trab AS A, * from rh_empelados2 WHERE interior <> '' ORDER BY f
 select TOP 40 * from rh_empelados2
 select * from [vDatosEmpleados] where codigopostal <> 0
 
-select top 45 REPLACE(no_trab,' ','') as NOMINA,REPLACE(REPLACE(categoria,'$',''),' ','') AS categoria,SUBSTRING(nomina,1,1) AS nomina,
+select REPLACE(no_trab,' ','') as NOMINA,REPLACE(REPLACE(categoria,'$',''),' ','') AS categoria,SUBSTRING(nomina,1,1) AS nomina,
 SUBSTRING(clasificacion,1,1) AS clasificacion,REPLACE(registro,' ',''),REPLACE(lote,' ','') AS lote,REPLACE(dv,' ','') AS dv,REPLACE(lugar_nacimiento,' ','') AS lugar_nacimiento,'ID',
 REPLACE(ide_oficial,' ','') AS ide_oficial,
 SUBSTRING(estado_civil,1,1) AS estado_civil,REPLACE(escolaridad,' ','') AS escolaridad,'constancia_escolar',
 CONCAT(REPLACE(ape_pat_padre,' ',''),' ',REPLACE(ape_mat_padre,' ',''),' ',REPLACE(nombres_padre,' ','')) AS nombre_padre,
 CONCAT(REPLACE(ape_pat_madre,' ',''),' ',REPLACE(ape_mat_madre,' ',''),' ',REPLACE(nombres_madre,' ','')) AS nombre_madre,
-REPLACE(calle,' ','') AS calle,REPLACE(interior,' ','') AS interior,REPLACE(numero,' ','') AS exterior,REPLACE(fraccionamiento,' ','') AS fraccionamiento,'domicilio',REPLACE(cp,' ','') AS cp,REPLACE(estado,' ','') AS estado,
-REPLACE(municipio,' ','') AS municipio,REPLACE(localidad,' ','') AS localidad,
+RTRIM(calle) AS calle,REPLACE(numero,' ','') AS exterior,REPLACE(interior,' ','') AS interior,RTRIM(fraccionamiento) AS fraccionamiento,'domicilio',REPLACE(cp,' ','') AS cp,RTRIM(estado) AS estado,
+RTRIM(municipio) AS municipio,RTRIM(localidad) AS localidad,
 REPLACE(infonavit,' ','') AS infonavit,REPLACE(no_infonavit,' ','') AS no_infonavit,REPLACE(fonacot,' ','') AS fonacot,REPLACE(no_fonacot,' ','') AS no_fonacot,REPLACE(tarjeta_nomina,' ','') AS tarjeta_nomina,REPLACE(cuenta,' ','') AS cuenta,
-REPLACE(correo_electronico,' ','') AS correo_electronico,REPLACE(telefono_casa,' ','') AS telefono_casa,REPLACE(celular,' ','') AS celular,REPLACE(telefono_emergencia,' ','') AS telefono_emergencia,'','',GETDATE()
+REPLACE(correo_electronico,' ','') AS correo_electronico,REPLACE(telefono_casa,' ','') AS telefono_casa,REPLACE(celular,' ','') AS celular,REPLACE(telefono_emergencia,' ','') AS telefono_emergencia
 from rh_empelados2
 WHERE no_trab <> ''
 
@@ -933,6 +935,7 @@ select * FROM PJEMPPJT WHERE employee = '08444'
 select MAX(CAST(employee AS INT)) AS numeroNomina FROM PJEMPPJT WHERE ISNUMERIC(employee) = 1
 
 /*
+SELECT * FROM tbdatos_empleados
 TRUNCATE TABLE tbdatos_empleados
 DELETE FROM tbempleados WHERE numero_nomina = '77777'
 DELETE FROM PJEMPLOY WHERE employee = '77777'
@@ -1089,9 +1092,30 @@ BEGIN TRY
   ROLLBACK
  END CATCH
 
-SELECT * FROM rh_empelados2
+ SELECT top 5  * FROM tbdatos_empleados
 
-
- SELECT top 1 b.nombre,puesto,convert(varchar,fecha_alta) AS empAlta,telefono_emergencia as a , no_trab,no_imss,cp,calle,numero, fraccionamiento,estado,municipio,a.dv,a.telefono_emergencia  from rh_empelados2  as a  inner join 
-                            (select emp_name as nombre,* from pjemploy ) as b on a.no_trab = b.employee
-                            where employee = '19905' order by fecha_alta desc
+SELECT TOP 10 
+CONCAT(ts.codigo,' - ',ts.nombre) AS sucursal,tc.nombre AS planta,tc.codigo AS 'claveSocio',
+CONVERT(VARCHAR(10), te.fecha_alta, 105) AS 'fechaAlta',tp.nombre AS puesto,
+td.clasificacion,td.nomina,td.registro_patronal,td.categoria,
+te.status,te.numero_nomina AS 'No. Nomina',UPPER(te.apellido_paterno) AS 'apellidoPaterno',UPPER(te.apellido_materno) AS 'apellidoMaterno',te.nombre AS nombreEmpleado,
+te.fecha_nacimiento AS fechaNacimiento,td.municipio,td.estado,td.lugar_nacimiento,te.sexo,
+CONCAT(te.rfcini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.rfcfin) AS RFC,
+CONCAT(te.curpini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.curpfin) AS CURP,
+te.nss AS IMSS,td.numero_identificacion,td.estado_civil,td.escolaridad,
+td.nombre_padre,td.nombre_madre,
+td.calle,td.numero_exterior,td.numero_interior,td.fraccionamiento,td.codigo_postal,td.localidad,td.municipio,td.estado,
+td.cuenta,td.numero_cuenta,td.infonavit,td.numero_infonavit,td.fonacot,td.numero_fonacot,td.correo,td.celular,td.telefono
+            FROM tbempleados AS te
+            INNER JOIN tbsucursal AS ts
+            ON te.id_sucursal = ts.id_sucursal 
+            INNER JOIN tbcelula AS tc
+            ON tc.id_celula = te.id_celula
+            INNER JOIN tbarea AS ta
+            ON ta.codigo = tc.codigo_area
+			INNER JOIN tbpuesto AS tp
+			ON te.id_puesto = tp.id_puesto
+			INNER JOIN tbdatos_empleados AS td
+			ON td.numero_nomina = te.numero_nomina
+            AND te.status <> 'B'
+            ORDER BY te.status ASC, te.created_at DESC
