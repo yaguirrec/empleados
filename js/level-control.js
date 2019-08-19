@@ -9,6 +9,7 @@ $( document ).ready(function() {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let usuario_activo = document.querySelector('#emp_activo').value;
     let super_activo = document.querySelector('#sup_activo').value;
+    let usuario_correo = document.querySelector('#usuario_correo').value;
 
     let backButton = $( "#backButton" ),
         seccionLateral = $("#sidePaneAdmin"),
@@ -19,7 +20,7 @@ $( document ).ready(function() {
         rh1 = $(".rh1"),
         rh2 = $(".rh2");
 
-    console.log('mi nivel ' + nivel_usuario);
+    console.log('mi correo ' + usuario_correo + '@mexq.com.mx');
 
     switch (nivel_usuario){
         case '': 

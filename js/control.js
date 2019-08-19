@@ -353,11 +353,12 @@ $( document ).ready(function() {
             btnEnviarAltas.click(function(e){
                 e.preventDefault();
                 var action = 'envioAltas',
-                    fecha = $('#txtFechaAltas').val();;
+                    fecha = $('#txtFechaAltas').val(),
+                    cc = $('#usuario_correo').val();
                 $.ajax({
                     type: 'POST',
                     url: localBackend + 'sender.php', 
-                    data: { action: action, fecha: fecha, datos: datosEmpleados },
+                    data: { action: action, fecha: fecha, datos: datosEmpleados, cc: cc },
                     success: function(response) {
                         // let respuesta = JSON.parse(response);
                     }

@@ -5,6 +5,7 @@
         $_SESSION['usuario_activo'] = $_GET['id'];
         $_SESSION['usuario_nombre'] = $_GET['name'];
         $_SESSION['usuario_nivel'] = $_GET['nivel'];
+        $_SESSION['usuario_correo'] = $_GET['correo'];
         $_SESSION['login'] = true;
     }
 ?>

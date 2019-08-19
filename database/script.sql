@@ -64,7 +64,28 @@ CREATE TABLE [dbo].[tbsucursal](
 	[updated_by] [char](10) DEFAULT '00001'
 ) ON [PRIMARY]
 GO
-select top 1 * from rh_empelados2
+
+/*CREAR TABLA ESTADO*/
+USE [MEXQApptemp]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbestado](
+	[id_estado] [int] IDENTITY(1,1) NOT NULL,
+	[tipo] [varchar](50) DEFAULT '',
+	[estado] [int] DEFAULT 0,
+	[descripcion] [varchar](100) DEFAULT '',
+	[comentario] [text] DEFAULT '',
+	[fecha] [datetime],
+	[created_at] [datetime],
+	[created_by] [char](10) DEFAULT '00001',
+	[updated_at] [datetime] default GETDATE(),
+	[updated_by] [char](10) DEFAULT '00001'
+) ON [PRIMARY]
+GO
+
 
 DROP TABLE tbdatos_empleados
 SELECT * FROM tbdatos_empleados
@@ -588,14 +609,14 @@ tb 34 nomipaq
 /*CONSULTAS*/
 SELECT * FROM PJEMPLOY WHERE employee = '08444'
 SELECT TOP 1 * FROM [vEmpleadosNM] where codigoempleado = '08444' ORDER BY fechaCaptura DESC 
-SELECT * FROM tbempleados where numero_nomina = '08444' ORDER BY updated_at DESC
-UPDATE tbempleados SET status = 'B' where numero_nomina = '08444'
+SELECT * FROM tbempleados where numero_nomina = '23515' ORDER BY updated_at DESC
 SELECT * FROM tbsucursal
 SELECT * FROM tbarea
 SELECT * FROM tbcelula
 SELECT id_celula,nombre FROM tbcelula WHERE codigo LIKE '99COR%' OR id_celula = 5 ORDER BY codigo
-SELECT * FROM tbcorreos
+SELECT * FROM tbcorreos order by created_at
 SELECT * FROM tbpuesto
+SELECT * FROM tbestado
 SELECT * FROM tbtipopuesto
 SELECT id_puesto,nivel,nombre FROM tbtipopuesto WHERE id_puesto > 1 ORDER BY id_puesto DESC
 SELECT * FROM tbprivilegios_emp
@@ -1092,7 +1113,8 @@ BEGIN TRY
   ROLLBACK
  END CATCH
 
- SELECT top 5  * FROM tbdatos_empleados
+SELECT * FROM tbempleados where fecha_alta > '2019-07-01'
+
 
 SELECT TOP 10 
 CONCAT(ts.codigo,' - ',ts.nombre) AS sucursal,tc.nombre AS planta,tc.codigo AS 'claveSocio',
@@ -1105,7 +1127,29 @@ CONCAT(te.curpini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimie
 te.nss AS IMSS,td.numero_identificacion,td.estado_civil,td.escolaridad,
 td.nombre_padre,td.nombre_madre,
 td.calle,td.numero_exterior,td.numero_interior,td.fraccionamiento,td.codigo_postal,td.localidad,td.municipio,td.estado,
-td.cuenta,td.numero_cuenta,td.infonavit,td.numero_infonavit,td.fonacot,td.numero_fonacot,td.correo,td.celular,td.telefono
+td.cuenta,td.numero_cuenta,td.infonavit,td.numero_infonavit,td.fonacot,td.numero_fonacot,td.correo,td.celular,td.telefono,te.nombre_largo
+FROM tbempleados AS te
+INNER JOIN tbsucursal AS ts
+ON te.id_sucursal = ts.id_sucursal 
+INNER JOIN tbcelula AS tc
+ON tc.id_celula = te.id_celula
+INNER JOIN tbarea AS ta
+ON ta.codigo = tc.codigo_area
+INNER JOIN tbpuesto AS tp
+ON te.id_puesto = tp.id_puesto
+INNER JOIN tbdatos_empleados AS td
+ON td.numero_nomina = te.numero_nomina
+AND te.status <> 'B' AND te.fecha_alta = '2019-08-01'
+ORDER BY te.status ASC, te.created_at DESC
+
+SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS nombre_largo, 
+            CASE
+                WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
+                THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
+                ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+            END AS puesto,
+            CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
+            ts.nombre AS 'sucursal',ta.nombre AS 'Departamento',tc.nombre as 'planta',te.status,te.created_at
             FROM tbempleados AS te
             INNER JOIN tbsucursal AS ts
             ON te.id_sucursal = ts.id_sucursal 
@@ -1113,9 +1157,5 @@ td.cuenta,td.numero_cuenta,td.infonavit,td.numero_infonavit,td.fonacot,td.numero
             ON tc.id_celula = te.id_celula
             INNER JOIN tbarea AS ta
             ON ta.codigo = tc.codigo_area
-			INNER JOIN tbpuesto AS tp
-			ON te.id_puesto = tp.id_puesto
-			INNER JOIN tbdatos_empleados AS td
-			ON td.numero_nomina = te.numero_nomina
-            AND te.status <> 'B'
+            AND te.status <> 'B' AND te.fecha_alta = '2019-08-09'
             ORDER BY te.status ASC, te.created_at DESC
