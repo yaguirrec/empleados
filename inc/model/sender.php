@@ -5,15 +5,15 @@ switch ($action){
         
     case 'envioAltas':
         // die(json_encode($_POST));
-        $fechaAlta = $_POST['fechaAlta'];
+        $fecha = $_POST['fecha'];
         $cc = $_POST['cc'];
         $correo_destinatario = 'cesar.fonseca20@outlook.com';
-        $nombre_destinatario = 'César Valenciano';
-        $asunto = 'Envio de altas '.$fechaAlta;
+        $asunto = 'Envio de altas '. $fecha;
         $datos = $_POST['datos'];
         $headers  = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-Type: text/html; charset=UTF-8' . "\r\n";
-        // $headers .= 'Cc: '.$cc.'@mexq.com.mx' . "\r\n";
+        // $headers .= 'To: Mary <mary@example.com>, Kelly <kelly@example.com>' . "\r\n";
+        $headers .= 'Cc: '.$cc.'@mexq.com.mx' . "\r\n";
         foreach($datos as $dato){
             $data .= $dato . '</br>';
         }
@@ -25,7 +25,7 @@ switch ($action){
 								<title>'.$asunto.'</title>
 							</head>
 							<body>
-                                <p>Hola '. $nombre_destinatario .'</p>
+                                <p>Envio de altas de la fecha '. $fecha .'</p>
                                 <p>Altas de empleado(s):</p> 
                                 <p>'. 
                                 $data
@@ -35,7 +35,7 @@ switch ($action){
 							</body>
 						</html>
                         ';
-        mail ($correo_destinatario, $asunto, $contenido, $headers, '-f contacto@mexq.com.mx');
+        mail ($correo_destinatario, $asunto, $contenido, $headers, '-f '.$cc.'@mexq.com.mx');
     break;
     default:
     break;
