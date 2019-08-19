@@ -11,6 +11,9 @@ switch ($action){
         $asunto = 'Envio de altas '.$fechaAlta;
         $datos = $_POST['datos'];
         $headers = 'Content-Type: text/html; charset=UTF-8';
+        foreach($datos as $dato){
+            $datos .=$dato . "\n";
+        }
         $contenido = 	'
 						<html>
 							<head>
@@ -20,7 +23,7 @@ switch ($action){
 							</head>
 							<body>
                                 <p>Hola '. $nombre_destinatario .'</p>
-								<p>altas del empleado(s) '. $datos .'</p>
+								<p>Altas de empleado(s):</p> <p>'. $datos .'</p>
 								<p>En el siguiente link podra acceder sistema web de empleados</p>
 								<a href="http://mexq.mx/empleados">Verificar altas</a>
 							</body>
