@@ -57,7 +57,7 @@
             <a class="collapse-item" href="index.php?request=bajas">Empleados inactivos</a>
             <hr class="sidebar-divider">
             <h6 class="collapse-header">Administrar registros:</h6>
-            <a class="collapse-item rh2 d-none" href="index.php?request=alta-empleado">Alta de empleado</a>
+            <a class="collapse-item" href="index.php?request=alta-empleado">Alta de empleado</a>
             <a class="collapse-item" href="index.php?request=altas">Administrar Altas</a>
           </div>
         </div>

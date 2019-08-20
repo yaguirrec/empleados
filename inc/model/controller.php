@@ -47,6 +47,7 @@
                         $usuario_activo = trim($row['numero_nomina']);
                         $usuario_nivel = trim($row['nivel']);
                         $usuario_departamento = trim($row['id_area']);
+                        $usuario_correo = trim($row['correo']);
                         $usuario_nombre = trim(ucwords(strtolower($row['nombre_largo'])));
                         $sesion = true;
 
@@ -61,6 +62,7 @@
                             'usuario_activo' => $usuario_activo,
                             'usuario_departamento' => $usuario_departamento,
                             'usuario_nombre'    => $usuario_nombre,
+                            'usuario_correo'    => $usuario_correo,
                             'usuario_nivel'    => $usuario_nivel,
                             'sesion' => $sesion
                         );
@@ -303,14 +305,19 @@
         break;
         case 'altas':
             $props = $_POST['prop'];
-            $query = "SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS nombre_largo, 
-                        CASE
-                            WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
-                            THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
-                            ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
-                        END AS puesto,
-                        CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
-                        ts.nombre AS 'sucursal',ta.nombre AS 'Departamento',tc.nombre as 'planta',te.status,te.created_at
+            $query = "SELECT
+                        CONCAT(ts.codigo,' - ',ts.nombre) AS sucursal,tc.nombre AS planta,tc.codigo AS 'claveSocio',
+                        CONVERT(VARCHAR(10), te.fecha_alta, 105) AS 'fechaAlta',tp.nombre AS puesto,
+                        td.clasificacion,td.nomina,td.registro_patronal,td.categoria,td.lote,
+                        te.status,te.numero_nomina,UPPER(te.apellido_paterno) AS 'apellidoPaterno',UPPER(te.apellido_materno) AS 'apellidoMaterno',te.nombre AS nombreEmpleado,
+                        te.nombre_largo,
+                        te.fecha_nacimiento AS fechaNacimiento,td.municipio,td.estado,td.lugar_nacimiento,te.sexo,
+                        CONCAT(te.rfcini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.rfcfin) AS RFC,
+                        CONCAT(te.curpini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.curpfin) AS CURP,
+                        te.nss AS IMSS,td.numero_identificacion,td.estado_civil,td.escolaridad,
+                        td.nombre_padre,td.nombre_madre,
+                        td.calle,td.numero_exterior,td.numero_interior,td.fraccionamiento,td.codigo_postal,td.localidad,td.municipio,td.estado,
+                        td.cuenta,td.numero_cuenta,td.infonavit,td.numero_infonavit,td.fonacot,td.numero_fonacot,td.correo,td.celular,td.telefono
                         FROM tbempleados AS te
                         INNER JOIN tbsucursal AS ts
                         ON te.id_sucursal = ts.id_sucursal 
@@ -318,8 +325,13 @@
                         ON tc.id_celula = te.id_celula
                         INNER JOIN tbarea AS ta
                         ON ta.codigo = tc.codigo_area
+                        INNER JOIN tbpuesto AS tp
+                        ON te.id_puesto = tp.id_puesto
+                        INNER JOIN tbdatos_empleados AS td
+                        ON td.numero_nomina = te.numero_nomina
                         AND te.status <> 'B' AND te.fecha_alta = ?
                         ORDER BY te.status ASC, te.created_at DESC";
+
             $params = array($props);
 
             $stmt = sqlsrv_query( $con, $query, $params);
@@ -352,6 +364,43 @@
             sqlsrv_free_stmt( $stmt);
             sqlsrv_close( $con );
 
+        break;
+        case 'envioAcuse':
+            // die(json_encode($_POST));
+            $fecha = $_POST['fecha'];
+            $nombreAdjuntoAcuse = $_POST['nombreAdjuntoAcuse'];
+
+            $update = "UPDATE tbdatos_empleados SET lote = ? WHERE numero_nomina IN
+                        ( 
+                        SELECT te.numero_nomina FROM tbempleados AS te
+                        INNER JOIN tbdatos_empleados AS td
+                        ON te.numero_nomina = td.numero_nomina
+                        AND te.fecha_alta = ?
+                        )";
+
+            $params = array($nombreAdjuntoAcuse,$fecha);
+
+            $stmt = sqlsrv_query( $con, $update, $params);
+
+            if( $stmt ) {
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => 'Datos actualizados',
+                    'mensaje' => 'Lote actualizado'                  
+                );
+            } 
+            else {
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'             
+                );
+            }               
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt($stmt);
+            sqlsrv_close($con);
         break;
         case 'buscar-texto':
             // die(json_encode($_POST));
@@ -1295,7 +1344,7 @@
             case 'datos-gafete':
                 // die(json_encode($_POST));
                 $nomina =  $_POST['nomina'];
-                $query = "SELECT top 1 b.nombre,puesto,convert(varchar,fecha_alta) AS empAlta,telefono_emergencia as a , no_trab,no_imss,cp,calle,numero, fraccionamiento,estado,municipio,a.dv  from rh_empelados2  as a  inner join 
+                $query = "SELECT top 1 b.nombre,puesto,convert(varchar,fecha_alta) AS empAlta,telefono_emergencia as a , no_trab,no_imss,cp,calle,numero, fraccionamiento,estado,municipio,a.dv,telefono_emergencia  from rh_empelados2  as a  inner join 
                             (select emp_name as nombre,* from pjemploy ) as b on a.no_trab = b.employee
                             where employee = ? order by fecha_alta desc";
 

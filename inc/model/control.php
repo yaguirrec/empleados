@@ -41,7 +41,7 @@ switch($action)
                     'estado' => 'NOK'
                 );
             }
-
+        break;
         case 'revisarImagen':
             // die(json_encode($_POST));
             $ruta = '../../assets/files/';
@@ -57,6 +57,31 @@ switch($action)
             }
                 
             echo json_encode($respuesta);
+        break;
+        case 'envioAcuse':
+            // die(json_encode($_POST));
+            // $adjuntoAcuse = $_POST['adjuntoAcuse'];
+            $nombreAdjuntoAcuse = $_POST['nombreAdjuntoAcuse'];
+            
+            if(isset($_FILES["adjuntoAcuse"]["name"])){
+                $respuesta = array(
+                    'estado' => 'OK'
+                );
+                $directorio = '../../assets/attached';
+                $targetDir = $directorio."/";       
+                if(!file_exists($directorio))
+                {
+                    mkdir($directorio, 0777,true);
+                }
+                $temp = explode(".", $_FILES["adjuntoAcuse"]["name"]);
+                $newfilename = $nombreAdjuntoAcuse . '.' . end($temp);
+                
+                move_uploaded_file($_FILES["adjuntoAcuse"]["tmp_name"], $targetDir . $newfilename);
+            } else {
+                $respuesta = array(
+                    'estado' => 'NOK'
+                );
+            }
         break;
         default:
             $respuesta = array(

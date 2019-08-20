@@ -7,7 +7,7 @@ $( document ).ready(function() {
     let seccionBuscar = $( ".seccionBuscar" );
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -357,6 +357,7 @@ $( document ).ready(function() {
                         row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
                         row.append($("<td> " + rowInfo.sucursal + " </td>"));
                         row.append($("<td> " + rowInfo.planta + " </td>"));
+                        row.append($("<td><a href='assets/attached/" + rowInfo.lote + ".pdf' target='_blank'>" + rowInfo.lote + "</a></td>"));
                     }
                 }
 
@@ -406,44 +407,44 @@ $( document ).ready(function() {
                     if (this.status === 200 && this.readyState == 4) {
                         var respuesta = JSON.parse(xhr.responseText);
                         console.log(respuesta);
-                        // if (respuesta.estado === 'OK') {
-                        //     var destination = respuesta.log;
-                        //     swal({
-                        //             title: 'Modificación exitosa!',
-                        //             text: 'Modificación de la información exitosa!',
-                        //             type: 'success'
-                        //         })
-                        //         .then(resultado => {
-                        //                 if(resultado.value) {
-                        //                     location.reload();
-                        //                     // window.location.href = 'index.php?request='+destination;
-                        //                     window.close();
-                        //                 }
-                        //             })
-                        // } else {
-                        //     // Hubo un error
-                            
-                        //     swal({
-                        //         title: 'Error!',
-                        //         text: 'Hubo un error',
-                        //         type: 'error'
-                        //     })
-                        // }
+                        if (respuesta.estado === 'OK') {
+                            Swal.fire({
+                                    title: 'Alta exitosa!',
+                                    text: 'Alta de acuse exitosa!',
+                                    type: 'success'
+                                })
+                                .then(resultado => {
+                                        if(resultado.value) {
+                                            location.reload();
+                                        }
+                                    })
+                        } else {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Hubo un error',
+                                type: 'error'
+                            })
+                        }
+                    }
+                }
+
+                var archivoAcuse = new FormData();
+                archivoAcuse.append('action', action);
+                archivoAcuse.append('adjuntoAcuse', adjuntoAcuse);
+                archivoAcuse.append('nombreAdjuntoAcuse', nombreAdjuntoAcuse);
+
+                var xhtr = new XMLHttpRequest();
+                xhtr.open('POST', localBackend + 'control.php' , true);
+                xhtr.send(archivoAcuse);
+                xhtr.onload = function(){
+                    if (this.status === 200 && this.readyState == 4) {
+                        // var respuesta = JSON.parse(xhtr.responseText);
+                        // console.log(respuesta);
                     }
                 }
 
 
 
-
-                // $.ajax({
-                //     type: 'POST',
-                //     url: backendURL, 
-                //     data: { action: action, fecha: fecha, adjuntoAcuse: adjuntoAcuse },
-                //     success: function(response) {
-                //         let respuesta = JSON.parse(response);
-                //         console.log(respuesta);
-                //     }
-                // });
             });
 
             break;
