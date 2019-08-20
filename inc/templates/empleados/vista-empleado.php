@@ -32,23 +32,27 @@
       </div>
     </div>
 
-    <hr>
-    <div class="rh2">
-      <div class="row divMenu">
+    <br>
+
+    <div class="col-sm">
+      <div class="nav-item row laborales d-none">
         <div class="col-md-12">
-          <?php include 'inc/templates/empleados/menu.php'; ?>
-        </div>
-      </div>
-    <hr>
-      <div class="row divGafete d-none">
-        <div class="col-md-12 divPrint">
           <?php include 'inc/templates/empleados/gafete.php'; ?>
         </div>
       </div>
     <hr>
+      <div class="row">
+        <div class="nav-item col-md-12">
+          <?php include 'inc/templates/empleados/menu.php'; ?>
+        </div>
+      </div>
+
+    <hr>
     
-    <div class="row btnRegresar px-5" id="backButton">
-      <a href="javascript:history.back();" class="btn btn-secondary btn-block px-5">Regresar</a>
+    <div class="row btnRegresar rh nominas laborales d-none" id="backButton">
+      <div class="col-md-12">
+        <a href="javascript:history.back();" class="btn btn-secondary btn-block px-5">Regresar</a>
+      </div>
     </div>
     </div>
 

@@ -1,6 +1,6 @@
 <div class="card-group">
   <div class="card mr-1">
-    <img src="https://images.pexels.com/photos/326576/pexels-photo-326576.jpeg?cs=srgb&dl=adult-blank-businessman-326576.jpg&fm=jpg" 
+    <img src="img/misc/01.jpg" 
     class="card-img-top" alt="...">
     <div class="card-body">
       <h5 class="card-title">Generar Gafete</h5>

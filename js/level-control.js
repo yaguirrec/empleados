@@ -5,6 +5,8 @@ $( document ).ready(function() {
      * 2 - ADMINISTRADOR
      * 3 - RH
      * 4 - DH
+     * 5 - LABORALES
+     * 6 - NOMINAS
      */
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let usuario_activo = document.querySelector('#emp_activo').value;
@@ -13,38 +15,46 @@ $( document ).ready(function() {
 
     let backButton = $( "#backButton" ),
         seccionLateral = $("#sidePaneAdmin"),
+        seccionPanel = $(".seccionPanel"),
         transportes = $(".transportes"),
+        general = $(".nav-item"),
         dh = $(".dh"),
-        dh1 = $(".dh1"),
+        laborales = $(".laborales"),
         rh = $(".rh"),
-        rh1 = $(".rh1"),
-        rh2 = $(".rh2");
+        nominas = $(".nominas");
 
-    console.log('mi correo ' + usuario_correo + '@mexq.com.mx');
+    console.log('mi correo ' + usuario_correo     + '@mexq.com.mx');
 
     switch (nivel_usuario){
         case '': 
-            rh.hide();
-            rh1.hide();
-            rh2.hide();
+            // DO NOTHING
             break;
         case '1':
             
             break;
         case '2':
-        
+            general.removeClass('d-none');
             break;
         case '3':
-            transportes.hide();
+            seccionLateral.removeClass('d-none');
+            seccionPanel.removeClass('d-none');
+            rh.removeClass('d-none');
             break;
         case '4':
-            transportes.hide();
-            rh1.hide();
-            rh2.hide();
+            seccionLateral.removeClass('d-none');
+            seccionPanel.removeClass('d-none');
+            dh.removeClass('d-none');
             break;
         case '5':
-            transportes.hide();
-            dh.hide();
+            seccionLateral.removeClass('d-none');
+            seccionPanel.removeClass('d-none');
+            laborales.removeClass('d-none');
+            // gafetes.removeClass('d-none');
+            break;
+        case '6':
+            seccionLateral.removeClass('d-none');
+            seccionPanel.removeClass('d-none');
+            nominas.removeClass('d-none');
             break;
         default:
             //**/ */

@@ -13,10 +13,10 @@
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
 
-      <div id="sidePaneAdmin">
+      <div id="sidePaneAdmin d-none">
 
       <!-- Nav Item - Dashboard -->
-      <li class="nav-item active seccionPanel rh">
+      <li class="nav-item active seccionPanel d-none">
         <a class="nav-link" href="index.php?request=main">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Panel de control</span></a>
@@ -26,51 +26,100 @@
       <hr class="sidebar-divider">
 
       <!-- Heading -->
-      <div class="sidebar-heading rh">
-        Empleados
+      <div class="sidebar-heading d-none">
+        RRHH
       </div>
 
       <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item rh">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-          <i class="fas fa-fw fa-cog"></i>
-          <span>Consultas</span>
+      <li class="nav-item rh d-none">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#rh" aria-expanded="true" aria-controls="rh">
+          <i class="fas fa-users-cog"></i>
+          <span>Módulo RRHH</span>
         </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="rh" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Opciones de consulta:</h6>
-            <a class="collapse-item rh1" href="index.php?request=empleado">Empleados activos</a>
-            <a class="collapse-item rh1" href="index.php?request=bajas">Empleados inactivos</a>
-            <a class="collapse-item transportes" href="index.php?request=direcciones">Transportes</a>
-            <a class="collapse-item dh" href="index.php?request=fecha2">Antiguedad</a>
-            <a class="collapse-item dh" href="index.php?request=fecha1">Cumpleañeros</a>
+            <a class="collapse-item" href="index.php?request=empleado">Empleados activos</a>
+            <a class="collapse-item" href="index.php?request=bajas">Empleados inactivos</a>
           </div>
         </div>
       </li>
 
-      <!-- Nav Item - Utilities Collapse Menu -->
-      <li class="nav-item rh1">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-          <i class="fas fa-fw fa-wrench"></i>
-          <span>Administrar</span>
+      <li class="nav-item laborales d-none">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#laborales" aria-expanded="true" aria-controls="laborales">
+          <i class="fas fa-users-cog"></i>
+          <span>Módulo Laborales</span>
         </a>
-        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+        <div id="laborales" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Administrar empleados:</h6>
-            <a class="collapse-item rh2" href="index.php?request=alta-empleado">Alta de empleado</a>
-            <a class="collapse-item rh2" href="index.php?request=altas">Envio de altas</a>
-            <!-- <a class="collapse-item rh2" href="#">Modificar de empleado</a>
-            <a class="collapse-item rh2" href="#">Baja de empleado</a> -->
-          </div>
-        </div>
-        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Modulos</h6>
-            <a class="collapse-item" href="index.php?request=puestos">Puestos</a>
-            <!-- <a class="collapse-item" href="#">Celulas</a> -->
+            <h6 class="collapse-header">Opciones de consulta:</h6>
+            <a class="collapse-item" href="index.php?request=empleado">Empleados activos</a>
+            <a class="collapse-item" href="index.php?request=bajas">Empleados inactivos</a>
+            <hr class="sidebar-divider">
+            <h6 class="collapse-header">Administrar registros:</h6>
+            <a class="collapse-item rh2 d-none" href="index.php?request=alta-empleado">Alta de empleado</a>
+            <a class="collapse-item" href="index.php?request=altas">Administrar Altas</a>
           </div>
         </div>
       </li>
+
+      <li class="nav-item dh d-none">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#dh" aria-expanded="true" aria-controls="dh">
+          <i class="fas fa-users-cog"></i>
+          <span>Módulo DH</span>
+        </a>
+        <div id="dh" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Opciones de consulta:</h6>
+            <a class="collapse-item" href="index.php?request=fecha2">Antiguedad</a>
+            <a class="collapse-item" href="index.php?request=fecha1">Cumpleañeros</a>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-item transportes d-none">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#transportes" aria-expanded="true" aria-controls="transportes">
+          <i class="fas fa-users-cog"></i>
+          <span>Módulo Transportes</span>
+        </a>
+        <div id="transportes" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Opciones de consulta:</h6>
+            <a class="collapse-item" href="index.php?request=direcciones">Transportes</a>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-item nominas d-none">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#nominas" aria-expanded="true" aria-controls="nominas">
+          <i class="fas fa-users-cog"></i>
+          <span>Módulo Nóminas</span>
+        </a>
+        <div id="nominas" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Opciones de consulta:</h6>
+            <a class="collapse-item" href="index.php?request=empleado">Empleados activos</a>
+            <a class="collapse-item" href="index.php?request=bajas">Empleados inactivos</a>
+            <hr class="sidebar-divider">
+            <h6 class="collapse-header">Administrar registros:</h6>
+            <a class="collapse-item" href="index.php?request=altas">Administrar Altas</a>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-item capacitacion d-none">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#capacitacion" aria-expanded="true" aria-controls="capacitacion">
+          <i class="fas fa-fw fa-cog"></i>
+          <span>Módulo Capacitación</span>
+        </a>
+        <div id="capacitacion" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Modulos</h6>
+            <a class="collapse-item" href="index.php?request=puestos">Puestos</a>
+          </div>
+        </div>
+      </li>
+
 
       <!-- Divider -->
       <!-- <hr class="sidebar-divider"> -->

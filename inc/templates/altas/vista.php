@@ -38,14 +38,23 @@
                     <th scope="col">Fecha Alta</th>
                     <th scope="col">Sucursal</th>
                     <th scope="col">Area</th>
+                    <th scope="col">Lote</th>
                 </tr>
             </thead>
             <tbody id="dataTable">
             </tbody>
             </table>
 
-            <div class="col-md-8 offset-2 seccionEnvioAltas d-none">
+            <div class="col-md-8 offset-2 laborales seccionEnvioAltas d-none">
                 <button class="btn btn-success btn-block" id="btnEnviarAltas">ENVIAR</button>
+            </div>
+
+            <div class="col-md-8 offset-2 nominas seccionAcuseAltas d-nonde">
+                <div class="form-group">
+                    <label for="txtAcuse">Acuse de alta</label>
+                    <input type="file" class="form-control-file" id="txtAcuse">
+                </div>
+                <button class="btn btn-info btn-block" id="btnEnviarAcuse" accept="application/pdf,application/vnd.ms-excel">SUBIR ACUSE</button>
             </div>
 
             <div class="alert alert-danger d-none text-uppercase text-center h4" id="alertaM" role="alert">

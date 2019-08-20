@@ -6,7 +6,8 @@ switch ($action){
     case 'envioAltas':
         // die(json_encode($_POST));
         $fecha = $_POST['fecha'];
-        $cc = $_POST['cc'];
+        // $cc = $_POST['cc'];
+        $cc = 'test1';
         $correo_destinatario = 'cesar.fonseca20@outlook.com';
         $asunto = 'Envio de altas '. $fecha;
         $datos = $_POST['datos'];
@@ -31,7 +32,7 @@ switch ($action){
                                 $data
                                 .'</p>
 								<p>En el siguiente link podra acceder sistema web de empleados</p>
-								<a href="http://mexq.mx/empleados">Verificar altas</a>
+								<center><h2><a href="http://mexq.mx/empleados">Verificar altas</a></h2></center>
 							</body>
 						</html>
                         ';

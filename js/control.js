@@ -6,11 +6,13 @@ $( document ).ready(function() {
     let seccionActual = searchParams.get('request');
     let seccionBuscar = $( ".seccionBuscar" );
     let seccionEnvioAltas = $('.seccionEnvioAltas');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let seccionAcuseAltas = $('.seccionAcuseAltas');
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
     let url_dev = 'http://localhost/';
+    let nivel_usuario = document.querySelector('#nivel_usuario').value;
 
     $('#searchBox').keyup(function(event) {
         event.preventDefault();
@@ -294,6 +296,7 @@ $( document ).ready(function() {
             case 'altas':
                 let btnConsultarAltas = $('#btnConsultaAltas'),
                     btnEnviarAltas = $('#btnEnviarAltas'),
+                    btnEnviarAcuse = $('#btnEnviarAcuse'),
                     datosEmpleados = [];
                 obtenerAltas();
                 btnConsultarAltas.on('click',function(e){
@@ -319,11 +322,18 @@ $( document ).ready(function() {
                             {
                                 $('#alertaM').removeClass('d-none');
                                 seccionEnvioAltas.addClass('d-none');
+                                seccionAcuseAltas.addClass('d-none');
                             } 
                             else 
                             {
                                 $('#alertaM').addClass('d-none');
-                                seccionEnvioAltas.removeClass('d-none');
+                                if(nivel_usuario === '5'){
+                                    seccionEnvioAltas.removeClass('d-none');
+                                }
+                                // else if (nivel_usuario === '6'){
+                                else if (nivel_usuario === '2'){
+                                    seccionAcuseAltas.removeClass('d-none');
+                                }
                                 for(var i in informacion){
                                     tablaAltas(informacion[i]);
                                     datosEmpleados[i] = `${informacion[i].numero_nomina} - ${informacion[i].nombre_largo}.`;
@@ -355,6 +365,7 @@ $( document ).ready(function() {
                 var action = 'envioAltas',
                     fecha = $('#txtFechaAltas').val(),
                     cc = $('#usuario_correo').val();
+                    
                 $.ajax({
                     type: 'POST',
                     url: localBackend + 'sender.php', 
@@ -371,6 +382,70 @@ $( document ).ready(function() {
                     timer: 1800
                   })
             });
+
+            btnEnviarAcuse.click(function(e){
+                e.preventDefault();
+                var action = 'envioAcuse',
+                    fecha = $('#txtFechaAltas').val();
+
+                let adjunto_Acuse = document.getElementById('txtAcuse');
+                let adjuntoAcuse = adjunto_Acuse.files[0];
+                let nombreAdjuntoAcuse = adjunto_Acuse.files[0].name;
+                nombreAdjuntoAcuse = nombreAdjuntoAcuse.substr(21, 9);
+
+                var datosAcuse = new FormData();
+                datosAcuse.append('action', action);
+                datosAcuse.append('fecha', fecha);
+                datosAcuse.append('adjuntoAcuse', adjuntoAcuse);
+                datosAcuse.append('nombreAdjuntoAcuse', nombreAdjuntoAcuse);
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', backendURL , true);
+                xhr.send(datosAcuse);
+                xhr.onload = function(){
+                    if (this.status === 200 && this.readyState == 4) {
+                        var respuesta = JSON.parse(xhr.responseText);
+                        console.log(respuesta);
+                        // if (respuesta.estado === 'OK') {
+                        //     var destination = respuesta.log;
+                        //     swal({
+                        //             title: 'Modificación exitosa!',
+                        //             text: 'Modificación de la información exitosa!',
+                        //             type: 'success'
+                        //         })
+                        //         .then(resultado => {
+                        //                 if(resultado.value) {
+                        //                     location.reload();
+                        //                     // window.location.href = 'index.php?request='+destination;
+                        //                     window.close();
+                        //                 }
+                        //             })
+                        // } else {
+                        //     // Hubo un error
+                            
+                        //     swal({
+                        //         title: 'Error!',
+                        //         text: 'Hubo un error',
+                        //         type: 'error'
+                        //     })
+                        // }
+                    }
+                }
+
+
+
+
+                // $.ajax({
+                //     type: 'POST',
+                //     url: backendURL, 
+                //     data: { action: action, fecha: fecha, adjuntoAcuse: adjuntoAcuse },
+                //     success: function(response) {
+                //         let respuesta = JSON.parse(response);
+                //         console.log(respuesta);
+                //     }
+                // });
+            });
+
             break;
         case 'datos':
             //GET VALUE FROM LS
