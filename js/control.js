@@ -357,7 +357,7 @@ $( document ).ready(function() {
                         row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
                         row.append($("<td> " + rowInfo.sucursal + " </td>"));
                         row.append($("<td> " + rowInfo.planta + " </td>"));
-                        row.append($("<td><a href='assets/attached/" + rowInfo.lote + ".pdf' target='_blank'>" + rowInfo.lote + "</a></td>"));
+                        row.append($("<td><a href='assets/attached/" + rowInfo.lote + ".rar' target='_blank'>" + rowInfo.lote + "</a></td>"));
                     }
                 }
 
@@ -397,7 +397,6 @@ $( document ).ready(function() {
                 var datosAcuse = new FormData();
                 datosAcuse.append('action', action);
                 datosAcuse.append('fecha', fecha);
-                datosAcuse.append('adjuntoAcuse', adjuntoAcuse);
                 datosAcuse.append('nombreAdjuntoAcuse', nombreAdjuntoAcuse);
 
                 var xhr = new XMLHttpRequest();
