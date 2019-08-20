@@ -330,8 +330,8 @@ $( document ).ready(function() {
                                 if(nivel_usuario === '5'){
                                     seccionEnvioAltas.removeClass('d-none');
                                 }
-                                // else if (nivel_usuario === '6'){
-                                else if (nivel_usuario === '2'){
+                                else if (nivel_usuario === '6'){
+                                // else if (nivel_usuario === '2'){
                                     seccionAcuseAltas.removeClass('d-none');
                                 }
                                 for(var i in informacion){

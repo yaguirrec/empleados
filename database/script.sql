@@ -313,11 +313,12 @@ CREATE TABLE [dbo].[tbprivilegios_emp](
 	[panel_administrar_usuarios] [int] DEFAULT 0
 ) ON [PRIMARY]
 GO
-
+/*
 ALTER TABLE tbprivilegios_emp
 ADD [panel_dh] [int] DEFAULT 0;
+*/
 
-INSERT INTO tbprivilegios_emp (tipo,descripcion,created_at) VALUES ('Laborales','Acceso a Laborales',GETDATE())
+INSERT INTO tbprivilegios_emp (tipo,descripcion,created_at) VALUES ('Nominas','Acceso a Nominas',GETDATE())
 SELECT * FROM tbprivilegios_emp
 
 /*CREAR TABLA RELACION EMPLEADOS-PERMISOS*/
@@ -338,7 +339,10 @@ CREATE TABLE [dbo].[tbemp_permisos](
 ) ON [PRIMARY]
 GO
 
-INSERT INTO tbemp_permisos (numero_nomina,created_at,emp_proy) VALUES ('26263',GETDATE(),1)
+INSERT INTO tbemp_permisos (numero_nomina,created_at,emp_proy) VALUES ('23898',GETDATE(),6)
+SELECT * FROM P1ACCESOWEB WHERE employee = '77777'
+DELETE FROM P1ACCESOWEB WHERE id IN(2809)
+SELECT * FROM tbemp_permisos
 
 SELECT * FROM [dbo].[departamentos_nomipaq]
 SELECT * FROM [dbo].[puestos_nomipaq] where idpuesto = '520'
@@ -370,6 +374,9 @@ SELECT te.numero_nomina,te.nombre_largo,te.nombre,te.apellido_paterno,te.apellid
                         ON ta.codigo = tc.codigo_area
                         AND te.numero_nomina = '08444'
 
+EXEC datos_empleado_acceso @NUMERO_NOMINA = '77777'
+
+
 /**STORED FUINCTION LOGIN*/
 
 ALTER PROCEDURE datos_empleado_acceso
@@ -377,8 +384,12 @@ ALTER PROCEDURE datos_empleado_acceso
 AS
 	BEGIN
 	DECLARE @PERMISOS INT
+	DECLARE @CORREO VARCHAR(45)
 		SET @PERMISOS = (SELECT emp_proy FROM tbemp_permisos WHERE numero_nomina= @NUMERO_NOMINA)
-		SELECT te.numero_nomina,te.nombre_largo,te.nombre,te.apellido_paterno,te.apellido_materno,te.status,te.fecha_alta,te.fecha_baja,te.fecha_nacimiento,
+		SET @CORREO = (SELECT alias FROM tbcorreos WHERE numero_nomina= @NUMERO_NOMINA AND tipo = 1)
+		SELECT TOP 1 te.numero_nomina,te.nombre_largo,te.nombre,te.apellido_paterno,te.apellido_materno,te.status,
+		CASE WHEN @CORREO IS NULL THEN 'contacto' ELSE @CORREO END AS correo,
+		te.fecha_alta,te.fecha_baja,te.fecha_nacimiento,
 		ts.nombre,ta.id_area,ta.codigo,ta.nombre,tc.id_celula,tc.codigo,tc.nombre,
 		CASE WHEN @PERMISOS = 0 THEN '0' ELSE @PERMISOS END  AS nivel,
 		pa.password
@@ -401,8 +412,7 @@ INNER JOIN tbempleados AS pe
 on pa.employee = pe.numero_nomina
 and pe.status = 'A'
 
-SELECT * FROM tbemp_permisos WHERE numero_nomina='08444'
-EXEC datos_empleado_acceso @NUMERO_NOMINA = '19905'
+SELECT * FROM tbemp_permisos
 
 /**VISTA PUESTOS NOMPIAQ**/
 CREATE VIEW PUESTOS_NOMINAS AS
@@ -1116,10 +1126,10 @@ BEGIN TRY
 SELECT * FROM tbempleados where fecha_alta > '2019-07-01'
 
 
-SELECT TOP 10 
+SELECT TOP 100 
 CONCAT(ts.codigo,' - ',ts.nombre) AS sucursal,tc.nombre AS planta,tc.codigo AS 'claveSocio',
 CONVERT(VARCHAR(10), te.fecha_alta, 105) AS 'fechaAlta',tp.nombre AS puesto,
-td.clasificacion,td.nomina,td.registro_patronal,td.categoria,
+td.clasificacion,td.nomina,td.registro_patronal,td.categoria,td.lote,
 te.status,te.numero_nomina AS 'No. Nomina',UPPER(te.apellido_paterno) AS 'apellidoPaterno',UPPER(te.apellido_materno) AS 'apellidoMaterno',te.nombre AS nombreEmpleado,
 te.fecha_nacimiento AS fechaNacimiento,td.municipio,td.estado,td.lugar_nacimiento,te.sexo,
 CONCAT(te.rfcini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.rfcfin) AS RFC,
@@ -1139,8 +1149,8 @@ INNER JOIN tbpuesto AS tp
 ON te.id_puesto = tp.id_puesto
 INNER JOIN tbdatos_empleados AS td
 ON td.numero_nomina = te.numero_nomina
-AND te.status <> 'B' AND te.fecha_alta = '2019-08-01'
-ORDER BY te.status ASC, te.created_at DESC
+AND te.status <> 'B'
+ORDER BY te.status ASC, te.created_at ASC
 
 SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS nombre_largo, 
             CASE
@@ -1159,3 +1169,19 @@ SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS nombre_largo,
             ON ta.codigo = tc.codigo_area
             AND te.status <> 'B' AND te.fecha_alta = '2019-08-09'
             ORDER BY te.status ASC, te.created_at DESC
+
+
+
+UPDATE tbdatos_empleados SET lote = '' WHERE numero_nomina IN
+( 
+SELECT te.numero_nomina FROM tbempleados AS te
+INNER JOIN tbdatos_empleados AS td
+ON te.numero_nomina = td.numero_nomina
+AND te.fecha_alta = '2017-12-11'
+)
+
+
+SELECT td.lote FROM tbempleados AS te
+INNER JOIN tbdatos_empleados AS td
+ON te.numero_nomina = td.numero_nomina
+AND te.fecha_alta = '2017-12-11'

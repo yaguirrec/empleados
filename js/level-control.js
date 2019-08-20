@@ -23,7 +23,7 @@ $( document ).ready(function() {
         rh = $(".rh"),
         nominas = $(".nominas");
 
-    console.log('mi correo ' + usuario_correo     + '@mexq.com.mx');
+    console.log('campo ' + nivel_usuario);
 
     switch (nivel_usuario){
         case '': 
@@ -57,7 +57,7 @@ $( document ).ready(function() {
             nominas.removeClass('d-none');
             break;
         default:
-            //**/ */
+            seccionLateral.removeClass('d-none');
             break;
     }
 });
