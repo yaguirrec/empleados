@@ -7,6 +7,7 @@ $( document ).ready(function() {
     let seccionBuscar = $( ".seccionBuscar" );
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
+    let seccionExportar = $('.seccionExportar')
     let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
@@ -349,14 +350,18 @@ $( document ).ready(function() {
         
                     function tablaAltas(rowInfo){
                         var row = $("<tr>");
+                        seccionExportar.removeClass('d-none');
                         
                         $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
-                        row.append($("<td class='trCode'>" + rowInfo.numero_nomina + " </td>"));
-                        row.append($("<td class='text-left'> " + rowInfo.nombre_largo + " </td>"));
-                        row.append($("<td class='text-left'> " + rowInfo.puesto + " </td>"));
-                        row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
+                        row.append($("<td>" + rowInfo.numero_nomina + " </td>"));
+                        row.append($("<td> " + rowInfo.nss + " </td>"));
+                        row.append($("<td> " + rowInfo.nombre_largo + " </td>"));
+                        row.append($("<td> " + rowInfo.categoria + " </td>"));
                         row.append($("<td> " + rowInfo.sucursal + " </td>"));
                         row.append($("<td> " + rowInfo.planta + " </td>"));
+                        row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
+                        row.append($("<td> " + rowInfo.registro_patronal + " </td>"));
+                        row.append($("<td> " + rowInfo.registro_patronal + ' ' + rowInfo.tipo_nomina + " </td>"));
                         row.append($("<td><a href='assets/attached/" + rowInfo.lote + ".rar' target='_blank'>" + rowInfo.lote + "</a></td>"));
                     }
                 }
@@ -447,6 +452,106 @@ $( document ).ready(function() {
             });
 
             break;
+        /**ALTAS SEMANALES */
+        case 'semanales':
+            let btnMostrarAltas = $('#btnMostrarAltas'),
+                txtFechaINI = $('#txtFechaINI'),
+                txtFechaFIN = $('#txtFechaFIN'),
+                txtPeriodo = $('#txtPeriodo');
+
+            action = 'altas-semanales';
+
+            btnMostrarAltas.on('click', function(e){
+                e.preventDefault();
+                $('#dataTable').empty();
+                txtPeriodo.text(`Periodo del ${txtFechaINI.val()} al ${txtFechaFIN.val()}`);
+                
+                $.ajax({
+                    type: 'POST',
+                    url: backendURL, 
+                    data: { action: action, fechaINI: txtFechaINI.val(), fechaFIN: txtFechaFIN.val()},
+                    success: function(response) {
+                        let respuesta = JSON.parse(response);
+                        if (respuesta.estado === 'OK') {
+                            var datos = respuesta.informacion.length;
+                            var informacion = respuesta.informacion;
+                            if(datos < 1)
+                            {
+                                $('#alertaM').removeClass('d-none');
+                            } 
+                            else 
+                            {
+                                $('#alertaM').addClass('d-none');
+                                for(var i in informacion){
+                                    tablaAltasSemanales(informacion[i]);
+                                }    
+                            }                        
+                        }
+                    }
+                });
+            });
+
+            function tablaAltasSemanales(rowInfo){
+                var row = $("<tr>");
+                let tipo_nomina = 'NA',
+                    clasificacion = 'NA';
+                seccionExportar.removeClass('d-none');
+                tipo_nomina = (rowInfo.nomina === 'Q' ? 'QUIN' : 'SEM');
+
+                if (rowInfo.clasificacion === 'A')
+                    clasificacion = 'Administrativo'
+                else if (rowInfo.clasificacion === 'AO')
+                    clasificacion = 'Administrativo Operativo'
+                else if (rowInfo.clasificacion === 'O')
+                    clasificacion = 'Operativo'
+
+                $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
+                row.append($("<td>" + rowInfo.sucursal + " </td>"));
+                row.append($("<td>" + rowInfo.planta + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.claveSocio + " </td>"));
+                row.append($("<td>" + rowInfo.fechaAlta + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.puesto + " </td>"));
+                row.append($("<td class='d-none'>" + clasificacion + " </td>"));
+                row.append($("<td class='d-none'>" + tipo_nomina + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.registro_patronal + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.categoria + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.lote + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.status + " </td>"));
+                row.append($("<td>" + rowInfo.numero_nomina + " </td>"));
+                row.append($("<td>" + rowInfo.apellidoPaterno + " </td>"));
+                row.append($("<td>" + rowInfo.apellidoMaterno + " </td>"));
+                row.append($("<td>" + rowInfo.nombreEmpleado + " </td>"));
+                row.append($("<td>" + rowInfo.fechaNacimiento.date.substr(0, 10) + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.lugar_nacimiento + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.sexo + " </td>"));
+                row.append($("<td>" + rowInfo.RFC + " </td>"));
+                row.append($("<td>" + rowInfo.CURP + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.nss + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.numero_identificacion + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.estado_civil + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.escolaridad + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.nombre_padre + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.nombre_madre + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.calle + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.numero_exterior + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.numero_interior + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.fraccionamiento + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.cp + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.localidad + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.municipio + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.estado + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.cuenta + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.numero_cuenta + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.infonavit + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.numero_infonavit + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.fonacto + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.numero_fonacot + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.correo + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.celular + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.telefono + " </td>"));
+            }
+
+        break;
         case 'datos':
             //GET VALUE FROM LS
             var codigoEmpleado = localStorage.getItem('codigoEmpleado'),
@@ -699,7 +804,7 @@ $( document ).ready(function() {
             function tablaFechas(rowInfo){
         
                 $('#loadingIndicator').addClass('d-none');
-                $('.toolsDH').removeClass('d-none');
+                seccionExportar.removeClass('d-none');
                 
                 var row = $("<tr class='text-center'>");
                 
@@ -791,6 +896,23 @@ $( document ).ready(function() {
                 });
 
             });
+
+            //VALIDAR CATEGORIA $$$
+            $('#txtCategoria').focusout(function(){
+                let categoria = parseFloat($('#txtCategoria').val());
+                if (categoria < 3000 || categoria > 20000 || !($.isNumeric(categoria))){
+                    $('#txtCategoria').val('');
+                    $('#txtCategoria').addClass('bg-warning');
+                    Swal.fire({
+                        title: 'Aviso',
+                        text: 'El sueldo debe estar en el rango de $3,000.00 a $20,000.00.',
+                        type: 'error'
+                    });
+                } else {
+                    $('#txtCategoria').removeClass('bg-warning');
+                }
+            });
+
 
             //LLENAR CAMPOS CLAVE SI NO EXISTE EN LA BD
             let camposClave = () =>

@@ -1,4 +1,4 @@
-<form>
+<form id="myform">
   <div class="bg-gradient-success p-5 text-white text-center rounded-right">
   <h1>DATOS DE LA EMPRESA</h1>
     <div class="form-row">

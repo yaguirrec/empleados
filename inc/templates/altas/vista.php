@@ -33,11 +33,14 @@
             <thead class="font-weight-bold">
                 <tr>
                     <th scope="col">Nómina</th>
+                    <th scope="col">NSS</th>
                     <th scope="col">Nombre</th>
-                    <th scope="col">Puesto</th>
-                    <th scope="col">Fecha Alta</th>
-                    <th scope="col">Sucursal</th>
-                    <th scope="col">Area</th>
+                    <th scope="col">S.D.I.</th>
+                    <th scope="col">Departamento</th>
+                    <th scope="col">Planta</th>
+                    <th scope="col">Alta</th>
+                    <th scope="col">Reg Patronal</th>
+                    <th scope="col">Nomina</th>
                     <th scope="col">Lote</th>
                 </tr>
             </thead>

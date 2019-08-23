@@ -103,6 +103,7 @@
             <hr class="sidebar-divider">
             <h6 class="collapse-header">Administrar registros:</h6>
             <a class="collapse-item" href="index.php?request=altas">Administrar Altas</a>
+            <a class="collapse-item" href="index.php?request=semanales">Altas Semanales</a>
           </div>
         </div>
       </li>

@@ -38,6 +38,9 @@
                 break;
               case 'altas':
                 include 'inc/templates/altas/vista.php';
+              break;
+              case 'semanales':
+                include 'inc/templates/altas/semanales.php';
                 break;
               case 'datos':
                 include 'inc/templates/empleados/vista-empleado.php';

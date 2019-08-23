@@ -957,10 +957,10 @@ REPLACE(correo_electronico,' ','') AS correo_electronico,REPLACE(telefono_casa,'
 from rh_empelados2
 WHERE no_trab <> ''
 
-SELECT * FROM tbdatos_empleados
-SELECT * FROM tbempleados WHERE numero_nomina = '77777'
-SELECT * FROM PJEMPLOY WHERE employee ='77777'
-SELECT * FROM PJEMPPJT WHERE employee ='77777'
+SELECT * FROM tbdatos_empleados WHERE numero_nomina = '88889'
+SELECT * FROM tbempleados WHERE numero_nomina = '88889'
+SELECT * FROM PJEMPLOY WHERE employee ='88889'
+SELECT * FROM PJEMPPJT WHERE employee ='88889'
 
 select * FROM PJEMPPJT WHERE employee = '08444'
 select MAX(CAST(employee AS INT)) AS numeroNomina FROM PJEMPPJT WHERE ISNUMERIC(employee) = 1

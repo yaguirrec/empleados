@@ -28,7 +28,7 @@
         </div>
     </div>
 
-<div class="row toolsDH d-none">
+<div class="row seccionExportar d-none">
   <div class="col-sm-5 ml-4">
       <div class="input-group mb-10">
           <div class="input-group-prepend">
