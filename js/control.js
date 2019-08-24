@@ -642,7 +642,6 @@ $( document ).ready(function() {
                     datosGafete.append('empNomina', numero_nomina);
                     datosGafete.append('empFoto', empFoto);
                     datosGafete.append('action', action);
-                console.log(action + ' ' + numero_nomina);
                 var xhr = new XMLHttpRequest();
                 xhr.open('POST', backendURL , true);
                 xhr.send(datosGafete);
@@ -661,7 +660,6 @@ $( document ).ready(function() {
                 var url = url_final + "empleados/gafete.php?emp=" + numero_nomina,
                 newTab = window.open(url, '_blank');
                 newTab.focus();
-               
             });
 
             

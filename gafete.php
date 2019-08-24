@@ -112,7 +112,7 @@ font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;}
     position: absolute; 
     text-align: center;
     width: 3.6cm; 
-    top:11.55cm;
+    top:11.35cm;
     font-size: 9px;
     font-family: 'Century Gothic', CenturyGothic, AppleGothic;
     z-index: 9;
@@ -168,5 +168,5 @@ font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/barcodes/JsBarcode.code128.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
 <script src="js/gafete.js"></script>

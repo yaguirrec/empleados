@@ -87,9 +87,10 @@ CREATE TABLE [dbo].[tbestado](
 GO
 
 
-DROP TABLE tbdatos_empleados
-SELECT * FROM tbdatos_empleados
-TRUNCATE TABLE tbdatos_empleados
+--DROP TABLE tbdatos_empleados
+--TRUNCATE TABLE tbdatos_empleados
+
+SELECT * FROM tbdatos_empleados WHERE numero_nomina = '19905'
 
 /**CREAR TABLA DATOS EMPLEADOS*/
 USE [MEXQApptemp]
@@ -102,7 +103,8 @@ CREATE TABLE [dbo].[tbdatos_empleados](
 	[id_registro] [int] IDENTITY(1,1) NOT NULL,
 	[numero_nomina] [varchar](10) NOT NULL,
 	[clasificacion] [varchar](8) DEFAULT '',
-	[categoria] [varchar](25) DEFAULT '',
+	[salario_diario] [varchar](25) DEFAULT '',
+	[salario_mensual] [varchar](10) DEFAULT '',
 	[nomina] [varchar](1) DEFAULT '',
 	[registro_patronal] [varchar](10) DEFAULT 'CNO',
 	[lote] [varchar](15) DEFAULT '',
@@ -136,6 +138,7 @@ CREATE TABLE [dbo].[tbdatos_empleados](
 	[contacto_emergencia_nombre] [varchar](40) DEFAULT '',
 	[contacto_emergencia_numero] [varchar](15) DEFAULT '',
 	[posicion] [int],
+	[comentarios] [text],
 	[created_at] [datetime],
 	[created_by] [char](10) DEFAULT '00001',
 	[updated_at] [datetime] default GETDATE(),
@@ -759,7 +762,14 @@ ORDER BY tc.nombre
 
 select top 1 b.nombre,puesto,convert(varchar,fecha_alta),telefono_emergencia as a , no_trab,no_imss,cp,calle,numero, fraccionamiento,estado,municipio,a.dv  from (select * from rh_empelados2 ) as a  inner join 
 (select emp_name as nombre,* from pjemploy ) as b on a.no_trab = b.employee
-where employee='26389' order by fecha_alta desc
+where employee='19905' order by fecha_alta desc
+
+/**DATOS PARA GAFETE**/
+SELECT te.nombre_largo,fecha_alta,te.numero_nomina,te.nss,td.dv,td.celular,td.codigo_postal,td.calle,td.numero_exterior,td.fraccionamiento,td.estado,td.municipio,td.domicilio_completo
+FROM tbempleados AS te
+INNER JOIN tbdatos_empleados AS td
+ON te.numero_nomina = td.numero_nomina
+WHERE te.numero_nomina = '19905'
 
 SELECT TOP 10 * FROM tbempleados 
 
@@ -945,11 +955,11 @@ select TOP 40 * from rh_empelados2
 select * from [vDatosEmpleados] where codigopostal <> 0
 
 select REPLACE(no_trab,' ','') as NOMINA,REPLACE(REPLACE(categoria,'$',''),' ','') AS categoria,SUBSTRING(nomina,1,1) AS nomina,
-SUBSTRING(clasificacion,1,1) AS clasificacion,REPLACE(registro,' ',''),REPLACE(lote,' ','') AS lote,REPLACE(dv,' ','') AS dv,REPLACE(lugar_nacimiento,' ','') AS lugar_nacimiento,'ID',
+SUBSTRING(clasificacion,1,1) AS clasificacion,REPLACE(registro,' ',''),REPLACE(lote,' ','') AS lote,REPLACE(dv,' ','') AS dv,RTRIM(lugar_nacimiento) AS lugar_nacimiento,'ID',
 REPLACE(ide_oficial,' ','') AS ide_oficial,
 SUBSTRING(estado_civil,1,1) AS estado_civil,REPLACE(escolaridad,' ','') AS escolaridad,'constancia_escolar',
-CONCAT(REPLACE(ape_pat_padre,' ',''),' ',REPLACE(ape_mat_padre,' ',''),' ',REPLACE(nombres_padre,' ','')) AS nombre_padre,
-CONCAT(REPLACE(ape_pat_madre,' ',''),' ',REPLACE(ape_mat_madre,' ',''),' ',REPLACE(nombres_madre,' ','')) AS nombre_madre,
+CONCAT(REPLACE(ape_pat_padre,' ',''),' ',REPLACE(ape_mat_padre,' ',''),' ',RTRIM(nombres_padre)) AS nombre_padre,
+CONCAT(REPLACE(ape_pat_madre,' ',''),' ',REPLACE(ape_mat_madre,' ',''),' ',RTRIM(nombres_madre)) AS nombre_madre,
 RTRIM(calle) AS calle,REPLACE(numero,' ','') AS exterior,REPLACE(interior,' ','') AS interior,RTRIM(fraccionamiento) AS fraccionamiento,'domicilio',REPLACE(cp,' ','') AS cp,RTRIM(estado) AS estado,
 RTRIM(municipio) AS municipio,RTRIM(localidad) AS localidad,
 REPLACE(infonavit,' ','') AS infonavit,REPLACE(no_infonavit,' ','') AS no_infonavit,REPLACE(fonacot,' ','') AS fonacot,REPLACE(no_fonacot,' ','') AS no_fonacot,REPLACE(tarjeta_nomina,' ','') AS tarjeta_nomina,REPLACE(cuenta,' ','') AS cuenta,
@@ -957,7 +967,7 @@ REPLACE(correo_electronico,' ','') AS correo_electronico,REPLACE(telefono_casa,'
 from rh_empelados2
 WHERE no_trab <> ''
 
-SELECT * FROM tbdatos_empleados WHERE numero_nomina = '88889'
+SELECT * FROM tbdatos_empleados WHERE numero_nomina = '26571'
 SELECT * FROM tbempleados WHERE numero_nomina = '88889'
 SELECT * FROM PJEMPLOY WHERE employee ='88889'
 SELECT * FROM PJEMPPJT WHERE employee ='88889'
@@ -1123,18 +1133,18 @@ BEGIN TRY
   ROLLBACK
  END CATCH
 
-SELECT * FROM tbempleados where fecha_alta > '2019-07-01'
+SELECT * FROM tbdatos_empleados
 
 
-SELECT TOP 100 
+SELECT 
 CONCAT(ts.codigo,' - ',ts.nombre) AS sucursal,tc.nombre AS planta,tc.codigo AS 'claveSocio',
 CONVERT(VARCHAR(10), te.fecha_alta, 105) AS 'fechaAlta',tp.nombre AS puesto,
 td.clasificacion,td.nomina,td.registro_patronal,td.categoria,td.lote,
-te.status,te.numero_nomina AS 'No. Nomina',UPPER(te.apellido_paterno) AS 'apellidoPaterno',UPPER(te.apellido_materno) AS 'apellidoMaterno',te.nombre AS nombreEmpleado,
+te.status,te.numero_nomina,UPPER(te.apellido_paterno) AS 'apellidoPaterno',UPPER(te.apellido_materno) AS 'apellidoMaterno',te.nombre AS nombreEmpleado,
 te.fecha_nacimiento AS fechaNacimiento,td.municipio,td.estado,td.lugar_nacimiento,te.sexo,
 CONCAT(te.rfcini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.rfcfin) AS RFC,
 CONCAT(te.curpini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.curpfin) AS CURP,
-te.nss AS IMSS,td.numero_identificacion,td.estado_civil,td.escolaridad,
+te.nss,td.numero_identificacion,td.estado_civil,td.escolaridad,
 td.nombre_padre,td.nombre_madre,
 td.calle,td.numero_exterior,td.numero_interior,td.fraccionamiento,td.codigo_postal,td.localidad,td.municipio,td.estado,
 td.cuenta,td.numero_cuenta,td.infonavit,td.numero_infonavit,td.fonacot,td.numero_fonacot,td.correo,td.celular,td.telefono,te.nombre_largo
@@ -1149,17 +1159,25 @@ INNER JOIN tbpuesto AS tp
 ON te.id_puesto = tp.id_puesto
 INNER JOIN tbdatos_empleados AS td
 ON td.numero_nomina = te.numero_nomina
-AND te.status <> 'B'
+AND te.status <> 'B' WHERE te.fecha_alta >= '2019-08-16' AND te.fecha_alta <= '2019-08-23'
 ORDER BY te.status ASC, te.created_at ASC
 
-SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS nombre_largo, 
+SELECT te.numero_nomina,te.nss,UPPER(te.nombre_largo) AS nombre_largo,
+			td.categoria,
+			ts.nombre AS Sucursal,
+			ta.nombre Planta,
+			CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
+			td.registro_patronal,
+			CASE WHEN td.nomina = 'S' THEN 'SEM'
+			WHEN td.nomina = 'Q' THEN 'QUIN'
+			ELSE 'NA' END AS tipo_nomina,
+			td.lote,
             CASE
                 WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
                 THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
                 ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
             END AS puesto,
-            CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
-            ts.nombre AS 'sucursal',ta.nombre AS 'Departamento',tc.nombre as 'planta',te.status,te.created_at
+            te.created_at
             FROM tbempleados AS te
             INNER JOIN tbsucursal AS ts
             ON te.id_sucursal = ts.id_sucursal 
@@ -1167,7 +1185,9 @@ SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS nombre_largo,
             ON tc.id_celula = te.id_celula
             INNER JOIN tbarea AS ta
             ON ta.codigo = tc.codigo_area
-            AND te.status <> 'B' AND te.fecha_alta = '2019-08-09'
+			INNER JOIN tbdatos_empleados AS td
+			ON te.numero_nomina = td.numero_nomina
+            AND te.status <> 'B' AND te.fecha_alta = '2017-12-11'
             ORDER BY te.status ASC, te.created_at DESC
 
 
@@ -1185,3 +1205,20 @@ SELECT td.lote FROM tbempleados AS te
 INNER JOIN tbdatos_empleados AS td
 ON te.numero_nomina = td.numero_nomina
 AND te.fecha_alta = '2017-12-11'
+
+/**BORRAR REGISTROS DUPLICADOS**/
+SELECT *
+FROM tbdatos_empleados order by numero_nomina
+
+CREATE TABLE #tmp_userd (
+    id int
+);
+
+insert into #tmp_userd
+SELECT MAX(id_registro) id 
+    FROM tbdatos_empleados 
+    GROUP BY numero_nomina
+
+DELETE FROM tbdatos_empleados WHERE id_registro NOT IN (SELECT id FROM #tmp_userd);
+
+DROP TABLE #tmp_userd;

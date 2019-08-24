@@ -13,27 +13,58 @@ if (check) {
     $.ajax({
         type: 'POST',
         url: backendURL, 
-        data: { action: action, nomina : param },
-        success: function(response) {
-            let respuesta = JSON.parse(response);
+        data: { action: action, nomina : param }
+    }).done(function(response){
+        let respuesta = JSON.parse(response);
+        let informacionCantidad = respuesta.informacion.length;
+        if(informacionCantidad > 0){
             let informacion = respuesta.informacion[0];
-            let nomina = $.trim(informacion.no_trab);
-            let url = 'http://barcode.tec-it.com/barcode.ashx?data='+ nomina +'&code=Code128&dpi=210&color=%23000000';
-            let imss = $.trim(informacion.no_imss);
-            let telefonoEmergencia = informacion.telefono_emergencia;
+            let nomina = $.trim(informacion.numero_nomina);
+            let fechaAlta = (informacion.fecha_alta.date).substr(0, 10);
+            let imss = $.trim(informacion.nss);
+            let telefonoEmergencia = informacion.contacto_emergencia_numero;
             imss = `${imss.substr(0, 4)}-${imss.substr(4, 2)}-${imss.substr(6, 4)}-${$.trim(informacion.dv)}`;
             telefonoEmergencia = `${telefonoEmergencia.substr(0, 3)} - ${telefonoEmergencia.substr(3, 3)} - ${telefonoEmergencia.substr(6, 4)}`;
             $("#empFoto").attr("src","assets/files/" + nomina + "/" + nomina + ".jpg");
-            $("#empNombre").html(informacion.nombre);
+            $("#empNombre").html(informacion.nombre_largo);
             $("#empNumero").html(nomina);
             $("#empPuesto").html(informacion.puesto);
-            $("#empAlta").html('Ingreso: ' + informacion.empAlta);
+            $("#empAlta").html('Ingreso: ' + fechaAlta);
             $("#empNS").html(imss);
             $("#empEmergencia").html(telefonoEmergencia);
-            $("#empDireccion").html(`Calle ${informacion.calle} #${informacion.numero}  <br/> Fracc. ${informacion.fraccionamiento} <br/> C.P. ${informacion.cp} ${informacion.estado}`);
+            $("#empDireccion").html(`Calle ${informacion.calle} #${informacion.numero_exterior}  <br/> Fracc. ${informacion.fraccionamiento} <br/> C.P. ${informacion.cp} ${informacion.estado}`);
             // $("#empNomina").attr("src",url);
             JsBarcode("#empNomina", nomina,{lineColor: "#052467", font: "arial",displayValue: false});
+        } else {
+            // window.close();
+            let timerInterval
+            Swal.fire({
+            title: 'No hay información',
+            html: '<strong>No hay información del empleado disponible.</strong>',
+            timer: 3500,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+                timerInterval = setInterval(() => {
+                Swal.getContent().querySelector('')
+                    .textContent = Swal.getTimerLeft()
+                }, 100)
+            },
+            onClose: () => {
+                clearInterval(timerInterval)
+                window.close();
+            }
+            }).then((result) => {
+            if (
+                /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.timer
+            ) {
+                // console.log('I was closed by the timer')
+                window.close();
+            }
+            })
         }
+    }).fail(function(response) {
+        console.log('ERR');
     });
 
 } else {
