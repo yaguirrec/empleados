@@ -747,7 +747,7 @@ $(document).ready(function () {
                 datosGafete.append('empFoto', empFoto);
                 datosGafete.append('action', action);
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST', backendURL, true);
+                xhr.open('POST', localBackend + 'control.php' , true);
                 xhr.send(datosGafete);
                 xhr.onload = function () {
                     if (this.status === 200) {
