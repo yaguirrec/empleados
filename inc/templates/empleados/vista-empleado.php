@@ -26,6 +26,11 @@
                     <td><dd id="txtDepartamento"></dd></td>
                     <th>Celula:</th>
                     <td><dd id="txtCelula"></dd></td>
+                    
+                </tr>
+                <tr>
+                    <th>Estado:</th>
+                    <td><dd class="statusEmpleado" id="txtStatus"></dd></td>
                 </tr>
             </tbody>
         </table>
@@ -34,26 +39,15 @@
 
     <br>
 
-    <div class="col-sm">
-      <div class="nav-item row laborales d-none">
-        <div class="col-md-12">
-          <?php include 'inc/templates/empleados/gafete.php'; ?>
-        </div>
-      </div>
-    <hr>
-      <div class="row">
-        <div class="nav-item col-md-12">
-          <?php include 'inc/templates/empleados/menu.php'; ?>
-        </div>
-      </div>
-
+  <div class="card-deck laborales">
+    <?php include 'inc/templates/empleados/menu.php'; ?>
+  </div>
     <hr>
     
-    <div class="row btnRegresar rh nominas laborales d-none" id="backButton">
+    <div class="row btnRegresar laborales d-none" id="backButton">
       <div class="col-md-12">
         <a href="javascript:history.back();" class="btn btn-secondary btn-block px-5">Regresar</a>
       </div>
-    </div>
     </div>
 
   </div>

@@ -1,6 +1,6 @@
 <form id="myform">
   <div class="bg-gradient-success p-5 text-white text-center rounded-right">
-  <h1>DATOS DE LA EMPRESA</h1>
+    <h1>DATOS DE LA EMPRESA</h1>
     <div class="form-row">
       <div class="form-group col-md-2">
         <label for="txtNomina">Número de nomina</label>
@@ -11,62 +11,72 @@
         <input type="text" class="form-control" id="txtTipo" readonly>
       </div>
       <div class="form-group col-md-4">
-          <label for="txtSucursal">Sucursal</label>
-          <select class="form-control" id="txtSucursal"></select>  
+        <label for="txtSucursal">Sucursal</label>
+        <select class="form-control" id="txtSucursal"></select>
       </div>
       <div class="form-group col-md-4">
-          <label for="txtClasificacion">Clasificación</label>
-          <select class="form-control" id="txtClasificacion">
-            <option value="" selected required>Selecciona una Clasificación</option>
-            <option value="A">Administrativo</option>
-            <option value="AO">Adm .Operativo</option>
-            <option value="O">Operativo</option>
-            <option value="E">Especial</option>
-            <option value="B">Becario</option>
-          </select>
+        <label for="txtClasificacion">Clasificación</label>
+        <select class="form-control" id="txtClasificacion">
+          <option value="" selected required>Selecciona una Clasificación</option>
+          <option value="A">Administrativo</option>
+          <option value="AO">Adm .Operativo</option>
+          <option value="O">Operativo</option>
+          <option value="E">Especial</option>
+          <option value="B">Becario</option>
+        </select>
       </div>
     </div>
     <div class="form-row">
-      <div class="form-group col-md-4">
-        <label for="txtCategoria">Categoria</label>
-        <input type="text" class="form-control" id="txtCategoria" placeholder="Categoria">
+      <div class="form-group col-md-2">
+        <label for="txtSalarioDiario">Salario Diario</label>
+        <input type="text" class="form-control" id="txtSalarioDiario" placeholder="Salario Diario">
+      </div>
+      <div class="form-group col-md-3">
+        <label for="txtSalarioMensual">Salario Mensual</label>
+        <input type="text" class="form-control" id="txtSalarioMensual" placeholder="Salario Mensual">
+      </div>
+      <div class="form-group col-md-3">
+        <label for="txtTipoNomina">Nomina</label>
+        <select class="form-control" id="txtTipoNomina">
+          <option value="" selected required>Selecciona Nomina</option>
+          <option value="Q">QUIN</option>
+          <option value="S">SEM</option>
+        </select>
       </div>
       <div class="form-group col-md-4">
-          <label for="txtTipoNomina">Nomina</label>
-          <select class="form-control" id="txtTipoNomina">
-            <option value="" selected required>Selecciona Nomina</option>
-            <option value="Q">QUIN</option>
-            <option value="S">SEM</option>
-          </select>
-      </div>
-      <div class="form-group col-md-4"> 
-          <label for="txtCelula">Departamento</label>
-          <select class="form-control" id="txtCelula"></select>  
+        <label for="txtCelula">Departamento</label>
+        <select class="form-control" id="txtCelula"></select>
       </div>
     </div>
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="txtfechaAlta">Fecha Alta</label>
-        <input type="date" class="form-control" id="txtfechaAlta" value="<?php echo date("Y-m-d");?>">
+        <input type="date" class="form-control" id="txtfechaAlta" value="<?php echo date("Y-m-d"); ?>">
       </div>
       <div class="form-group col-md-4">
-          <label for="txtRegistro">Registro</label>
-          <select class="form-control" id="txtRegistro">
-            <option value="SAC" selected>SAC</option>
-            <option value="CNO">CNO</option>
-          </select>
+        <label for="txtRegistro">Registro</label>
+        <select class="form-control" id="txtRegistro">
+          <option value="SAC" selected>SAC</option>
+          <option value="CNO">CNO</option>
+        </select>
       </div>
       <div class="form-group col-md-4">
-          <label for="txtPuesto">Puesto</label>
-          <select class="form-control" id="txtPuesto"></select>  
+        <label for="txtPuesto">Puesto</label>
+        <select class="form-control" id="txtPuesto"></select>
       </div>
     </div>
     <div class="form-row">
       <!-- JEFE DIRECTO -->
       <div class="form-group col-md-12">
-          <label for="txtJefe">Jefe directo</label>
-          <select class="form-control text-uppercase" id="txtJefe">
-          </select>
+        <label for="txtJefe">Jefe directo</label>
+        <select class="form-control text-uppercase" id="txtJefe">
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-12">
+        <label for="txtComentario">Comentarios</label>
+        <textarea class="form-control" id="txtComentario" rows="3">Dado de alta en laborales.</textarea>
       </div>
     </div>
   </div>
@@ -97,7 +107,7 @@
         <label for="txtRFC">RFC</label>
         <input type="text" class="form-control" id="txtRFC">
       </div>
-      
+
       <div class="form-group col-md-3">
         <label for="txtNSS">NSS</label>
         <input type="text" class="form-control" id="txtNSS">
@@ -110,7 +120,7 @@
     <div class="form-row">
       <div class="form-group col-md-2">
         <label for="txtfechaNacimiento">Fecha Nacimiento</label>
-        <input type="date" class="form-control" id="txtfechaNacimiento" value="<?php echo date("Y-m-d");?>">
+        <input type="date" class="form-control" id="txtfechaNacimiento" value="<?php echo date("Y-m-d"); ?>">
       </div>
       <div class="form-group col-md-2">
         <label for="txtLnacimiento">Lugar de nacimiento</label>
@@ -312,7 +322,6 @@
   </div>
 
   <hr>
-
   <button type="submit" class="btn btn-primary btn-block" id="btnGuardarEmpleado">GUARDAR <i class="far fa-save"></i></button>
   <br>
 </form>

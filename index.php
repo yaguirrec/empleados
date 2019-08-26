@@ -36,6 +36,9 @@
               case 'alta-empleado':
                 include 'inc/templates/empleados/alta-empleado.php';
                 break;
+              case 'modificar-empleado':
+                include 'inc/templates/empleados/modificar.php';
+                break;
               case 'altas':
                 include 'inc/templates/altas/vista.php';
               break;

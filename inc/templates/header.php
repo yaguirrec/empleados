@@ -51,6 +51,7 @@
 <input type="hidden" id="nivel_usuario" value="<?php echo $nivel_usuario; ?>" readonly>
 <input type="hidden" id="emp_activo" value="<?php echo $emp_level; ?>" readonly>
 <input type="hidden" id="sup_activo" value="<?php echo $sup_level; ?>" readonly>
+<input type="hidden" id="empleado_activo" value="<?php echo $usuario_activo; ?>" readonly>
 <input type="hidden" id="usuario_correo" value="<?php echo $usuario_correo; ?>" readonly>
 <body id="page-top">
   <!-- Page Wrapper -->

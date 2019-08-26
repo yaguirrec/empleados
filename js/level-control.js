@@ -12,6 +12,7 @@ $( document ).ready(function() {
     let usuario_activo = document.querySelector('#emp_activo').value;
     let super_activo = document.querySelector('#sup_activo').value;
     let usuario_correo = document.querySelector('#usuario_correo').value;
+    let empleado_activo = document.querySelector('#empleado_activo').value;
 
     let backButton = $( "#backButton" ),
         seccionLateral = $("#sidePaneAdmin"),
@@ -23,7 +24,7 @@ $( document ).ready(function() {
         rh = $(".rh"),
         nominas = $(".nominas");
 
-    console.log('campo ' + nivel_usuario);
+    console.log('campo ' + empleado_activo);
 
     switch (nivel_usuario){
         case '': 
