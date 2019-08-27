@@ -189,7 +189,7 @@ $(document).ready(function () {
         xmlCEL.send(listaCEL);
     }
 
-    listarPuestos = (paramCel, clasificacion) => {
+    let listarPuestos = (paramCel, clasificacion) => {
         var listaP = new FormData(),
             action = 'buscarP';
         listaP.append('action', action);
@@ -215,7 +215,7 @@ $(document).ready(function () {
         xmlP.send(listaP);
     }
 
-    listarJefes = (paramPuesto, paramCel) => {
+    let listarJefes = (paramPuesto, paramCel) => {
         var listaJefe = new FormData(),
             action = 'buscarJefe';
         listaJefe.append('action', action);
@@ -239,6 +239,37 @@ $(document).ready(function () {
             }
         }
         xmlJefe.send(listaJefe);
+    }
+
+    let listarFraccionamientos = (cp) => {
+        if (cp.length === 5) {
+            $.ajax({
+                type: "GET",
+                url: "https://api-codigos-postales.herokuapp.com/v2/codigo_postal/" + cp,
+                success: function (data) {
+                    $("#txtEdo").val(data.estado);
+                    $("#txtMunicipio").val(data.municipio);
+                    $("#txtLocalidad").val(data.municipio);
+                    var colonias = data.colonias,
+                        s = '';
+                    for (var i in colonias) {
+                        s += '<option value="' + colonias[i] + '">' + colonias[i] + '</option>';
+                    }
+                    $("#txtFraccionamiento").html(s);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(jqXHR.status);
+                }
+            });
+        } else {
+            Swal.fire({
+                position: 'center',
+                type: 'warning',
+                title: 'EL CP debe tener 5 digitos',
+                showConfirmButton: false,
+                timer: 1000
+            })
+        }
     }
 
     $("#exportInfo").click(function () {
@@ -747,7 +778,7 @@ $(document).ready(function () {
                 datosGafete.append('empFoto', empFoto);
                 datosGafete.append('action', action);
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST', localBackend + 'control.php' , true);
+                xhr.open('POST', localBackend + 'control.php', true);
                 xhr.send(datosGafete);
                 xhr.onload = function () {
                     if (this.status === 200) {
@@ -857,7 +888,9 @@ $(document).ready(function () {
             break;
         //LLENAR FORMULARIO DATOS DEL EMPLEADO
         case 'modificar-empleado':
+            // let btnModificarEmpleado = $('#btnModificarEmpleado');
             listarSucursales();
+            
 
             var action = 'datos-empleado',
                 numero_nomina = localStorage.getItem('codigoEmpleado');
@@ -872,7 +905,6 @@ $(document).ready(function () {
                     var datos = respuesta.informacion[0];
                     $("#txtNomina").val(datos.numero_nomina);
                     $("#txtTipo").val(datos.status);
-                    $("#txtSucursal").val(datos.id_sucursal);
                     $("#txtClasificacion").val(datos.clasificacion);
                     $("#txtSalarioDiario").val(datos.salario_diario);
                     $("#txtSalarioMensual").val(datos.salario_mensual);
@@ -882,23 +914,227 @@ $(document).ready(function () {
                     $("#txtRegistro").val(datos.registro_patronal);
                     listarPuestos(datos.id_celula, datos.clasificacion);
                     listarJefes(datos.id_puesto, datos.id_celula);
-                    $("#txtEmpleados").val(datos.status);
-                    $("#txtEmpleados").val(datos.status);
-                    $("#txtEmpleados").val(datos.status);
-                    $("#txtJefe").val(datos.status);
+                    $("#txtComentario").val(datos.comentarios);
+                    $("#txtNombre").val(datos.nombre);
+                    $("#txtPaterno").val(datos.apellido_paterno);
+                    $("#txtMaterno").val(datos.apellido_materno);
+                    $("#txtCURP").val(datos.CURP);
+                    $("#txtRFC").val(datos.RFC);
+                    $("#txtNSS").val(datos.nss);
+                    $("#txtDV").val(datos.dv);
+                    $("#txtfechaNacimiento").val((datos.fecha_nacimiento.date).substr(0, 10));
+                    $("#txtLnacimiento").val(datos.lugar_nacimiento);
+                    $("#txtGenero").val(datos.sexo);
+                    $("#txtTI").val(datos.identificacion);
+                    $("#txtID").val(datos.numero_identificacion);
+                    $("#txtCivil").val(datos.estado_civil);
+                    $("#txtEscolaridad").val(datos.escolaridad);
+                    $("#txtStescolaridad").val(datos.constancia);
+                    $("#txtNombrePadre").val(datos.nombre_padre);
+                    $("#txtNombreMadre").val(datos.nombre_madre);
+                    $("#txtCalle").val(datos.calle);
+                    $("#txtNume").val(datos.numero_exterior);
+                    $("#txtNumi").val(datos.numero_interior);
+                    $("#txtCP").val(datos.codigo_postal);
+                    listarFraccionamientos(datos.codigo_postal)
+                    $("#txtInfonavit").val(datos.infonavit);
+                    $("#txtNinfonavit").val(datos.numero_infonavit);
+                    $("#txtFonacot").val(datos.fonacot);
+                    $("#txtNfonacot").val(datos.numero_fonacot);
+                    $("#txtBanco").val(datos.cuenta);
+                    $("#txtCuenta").val(datos.numero_cuenta);
+                    $("#txtCorreo").val(datos.correo);
+                    $("#txtTelefono").val(datos.telefono);
+                    $("#txtCelular").val(datos.celula);
+                    $("#txtContacto").val(datos.contacto_emergencia_nombre);
+                    $("#txtNcontacto").val(datos.contacto_emergencia_numero);
 
                     setTimeout(function () {
+                        $("#txtSucursal").val(datos.id_sucursal);
                         $("#txtCelula").val(datos.id_celula);
                         $("#txtPuesto").val(datos.id_puesto);
                         $("#txtJefe").val(datos.jefe_nomina);
-                    }, 250);
+                        $("#txtFraccionamiento").val(datos.fraccionamiento);
+                        $("#txtEdo").val(datos.estado);
+                        $("#txtMunicipio").val(datos.municipio);
+                        $("#txtLocalidad").val(datos.localidad);
+                    }, 280);
+
+                    $("#txtClasificacion").focusout(function(){
+                        listarDepartamentos($("#txtSucursal").val(),$("#txtClasificacion").val());
+                    });
+
+                    
+                    $("#txtCelula").focusout(function(){
+                        listarPuestos($("#txtCelula").val(),$("#txtClasificacion").val());
+                    });
                 }
 
 
 
             });
 
-
+            $('#btnModificarEmpleado').click(function(e){
+                e.preventDefault();
+                let nomina = $('#txtNomina').val(),
+                    jefenomina = $('#txtJefe').val(),
+                    tipoNomina = $('#txtTipoNomina').val(),
+                    tipo = $('#txtTipo').val(),
+                    sucursal = $('#txtSucursal').val(),
+                    clasificacion = $('#txtClasificacion').val(),
+                    salarioDiario = $('#txtSalarioDiario').val(),
+                    salarioMensual = $('#txtSalarioMensual').val(),
+                    celula = $('#txtCelula').val(),
+                    fechaAlta = $('#txtfechaAlta').val(),
+                    registro = $('#txtRegistro').val(),
+                    puesto = $('#txtPuesto').val(),
+                    comentario = $('#txtComentario').val(),
+                    nombre = $('#txtNombre').val(),
+                    aPaterno = $('#txtPaterno').val(),
+                    aMaterno = $('#txtMaterno').val(),
+                    // curp = $('#txtCURP').val(),
+                    // rfc = $('#txtRFC').val(),
+                    // nss = $('#txtNSS').val(),
+                    // dv = $('#txtDV').val(),
+                    // fechaNacimiento = $('#txtfechaNacimiento').val(),
+                    lNacimiento = $('#txtLnacimiento').val(),
+                    // genero = $('#txtGenero').val(),
+                    tIdentificacion = $('#txtTI').val(),
+                    id = $('#txtID').val(),
+                    eCivil = $('#txtCivil').val(),
+                    escolaridad = $('#txtEscolaridad').val(),
+                    cEscolaridad = $('#txtStescolaridad').val(),
+                    nPadre = $('#txtNombrePadre').val(),
+                    nMadre = $('#txtNombreMadre').val(),
+                    calle = $('#txtCalle').val(),
+                    numE = $('#txtNume').val(),
+                    numI = $('#txtNumi').val(),
+                    cp = $('#txtCP').val(),
+                    edo = $('#txtEdo').val(),
+                    municipio = $('#txtMunicipio').val(),
+                    localidad = $('#txtLocalidad').val(),
+                    fraccionamiento = $('#txtFraccionamiento').val(),
+                    infonavit = $('#txtInfonavit').val(),
+                    nInfonavit = $('#txtNinfonavit').val(),
+                    fonacot = $('#txtFonacot').val(),
+                    nFonacot = $('#txtNfonacot').val(),
+                    banco = $('#txtBanco').val(),
+                    cuenta = $('#txtCuenta').val(),
+                    correo = $('#txtCorreo').val(),
+                    telefono = $('#txtTelefono').val(),
+                    celular = $('#txtCelular').val(),
+                    contacto = $('#txtContacto').val(),
+                    nContacto = $('#txtNcontacto').val(),
+                    // curpini = curp.substr(0, 4),
+                    // curpfin = curp.substr(10, 8);
+                    domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
+                if
+                    (
+                    salarioDiario.trim() === '' || celula.trim() === '' ||
+                    registro.trim() === '' || puesto.trim() === '' ||
+                    nombre.trim() === '' || aPaterno.trim() === '' ||
+                    aMaterno.trim() === '' || id.trim() === '' || nPadre.trim() === '' ||
+                    nMadre.trim() === '' || calle.trim() === '' ||
+                    numE.trim() === '' ||
+                    cp.trim() === '' || nInfonavit.trim() === '' ||
+                    nFonacot.trim() === '' || cuenta.trim() === '' ||
+                    correo.trim() === '' || telefono.trim() === '' ||
+                    celular.trim() === '' || contacto.trim() === '' ||
+                    nContacto.trim() === ''
+                ) {
+                    Swal.fire({
+                        position: 'center',
+                        type: 'warning',
+                        title: 'Debe llenar todos los datos',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                }
+                else {
+                    var nombreLargo = `${aPaterno} ${aMaterno} ${nombre}`;
+                    $.ajax({
+                        type: 'POST',
+                        url: backendURL,
+                        data: {
+                            action: 'modificarEmpleado',
+                            nomina: nomina,
+                            jefenomina: jefenomina,
+                            tipoNomina: tipoNomina,
+                            tipo: tipo,
+                            sucursal: sucursal,
+                            clasificacion: clasificacion,
+                            salarioDiario: salarioDiario,
+                            salarioMensual: salarioMensual,
+                            celula: celula,
+                            fechaAlta: fechaAlta,
+                            registro: registro,
+                            puesto: puesto,
+                            comentario: comentario,
+                            nombre: nombre,
+                            aPaterno: aPaterno,
+                            aMaterno: aMaterno,
+                            nombreLargo: nombreLargo,
+                            lNacimiento: lNacimiento,
+                            tIdentificacion: tIdentificacion,
+                            id: id,
+                            eCivil: eCivil,
+                            escolaridad: escolaridad,
+                            cEscolaridad: cEscolaridad,
+                            nPadre: nPadre,
+                            nMadre: nMadre,
+                            calle: calle,
+                            numE: numE,
+                            numI: numI,
+                            cp: cp,
+                            edo: edo,
+                            municipio: municipio,
+                            localidad: localidad,
+                            fraccionamiento: fraccionamiento,
+                            domicilio: domicilio,
+                            infonavit: infonavit,
+                            nInfonavit: nInfonavit,
+                            fonacot: fonacot,
+                            nFonacot: nFonacot,
+                            banco: banco,
+                            cuenta: cuenta,
+                            correo: correo,
+                            telefono: telefono,
+                            celular: celular,
+                            contacto: contacto,
+                            nContacto: nContacto,
+                            empleado_activo: empleado_activo
+                        },
+                        success: function (response) {
+                            var respuesta = JSON.parse(response);
+                            console.log(respuesta);
+                            if (respuesta.estado === 'OK') {
+                                Swal.fire({
+                                    title: 'Correcto',
+                                    text: 'Guardado exitoso!',
+                                    type: 'success'
+                                })
+                                    .then(resultado => {
+                                        if (resultado.value) {
+                                            // location.reload();
+                                            // window.location.href = 'index.php?request=empleado';
+                                        }
+                                    })
+                            } else {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: 'No se realizo el guardado',
+                                    type: 'error'
+                                })
+                                    .then(resultado => {
+                                        if (resultado.value) {
+                                            // location.reload();
+                                        }
+                                    })
+                            }
+                        }
+                    });
+                }
+            });
 
             break;
         case 'main':
@@ -1419,7 +1655,6 @@ $(document).ready(function () {
             // DESHABILITAR CAMPOS
             function lockFields() {
                 if ($("#txtGenerp").val().trim() === 0) $("#txtGenero").attr('disabled', 'disabled');
-
             }
 
             let btnGuardarEmpleado = $('#btnGuardarEmpleado');
@@ -1455,8 +1690,8 @@ $(document).ready(function () {
                     eCivil = $('#txtCivil').val(),
                     escolaridad = $('#txtEscolaridad').val(),
                     cEscolaridad = $('#txtStescolaridad').val(),
-                    nPadre = $('#txtNombre').val(),
-                    nMadre = $('#txtNombre').val(),
+                    nPadre = `${$('#txtAPp').val()} ${$('#txtAMp').val()} ${$('#txtNomp').val()}`,
+                    nMadre = `${$('#txtAPm').val()} ${$('#txtAMm').val()} ${$('#txtNomm').val()}`,
                     calle = $('#txtCalle').val(),
                     numE = $('#txtNume').val(),
                     numI = $('#txtNumi').val(),

@@ -430,6 +430,41 @@ AS
 	END
 GO
 
+/**FUNCTION DATOS EMPLEADO*/
+
+EXEC datos_empleado_consulta @NUMERO_NOMINA = '19905'
+
+CREATE PROCEDURE datos_empleado_consulta
+@NUMERO_NOMINA VARCHAR(5)
+AS 
+	BEGIN
+		DECLARE @JEFE VARCHAR(5)
+		SET @JEFE = (SELECT jefe_nomina FROM tbjefe_empleado WHERE empleado_nomina = @NUMERO_NOMINA)
+		SELECT TOP 1 
+		te.numero_nomina,te.status,te.id_sucursal,td.clasificacion,td.salario_diario,td.salario_mensual,td.nomina,te.id_celula,te.fecha_alta,td.registro_patronal,
+		te.id_puesto,
+		@JEFE AS jefe_nomina,
+		td.comentarios,te.nombre,te.apellido_paterno,te.apellido_materno,
+		CONCAT(te.curpini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.curpfin) AS CURP,
+		CONCAT(te.rfcini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.rfcfin) AS RFC,
+		te.nss,td.dv,te.fecha_nacimiento,td.lugar_nacimiento,te.sexo,td.identificacion,td.numero_identificacion,td.estado_civil,td.escolaridad,td.constancia,
+		td.nombre_padre,td.nombre_madre,td.calle,td.numero_exterior,td.numero_interior,td.codigo_postal,td.estado,
+		td.municipio,td.localidad,td.fraccionamiento,td.infonavit,td.numero_infonavit,td.fonacot,td.numero_fonacot,td.cuenta,td.numero_cuenta,
+		td.correo,td.telefono,td.celular,td.contacto_emergencia_nombre,td.contacto_emergencia_numero
+		FROM tbempleados AS te
+		INNER JOIN tbsucursal AS ts
+		ON te.id_sucursal = ts.id_sucursal 
+		INNER JOIN tbcelula AS tc
+		ON tc.id_celula = te.id_celula
+		INNER JOIN tbarea AS ta
+		ON ta.codigo = tc.codigo_area
+		INNER JOIN tbdatos_empleados AS td
+		ON te.numero_nomina = td.numero_nomina
+		AND te.numero_nomina = @NUMERO_NOMINA
+	END
+GO
+
+
 --ver 
 select pa.*, PE.status from P1ACCESOWEB as pa
 INNER JOIN tbempleados AS pe
@@ -1202,6 +1237,8 @@ BEGIN TRY
   ROLLBACK
  END CATCH
 
+ /**UPDATE TBDATOS, TBDATOS_EMPLEADOS, TBJEFE_EMPLEADO **/
+
 
 
 SELECT 
@@ -1229,31 +1266,6 @@ INNER JOIN tbdatos_empleados AS td
 ON td.numero_nomina = te.numero_nomina
 WHERE te.fecha_alta >= '2019-08-01' AND te.fecha_alta <= '2019-08-23'
 ORDER BY te.status ASC, te.created_at ASC
-
-SELECT 
-te.numero_nomina,te.status,te.id_sucursal,td.clasificacion,td.salario_diario,td.salario_mensual,td.nomina,te.id_celula,te.fecha_alta,td.registro_patronal,
-te.id_puesto,tj.jefe_nomina,td.comentarios,te.nombre,te.apellido_paterno,te.apellido_materno,
-CONCAT(te.curpini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.curpfin) AS CURP,
-CONCAT(te.rfcini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.rfcfin) AS RFC,
-te.nss,td.dv,te.sexo,td.identificacion,td.numero_identificacion,td.estado_civil,td.escolaridad,td.constancia,
-td.nombre_padre,td.nombre_madre,td.calle,td.numero_exterior,td.numero_interior,td.codigo_postal,td.estado,
-td.municipio,td.localidad,td.fraccionamiento,td.infonavit,td.numero_infonavit,td.fonacot,td.numero_fonacot,td.cuenta,td.numero_cuenta,
-td.correo,td.telefono,td.celular,td.contacto_emergencia_nombre,td.contacto_emergencia_numero
-FROM tbempleados AS te
-INNER JOIN tbsucursal AS ts
-ON te.id_sucursal = ts.id_sucursal 
-INNER JOIN tbcelula AS tc
-ON tc.id_celula = te.id_celula
-INNER JOIN tbarea AS ta
-ON ta.codigo = tc.codigo_area
-INNER JOIN tbdatos_empleados AS td
-ON te.numero_nomina = td.numero_nomina
-INNER JOIN tbjefe_empleado AS tj
-ON tj.empleado_nomina = te.numero_nomina
-AND te.numero_nomina = '88891'
-ORDER BY te.status ASC, te.created_at DESC
-
-
 
 UPDATE tbdatos_empleados SET lote = '' WHERE numero_nomina IN
 ( 

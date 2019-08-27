@@ -110,11 +110,11 @@
 
       <div class="form-group col-md-3">
         <label for="txtNSS">NSS</label>
-        <input type="text" class="form-control" id="txtNSS">
+        <input type="text" class="form-control" id="txtNSS" minlength="10" maxlength="10">
       </div>
       <div class="form-group col-md-1">
         <label for="txtDV">DV</label>
-        <input type="text" class="form-control" id="txtDV">
+        <input type="text" class="form-control" id="txtDV" minlength="1" maxlength="1">
       </div>
     </div>
     <div class="form-row">

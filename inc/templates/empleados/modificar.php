@@ -87,7 +87,7 @@
                 <div class="form-row">
                     <div class="form-group col-md-12">
                         <label for="txtComentario">Comentarios</label>
-                        <textarea class="form-control" id="txtComentario" rows="3">Dado de alta en laborales.</textarea>
+                        <textarea class="form-control" id="txtComentario" rows="3"></textarea>
                     </div>
                 </div>
             </div>
@@ -121,11 +121,11 @@
 
                     <div class="form-group col-md-3">
                         <label for="txtNSS">NSS</label>
-                        <input type="text" class="form-control" id="txtNSS" readonly>
+                        <input type="text" class="form-control" minlength="10" maxlength="10" id="txtNSS">
                     </div>
                     <div class="form-group col-md-1">
                         <label for="txtDV">DV</label>
-                        <input type="text" class="form-control" id="txtDV" readonly>
+                        <input type="text" class="form-control" maxlength="1" minlength="1" id="txtDV" >
                     </div>
                 </div>
                 <div class="form-row">
@@ -139,7 +139,7 @@
                     </div>
                     <div class="form-group col-md-2">
                         <label for="txtGenero">Genero</label>
-                        <select class="form-control" id="txtGenero" readonly>
+                        <select class="form-control" id="txtGenero" disabled>
                             <option value="H" selected>Hombre</option>
                             <option value="M">Mujer</option>
                         </select>
@@ -197,11 +197,11 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="txtNombrePadre">Nombre del padre</label>
-                        <input type="text" class="form-control" id="txtNomp">
+                        <input type="text" class="form-control" id="txtNombrePadre">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="txtNombreMadre">Nombre de la madre</label>
-                        <input type="text" class="form-control" id="txtAPp">
+                        <input type="text" class="form-control" id="txtNombreMadre">
                     </div>
                 </div>
 
@@ -314,7 +314,7 @@
             </div>
 
             <hr>
-            <button type="submit" class="btn btn-primary btn-block" id="btnGuardarEmpleado">GUARDAR <i class="far fa-save"></i></button>
+            <button type="submit" class="btn btn-primary btn-block" id="btnModificarEmpleado">ENVIAR CAMBIOS <i class="far fa-save"></i></button>
             <br>
         </form>
     </div>
