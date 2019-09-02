@@ -37,6 +37,7 @@ $( document ).ready(function() {
             break;
         case '2':
             general.removeClass('d-none');
+            laborales.removeClass('d-none');
             break;
         case '3':
             seccionLateral.removeClass('d-none');
