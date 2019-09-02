@@ -32,12 +32,12 @@
     </div>
 </div>
 
-<div class="editarEmpleado d-none">
+<div class="reingresarEmpleado d-none">
     <div class="row">
         <div class="col-md-10 offset-1">
             <h1>Re ingreso de empleado</h1>
             <hr>
-            
+            <?php include 'inc/templates/empleados/reingreso.php'; ?>
         </div>
     </div>
 </div>

@@ -13,6 +13,8 @@ $( document ).ready(function() {
     let super_activo = document.querySelector('#sup_activo').value;
     let usuario_correo = document.querySelector('#usuario_correo').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
+    let seccionEnvioAltas = $('#seccionEnvioAltas');
+    let seccionAcuseAltas = $('#seccionAcuseAltas');
 
     let backButton = $( "#backButton" ),
         seccionLateral = $("#sidePaneAdmin"),
@@ -24,7 +26,7 @@ $( document ).ready(function() {
         rh = $(".rh"),
         nominas = $(".nominas");
 
-    console.log('campo ' + empleado_activo);
+    console.log('campo ' + nivel_usuario);
 
     switch (nivel_usuario){
         case '': 
@@ -50,12 +52,14 @@ $( document ).ready(function() {
             seccionLateral.removeClass('d-none');
             seccionPanel.removeClass('d-none');
             laborales.removeClass('d-none');
+            seccionEnvioAltas.removeClass('d-none');
             // gafetes.removeClass('d-none');
             break;
         case '6':
             seccionLateral.removeClass('d-none');
             seccionPanel.removeClass('d-none');
             nominas.removeClass('d-none');
+            seccionAcuseAltas.removeClass('d-none');
             break;
         default:
             seccionLateral.removeClass('d-none');

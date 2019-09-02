@@ -48,11 +48,11 @@
             </tbody>
             </table>
 
-            <div class="col-md-8 offset-2 laborales seccionEnvioAltas d-none">
+            <div class="col-md-8 offset-2 d-none" id="seccionEnvioAltas">
                 <button class="btn btn-success btn-block" id="btnEnviarAltas">ENVIAR</button>
             </div>
 
-            <div class="col-md-8 offset-2 nominas seccionAcuseAltas d-nonde">
+            <div class="col-md-8 offset-2 d-none" id="seccionAcuseAltas">
                 <div class="form-group">
                     <label for="txtAcuse">Acuse de alta</label>
                     <input type="file" class="form-control-file" id="txtAcuse">

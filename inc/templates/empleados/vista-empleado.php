@@ -39,7 +39,7 @@
 
     <br>
 
-  <div class="card-deck laborales">
+  <div class="card-deck laborales d-none">
     <?php include 'inc/templates/empleados/menu.php'; ?>
   </div>
     <hr>

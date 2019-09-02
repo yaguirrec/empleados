@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-12">
-        <h1 class="text-center">Modificar empleado</h1>
+        <h1 class="text-center">Reingreso de empleado</h1>
         <h2 class="text-center" id="nominaEmpleado"></h2>
     </div>
 </div>
@@ -17,8 +17,8 @@
                     <div class="form-group col-md-1">
                         <label for="txtTipo">Tipo</label>
                         <select class="form-control" id="txtTipo" disabled>
-                            <option value="A" selected>Alta</option>
-                            <option value="R">Reingreso</option>
+                            <option value="A">Alta</option>
+                            <option value="R" selected>Reingreso</option>
                             <option value="B">Baja</option>
                         </select>
                     </div>
@@ -67,7 +67,7 @@
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label for="txtfechaAlta">Fecha Alta</label>
-                        <input type="date" class="form-control" id="txtfechaAlta" readonly>
+                        <input type="date" class="form-control" id="txtfechaAlta">
                     </div>
                     <div class="form-group col-md-4">
                         <label for="txtRegistro">Registro</label>
@@ -319,7 +319,7 @@
             </div>
 
             <hr>
-            <button type="submit" class="btn btn-primary btn-block" id="btnModificarEmpleado">ENVIAR CAMBIOS <i class="far fa-save"></i></button>
+            <button type="submit" class="btn btn-primary btn-block" id="btnReingresarEmpleado">ENVIAR CAMBIOS <i class="far fa-save"></i></button>
             <br>
         </form>
     </div>

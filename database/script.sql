@@ -91,7 +91,7 @@ CREATE TABLE [dbo].[tbestado](
 GO
 
 /**TABLA JEFES**/
-USE [MEXQApptemp]
+USE [MEXQAPPPR]
 GO
 SET ANSI_NULLS ON
 GO
@@ -398,7 +398,7 @@ SELECT te.numero_nomina,te.nombre_largo,te.nombre,te.apellido_paterno,te.apellid
                         ON ta.codigo = tc.codigo_area
                         AND te.numero_nomina = '08444'
 
-EXEC datos_empleado_acceso @NUMERO_NOMINA = '77777'
+EXEC datos_empleado_acceso @NUMERO_NOMINA = '88892'
 
 
 /**STORED FUINCTION LOGIN*/
@@ -432,9 +432,42 @@ GO
 
 /**FUNCTION DATOS EMPLEADO*/
 
-EXEC datos_empleado_consulta @NUMERO_NOMINA = '19905'
+EXEC datos_empleado_consulta @NUMERO_NOMINA = '26564'
 
-CREATE PROCEDURE datos_empleado_consulta
+
+/**CONSULTA EMPLEADOS**/
+SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
+                            CASE
+                                WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
+                                THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
+                                ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                            END AS Puesto,
+                            CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
+                            ts.nombre AS 'Sucursal',
+							ta.nombre AS 'Departamento',
+							CASE 
+								WHEN (SELECT descripcion FROM DEPARTAMENTOS_NOMINAS WHERE numerodepartamento = te.departamento_temp) IS NULL
+								THEN (SELECT nombre FROM tbcelula WHERE id_celula = te.id_celula)
+								ELSE (SELECT descripcion FROM DEPARTAMENTOS_NOMINAS WHERE numerodepartamento = te.departamento_temp)
+							END AS 'Celula',
+							te.status,te.created_at
+                            FROM tbempleados AS te
+                            INNER JOIN tbsucursal AS ts
+                            ON te.id_sucursal = ts.id_sucursal 
+                            INNER JOIN tbcelula AS tc
+                            ON tc.id_celula = te.id_celula
+                            INNER JOIN tbarea AS ta
+                            ON ta.codigo = tc.codigo_area
+                            WHERE te.status <> 'B' AND te.numero_nomina = '26564'
+                            ORDER BY te.status ASC, te.created_at DESC
+
+select * from [dbo].[departamentos_nomipaq]
+select * from tbempleados where numero_nomina = '05634'
+select * from tbempleados where id_celula = ''
+
+SELECT jefe_nomina FROM tbjefe_empleado WHERE empleado_nomina = '88889'
+
+ALTER PROCEDURE datos_empleado_consulta
 @NUMERO_NOMINA VARCHAR(5)
 AS 
 	BEGIN
@@ -443,13 +476,13 @@ AS
 		SELECT TOP 1 
 		te.numero_nomina,te.status,te.id_sucursal,td.clasificacion,td.salario_diario,td.salario_mensual,td.nomina,te.id_celula,te.fecha_alta,td.registro_patronal,
 		te.id_puesto,
-		@JEFE AS jefe_nomina,
+		CASE WHEN @JEFE IS NULL THEN '' ELSE @JEFE END AS jefe_nomina,
 		td.comentarios,te.nombre,te.apellido_paterno,te.apellido_materno,
 		CONCAT(te.curpini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.curpfin) AS CURP,
 		CONCAT(te.rfcini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.rfcfin) AS RFC,
-		te.nss,td.dv,te.fecha_nacimiento,td.lugar_nacimiento,te.sexo,td.identificacion,td.numero_identificacion,td.estado_civil,td.escolaridad,td.constancia,
+		te.nss,td.dv,td.lote,te.fecha_nacimiento,td.lugar_nacimiento,te.sexo,td.identificacion,td.numero_identificacion,td.estado_civil,LOWER(td.escolaridad) AS escolaridad,td.constancia,
 		td.nombre_padre,td.nombre_madre,td.calle,td.numero_exterior,td.numero_interior,td.codigo_postal,td.estado,
-		td.municipio,td.localidad,td.fraccionamiento,td.infonavit,td.numero_infonavit,td.fonacot,td.numero_fonacot,td.cuenta,td.numero_cuenta,
+		td.municipio,td.localidad,td.fraccionamiento,UPPER(td.infonavit) AS infonavit,td.numero_infonavit,UPPER(td.fonacot) AS fonacot,td.numero_fonacot,UPPER(td.cuenta) AS cuenta,td.numero_cuenta,
 		td.correo,td.telefono,td.celular,td.contacto_emergencia_nombre,td.contacto_emergencia_numero
 		FROM tbempleados AS te
 		INNER JOIN tbsucursal AS ts
@@ -478,6 +511,14 @@ CREATE VIEW PUESTOS_NOMINAS AS
 SELECT CAST(idpuesto AS VARCHAR(10)) COLLATE SQL_Latin1_General_CP1_CI_AS AS idpuesto,
 descripcion COLLATE SQL_Latin1_General_CP1_CI_AS AS descripcion
 FROM [192.168.2.203\COMPAC].[ct2017_SERVICIOS_].[dbo].[nom10006]
+
+/**VISTA DEPARTAMENTO NOMIPAQ**/
+CREATE VIEW DEPARTAMENTOS_NOMINAS AS
+SELECT CAST(numerodepartamento AS VARCHAR(10)) COLLATE SQL_Latin1_General_CP1_CI_AS AS numerodepartamento,
+descripcion COLLATE SQL_Latin1_General_CP1_CI_AS AS descripcion
+FROM [dbo].[departamentos_nomipaq]
+
+SELECT * FROM [dbo].[departamentos_nomipaq]
 
 
 /** VISTA EMPLEADOS NOMIPAQ */
@@ -999,13 +1040,8 @@ UPDATE tbempleados SET id_celula = 361 WHERE numero_nomina = '01885'
 
 SELECT id_puesto,nombre FROM tbpuesto WHERE id_celula = 28 ORDER BY id_nivel ASC
 
-SELECT CONCAT(curpini + RIGHT(YEAR(fecha_nacimiento),2) , FORMAT(fecha_nacimiento,'MM') , CONVERT(CHAR(2),fecha_nacimiento,103) , curpfin), * FROM tbempleados
-WHERE CONCAT(curpini + RIGHT(YEAR(fecha_nacimiento),2) , FORMAT(fecha_nacimiento,'MM') , CONVERT(CHAR(2),fecha_nacimiento,103) , curpfin) = 'VAFC920220HASLNS06'
-SELECT top 1  CONCAT(curpini + RIGHT(YEAR(fecha_nacimiento),2) , FORMAT(fecha_nacimiento,'MM') , CONVERT(CHAR(2),fecha_nacimiento,103) , curpfin) AS curp, * FROM tbempleados where numero_nomina = '08444'
+SELECT numero_nomina FROM tbempleados WHERE CONCAT(curpini + RIGHT(YEAR(fecha_nacimiento),2) , FORMAT(fecha_nacimiento,'MM') , CONVERT(CHAR(2),fecha_nacimiento,103) , curpfin) = 'HIGA921123MASMHF08'
 
-SELECT MAX(CAST(REPLACE(no_trab, ' ', '') AS INT)) as NUMERO FROM rh_empelados2 WHERE no_trab <> '----------' AND no_trab NOT LIKE '´%' AND DATALENGTH(CAST(REPLACE(no_trab, ' ', '') AS INT)) < 6
-SELECT no_trab,* FROM rh_empelados2 WHERE no_trab = '----------'                                             
-SELECT TOP 100 no_trab n,* FROM rh_empelados2 WHERE fecha_alta > '2019-06-01' order by no_trab DESC
 
 /*OBTENER ULTIMO NUMERO DE NOMINA EN PJEMPLOYEE**/
 SELECT top 1 MAX(CAST(REPLACE(employee, ' ', '') AS INT)) AS numeroNomina FROM PJEMPLOY WHERE ISNUMERIC(employee) = 1 AND em_id03 = '' GROUP BY crtd_datetime ORDER BY crtd_datetime DESC
@@ -1031,17 +1067,14 @@ REPLACE(correo_electronico,' ','') AS correo_electronico,REPLACE(telefono_casa,'
 from rh_empelados2
 WHERE no_trab = '09666'
 
-SELECT * FROM tbdatos_empleados WHERE numero_nomina = '88891'
-SELECT * FROM tbempleados WHERE numero_nomina = '88891'
-SELECT * FROM PJEMPLOY WHERE employee ='88891'
-SELECT * FROM PJEMPPJT WHERE employee ='88891'
-SELECT * FROM PJEMPPJT WHERE employee ='08444'
+SELECT * FROM tbdatos_empleados WHERE numero_nomina = '26564'
+SELECT * FROM tbempleados WHERE numero_nomina = '88893'
+SELECT * FROM PJEMPLOY WHERE employee ='88892'
+SELECT * FROM PJEMPPJT WHERE employee ='88892'
 
 SELECT * FROM tbdatos_empleados
 
 /*
-SELECT * FROM tbdatos_empleados
-TRUNCATE TABLE tbdatos_empleados
 DELETE FROM tbempleados WHERE numero_nomina = '77777'
 DELETE FROM PJEMPLOY WHERE employee = '77777'
 DELETE FROM PJEMPPJT WHERE employee = '77777'
@@ -1056,7 +1089,7 @@ EXEC insertEmployeeData '88888','HERNANDEZ IBARRA GABRIELA','gabriela','hernande
 						'125','2','SAN ANTONIO DE LOS HORCONES','PRIVADA SAN ANTONIO DE LOS HORCONES #125 INT 2 SAN ANTONIO DE LOS HORCONES','55632','AGUASCALIENTES','JESUS MARIA','SAN ANTONIO DE LOS HORCONES','NO','','NO','','SI','RETENIDO',
 						'g@gmail.com','9128574','4493216547','Juana Ibarra','4498754631',0;
 
-/**insert empleados en PJEMPLOY / TBEMPLEADOS / TBEMPLEADOS_DATOIS**/
+/**insert empleados en PJEMPLOY / TBEMPLEADOS / TBEMPLEADOS_DATOS**/
 ALTER PROCEDURE insertEmployeeData(
 								@nnomina varchar(10), 
 								@jnomina varchar(5),
@@ -1209,10 +1242,141 @@ BEGIN TRY
   ROLLBACK
  END CATCH
 
+ /***
+MODIFICAR DATOS DEL EMPLEADO
+TBDATOS - PJEMPLOY - TBDATOS_EMPLEADOS
+*/
+
+ALTER PROCEDURE updateEmployeeData(
+@nnomina varchar(10), 
+@jnomina varchar(5),
+@nlargo varchar(85), 
+@nombre varchar(35), 
+@apaterno varchar(35),
+@amaterno varchar(35),
+@nss varchar(25),
+@empleado_status varchar(1),
+@fechaa DATE,
+@comentario text,
+@ids INT,
+@ida INT,
+@idc INT,
+@idp INT,
+@clasificacion varchar(8)
+,@salarioDiario varchar(25)
+,@salarioMensual varchar(25)
+,@nomina  varchar(1)
+,@registro_patronal  varchar(10)
+,@lote  varchar(15)
+,@dv  varchar(3)
+,@lugar_nacimiento  varchar(45)
+,@identificacion  varchar(15)
+,@numero_identificacion  varchar(65)
+,@estado_civil  varchar(5)
+,@escolaridad  varchar(25)
+,@constancia  varchar(25)
+,@nombre_padre  varchar(65)
+,@nombre_madre  varchar(65)
+,@calle  varchar(65)
+,@numero_interior  varchar(10)
+,@numero_exterior  varchar(10)
+,@fraccionamiento  varchar(65)
+,@domicilio_completo  varchar(65)
+,@codigo_postal  varchar(5)
+,@estado  varchar(55)
+,@municipio  varchar(55)
+,@localidad  varchar(55)
+,@infonavit  varchar(2)
+,@numero_infonavit  varchar(35)
+,@fonacot  varchar(2)
+,@numero_fonacot  varchar(35)
+,@cuenta  varchar(2)
+,@numero_cuenta  varchar(35)
+,@correo  varchar(55)
+,@telefono  varchar(25)
+,@celular  varchar(25)
+,@contacto_emergencia_nombre  varchar(40)
+,@contacto_emergencia_numero  varchar(15)
+,@nominaControl varchar(5)
+)
+AS
+BEGIN TRY
+BEGIN TRANSACTION
+		/**TBDATOS_EMPLEADO**/
+		UPDATE [dbo].[tbdatos_empleados]
+		   SET [clasificacion] = @clasificacion
+			  ,[salario_diario] = @salarioDiario
+			  ,[salario_mensual] = @salarioMensual
+			  ,[nomina] = @nomina
+			  ,[registro_patronal] = @registro_patronal
+			  ,[lote] = @lote
+			  ,[dv] = @dv
+			  ,[lugar_nacimiento] = @lugar_nacimiento
+			  ,[identificacion] = @identificacion
+			  ,[numero_identificacion] = @numero_identificacion
+			  ,[estado_civil] = @estado_civil
+			  ,[escolaridad] = @escolaridad
+			  ,[constancia] = @constancia
+			  ,[nombre_padre] = UPPER(@nombre_padre)
+			  ,[nombre_madre] = UPPER(@nombre_madre)
+			  ,[calle] = @calle
+			  ,[numero_interior] = @numero_interior
+			  ,[numero_exterior] = @numero_exterior
+			  ,[fraccionamiento] = @fraccionamiento
+			  ,[domicilio_completo] = @domicilio_completo
+			  ,[codigo_postal] = @codigo_postal
+			  ,[estado] = @estado
+			  ,[municipio] = @municipio
+			  ,[localidad] = @localidad
+			  ,[infonavit] = @infonavit
+			  ,[numero_infonavit] = @numero_infonavit
+			  ,[fonacot] = @fonacot
+			  ,[numero_fonacot] = @numero_fonacot
+			  ,[cuenta] = @cuenta
+			  ,[numero_cuenta] = @numero_cuenta
+			  ,[correo] = @correo
+			  ,[telefono] = @telefono
+			  ,[celular] = @celular
+			  ,[contacto_emergencia_nombre] = @contacto_emergencia_nombre
+			  ,[contacto_emergencia_numero] = @contacto_emergencia_numero
+			  ,[posicion] = 1
+			  ,[comentarios] = @comentario
+			  ,[updated_at] = GETDATE()
+			  ,[updated_by] = @nominaControl
+		 WHERE [numero_nomina] = @nnomina
+		/**TBEMPLEADOS**/
+		UPDATE [dbo].[tbempleados]
+		   SET [numero_nomina] = @nnomina
+			  ,[nombre_largo] = UPPER(@nlargo)
+			  ,[nombre] = UPPER(@nombre)
+			  ,[apellido_paterno] = UPPER(@apaterno)
+			  ,[apellido_materno] = UPPER(@amaterno)
+			  ,[nss] = @nss
+			  ,[fecha_alta] = @fechaa
+			  ,[status] = @empleado_status
+			  ,[id_sucursal] = @ids
+			  ,[id_area] = @ida
+			  ,[id_celula] = @idc
+			  ,[id_puesto] = @idp
+			  ,[updated_at] = GETDATE()
+			  ,[updated_by] = @nominaControl
+		 WHERE [numero_nomina] = @nnomina
+		 UPDATE tbjefe_empleado SET [jefe_nomina] = @jnomina, [updated_at] = GETDATE(), [updated_by] = @nominaControl WHERE [empleado_nomina] = @nnomina
+     COMMIT
+ END TRY
+ BEGIN CATCH
+  ROLLBACK
+ END CATCH
+
+
+ SELECT * FROM tbempleados WHERE numero_nomina = '88893'
+ update tbempleados set status = 'A' WHERE numero_nomina= '88893'
+
+
  EXEC firedEmployee '26549','TEST','TEST','2019-08-04','19905';
 
  /**insert empleados en PJEMPLOY / TBEMPLEADOS / TBEMPLEADOS_DATOIS**/
-ALTER PROCEDURE firedEmployee(
+CREATE PROCEDURE firedEmployee(
 								@numeroNomina varchar(5), 
 								@descripcion varchar(45), 
 								@comentario text, 
@@ -1236,9 +1400,6 @@ BEGIN TRY
  BEGIN CATCH
   ROLLBACK
  END CATCH
-
- /**UPDATE TBDATOS, TBDATOS_EMPLEADOS, TBJEFE_EMPLEADO **/
-
 
 
 SELECT 

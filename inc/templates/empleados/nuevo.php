@@ -86,11 +86,11 @@
     <div class="form-row">
       <div class="form-group col-md-4">
         <label for="txtNombre">Nombre(s)</label>
-        <input type="text" class="form-control" id="txtNombre">
+        <input type="text" class="form-control text-uppercase" id="txtNombre">
       </div>
       <div class="form-group col-md-4">
         <label for="txtPaterno">Apellido Paterno</label>
-        <input type="text" class="form-control" id="txtPaterno">
+        <input type="text" class="form-control text-uppercase" id="txtPaterno">
       </div>
       <div class="form-group col-md-4">
         <label for="txtMaterno">Apellido Materno</label>
@@ -129,8 +129,8 @@
       <div class="form-group col-md-2">
         <label for="txtGenero">Genero</label>
         <select class="form-control" id="txtGenero">
-          <option value="H" selected>Hombre</option>
-          <option value="M">Mujer</option>
+          <option value="M" selected>Hombre</option>
+          <option value="F">Mujer</option>
         </select>
       </div>
       <div class="form-group col-md-2">

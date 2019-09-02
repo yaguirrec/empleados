@@ -6,14 +6,13 @@ switch ($action){
     case 'envioAltas':
         // die(json_encode($_POST));
         $fecha = $_POST['fecha'];
-        // $cc = $_POST['cc'];
-        $cc = 'test1';
-        $correo_destinatario = 'cesar.fonseca20@outlook.com';
+        $cc = $_POST['cc'];
+        $correo_destinatario = 'irivera@mexq.com.mx';
         $asunto = 'Envio de altas '. $fecha;
         $datos = $_POST['datos'];
         $headers  = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-Type: text/html; charset=UTF-8' . "\r\n";
-        // $headers .= 'To: Mary <mary@example.com>, Kelly <kelly@example.com>' . "\r\n";
+        $headers .= 'To: agomez@mexq.com.mx, pvaldez@mexq.com.mx' . "\r\n";
         $headers .= 'Cc: '.$cc.'@mexq.com.mx' . "\r\n";
         foreach($datos as $dato){
             $data .= $dato . '</br>';
