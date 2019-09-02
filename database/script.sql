@@ -1067,10 +1067,10 @@ REPLACE(correo_electronico,' ','') AS correo_electronico,REPLACE(telefono_casa,'
 from rh_empelados2
 WHERE no_trab = '09666'
 
-SELECT * FROM tbdatos_empleados WHERE numero_nomina = '26564'
-SELECT * FROM tbempleados WHERE numero_nomina = '88893'
-SELECT * FROM PJEMPLOY WHERE employee ='88892'
-SELECT * FROM PJEMPPJT WHERE employee ='88892'
+SELECT * FROM tbdatos_empleados WHERE numero_nomina = '26719'
+SELECT * FROM tbempleados WHERE numero_nomina = '26700'
+SELECT * FROM PJEMPLOY WHERE employee ='26719'
+SELECT * FROM PJEMPPJT WHERE employee ='26719'
 
 SELECT * FROM tbdatos_empleados
 
