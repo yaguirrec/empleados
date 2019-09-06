@@ -342,7 +342,7 @@ ALTER TABLE tbprivilegios_emp
 ADD [panel_dh] [int] DEFAULT 0;
 */
 
-INSERT INTO tbprivilegios_emp (tipo,descripcion,created_at) VALUES ('Nominas','Acceso a Nominas',GETDATE())
+INSERT INTO tbprivilegios_emp (tipo,descripcion,created_at) VALUES ('Transportes','Acceso al departamento de transportes',GETDATE())
 SELECT * FROM tbprivilegios_emp
 
 /*CREAR TABLA RELACION EMPLEADOS-PERMISOS*/
@@ -363,10 +363,9 @@ CREATE TABLE [dbo].[tbemp_permisos](
 ) ON [PRIMARY]
 GO
 
-INSERT INTO tbemp_permisos (numero_nomina,created_at,emp_proy) VALUES ('23898',GETDATE(),6)
-SELECT * FROM P1ACCESOWEB WHERE employee = '77777'
-DELETE FROM P1ACCESOWEB WHERE id IN(2809)
+INSERT INTO tbemp_permisos (numero_nomina,created_at,emp_proy) VALUES ('16588',GETDATE(),7)
 SELECT * FROM tbemp_permisos
+--UPDATE tbemp_permisos SET numero_nomina = '16588' WHERE id = 9
 
 SELECT * FROM [dbo].[departamentos_nomipaq]
 SELECT * FROM [dbo].[puestos_nomipaq] where idpuesto = '520'
@@ -398,7 +397,7 @@ SELECT te.numero_nomina,te.nombre_largo,te.nombre,te.apellido_paterno,te.apellid
                         ON ta.codigo = tc.codigo_area
                         AND te.numero_nomina = '08444'
 
-EXEC datos_empleado_acceso @NUMERO_NOMINA = '88892'
+EXEC datos_empleado_acceso @NUMERO_NOMINA = '26344'
 
 /**STORED FUINCTION LOGIN*/
 
@@ -545,8 +544,22 @@ SELECT CAST(numerodepartamento AS VARCHAR(10)) COLLATE SQL_Latin1_General_CP1_CI
 descripcion COLLATE SQL_Latin1_General_CP1_CI_AS AS descripcion
 FROM [dbo].[departamentos_nomipaq]
 
-SELECT * FROM [dbo].[departamentos_nomipaq]
+ALTER VIEW VW_empleados_direcciones AS
+SELECT te.numero_nomina,te.nombre_largo,te.fecha_alta,
+CASE 
+	WHEN (SELECT nombre FROM tbcelula WHERE id_celula = te.id_celula) = '' 
+	THEN te.area_temp 
+	ELSE (SELECT nombre FROM tbcelula WHERE id_celula = te.id_celula) 
+END AS Area,
+td.estado,td.localidad,td.codigo_postal,CONCAT(td.calle,' #',td.numero_exterior, ' ' ,td.numero_interior,' ',td.fraccionamiento) as Domicilio 
+FROM tbempleados AS te
+INNER JOIN tbdatos_empleados AS td
+ON te.numero_nomina = td.numero_nomina
+AND te.status <> 'B'
+GROUP BY te.numero_nomina,te.nombre_largo,te.fecha_alta,te.id_celula,te.area_temp,td.estado,td.localidad,td.codigo_postal,td.calle,td.numero_exterior,td.numero_interior,,td.fraccionamiento
 
+
+SELECT * FROM VW_empleados_direcciones ORDER BY fecha_alta DESC
 
 /** VISTA EMPLEADOS NOMIPAQ */
 ALTER VIEW [vEmpleadosNM] AS
@@ -627,7 +640,9 @@ SELECT lupd_datetime AS ALTA, * FROM PJEMPLOY ORDER BY lupd_datetime
 --TRUNCATE TABLE tbempleados2 
 SELECT * FROM tbempleados2 ORDER BY created_at
 
-ALTER TRIGGER _newEmployee ON PJEMPLOY
+DROP TRIGGER _newEmployee
+
+CREATE TRIGGER _newEmployee ON PJEMPLOY
 FOR INSERT
 AS BEGIN
 	SET NOCOUNT ON;
@@ -660,7 +675,7 @@ ELSE
 END
 GO
 
-
+DROP TRIGGER _updateEmployee
 ALTER TRIGGER _updateEmployee ON PJEMPLOY
 FOR UPDATE
 AS BEGIN
@@ -823,6 +838,8 @@ ON vde.codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS = te.numero_nomina
 AND codigopostal <> ''
 AND te.status <> 'B' 
 ORDER BY te.fecha_alta
+
+
 
 --COMPLETAR SUCURSAL (OMITIR LOS YA ASIGNADOS)
 SELECT ts.id_sucursal,te.numero_nomina,te.nombre_largo,te.area_temp,te.id_celula FROM tbempleados AS te
@@ -1396,7 +1413,7 @@ BEGIN TRANSACTION
  END CATCH
 
 
- SELECT * FROM tbempleados WHERE numero_nomina = '88893'
+ SELECT * FROM tbempleados WHERE created_by <> '00001'
  update tbempleados set status = 'A' WHERE numero_nomina= '88893'
 
 

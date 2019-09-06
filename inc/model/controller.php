@@ -9,7 +9,7 @@
         die();
     }
 
-        include 'connection_.php';   
+        include 'connection.php';   
         $con = connDB();
         $sesion = false;
         $action  = $_POST['action'];
@@ -105,12 +105,53 @@
             sqlsrv_free_stmt( $stmt);
             sqlsrv_close( $con );
         break;
+        case 'datos-empleado':
+            // die(json_encode($_POST));
+            $numero_nomina = $_POST['numero_nomina'];
+            $query = "EXEC datos_empleado_consulta @NUMERO_NOMINA = ?";
+            $params = array($numero_nomina);//Pasar parametros a las consulta ?
+            $stmt = sqlsrv_query( $con, $query, $params);
+
+            $result = array();
+            
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'                
+                );
+            } else {
+                do {
+                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                    $result[] = $row; 
+                    }
+                } while (sqlsrv_next_result($stmt));
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => $result,
+                    'mensaje' => 'Informacion obtenida de la BD de la Lista'                
+                );
+            }
+
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+
+        break;
         case 'mostrar-empleado':
             // die(json_encode($_POST));
             $props = $_POST['prop'];
             $query = "SELECT te.numero_nomina, te.nombre_largo, 
                         CASE WHEN tp.nombre IS NULL THEN 'Sin asignar' ELSE tp.nombre END AS 'Puesto',
-                        ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento', tc.nombre AS 'Celula'
+                        ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento', tc.nombre AS 'Celula',
+                        CASE
+                            WHEN te.status = 'B' THEN 'Baja'
+                            WHEN te.status = 'A' THEN 'Activo'
+                            WHEN te.status = 'R' THEN 'Re Ingreso'
+                        END AS status
                         FROM tbempleados AS te
                         INNER JOIN tbsucursal AS ts
                         ON te.id_sucursal = ts.id_sucursal
@@ -304,20 +345,23 @@
             sqlsrv_close( $con );
         break;
         case 'altas':
+            // die(json_encode($_POST));
             $props = $_POST['prop'];
-            $query = "SELECT
-                        CONCAT(ts.codigo,' - ',ts.nombre) AS sucursal,tc.nombre AS planta,tc.codigo AS 'claveSocio',
-                        CONVERT(VARCHAR(10), te.fecha_alta, 105) AS 'fechaAlta',tp.nombre AS puesto,
-                        td.clasificacion,td.nomina,td.registro_patronal,td.categoria,td.lote,
-                        te.status,te.numero_nomina,UPPER(te.apellido_paterno) AS 'apellidoPaterno',UPPER(te.apellido_materno) AS 'apellidoMaterno',te.nombre AS nombreEmpleado,
-                        te.nombre_largo,
-                        te.fecha_nacimiento AS fechaNacimiento,td.municipio,td.estado,td.lugar_nacimiento,te.sexo,
-                        CONCAT(te.rfcini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.rfcfin) AS RFC,
-                        CONCAT(te.curpini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.curpfin) AS CURP,
-                        te.nss AS IMSS,td.numero_identificacion,td.estado_civil,td.escolaridad,
-                        td.nombre_padre,td.nombre_madre,
-                        td.calle,td.numero_exterior,td.numero_interior,td.fraccionamiento,td.codigo_postal,td.localidad,td.municipio,td.estado,
-                        td.cuenta,td.numero_cuenta,td.infonavit,td.numero_infonavit,td.fonacot,td.numero_fonacot,td.correo,td.celular,td.telefono
+            $query = "SELECT te.numero_nomina,te.nss,UPPER(te.nombre_largo) AS nombre_largo,
+                        td.salario_diario,
+                        ts.nombre AS sucursal,
+                        ta.nombre planta,
+                        CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
+                        td.registro_patronal,
+                        CASE WHEN td.nomina = 'S' THEN 'SEM'
+                        WHEN td.nomina = 'Q' THEN 'QUIN'
+                        ELSE 'NA' END AS tipo_nomina,
+                        CASE
+                            WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
+                            THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
+                            ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                        END AS puesto,
+                        td.lote,te.created_at
                         FROM tbempleados AS te
                         INNER JOIN tbsucursal AS ts
                         ON te.id_sucursal = ts.id_sucursal 
@@ -325,11 +369,9 @@
                         ON tc.id_celula = te.id_celula
                         INNER JOIN tbarea AS ta
                         ON ta.codigo = tc.codigo_area
-                        INNER JOIN tbpuesto AS tp
-                        ON te.id_puesto = tp.id_puesto
                         INNER JOIN tbdatos_empleados AS td
-                        ON td.numero_nomina = te.numero_nomina
-                        AND te.status <> 'B' AND te.fecha_alta = ?
+                        ON te.numero_nomina = td.numero_nomina
+                        AND te.status <> 'B' AND te.fecha_alta = ? AND td.clasificacion <> 'B'
                         ORDER BY te.status ASC, te.created_at DESC";
 
             $params = array($props);
@@ -365,6 +407,71 @@
             sqlsrv_close( $con );
 
         break;
+        case 'altas-semanales':
+        // die(json_encode($_POST));
+        $fechaINI = $_POST['fechaINI'];
+        $fechaFIN = $_POST['fechaFIN'];
+
+        $query = "SELECT 
+                    CONCAT(ts.codigo,' - ',ts.nombre) AS sucursal,tc.nombre AS planta,tc.codigo AS 'claveSocio',
+                    CONVERT(VARCHAR(10), te.fecha_alta, 105) AS 'fechaAlta',
+                    CASE
+                        WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
+                        THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
+                        ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                    END AS puesto,
+                    td.clasificacion,td.nomina,td.registro_patronal,td.salario_diario,td.lote,
+                    te.status,te.numero_nomina,UPPER(te.apellido_paterno) AS 'apellidoPaterno',UPPER(te.apellido_materno) AS 'apellidoMaterno',te.nombre AS nombreEmpleado,
+                    te.fecha_nacimiento AS fechaNacimiento,td.municipio,td.estado,td.lugar_nacimiento,te.sexo,
+                    CONCAT(te.rfcini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.rfcfin) AS RFC,
+                    CONCAT(te.curpini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.curpfin) AS CURP,
+                    te.nss,td.numero_identificacion,td.estado_civil,td.escolaridad,
+                    td.nombre_padre,td.nombre_madre,
+                    td.calle,td.numero_exterior,td.numero_interior,td.fraccionamiento,td.codigo_postal,td.localidad,td.municipio,td.estado,
+                    td.cuenta,td.numero_cuenta,td.infonavit,td.numero_infonavit,td.fonacot,td.numero_fonacot,td.correo,td.celular,td.telefono,te.nombre_largo
+                    FROM tbempleados AS te
+                    INNER JOIN tbsucursal AS ts
+                    ON te.id_sucursal = ts.id_sucursal 
+                    INNER JOIN tbcelula AS tc
+                    ON tc.id_celula = te.id_celula
+                    INNER JOIN tbdatos_empleados AS td
+                    ON td.numero_nomina = te.numero_nomina
+                    AND te.fecha_alta >= ? AND te.fecha_alta <= ?
+                    ORDER BY te.status ASC, te.created_at ASC";
+
+            $params = array($fechaINI, $fechaFIN);
+
+            $stmt = sqlsrv_query( $con, $query, $params);
+
+            $result = array();
+
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'                
+                );
+            } else {
+                do {
+                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                    $result[] = $row; 
+                    }
+                } while (sqlsrv_next_result($stmt));
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => $result,
+                    'mensaje' => 'Informacion obtenida de buscar'                
+                );
+            }
+
+
+        echo json_encode($respuesta);
+        sqlsrv_free_stmt( $stmt);
+        sqlsrv_close( $con );
+        break;
         case 'envioAcuse':
             // die(json_encode($_POST));
             $fecha = $_POST['fecha'];
@@ -376,7 +483,7 @@
                         INNER JOIN tbdatos_empleados AS td
                         ON te.numero_nomina = td.numero_nomina
                         AND te.fecha_alta = ?
-                        )";
+                        );";
 
             $params = array($nombreAdjuntoAcuse,$fecha);
 
@@ -658,13 +765,7 @@
             break;
             case 'lista-direcciones':
                 // die(json_encode($_POST));
-                $query = "SELECT TOP 250 te.numero_nomina,te.nombre_largo, CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,vde.estado,vde.poblacion,vde.codigopostal,vde.direccion,te.status
-                FROM [vDatosEmpleados] AS vde
-                INNER JOIN	tbempleados AS te 
-                ON vde.codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS = te.numero_nomina
-                AND codigopostal <> ''
-                AND te.status <> 'B'
-                ORDER BY te.fecha_alta DESC";
+                $query = "SELECT * FROM VW_empleados_direcciones ORDER BY fecha_alta DESC";
                 
                 $stmt = sqlsrv_query( $con, $query);
 
@@ -884,8 +985,7 @@
                 } else {
                     $query = "SELECT tc.id_celula,tc.codigo,tc.nombre FROM tbcelula AS tc
                                 INNER JOIN tbsucursal AS ts
-                                ON SUBSTRING(tc.codigo,1,5) = SUBSTRING(ts.codigo,1,5)
-                                WHERE SUBSTRING(tc.codigo,1,5) <> '99COR'";
+                                ON SUBSTRING(tc.codigo,1,5) = SUBSTRING(ts.codigo,1,5)";
                     $params = array($sucursal);
                     $stmt = sqlsrv_query( $con, $query);
                 }
@@ -929,7 +1029,13 @@
                     $params = array($param);
 
                     $stmt = sqlsrv_query( $con, $query, $params);
-                }else{
+                } else if($clasificacion === 'B'){
+                    $query = "SELECT id_puesto,nombre FROM tbpuesto WHERE id_nivel > 8";
+                    
+
+                    $stmt = sqlsrv_query( $con, $query, $params);
+                }
+                else{
                     $query = "SELECT id_puesto,nombre FROM tbpuesto ORDER BY id_nivel ASC";
                     
                     $stmt = sqlsrv_query( $con, $query);
@@ -1097,6 +1203,7 @@
             case 'guardarEmpleado':
                 // die(json_encode($_POST));
                     $nomina =  $_POST['nomina'];
+                    $jefeNomina =  $_POST['jefenomina'];
                     $nombre =  $_POST['nombre'];
                     $aPaterno =  $_POST['aPaterno'];
                     $aMaterno =  $_POST['aMaterno'];
@@ -1115,9 +1222,11 @@
                     $area =  0;
                     $celula =  $_POST['celula'];
                     $puesto =  $_POST['puesto'];
+                    $comentario =  $_POST['comentario'];
 
                     $clasificacion =  $_POST['clasificacion'];
-                    $categoria =  $_POST['categoria'];
+                    $salarioDiario =  $_POST['salarioDiario'];
+                    $salarioMensual =  $_POST['salarioMensual'];
                     $tipoNomina =  $_POST['tipoNomina'];
                     $registro =  $_POST['registro'];
                     $lote =  '';
@@ -1151,12 +1260,14 @@
                     $contacto =  $_POST['contacto'];
                     $nContacto =  $_POST['nContacto'];
                     $posicion =  0;
+                    $empleado_activo = $_POST['empleado_activo'];
 
 
                     $fechaControl =  date('Y-m-d H:i:s');
                     $userControl =  'testUser';
                     
                     $insert = "EXEC insertEmployeeData @nnomina = ?, 
+                                                        @jnomina = ?,
                                                         @nlargo = ?, 
                                                         @nombre = ?,
                                                         @apaterno = ?,
@@ -1176,8 +1287,10 @@
                                                         @idc = ?,
                                                         @idp = ?,
                                                         @clasificacion  = ?,
-                                                        @categoria  = ?,
+                                                        @salarioDiario  = ?,
+                                                        @salarioMensual  = ?,
                                                         @nomina  = ?,
+                                                        @comentario  = ?,
                                                         @registro_patronal  = ?,
                                                         @lote  = ?,
                                                         @dv  = ?,
@@ -1209,12 +1322,13 @@
                                                         @celular  = ?,
                                                         @contacto_emergencia_nombre  = ?,
                                                         @contacto_emergencia_numero  = ?,
-                                                        @posicion = ?";
+                                                        @posicion = ?,
+                                                        @nominaControl = ?";
 
 
-                    $params = array($nomina,$nombreLargo,$nombre,$aPaterno,$aMaterno,$genero,$curpini,$curpfin,$rfcini,$rfcfin,$nss,$fechaNacimiento,$fechaAlta,$fechaBaja,$status,$sucursal,$area,$celula,$puesto,
-                                    $clasificacion,$categoria,$tipoNomina,$registro,$lote,$dv,$lNacimiento,$tIdentificacion,$id,$eCivil,$escolaridad,$cEscolaridad,$nPadre,$nMadre,$calle,$numE,$numI,$fraccionamiento,
-                                    $domicilio,$cp,$edo,$municipio,$localidad,$infonavit,$nInfonavit,$fonacot,$nFonacot,$banco,$cuenta,$correo,$telefono,$celular,$contacto,$nContacto,$posicion);
+                    $params = array($nomina,$jefeNomina,$nombreLargo,$nombre,$aPaterno,$aMaterno,$genero,$curpini,$curpfin,$rfcini,$rfcfin,$nss,$fechaNacimiento,$fechaAlta,$fechaBaja,$status,$sucursal,$area,$celula,$puesto,
+                                    $clasificacion,$salarioDiario,$salarioMensual,$tipoNomina,$comentario,$registro,$lote,$dv,$lNacimiento,$tIdentificacion,$id,$eCivil,$escolaridad,$cEscolaridad,$nPadre,$nMadre,$calle,$numE,$numI,$fraccionamiento,
+                                    $domicilio,$cp,$edo,$municipio,$localidad,$infonavit,$nInfonavit,$fonacot,$nFonacot,$banco,$cuenta,$correo,$telefono,$celular,$contacto,$nContacto,$posicion,$empleado_activo);
                     
                     $stmt = sqlsrv_query( $con, $insert, $params);
 
@@ -1238,6 +1352,179 @@
                 echo json_encode($respuesta);
                 sqlsrv_free_stmt( $stmt);
                 sqlsrv_close( $con );
+            break;
+            case 'modificarEmpleado':
+                // die(json_encode($_POST));
+                    $nomina =  $_POST['nomina'];
+                    $jefeNomina =  $_POST['jefenomina'];
+                    $nombre =  $_POST['nombre'];
+                    $aPaterno =  $_POST['aPaterno'];
+                    $aMaterno =  $_POST['aMaterno'];
+                    $nombreLargo = $_POST['nombreLargo'];
+                    $nss =  $_POST['nss'];
+                    $fechaAlta =  $_POST['fechaAlta'];
+                    $empleado_status =  $_POST['empleado_status'];
+                    $sucursal =  $_POST['sucursal'];
+                    $area =  0;
+                    $celula =  $_POST['celula'];
+                    $puesto =  $_POST['puesto'];
+                    $comentario =  $_POST['comentario'];
+
+                    $clasificacion =  $_POST['clasificacion'];
+                    $salarioDiario =  $_POST['salarioDiario'];
+                    $salarioMensual =  $_POST['salarioMensual'];
+                    $tipoNomina =  $_POST['tipoNomina'];
+                    $registro =  $_POST['registro'];
+                    $lote =  $_POST['lote'];;
+                    $dv =  $_POST['dv'];
+                    $lNacimiento =  $_POST['lNacimiento'];
+                    $tIdentificacion =  $_POST['tIdentificacion'];
+                    $id =  $_POST['id'];
+                    $eCivil =  $_POST['eCivil'];
+                    $escolaridad =  $_POST['escolaridad'];
+                    $cEscolaridad =  $_POST['cEscolaridad'];
+                    $nPadre =  $_POST['nPadre'];
+                    $nMadre =  $_POST['nMadre'];
+                    $calle =  $_POST['calle'];
+                    $numE =  $_POST['numE'];
+                    $numI =  $_POST['numI'];
+                    $fraccionamiento =  $_POST['fraccionamiento'];
+                    $domicilio =  $_POST['domicilio'];
+                    $cp =  $_POST['cp'];
+                    $edo =  $_POST['edo'];
+                    $municipio =  $_POST['municipio'];
+                    $localidad =  $_POST['localidad'];
+                    $infonavit =  $_POST['infonavit'];
+                    $nInfonavit =  $_POST['nInfonavit'];
+                    $fonacot =  $_POST['fonacot'];
+                    $nFonacot =  $_POST['nFonacot'];
+                    $banco =  $_POST['banco'];
+                    $cuenta =  $_POST['cuenta'];
+                    $correo =  $_POST['correo'];
+                    $telefono =  $_POST['telefono'];
+                    $celular =  $_POST['celular'];
+                    $contacto =  $_POST['contacto'];
+                    $nContacto =  $_POST['nContacto'];
+                    $empleado_activo = $_POST['empleado_activo'];
+
+                    $insert = "EXEC updateEmployeeData @nnomina = ?, 
+                                                        @jnomina = ?,
+                                                        @nlargo = ?, 
+                                                        @nombre = ?,
+                                                        @apaterno = ?,
+                                                        @amaterno = ?,
+                                                        @nss = ?,
+                                                        @fechaa = ?,
+                                                        @empleado_status = ?,
+                                                        @ids = ?,
+                                                        @ida = ?,
+                                                        @idc = ?,
+                                                        @idp = ?,
+                                                        @clasificacion  = ?,
+                                                        @salarioDiario  = ?,
+                                                        @salarioMensual  = ?,
+                                                        @nomina  = ?,
+                                                        @comentario  = ?,
+                                                        @registro_patronal  = ?,
+                                                        @lote  = ?,
+                                                        @dv  = ?,
+                                                        @lugar_nacimiento  = ?,
+                                                        @identificacion  = ?,
+                                                        @numero_identificacion  = ?,
+                                                        @estado_civil  = ?,
+                                                        @escolaridad  = ?,
+                                                        @constancia  = ?,
+                                                        @nombre_padre  = ?,
+                                                        @nombre_madre  = ?,
+                                                        @calle  = ?,
+                                                        @numero_exterior  = ?,
+                                                        @numero_interior  = ?,
+                                                        @fraccionamiento  = ?,
+                                                        @domicilio_completo  = ?,
+                                                        @codigo_postal  = ?,
+                                                        @estado  = ?,
+                                                        @municipio  = ?,
+                                                        @localidad  = ?,
+                                                        @infonavit  = ?,
+                                                        @numero_infonavit  = ?,
+                                                        @fonacot  = ?,
+                                                        @numero_fonacot  = ?,
+                                                        @cuenta  = ?,
+                                                        @numero_cuenta  = ?,
+                                                        @correo  = ?,
+                                                        @telefono  = ?,
+                                                        @celular  = ?,
+                                                        @contacto_emergencia_nombre  = ?,
+                                                        @contacto_emergencia_numero  = ?,
+                                                        @nominaControl = ?";
+
+
+                    $params = array($nomina,$jefeNomina,$nombreLargo,$nombre,$aPaterno,$aMaterno,$nss,$fechaAlta,$empleado_status,$sucursal,$area,$celula,$puesto,$clasificacion,$salarioDiario,$salarioMensual,$tipoNomina,
+                                    $comentario,$registro,$lote,$dv,$lNacimiento,$tIdentificacion,$id,$eCivil,$escolaridad,$cEscolaridad,$nPadre,$nMadre,$calle,$numE,$numI,$fraccionamiento,
+                                    $domicilio,$cp,$edo,$municipio,$localidad,$infonavit,$nInfonavit,$fonacot,$nFonacot,$banco,$cuenta,$correo,$telefono,$celular,$contacto,$nContacto,$empleado_activo);
+                    
+                    $stmt = sqlsrv_query( $con, $insert, $params);
+
+                    if( $stmt ) {
+                        $respuesta = array(
+                            'estado' => 'OK',
+                            'tipo' => 'success',
+                            'informacion' => 'Insertado',
+                            'mensaje' => 'Informacion obtenida'                  
+                        );
+                    } 
+                    else {
+                        $respuesta = array(
+                            'estado' => 'NOK',
+                            'tipo' => 'error',
+                            'informacion' => 'No existe informacion',
+                            'mensaje' => 'No hay datos en la BD'             
+                        );
+                    }               
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
+            case 'bajaEmpleado':
+                // die(json_encode($_POST));
+                $nominaEmpleado =  $_POST['nominaEmpleado'];
+                $razonBaja =  $_POST['razonBaja'];
+                $comentariosBaja =  $_POST['comentariosBaja'];
+                $fechaBaja =  $_POST['fechaBaja'];
+                $empleadoControl =  $_POST['empleadoControl'];
+
+                $update = "EXEC firedEmployee @numeroNomina = ?,
+                                                @descripcion = ?,
+                                                @comentario = ?,
+                                                @fechaBaja = ?,
+                                                @nominaControl = ?";
+
+                $params = array($nominaEmpleado,$razonBaja,$comentariosBaja,$fechaBaja,$empleadoControl);
+
+                $stmt = sqlsrv_query( $con, $update, $params);
+
+                if( $stmt ) {
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => 'Baja',
+                        'mensaje' => 'Baja del empleado realizada'                  
+                    );
+                } 
+                else {
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'             
+                    );
+                }               
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
             break;
             case 'obtenerTipoPuesto':
                 // die(json_encode($_POST));
@@ -1344,9 +1631,13 @@
             case 'datos-gafete':
                 // die(json_encode($_POST));
                 $nomina =  $_POST['nomina'];
-                $query = "SELECT top 1 b.nombre,puesto,convert(varchar,fecha_alta) AS empAlta,telefono_emergencia as a , no_trab,no_imss,cp,calle,numero, fraccionamiento,estado,municipio,a.dv,telefono_emergencia  from rh_empelados2  as a  inner join 
-                            (select emp_name as nombre,* from pjemploy ) as b on a.no_trab = b.employee
-                            where employee = ? order by fecha_alta desc";
+                $query = "SELECT te.nombre_largo,fecha_alta,te.numero_nomina,te.nss,td.dv,td.contacto_emergencia_numero,td.codigo_postal,td.calle,td.numero_exterior,td.fraccionamiento,td.estado,td.municipio,td.domicilio_completo,tp.nombre puesto
+                            FROM tbempleados AS te
+                            INNER JOIN tbdatos_empleados AS td
+                            ON te.numero_nomina = td.numero_nomina
+                            INNER JOIN tbpuesto AS tp
+                            ON te.id_puesto = tp.id_puesto
+                            WHERE te.numero_nomina = ?";
 
                 $params = array($nomina);
                 

@@ -7,6 +7,7 @@ $( document ).ready(function() {
      * 4 - DH
      * 5 - LABORALES
      * 6 - NOMINAS
+     * 7 - TRANSPORTES
      */
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let usuario_activo = document.querySelector('#emp_activo').value;
@@ -61,6 +62,11 @@ $( document ).ready(function() {
             seccionPanel.removeClass('d-none');
             nominas.removeClass('d-none');
             seccionAcuseAltas.removeClass('d-none');
+            break;
+        case '7':
+            seccionLateral.removeClass('d-none');
+            seccionPanel.removeClass('d-none');
+            transportes.removeClass('d-none');
             break;
         default:
             seccionLateral.removeClass('d-none');

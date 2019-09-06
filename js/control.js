@@ -1386,6 +1386,7 @@ $(document).ready(function () {
                     estado = '';
 
                 $('#loadingIndicator').addClass('d-none');
+                seccionExportar.removeClass('d-none');
 
                 if (st === 'B') {
                     estado = "alert-secondary";
@@ -1400,11 +1401,12 @@ $(document).ready(function () {
                 $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
                 row.append($("<td class='trCode'>" + rowInfo.numero_nomina + " </td>"));
                 row.append($("<td class='text-uppercase'> " + rowInfo.nombre_largo + " </td>"));
-                row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
+                row.append($("<td> " + rowInfo.fecha_alta.date.substr(0, 10) + " </td>"));
+                row.append($("<td> " + rowInfo.Area + " </td>"));
                 row.append($("<td> " + rowInfo.estado + " </td>"));
-                row.append($("<td> " + rowInfo.poblacion + " </td>"));
-                row.append($("<td> " + rowInfo.codigopostal + " </td>"));
-                row.append($("<td> " + rowInfo.direccion + " </td>"));
+                row.append($("<td> " + rowInfo.localidad + " </td>"));
+                row.append($("<td> " + rowInfo.codigo_postal + " </td>"));
+                row.append($("<td> " + rowInfo.Domicilio + " </td>"));
 
             }
 

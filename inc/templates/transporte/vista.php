@@ -10,8 +10,9 @@
           <th scope="col">Nómina</th>
           <th scope="col">Nombres</th>
           <th scope="col">Fecha Alta</th>
+          <th scope="col">Area</th>
           <th scope="col">Estado</th>
-          <th scope="col">Poblacion</th>
+          <th scope="col">Localidad</th>
           <th scope="col">CP</th>
           <th scope="col">Dirección</th>
           <!-- <th scope="col">Acciones</th> -->
