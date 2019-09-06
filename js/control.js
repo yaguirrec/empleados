@@ -1733,16 +1733,18 @@ $(document).ready(function () {
             //VALIDAR CATEGORIA $$$
             txtSalarioMensual.focusout(function () {
                 let salarioMensual = parseFloat(txtSalarioMensual.val());
-                if (salarioMensual < 2250 || salarioMensual > 20000 || !($.isNumeric(salarioMensual))) {
-                    txtSalarioMensual.val('');
-                    txtSalarioMensual.addClass('btn-outline-danger');
-                    Swal.fire({
-                        title: 'Aviso',
-                        text: 'El salario debe estar en el rango de $2,250.00 a $20,000.00.',
-                        type: 'error'
-                    });
-                } else {
-                    txtSalarioMensual.removeClass('btn-outline-danger');
+                if(txtClasificacion.val() === 'A'){
+                    if (salarioMensual < 2250 || salarioMensual > 20000 || !($.isNumeric(salarioMensual))) {
+                        txtSalarioMensual.val('');
+                        txtSalarioMensual.addClass('btn-outline-danger');
+                        Swal.fire({
+                            title: 'Aviso',
+                            text: 'El salario debe estar en el rango de $2,250.00 a $20,000.00.',
+                            type: 'error'
+                        });
+                    } else {
+                        txtSalarioMensual.removeClass('btn-outline-danger');
+                    }
                 }
             });
 
@@ -2335,7 +2337,8 @@ $(document).ready(function () {
                 let puestoNivel = $('#txttPuesto').val(),
                     puestoNombre = $('#txtnPuesto').val(),
                     puestoDepartamento = $('#txtnDepartamento').val(),
-                    puestoDescripcion = $('#txtdPuesto').val();
+                    puestoDescripcion = $('#txtdPuesto').val(),
+                    puestoCorto = (puestoNombre.split(/\s/).reduce((response,word)=> response+=word.slice(0,1),'')).toUpperCase();
 
                 if (puestoNombre.trim() === '' || puestoDescripcion.trim() === '') {
                     Swal.fire({
@@ -2346,15 +2349,43 @@ $(document).ready(function () {
                         timer: 1000
                     })
                 } else {
-                    Swal.fire({
-                        position: 'center',
-                        type: 'success',
-                        title: 'Bien',
-                        showConfirmButton: false,
-                        timer: 1000
-                    })
+                    $.ajax({
+                        type: 'POST',
+                        url: backendURL,
+                        data: { action: 'guardarPuesto', puestoNivel: puestoNivel, puestoNombre : puestoNombre,puestoCorto : puestoCorto, puestoDepartamento : puestoDepartamento, puestoDescripcion : puestoDescripcion, empleadoControl: empleado_activo},
+                        success: function (response) {
+                            let respuesta = JSON.parse(response);
+                            console.log(respuesta);
+                            if (respuesta.estado === 'OK') {
+                                Swal.fire({
+                                    title: 'Correcto',
+                                    text: 'Guardado exitoso!',
+                                    type: 'success'
+                                })
+                                    .then(resultado => {
+                                        if (resultado.value) {
+                                            // location.reload();
+                                            window.location.href = 'index.php?request=puestos';
+                                        }
+                                    })
+                            } else {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: 'No se realizo el guardado',
+                                    type: 'error'
+                                })
+                                    .then(resultado => {
+                                        if (resultado.value) {
+                                            // location.reload();
+                                        }
+                                    })
+                            }
+                        }
+                    });
+                    
                 }
             });
+        
 
             break;
         default:

@@ -400,7 +400,6 @@ SELECT te.numero_nomina,te.nombre_largo,te.nombre,te.apellido_paterno,te.apellid
 
 EXEC datos_empleado_acceso @NUMERO_NOMINA = '88892'
 
-
 /**STORED FUINCTION LOGIN*/
 
 ALTER PROCEDURE datos_empleado_acceso
@@ -429,6 +428,34 @@ AS
 		AND te.numero_nomina = @NUMERO_NOMINA
 	END
 GO
+
+/**FUNCION ALTAS SEMANALES**/
+SELECT 
+CONCAT(ts.codigo,' - ',ts.nombre) AS sucursal,tc.nombre AS planta,tc.codigo AS 'claveSocio',
+CONVERT(VARCHAR(10), te.fecha_alta, 105) AS 'fechaAlta',
+CASE
+	WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
+	THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
+	ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+END AS puesto,
+td.clasificacion,td.nomina,td.registro_patronal,td.salario_diario,td.lote,
+te.status,te.numero_nomina,UPPER(te.apellido_paterno) AS 'apellidoPaterno',UPPER(te.apellido_materno) AS 'apellidoMaterno',te.nombre AS nombreEmpleado,
+te.fecha_nacimiento AS fechaNacimiento,td.municipio,td.estado,td.lugar_nacimiento,te.sexo,
+CONCAT(te.rfcini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.rfcfin) AS RFC,
+CONCAT(te.curpini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.curpfin) AS CURP,
+te.nss,td.numero_identificacion,td.estado_civil,td.escolaridad,
+td.nombre_padre,td.nombre_madre,
+td.calle,td.numero_exterior,td.numero_interior,td.fraccionamiento,td.codigo_postal,td.localidad,td.municipio,td.estado,
+td.cuenta,td.numero_cuenta,td.infonavit,td.numero_infonavit,td.fonacot,td.numero_fonacot,td.correo,td.celular,td.telefono,te.nombre_largo
+FROM tbempleados AS te
+INNER JOIN tbsucursal AS ts
+ON te.id_sucursal = ts.id_sucursal 
+INNER JOIN tbcelula AS tc
+ON tc.id_celula = te.id_celula
+INNER JOIN tbdatos_empleados AS td
+ON td.numero_nomina = te.numero_nomina
+AND te.fecha_alta >= '2019-08-01' AND te.fecha_alta <= '2019-09-09'
+ORDER BY te.status ASC, te.created_at ASC
 
 /**FUNCTION DATOS EMPLEADO*/
 
@@ -719,7 +746,7 @@ tb 34 nomipaq
 /*CONSULTAS*/
 SELECT * FROM PJEMPLOY WHERE employee = '08444'
 SELECT TOP 1 * FROM [vEmpleadosNM] where codigoempleado = '08444' ORDER BY fechaCaptura DESC 
-SELECT * FROM tbempleados where numero_nomina = '23515' ORDER BY updated_at DESC
+SELECT * FROM tbempleados where numero_nomina = '26730' ORDER BY updated_at DESC
 SELECT * FROM tbsucursal
 SELECT * FROM tbarea
 SELECT * FROM tbcelula
@@ -1400,33 +1427,6 @@ BEGIN TRY
  BEGIN CATCH
   ROLLBACK
  END CATCH
-
-
-SELECT 
-CONCAT(ts.codigo,' - ',ts.nombre) AS sucursal,tc.nombre AS planta,tc.codigo AS 'claveSocio',
-CONVERT(VARCHAR(10), te.fecha_alta, 105) AS 'fechaAlta',tp.nombre AS puesto,
-td.clasificacion,td.nomina,td.registro_patronal,td.salario_diario,td.lote,
-te.status,te.numero_nomina,UPPER(te.apellido_paterno) AS 'apellidoPaterno',UPPER(te.apellido_materno) AS 'apellidoMaterno',te.nombre AS nombreEmpleado,
-te.fecha_nacimiento AS fechaNacimiento,td.municipio,td.estado,td.lugar_nacimiento,te.sexo,
-CONCAT(te.rfcini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.rfcfin) AS RFC,
-CONCAT(te.curpini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.curpfin) AS CURP,
-te.nss,td.numero_identificacion,td.estado_civil,td.escolaridad,
-td.nombre_padre,td.nombre_madre,
-td.calle,td.numero_exterior,td.numero_interior,td.fraccionamiento,td.codigo_postal,td.localidad,td.municipio,td.estado,
-td.cuenta,td.numero_cuenta,td.infonavit,td.numero_infonavit,td.fonacot,td.numero_fonacot,td.correo,td.celular,td.telefono,te.nombre_largo
-FROM tbempleados AS te
-INNER JOIN tbsucursal AS ts
-ON te.id_sucursal = ts.id_sucursal 
-INNER JOIN tbcelula AS tc
-ON tc.id_celula = te.id_celula
-INNER JOIN tbarea AS ta
-ON ta.codigo = tc.codigo_area
-INNER JOIN tbpuesto AS tp
-ON te.id_puesto = tp.id_puesto
-INNER JOIN tbdatos_empleados AS td
-ON td.numero_nomina = te.numero_nomina
-WHERE te.fecha_alta >= '2019-08-01' AND te.fecha_alta <= '2019-08-23'
-ORDER BY te.status ASC, te.created_at ASC
 
 UPDATE tbdatos_empleados SET lote = '' WHERE numero_nomina IN
 ( 
