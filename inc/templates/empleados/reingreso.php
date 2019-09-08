@@ -200,13 +200,32 @@
                 </div>
 
                 <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="txtNombrePadre">Nombre del padre</label>
+                    <div class="form-group col-md-4">
+                        <label for="txtNombrePadre">Nombre padre</label>
                         <input type="text" class="form-control text-uppercase" id="txtNombrePadre" required>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label for="txtNombreMadre">Nombre de la madre</label>
+                    <div class="form-group col-md-4">
+                        <label for="txtApePatPadre">Apellido Paterno Padre</label>
+                        <input type="text" class="form-control text-uppercase" id="txtApePatPadre" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtApeMatPadre">Apellido Materno Padre</label>
+                        <input type="text" class="form-control text-uppercase" id="txtApeMatPadre" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="txtNombreMadre">Nombre madre</label>
                         <input type="text" class="form-control text-uppercase" id="txtNombreMadre" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtApePatMadre">Apellido Paterno Madre</label>
+                        <input type="text" class="form-control text-uppercase" id="txtApePatMadre" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtApeMatMadre">Apellido Materno Madre</label>
+                        <input type="text" class="form-control text-uppercase" id="txtApeMatMadre" required>
                     </div>
                 </div>
 

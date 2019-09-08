@@ -1525,7 +1525,6 @@
                 sqlsrv_free_stmt( $stmt);
                 sqlsrv_close( $con );
             break;
-            break;
             case 'obtenerTipoPuesto':
                 // die(json_encode($_POST));
                 $query = "SELECT id_puesto,nivel,nombre FROM tbtipopuesto WHERE id_puesto > 1  ORDER BY id_puesto DESC";
@@ -1594,6 +1593,57 @@
                 sqlsrv_free_stmt( $stmt);
                 sqlsrv_close( $con ); 
             break;
+            case 'guardarPuesto':
+                die(json_encode($_POST));
+                $puestoNombre =  $_POST['puestoNombre'];
+                $puestoDepartamento =  $_POST['puestoDepartamento'];
+                $puestoDescripcion =  $_POST['puestoDescripcion'];
+                $puestoNivel =  $_POST['puestoNivel'];
+                $empleadoControl = $_POST['empleadoControl'];
+                $puestoCorto = $_POST['puestoCorto'];
+                $puestoJefe = 2;
+
+
+
+                $insert = "INSERT INTO [dbo].[tbpuesto]
+                        ([codigo]
+                        ,[nombre]
+                        ,[descripcion]
+                        ,[nombre_corto]
+                        ,[id_nivel]
+                        ,[id_puestojefe]
+                        ,[id_celula]
+                        ,[id_clasificacion]
+                        ,[created_at]
+                        ,[created_by])
+                VALUES
+                        ((SELECT CONCAT('P',MAX( id_puesto )+1) FROM tbpuesto),?,?,?,?,?,?,?,GETDATE(),?)";
+
+                $params = array($puestoNombre,$puestoDescripcion,$puestoCorto,$puestoNivel,$puestoJefe,$puestoDepartamento,$puestoNivel,GETDATE(),$empleadoControl);
+            
+                $stmt = sqlsrv_query( $con, $insert, $params);
+
+                if( $stmt ) {
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => 'Insertado',
+                        'mensaje' => 'Informacion obtenida'                  
+                    );
+                } 
+                else {
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'             
+                    );
+                }               
+
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+            break;
             case 'obtenerPuestos':
                 // die(json_encode($_POST));
                 $query = "SELECT * FROM tbpuesto";
@@ -1638,6 +1688,43 @@
                             INNER JOIN tbpuesto AS tp
                             ON te.id_puesto = tp.id_puesto
                             WHERE te.numero_nomina = ?";
+
+                $params = array($nomina);
+                
+                $stmt = sqlsrv_query( $con, $query, $params);
+                
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
+            case 'datos-formato':
+                // die(json_encode($_POST));
+                $nomina =  $_POST['nomina'];
+                $query = "EXEC datos_empleado_formato @NUMERO_NOMINA = ?";
 
                 $params = array($nomina);
                 

@@ -1,0 +1,384 @@
+@import url('https://www.fontify.me/wf/3afcc221e9439cbe0309799cece16dee');
+body{
+font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+}
+
+@media print {
+    .noprint{
+        display:none; 
+    }
+
+    html
+    {
+        zoom: 148%;
+    }
+
+    @page { 
+        margin:0;size:portrait;
+    }
+}
+
+p{
+    position: absolute;
+}
+
+.container{
+    position: relative;
+    width: 100%;
+}
+
+#imagenFormato {
+    margin-left:3.8px;
+    width:21.6cm;
+    height:27.9cm;
+    z-index: 1;
+}
+
+/**CAMPOS FORMATO**/
+#formatoFecha{
+    top: 126; 
+    left: 201; 
+    font-size: 90%;
+    font-weight: bold;
+}
+
+#nombreSucursal{
+    top: 126; 
+    left: 325; 
+    font-size: 90%;
+    font-weight: bold;
+}
+
+#nombrePlanta{
+    top: 138; 
+    left: 403; 
+    font-size: 46%;
+    font-weight: bold;
+}
+
+
+#claveSocio{
+    top: 126; 
+    left: 540; 
+    font-size: 90%;
+    font-weight: bold;
+}
+
+#empLote{
+    top: 130; 
+    left: 645; 
+    font-size: 80%;
+    font-weight: bold;
+}
+
+#empTipo{
+    top: 173; 
+    left: 90; 
+    font-size: 100%;
+}
+
+#formatoTipo{
+    top: 196; 
+    left: 185; 
+    font-size: 100%;
+}
+
+#tipoNomina{
+    top: 237; 
+    left: 440; 
+    font-size: 100%;
+}
+
+#empRegistro{
+    top: 237; 
+    left: 575; 
+    font-size: 100%;
+}
+
+#empFechaAlta{
+    top: 195; 
+    left: 645; 
+    font-size: 90%;
+    font-weight: bold;
+}
+
+#empPuesto{
+    top: 240; 
+    left: 95; 
+    font-size: 80%;
+    font-weight: bold;
+}
+
+#empCategoria{
+    top: 238; 
+    left: 355; 
+    font-size: 90%;
+    font-weight: bold;
+}
+
+
+#empNomina{
+    top: 388; 
+    left: 110; 
+    font-size: 100%; 
+    font-weight: bold;
+}
+
+#empApellidoPaterno{
+    top: 290; 
+    left: 95; 
+    font-size: 75%;
+    font-weight: bold;
+}
+
+#empApellidoMaterno{
+    top: 290; 
+    left: 320; 
+    font-size: 75%;
+    font-weight: bold;
+}
+
+#empNombre{
+    top: 290; 
+    left: 530; 
+    font-size: 75%;
+    font-weight: bold;
+}
+
+#empRFC{
+    top: 340; 
+    left: 100; 
+    font-size: 90%;
+    font-weight: bold;
+}
+
+#empCURP{
+    top: 340; 
+    left: 260; 
+    font-size: 90%;
+    font-weight: bold;
+}
+
+#empNSS{
+    top: 340;
+    left: 478; 
+    font-size: 90%;
+    font-weight: bold;
+}
+
+#empDV{
+    top: 340; 
+    left: 585; 
+    font-size: 90%;
+    font-weight: bold;
+}
+
+#empID{
+    top: 340; 
+    left: 615; 
+    font-size: 90%;
+    font-weight: bold;
+}
+
+#empGenero{
+    top: 388; 
+    left: 188; 
+    font-size: 90%; 
+    font-weight: bold;
+}
+
+#empCivil{
+    top: 388; 
+    left: 281; 
+    font-size: 90%; 
+    font-weight: bold;
+}
+
+#empNacimiento{
+    top: 388; 
+    left: 390; 
+    font-size: 95%; 
+    font-weight: bold;
+}
+
+#empLugarNacimiento{
+    top: 395; 
+    left: 510; 
+    font-size: 50%; 
+    font-weight: bold;
+}
+
+#empEscolaridad{
+    top: 388; 
+    left: 631; 
+    font-size: 90%; 
+    font-weight: bold;
+}
+
+#apellidoPaternoPadre{
+    top: 420; 
+    left: 230; 
+    font-size: 90%; 
+    font-weight: bold;
+}
+
+#apellidoMaternoPadre{
+    top: 420; 
+    left: 405; 
+    font-size: 90%; 
+    font-weight: bold;
+}
+
+#nombrePadre{
+    top: 420; 
+    left: 580; 
+    font-size: 90%; 
+    font-weight: bold;
+}
+
+#apellidoPaternoMadre{
+    top: 460; 
+    left: 230; 
+    font-size: 90%; 
+    font-weight: bold;
+}
+
+#apellidoMaternoMadre{
+    top: 460; 
+    left: 405; 
+    font-size: 90%; 
+    font-weight: bold;
+}
+
+#nombreMadre{
+    top: 460; 
+    left: 580; 
+    font-size: 90%; 
+    font-weight: bold;
+}
+
+#nombreCalle{
+    top: 510; 
+    left: 100; 
+    font-size: 100%; 
+    font-weight: bold;
+}
+
+#numeroExterior{
+    top: 510; 
+    left: 380; 
+    font-size: 100%; 
+    font-weight: bold;
+}
+
+#numeroInterior{
+    top: 510; 
+    left: 420; 
+    font-size: 100%; 
+    font-weight: bold;
+}
+
+#fraccionamiento{
+    top: 510; 
+    left: 460; 
+    font-size: 100%; 
+    font-weight: bold;
+}
+
+#codigoPostal{
+    top: 510; 
+    left: 680; 
+    font-size: 100%; 
+    font-weight: bold;
+}
+
+#localidad{
+    top: 545; 
+    left: 100; 
+    font-size: 100%; 
+    font-weight: bold;
+}
+
+#municipio{
+    top: 545; 
+    left: 325; 
+    font-size: 100%; 
+    font-weight: bold;
+}
+
+#estado{
+    top: 545; 
+    left: 540; 
+    font-size: 100%; 
+    font-weight: bold;
+}
+
+#infonavit{
+    top: 595; 
+    left: 185; 
+    font-size: 100%; 
+    font-weight: bold;
+}
+
+#fonacot{
+    top: 612; 
+    left: 185; 
+    font-size: 100%; 
+    font-weight: bold;
+}
+
+#numeroInfonavit{
+    top: 595; 
+    left: 265; 
+    font-size: 85%; 
+    font-weight: bold;
+}
+
+#numeroFonacot{
+    top: 612; 
+    left: 265; 
+    font-size: 85%; 
+    font-weight: bold;
+}
+
+#correoElectronico{
+    top: 585; 
+    left: 540; 
+    font-size: 68%; 
+    font-weight: bold;
+}
+
+#telefonoCelular{
+    top: 600; 
+    left: 540; 
+    font-size: 85%; 
+    font-weight: bold;
+}
+
+#telefonoCasa{
+    top: 618; 
+    left: 540; 
+    font-size: 85%; 
+    font-weight: bold;
+}
+
+#cuentaBancaria{
+    top: 651; 
+    left: 332; 
+    font-size: 100%; 
+    font-weight: bold;
+}
+
+#numeroCuenta{
+    top: 651; 
+    left: 430; 
+    font-size: 90%; 
+    font-weight: bold;
+}
+
+
+
+
+
+
+

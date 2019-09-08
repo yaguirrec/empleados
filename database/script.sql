@@ -1056,22 +1056,7 @@ ORDER BY id_nivel
 
 SELECT * FROM tbarea
 EXEC sp_RENAME 'tbarea.nombre_corto', 'area_superior', 'COLUMN'
-UPDATE tbarea SET area_superior = ''
-INSERT INTO tbarea (codigo,nombre,descripcion,area_superior,created_at) VALUES ('122','Subdireccion Operativa','Area Subdireccion Operativa','102',getdate())
-INSERT INTO tbarea (codigo,nombre,descripcion,area_superior,created_at) VALUES ('123','Subdireccion Comercial','Area Subdireccion Comercial','102',getdate())
-UPDATE tbarea SET area_superior = '123' where id_area = 1
-UPDATE tbarea SET area_superior = '122' where id_area = 2
-UPDATE tbarea SET area_superior = '122' where id_area = 3
-UPDATE tbarea SET area_superior = '102' where id_area = 4
-UPDATE tbarea SET area_superior = '102' where id_area = 5
-UPDATE tbarea SET area_superior = '102' where id_area = 6
-UPDATE tbarea SET area_superior = '103' where id_area = 7
-UPDATE tbarea SET area_superior = '123' where id_area = 8
-UPDATE tbarea SET area_superior = '123' where id_area = 9
-UPDATE tbarea SET area_superior = '102' where id_area = 10
-UPDATE tbarea SET area_superior = '122' where id_area = 11
-UPDATE tbarea SET area_superior = '123' where id_area = 12
-UPDATE tbarea SET area_superior = '121' where id_area = 13
+
 
 select * from tbcelula
 select * from tbcelula where codigo LIKE '99COR%'
@@ -1102,16 +1087,62 @@ select REPLACE(no_trab,' ','') as NOMINA,REPLACE(REPLACE(categoria,'$',''),' ','
 SUBSTRING(clasificacion,1,1) AS clasificacion,REPLACE(registro,' ',''),REPLACE(lote,' ','') AS lote,REPLACE(dv,' ','') AS dv,RTRIM(lugar_nacimiento) AS lugar_nacimiento,'ID',
 REPLACE(ide_oficial,' ','') AS ide_oficial,
 SUBSTRING(estado_civil,1,1) AS estado_civil,REPLACE(escolaridad,' ','') AS escolaridad,'constancia_escolar',
-CONCAT(REPLACE(ape_pat_padre,' ',''),' ',REPLACE(ape_mat_padre,' ',''),' ',RTRIM(nombres_padre)) AS nombre_padre,
+CONCAT(REPLACE(ape_pat_padre,' ',''),'|',REPLACE(ape_mat_padre,' ',''),'|',RTRIM(nombres_padre)) AS nombre_padre,
 CONCAT(REPLACE(ape_pat_madre,' ',''),' ',REPLACE(ape_mat_madre,' ',''),' ',RTRIM(nombres_madre)) AS nombre_madre,
 RTRIM(calle) AS calle,REPLACE(numero,' ','') AS exterior,REPLACE(interior,' ','') AS interior,RTRIM(fraccionamiento) AS fraccionamiento,'domicilio',REPLACE(cp,' ','') AS cp,RTRIM(estado) AS estado,
 RTRIM(municipio) AS municipio,RTRIM(localidad) AS localidad,
 REPLACE(infonavit,' ','') AS infonavit,REPLACE(no_infonavit,' ','') AS no_infonavit,REPLACE(fonacot,' ','') AS fonacot,REPLACE(no_fonacot,' ','') AS no_fonacot,REPLACE(tarjeta_nomina,' ','') AS tarjeta_nomina,REPLACE(cuenta,' ','') AS cuenta,
 REPLACE(correo_electronico,' ','') AS correo_electronico,REPLACE(telefono_casa,' ','') AS telefono_casa,REPLACE(celular,' ','') AS celular,REPLACE(telefono_emergencia,' ','') AS telefono_emergencia
 from rh_empelados2
-WHERE no_trab = '09666'
 
-SELECT * FROM tbdatos_empleados WHERE numero_nomina = '26719'
+select REPLACE(no_trab,' ','') as NOMINA,
+CONCAT(RTRIM(ape_pat_padre),'|',RTRIM(ape_mat_padre),'|',RTRIM(nombres_padre)) AS nombre_padre,
+CONCAT(RTRIM(ape_pat_madre),'|',RTRIM(ape_mat_madre),'|',RTRIM(nombres_madre)) AS nombre_madre
+from rh_empelados2
+
+ALTER PROCEDURE datos_empleado_formato
+@NUMERO_NOMINA VARCHAR(10)
+AS
+	BEGIN
+		SELECT
+		TOP 1
+		CASE WHEN ts.codigo = '99COR0000' THEN ts.codigo
+		ELSE tc.codigo END AS 'clave_socio',
+		ts.nombre_corto AS sucursal,tc.nombre AS planta,
+		CONVERT(VARCHAR(10), te.fecha_alta, 101) AS 'fechaAlta',
+		CASE
+			WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
+			THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
+			ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+		END AS puesto,
+		td.clasificacion,td.nomina,td.registro_patronal,td.salario_diario,td.lote,
+		te.status,te.numero_nomina,UPPER(te.apellido_paterno) AS 'apellidoPaterno',UPPER(te.apellido_materno) AS 'apellidoMaterno',te.nombre AS nombreEmpleado,
+		CONVERT(VARCHAR(10), te.fecha_nacimiento, 101) AS fechaNacimiento,td.municipio,td.estado,td.lugar_nacimiento,te.sexo,
+		CONCAT(te.rfcini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.rfcfin) AS RFC,
+		CONCAT(te.curpini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.curpfin) AS CURP,
+		te.nss,td.dv,td.numero_identificacion,td.estado_civil,UPPER(td.escolaridad) AS escolaridad,
+		td.nombre_padre,td.nombre_madre,
+		td.calle,td.numero_exterior,td.numero_interior,td.fraccionamiento,td.codigo_postal,td.localidad,td.municipio,td.estado,
+		td.cuenta,td.numero_cuenta,td.infonavit,td.numero_infonavit,td.fonacot,td.numero_fonacot,td.correo,td.celular,td.telefono,te.nombre_largo
+		FROM tbempleados AS te
+		INNER JOIN tbsucursal AS ts
+		ON te.id_sucursal = ts.id_sucursal 
+		INNER JOIN tbcelula AS tc
+		ON tc.id_celula = te.id_celula
+		INNER JOIN tbdatos_empleados AS td
+		ON td.numero_nomina = te.numero_nomina
+		AND te.numero_nomina = @NUMERO_NOMINA
+		ORDER BY te.status ASC, te.created_at ASC
+	END
+GO
+
+SELECT * FROM tbdatos_empleados
+SELECT * FROM tbarea
+SELECT * FROM tbsucursal
+
+EXEC datos_empleado_formato '21651'
+SELECT * FROM tbdatos_empleados WHERE numero_nomina = '26536'
+SELECT * FROM tbjefe_empleado
 SELECT * FROM tbempleados WHERE numero_nomina = '26700'
 SELECT * FROM PJEMPLOY WHERE employee ='26719'
 SELECT * FROM PJEMPPJT WHERE employee ='26719'
@@ -1405,12 +1436,33 @@ BEGIN TRANSACTION
 			  ,[updated_at] = GETDATE()
 			  ,[updated_by] = @nominaControl
 		 WHERE [numero_nomina] = @nnomina
-		 UPDATE tbjefe_empleado SET [jefe_nomina] = @jnomina, [updated_at] = GETDATE(), [updated_by] = @nominaControl WHERE [empleado_nomina] = @nnomina
+		 IF (NOT EXISTS(SELECT * FROM tbjefe_empleado WHERE empleado_nomina = @nnomina))
+		 BEGIN
+			INSERT INTO tbjefe_empleado(empleado_nomina,jefe_nomina,created_at,created_by)
+			VALUES (@nnomina,@jnomina,GETDATE(),@nominaControl)
+		 END
+		 ELSE
+		 BEGIN
+			UPDATE tbjefe_empleado SET [jefe_nomina] = @jnomina, [updated_at] = GETDATE(), [updated_by] = @nominaControl WHERE [empleado_nomina] = @nnomina
+		 END
      COMMIT
  END TRY
  BEGIN CATCH
   ROLLBACK
  END CATCH
+
+ IF (NOT EXISTS(SELECT * FROM Clock WHERE cast(clockDate as date) = '08/10/2012') 
+    AND userName = 'test') 
+BEGIN 
+    INSERT INTO Clock(clockDate, userName, breakOut) 
+    VALUES(GetDate(), 'test', GetDate()) 
+END 
+ELSE 
+BEGIN 
+    UPDATE Clock 
+    SET breakOut = GetDate()
+    WHERE Cast(clockDate AS Date) = '08/10/2012' AND userName = 'test'
+END 
 
 
  SELECT * FROM tbempleados WHERE created_by <> '00001'

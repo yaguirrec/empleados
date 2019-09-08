@@ -246,7 +246,12 @@ $(document).ready(function () {
             let respuesta = JSON.parse(response);
             if (respuesta.estado === 'OK') {
                 var datos = respuesta.informacion[0];
-                console.info(datos);
+                let nombreCompletoMadre = datos.nombre_madre,
+                    nombreCompletoPadre = datos.nombre_padre;
+                
+                let nombrePadre = nombreCompletoPadre.split('|');
+                let nombreMadre = nombreCompletoMadre.split('|');
+
                 $("#txtNomina").val(datos.numero_nomina);
                 $("#txtTipo").val(datos.status);
                 $("#txtLote").val(datos.lote);
@@ -275,8 +280,14 @@ $(document).ready(function () {
                 $("#txtCivil").val(datos.estado_civil);
                 $("#txtEscolaridad").val(datos.escolaridad);
                 $("#txtStescolaridad").val(datos.constancia);
-                $("#txtNombrePadre").val(datos.nombre_padre);
-                $("#txtNombreMadre").val(datos.nombre_madre);
+
+                $("#txtNombrePadre").val(nombrePadre[2]);
+                $("#txtApePatPadre").val(nombrePadre[1]);
+                $("#txtApeMatPadre").val(nombrePadre[0]);
+                $("#txtNombreMadre").val(nombreMadre[2]);
+                $("#txtApePatMadre").val(nombreMadre[1]);
+                $("#txtApeMatMadre").val(nombreMadre[0]);
+
                 $("#txtCalle").val(datos.calle);
                 $("#txtNume").val(datos.numero_exterior);
                 $("#txtNumi").val(datos.numero_interior);
@@ -663,7 +674,8 @@ $(document).ready(function () {
                     seccionExportar.removeClass('d-none');
 
                     $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
-                    row.append($("<td>" + rowInfo.numero_nomina + " </td>"));
+                    // row.append($("<td>" + rowInfo.numero_nomina + " </td>"));
+                    row.append($("<td><a href='formato.php?emp=" + rowInfo.numero_nomina + "' title='Formato de Alta' target='_blank'>" + rowInfo.numero_nomina + "</a></td>"));
                     row.append($("<td> " + rowInfo.nss + " </td>"));
                     row.append($("<td> " + rowInfo.nombre_largo + " </td>"));
                     row.append($("<td> " + rowInfo.salario_diario + " </td>"));
@@ -864,7 +876,7 @@ $(document).ready(function () {
         case 'datos':
             let btnBaja = $('#btnBaja'),
                 btnModificar = $('#btnModificar'),
-                statusEmpleado = $('.statusEmpleado');
+                statusEmpleado = $('#txtStatus');
             //GET VALUE FROM LS
             var codigoEmpleado = localStorage.getItem('codigoEmpleado'),
                 action = 'mostrar-empleado';
@@ -892,7 +904,7 @@ $(document).ready(function () {
 
             function imprimirEmpleado(rowInfo) {
                 let statusEmpleadoR = rowInfo.status;
-                if (statusEmpleadoR === 'B') {
+                if (statusEmpleadoR.substr(0,1) === 'B') {
                     statusEmpleado.addClass('text-danger');
                     statusEmpleado.removeClass('text-success');
                 } else {
@@ -1078,7 +1090,25 @@ $(document).ready(function () {
             }).done(function (response) {
                 let respuesta = JSON.parse(response);
                 if (respuesta.estado === 'OK') {
-                    var datos = respuesta.informacion[0];
+                    let datos = respuesta.informacion[0];
+                    let nombreCompletoMadre = datos.nombre_madre,
+                        nombreCompletoPadre = datos.nombre_padre;
+                    
+                    let nombrePadre = nombreCompletoPadre.split('|');
+                    let nombreMadre = nombreCompletoMadre.split('|');
+
+                    var url = 'inc/model/entidades.json',
+                    entidad = datos.CURP.substr(11, 2);
+                    $.getJSON(url, function (data) {
+                        var clave = '';
+                        for (var e in data.entidades) {
+                            clave = data.entidades[e].clave;
+                            if (clave === entidad) {
+                                $("#txtLnacimiento").val(data.entidades[e].nombre);
+                            }
+                        }
+                    });
+
                     $("#txtNomina").val(datos.numero_nomina);
                     $("#txtTipo").val(datos.status);
                     $("#txtLote").val(datos.lote);
@@ -1107,8 +1137,14 @@ $(document).ready(function () {
                     $("#txtCivil").val(datos.estado_civil);
                     $("#txtEscolaridad").val(datos.escolaridad);
                     $("#txtStescolaridad").val(datos.constancia);
-                    $("#txtNombrePadre").val(datos.nombre_padre);
-                    $("#txtNombreMadre").val(datos.nombre_madre);
+
+                    $("#txtNombrePadre").val(nombrePadre[2]);
+                    $("#txtApePatPadre").val(nombrePadre[1]);
+                    $("#txtApeMatPadre").val(nombrePadre[0]);
+                    $("#txtNombreMadre").val(nombreMadre[2]);
+                    $("#txtApePatMadre").val(nombreMadre[1]);
+                    $("#txtApeMatMadre").val(nombreMadre[0]);
+
                     $("#txtCalle").val(datos.calle);
                     $("#txtNume").val(datos.numero_exterior);
                     $("#txtNumi").val(datos.numero_interior);
@@ -1186,8 +1222,8 @@ $(document).ready(function () {
                     eCivil = $('#txtCivil').val(),
                     escolaridad = $('#txtEscolaridad').val(),
                     cEscolaridad = $('#txtStescolaridad').val(),
-                    nPadre = $('#txtNombrePadre').val(),
-                    nMadre = $('#txtNombreMadre').val(),
+                    nPadre = `${$('#txtApePatPadre').val()}|${$('#txtApeMatPadre').val()}|${$('#txtNombrePadre').val()}`,
+                    nMadre = `${$('#txtApePatMadre').val()}|${$('#txtApeMatMadre').val()}|${$('#txtNombreMadre').val()}`,
                     calle = $('#txtCalle').val(),
                     numE = $('#txtNume').val(),
                     numI = $('#txtNumi').val(),
@@ -1753,7 +1789,7 @@ $(document).ready(function () {
 
             //LLENAR CAMPOS CLAVE SI NO EXISTE EN LA BD
             let camposClave = () => {
-                genero = textocurp.charAt(10);
+                genero = (textocurp.charAt(10) === 'M') ? 'F' : 'M';
                 $("#txtGenero").val(genero);
                 var aNacimiento = textocurp.substr(4, 2),
                     mNacimiento = textocurp.substr(6, 2),
@@ -2054,8 +2090,8 @@ $(document).ready(function () {
                     eCivil = $('#txtCivil').val(),
                     escolaridad = $('#txtEscolaridad').val(),
                     cEscolaridad = $('#txtStescolaridad').val(),
-                    nPadre = `${$('#txtAPp').val()} ${$('#txtAMp').val()} ${$('#txtNomp').val()}`,
-                    nMadre = `${$('#txtAPm').val()} ${$('#txtAMm').val()} ${$('#txtNomm').val()}`,
+                    nPadre = `${$('#txtAPp').val()}|${$('#txtAMp').val()}|${$('#txtNomp').val()}`,
+                    nMadre = `${$('#txtAPm').val()}|${$('#txtAMm').val()}|${$('#txtNomm').val()}`,
                     calle = $('#txtCalle').val(),
                     numE = $('#txtNume').val(),
                     numI = $('#txtNumi').val(),
