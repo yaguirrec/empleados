@@ -622,6 +622,87 @@ $(document).ready(function () {
                 });
             }
             break;
+        //SECCION BECARIOS
+        case 'becarios':
+            seccionBuscar.removeClass('d-none');
+            var action = 'lista-becarios';
+            var titulo = 'Becarios';
+            $('.seccionTitulo').text(titulo);
+            if (seccionActual === 'becarios') {
+                $('.columna-baja').addClass('d-none');
+            } else {
+                $('.columna-baja').removeClass('d-none');
+            }
+            var dataTable = new FormData();
+            dataTable.append('action', action);
+            var xmlhr = new XMLHttpRequest();
+            xmlhr.open('POST', backendURL, true);
+            xmlhr.onload = function () {
+                if (this.status === 200) {
+                    var respuesta = JSON.parse(xmlhr.responseText);
+                    if (respuesta.estado === 'OK') {
+                        var informacion = respuesta.informacion;
+                        for (var i in informacion) {
+                            tablaBecarios(informacion[i]);
+                        }
+                    } else if (respuesta.status === 'error') {
+                        var informacion = respuesta.informacion;
+                    }
+                }
+            }
+            xmlhr.send(dataTable);
+
+            function tablaBecarios(rowInfo) {
+                var st = rowInfo.status,
+                    status = 'Activo',
+                    estado = '';
+
+                $('#loadingIndicator').addClass('d-none');
+
+                if (st === 'B') {
+                    estado = "alert-secondary";
+                    status = 'Baja';
+                }
+                if (st === 'R') {
+                    estado = "text-secondary";
+                    status = 'Re-ingreso';
+                }
+                var row = $("<tr class='" + estado + " text-secondary'>");
+
+                $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
+                // NUMERO DE EQUIPO
+                row.append($("<td><a href='formato.php?emp=" + rowInfo.numero_nomina + "' title='Formato de Alta' target='_blank'>" + rowInfo.numero_nomina + "</a></td>"));
+                // NOMINA DEL EMPLEADO
+                row.append($("<td class='text-left'> " + rowInfo.Nombre + " </td>"));
+                row.append($("<td class='text-left'> " + rowInfo.Puesto + " </td>"));
+                row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
+                if (st === 'B') {
+                    row.append($("<td> " + rowInfo.fechaBaja + " </td>"));
+                }
+                row.append($("<td> " + rowInfo.Sucursal + " </td>"));
+                row.append($("<td> " + rowInfo.Celula + " </td>"));
+                row.append($("<td> " + status + " </td>"));
+                // COLUMNA ACCION
+                row.append($("<td class='text-center'>"
+                    + "<a class='btn btnConsulta text-white btn-facebook btn-circle btn-sm' data-id='" + rowInfo.numero_nomina + "' role='button' title='Ver información'><i class='fas fa-info'></i></a>"
+                    + "</td>"));
+
+                $(".btnConsulta").unbind().click(function () {
+                    var employeeID = $((this)).data('id'),
+                        url = "index.php?request=datos";
+                    // newTab = window.open(url, '_blank');
+
+                    //SAVE EMPLOYEE ID ON LOCAL STORAGE AS codigoEmpleado
+                    localStorage.setItem('codigoEmpleado', employeeID);
+
+                    // OPEN ON CURRENT TAB
+                    $(location).attr('href', url);
+
+                    // OPEN ON NEW TAB
+                    // newTab.focus();
+                });
+            }
+            break;
         // ENVIAR ALTAS A NOMINAS
         case 'altas':
             let btnConsultarAltas = $('#btnConsultaAltas'),
@@ -1097,18 +1178,6 @@ $(document).ready(function () {
                     let nombrePadre = nombreCompletoPadre.split('|');
                     let nombreMadre = nombreCompletoMadre.split('|');
 
-                    var url = 'inc/model/entidades.json',
-                    entidad = datos.CURP.substr(11, 2);
-                    $.getJSON(url, function (data) {
-                        var clave = '';
-                        for (var e in data.entidades) {
-                            clave = data.entidades[e].clave;
-                            if (clave === entidad) {
-                                $("#txtLnacimiento").val(data.entidades[e].nombre);
-                            }
-                        }
-                    });
-
                     $("#txtNomina").val(datos.numero_nomina);
                     $("#txtTipo").val(datos.status);
                     $("#txtLote").val(datos.lote);
@@ -1139,11 +1208,13 @@ $(document).ready(function () {
                     $("#txtStescolaridad").val(datos.constancia);
 
                     $("#txtNombrePadre").val(nombrePadre[2]);
-                    $("#txtApePatPadre").val(nombrePadre[1]);
-                    $("#txtApeMatPadre").val(nombrePadre[0]);
+                    $("#txtApeMatPadre").val(nombrePadre[1]);
+                    $("#txtApePatPadre").val(nombrePadre[0]);
+
                     $("#txtNombreMadre").val(nombreMadre[2]);
-                    $("#txtApePatMadre").val(nombreMadre[1]);
-                    $("#txtApeMatMadre").val(nombreMadre[0]);
+                    $("#txtApeMatMadre").val(nombreMadre[1]);
+                    $("#txtApePatMadre").val(nombreMadre[0]);
+
 
                     $("#txtCalle").val(datos.calle);
                     $("#txtNume").val(datos.numero_exterior);

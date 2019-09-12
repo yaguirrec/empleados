@@ -1109,7 +1109,7 @@ AS
 		CASE WHEN ts.codigo = '99COR0000' THEN ts.codigo
 		ELSE tc.codigo END AS 'clave_socio',
 		ts.nombre_corto AS sucursal,tc.nombre AS planta,
-		CONVERT(VARCHAR(10), te.fecha_alta, 101) AS 'fechaAlta',
+		CONVERT(VARCHAR(10), te.fecha_alta, 103) AS 'fechaAlta',
 		CASE
 			WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
 			THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
@@ -1117,12 +1117,12 @@ AS
 		END AS puesto,
 		td.clasificacion,td.nomina,td.registro_patronal,td.salario_diario,td.lote,
 		te.status,te.numero_nomina,UPPER(te.apellido_paterno) AS 'apellidoPaterno',UPPER(te.apellido_materno) AS 'apellidoMaterno',te.nombre AS nombreEmpleado,
-		CONVERT(VARCHAR(10), te.fecha_nacimiento, 101) AS fechaNacimiento,td.municipio,td.estado,td.lugar_nacimiento,te.sexo,
+		CONVERT(VARCHAR(10), te.fecha_nacimiento, 103) AS fechaNacimiento,td.municipio,td.estado,td.lugar_nacimiento,te.sexo,
 		CONCAT(te.rfcini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.rfcfin) AS RFC,
 		CONCAT(te.curpini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.curpfin) AS CURP,
 		te.nss,td.dv,td.numero_identificacion,td.estado_civil,UPPER(td.escolaridad) AS escolaridad,
-		td.nombre_padre,td.nombre_madre,
-		td.calle,td.numero_exterior,td.numero_interior,td.fraccionamiento,td.codigo_postal,td.localidad,td.municipio,td.estado,
+		UPPER(td.nombre_padre) AS nombre_padre,UPPER(td.nombre_madre) AS nombre_madre,
+		UPPER(td.calle) AS calle,td.numero_exterior,td.numero_interior,UPPER(td.fraccionamiento) AS fraccionamiento,td.codigo_postal,UPPER(td.localidad) AS localidad,UPPER(td.municipio) AS municipio,UPPER(td.estado) AS estado,
 		td.cuenta,td.numero_cuenta,td.infonavit,td.numero_infonavit,td.fonacot,td.numero_fonacot,td.correo,td.celular,td.telefono,te.nombre_largo
 		FROM tbempleados AS te
 		INNER JOIN tbsucursal AS ts
@@ -1136,12 +1136,12 @@ AS
 	END
 GO
 
-SELECT * FROM tbdatos_empleados
-SELECT * FROM tbarea
-SELECT * FROM tbsucursal
+SELECT  CONVERT(VARCHAR(10), GETDATE(), 103)
+UPDATE tbdatos_empleados set correo = 'SAMIRAHA@HOTMAIL.COM' WHERE numero_nomina = '26788'
+
 
 EXEC datos_empleado_formato '21651'
-SELECT * FROM tbdatos_empleados WHERE numero_nomina = '26536'
+SELECT * FROM tbdatos_empleados WHERE numero_nomina = '26788'
 SELECT * FROM tbjefe_empleado
 SELECT * FROM tbempleados WHERE numero_nomina = '26700'
 SELECT * FROM PJEMPLOY WHERE employee ='26719'
@@ -1451,22 +1451,7 @@ BEGIN TRANSACTION
   ROLLBACK
  END CATCH
 
- IF (NOT EXISTS(SELECT * FROM Clock WHERE cast(clockDate as date) = '08/10/2012') 
-    AND userName = 'test') 
-BEGIN 
-    INSERT INTO Clock(clockDate, userName, breakOut) 
-    VALUES(GetDate(), 'test', GetDate()) 
-END 
-ELSE 
-BEGIN 
-    UPDATE Clock 
-    SET breakOut = GetDate()
-    WHERE Cast(clockDate AS Date) = '08/10/2012' AND userName = 'test'
-END 
-
-
- SELECT * FROM tbempleados WHERE created_by <> '00001'
- update tbempleados set status = 'A' WHERE numero_nomina= '88893'
+ SELECT * FROM tbempleados where numero_nomina = '88894'
 
 
  EXEC firedEmployee '26549','TEST','TEST','2019-08-04','19905';

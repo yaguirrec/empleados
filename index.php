@@ -36,6 +36,9 @@
               case 'alta-empleado':
                 include 'inc/templates/empleados/alta-empleado.php';
                 break;
+              case 'becarios':
+                include 'inc/templates/empleados/vista.php';
+                break;
               case 'modificar-empleado':
                 include 'inc/templates/empleados/modificar.php';
                 break;

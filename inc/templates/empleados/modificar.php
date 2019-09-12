@@ -136,7 +136,7 @@
                 <div class="form-row">
                     <div class="form-group col-md-2">
                         <label for="txtfechaNacimiento">Fecha Nacimiento</label>
-                        <input type="date" class="form-control" id="txtfechaNacimiento" readonly>
+                        <input type="date" class="form-control" id="txtfechaNacimiento">
                     </div>
                     <div class="form-group col-md-2">
                         <label for="txtLnacimiento">Lugar de nacimiento</label>

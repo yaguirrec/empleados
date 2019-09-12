@@ -55,6 +55,7 @@
             <h6 class="collapse-header">Opciones de consulta:</h6>
             <a class="collapse-item" href="index.php?request=empleado">Empleados activos</a>
             <a class="collapse-item" href="index.php?request=bajas">Empleados inactivos</a>
+            <a class="collapse-item" href="index.php?request=becarios">Becarios</a>
             <hr class="sidebar-divider">
             <h6 class="collapse-header">Administrar registros:</h6>
             <a class="collapse-item" href="index.php?request=alta-empleado">Alta de empleado</a>

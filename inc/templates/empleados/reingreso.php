@@ -140,7 +140,7 @@
                     </div>
                     <div class="form-group col-md-2">
                         <label for="txtLnacimiento">Lugar de nacimiento</label>
-                        <input type="text" class="form-control" id="txtLnacimiento" readonly>
+                        <input type="text" class="form-control" id="txtLnacimiento">
                     </div>
                     <div class="form-group col-md-2">
                         <label for="txtGenero">Genero</label>
