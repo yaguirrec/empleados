@@ -20,11 +20,11 @@
       include 'inc/templates/inicio.php';
       if(empty($nivel_usuario)){
         switch($request){
-          case 'datos':
-            include 'inc/templates/empleados/vista-empleado.php';
+          case 'perfil':
+            include 'inc/templates/empleados/empleado.php';
             break;
           default:
-            include 'inc/templates/empleados/vista-empleado.php';
+            include 'inc/templates/empleados/empleado.php';
             break;
         }
       }else{

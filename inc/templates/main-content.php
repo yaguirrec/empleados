@@ -191,7 +191,7 @@
     </div>
 
     <!-- Color System -->
-    <h1>Noticias</h1>
+    <!-- <h1>Noticias</h1>
     <div class="row">
       <div class="col-lg-6 mb-4">
         <div class="card bg-primary text-white shadow">
@@ -241,7 +241,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
   </div>
 
@@ -256,13 +256,13 @@
         <div class="text-center">
           <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" width="400" src="img/banner.jpg" alt="">
         </div>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse, officia harum ratione sed incidunt fugiat in accusamus odio consequatur, adipisci deleniti culpa sapiente ex commodi. Recusandae hic quod porro! Ducimus!</p>
+        <p>MEXQ es líder Nacional como proveedor de servicios de aseguramiento de calidad en la industria automotriz. Actualmente contamos con más de 1,300 empleados en 14 sucursales alrededor de la república Mexicana. Desde 1997 nuestro prestigio como proveedor de servicios ha crecido gracias a la confianza que nos brindan las principales armadoras y toda su proveeduría en México y el Mundo. Nos enfocamos en apoyar a nuestros clientes mediante soluciones flexibles para sus problemas de calidad.</p>
         <a target="_blank" rel="nofollow" href="https://mexq.com.mx/">Visitar sitio &rarr;</a>
       </div>
     </div>
 
     <!-- Approach -->
-    <div class="card shadow mb-4">
+    <!-- <div class="card shadow mb-4">
       <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Intranet</h6>
       </div>
@@ -270,7 +270,7 @@
         <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officiis magni culpa est quasi error nisi dolorum sapiente soluta, omnis perferendis magnam similique, voluptatum nesciunt nihil amet nobis nostrum consequatur! Officia!</p>
         <p class="mb-0">lorem</p>
       </div>
-    </div>
+    </div> -->
 
   </div>
 </div>

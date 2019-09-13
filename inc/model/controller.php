@@ -51,7 +51,7 @@
                         $usuario_nombre = trim(ucwords(strtolower($row['nombre_largo'])));
                         $sesion = true;
 
-                        $ubicacion = ((empty($usuario_nivel) || $usuario_nivel < 2) ? 'datos' : 'main');
+                        $ubicacion = ((empty($usuario_nivel) || $usuario_nivel < 2) ? 'empleado' : 'main');
                         $respuesta = array(
                             'estado' => 'OK',
                             'ubicacion' => $ubicacion,

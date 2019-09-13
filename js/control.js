@@ -1157,7 +1157,85 @@ $(document).ready(function () {
                 }
 
             });
-            break;
+        break;
+        //PERFIL DEL EMPLEADO
+        case 'perfil':
+            let estadoEmpleado = $('#txtStatus');
+            //GET VALUE FROM LS
+            var codigoEmpleado = localStorage.getItem('nominaEmpleado'),
+                action = 'mostrar-empleado';
+            //REMOVE VALUE FROM LS
+            var dataEmp = new FormData();
+            dataEmp.append('action', action);
+            dataEmp.append('prop', codigoEmpleado);
+            var xmlhr = new XMLHttpRequest();
+            xmlhr.open('POST', backendURL, true);
+            xmlhr.onload = function () {
+                if (this.status === 200) {
+                    var respuesta = JSON.parse(xmlhr.responseText);
+                    if (respuesta.estado === 'OK') {
+                        var informacion = respuesta.informacion;
+                        for (var i in informacion) {
+                            mostrarEmpleado(informacion[i]);
+                        }
+                    } else if (respuesta.status === 'error') {
+                        var informacion = respuesta.informacion;
+                    }
+                }
+            }
+            xmlhr.send(dataEmp);
+
+            function mostrarEmpleado(rowInfo) {
+                let estadoEmpleadoR = rowInfo.status;
+                if (estadoEmpleadoR.substr(0,1) === 'B') {
+                    estadoEmpleado.addClass('text-danger');
+                    estadoEmpleado.removeClass('text-success');
+                } else {
+                    estadoEmpleado.removeClass('text-danger');
+                    estadoEmpleado.addClass('text-success');
+                }
+                var nomina = rowInfo.numero_nomina,
+                    urlFoto = 'assets/files/' + nomina + '/' + nomina + '.jpg',
+                    action = 'revisarImagen';
+                $("#empImagen").attr('src', urlFoto);
+                $('#txtNomina').text(rowInfo.numero_nomina);
+                $('#txtNombre').text(rowInfo.nombre_largo);
+                $('#txtPuesto').text(rowInfo.Puesto);
+                $('#txtSucursal').text(rowInfo.Sucursal);
+                $('#txtDepartamento').text(rowInfo.Departamento);
+                $('#txtCelula').text(rowInfo.Celula);
+                $('#txtStatus').text(rowInfo.status);
+
+
+                $.ajax({
+                    type: 'POST',
+                    url: localBackend + 'control.php',
+                    data: { action: action, nomina: nomina },
+                    success: function (response) {
+                        var respuesta = JSON.parse(response);
+                        if (respuesta.estado === 0) {
+                            $("#empImagen").attr('src', 'img/gafete/no-image.png');
+                            $("#btnGafete").prop('disabled', true);
+                            $("#lblImagen").hide();
+                        }
+                        else {
+                            $("#btnGafete").prop('disabled', false);
+                            $("#lblImagen").show();
+                        }
+                    }
+                });
+            }
+
+            var archivoImagen = $("#txtFoto")[0].files.length;
+            $("#txtFoto").on('click', function () {
+                if (archivoImagen === 0) {
+                    $("#btnGafete").prop('disabled', false);
+                } else {
+                    $("#btnGafete").prop('disabled', true);
+                }
+            });
+           
+        break;
         //LLENAR FORMULARIO DATOS DEL EMPLEADO
         case 'modificar-empleado':
             // let btnModificarEmpleado = $('#btnModificarEmpleado');

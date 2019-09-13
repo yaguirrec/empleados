@@ -17,6 +17,8 @@ $( document ).ready(function() {
     let seccionEnvioAltas = $('#seccionEnvioAltas');
     let seccionAcuseAltas = $('#seccionAcuseAltas');
 
+    localStorage.setItem('nominaEmpleado', empleado_activo);
+
     let backButton = $( "#backButton" ),
         seccionLateral = $("#sidePaneAdmin"),
         seccionPanel = $(".seccionPanel"),
@@ -27,7 +29,8 @@ $( document ).ready(function() {
         rh = $(".rh"),
         nominas = $(".nominas");
 
-    console.log('campo ' + nivel_usuario);
+    console.log('campo ' + empleado_activo);
+
 
     switch (nivel_usuario){
         case '': 

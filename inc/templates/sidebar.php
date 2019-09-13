@@ -7,7 +7,7 @@
           <img src="img/whiteLogo.png" width="85" alt="Logo MEXQ" class="responsive-img mb-2">
           <!-- <i class="fas fa-laugh-wink"></i> -->
         </div>
-        <!-- <div class="sidebar-brand-text mx-3">EliceWeb <sup>MEXQ</sup></div> -->
+        <div class="sidebar-brand-text mx-3">Empleados <sup>MEXQ</sup></div>
       </a>
 
       <!-- Divider -->
