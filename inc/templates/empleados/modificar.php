@@ -17,7 +17,7 @@
                     <div class="form-group col-md-1">
                         <label for="txtTipo">Tipo</label>
                         <select class="form-control" id="txtTipo" disabled>
-                            <option value="A" selected>Alta</option>
+                            <option value="A">Alta</option>
                             <option value="R">Reingreso</option>
                             <option value="B">Baja</option>
                         </select>

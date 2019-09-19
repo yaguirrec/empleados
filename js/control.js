@@ -244,6 +244,7 @@ $(document).ready(function () {
             data: { action: 'datos-empleado', numero_nomina: numero_nomina }
         }).done(function (response) {
             let respuesta = JSON.parse(response);
+            console.log(respuesta);
             if (respuesta.estado === 'OK') {
                 var datos = respuesta.informacion[0];
                 let nombreCompletoMadre = datos.nombre_madre,
@@ -282,11 +283,12 @@ $(document).ready(function () {
                 $("#txtStescolaridad").val(datos.constancia);
 
                 $("#txtNombrePadre").val(nombrePadre[2]);
-                $("#txtApePatPadre").val(nombrePadre[1]);
-                $("#txtApeMatPadre").val(nombrePadre[0]);
+                $("#txtApeMatPadre").val(nombrePadre[1]);
+                $("#txtApePatPadre").val(nombrePadre[0]);
+
                 $("#txtNombreMadre").val(nombreMadre[2]);
-                $("#txtApePatMadre").val(nombreMadre[1]);
-                $("#txtApeMatMadre").val(nombreMadre[0]);
+                $("#txtApeMatMadre").val(nombreMadre[1]);
+                $("#txtApePatMadre").val(nombreMadre[0]);
 
                 $("#txtCalle").val(datos.calle);
                 $("#txtNume").val(datos.numero_exterior);
@@ -1701,8 +1703,9 @@ $(document).ready(function () {
                 eCivil = $('#txtCivil').val(),
                 escolaridad = $('#txtEscolaridad').val(),
                 cEscolaridad = $('#txtStescolaridad').val(),
-                nPadre = $('#txtNombrePadre').val(),
-                nMadre = $('#txtNombreMadre').val(),
+                ///DATOS PADRES
+                nPadre = `${$('#txtApePatPadre').val()}|${$('#txtApeMatPadre').val()}|${$('#txtNombrePadre').val()}`,
+                nMadre = `${$('#txtApePatMadre').val()}|${$('#txtApeMatMadre').val()}|${$('#txtNombreMadre').val()}`,
                 calle = $('#txtCalle').val(),
                 numE = $('#txtNume').val(),
                 numI = $('#txtNumi').val(),
