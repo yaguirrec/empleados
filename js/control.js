@@ -710,13 +710,29 @@ $(document).ready(function () {
             let btnConsultarAltas = $('#btnConsultaAltas'),
                 btnEnviarAltas = $('#btnEnviarAltas'),
                 btnEnviarAcuse = $('#btnEnviarAcuse'),
+                btnEnviarProcesada = $('#btnEnviarProcesada'),
+                radioAcuse = $('#radioAcuse'),
+                radioProcesadas = $('#radioProcesada'),
+                divAcuses = $('#divAcuses'),
+                divProcesadas = $('#divProcesadas'),
                 datosEmpleados = [];
             obtenerAltas();
-            btnConsultarAltas.on('click', function (e) {
+            btnConsultarAltas.click(function (e) {
                 e.preventDefault();
                 $('#dataTable').empty();
                 obtenerAltas();
             });
+
+            radioAcuse.click(function(e){
+                divAcuses.removeClass('d-none');
+                divProcesadas.addClass('d-none');
+            });
+
+            radioProcesadas.click(function(e){
+                divProcesadas.removeClass('d-none');
+                divAcuses.addClass('d-none');
+            });
+              
             function obtenerAltas() {
                 var action = 'altas',
                     fecha = $('#txtFechaAltas').val();
@@ -753,11 +769,22 @@ $(document).ready(function () {
                 xmlhr.send(dataTable);
 
                 function tablaAltas(rowInfo) {
-                    var row = $("<tr>");
+                    var row = $("<tr>"),
+                        acuse = rowInfo.lote_acuse,
+                        procesada = rowInfo.lote;
+
+                    if(acuse == null || acuse == ''){
+                        acuse = '';
+                    }
+                    if(procesada == null || procesada == ''){
+                        procesada = '';
+                    }
+                    
                     seccionExportar.removeClass('d-none');
 
                     $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
-                    // row.append($("<td>" + rowInfo.numero_nomina + " </td>"));
+
+                    row.append($("<td><input class='form-check-input position-static ml-2 text-center' name='noNomina' type='checkbox' id='blankCheckbox' value='" + rowInfo.numero_nomina + "'>" + "</td>"));
                     row.append($("<td><a href='formato.php?emp=" + rowInfo.numero_nomina + "' title='Formato de Alta' target='_blank'>" + rowInfo.numero_nomina + "</a></td>"));
                     row.append($("<td> " + rowInfo.nss + " </td>"));
                     row.append($("<td> " + rowInfo.nombre_largo + " </td>"));
@@ -767,11 +794,12 @@ $(document).ready(function () {
                     row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
                     row.append($("<td> " + rowInfo.registro_patronal + " </td>"));
                     row.append($("<td> " + rowInfo.registro_patronal + ' ' + rowInfo.tipo_nomina + " </td>"));
-                    row.append($("<td><a href='assets/attached/" + rowInfo.lote + ".rar' target='_blank'>" + rowInfo.lote + "</a></td>"));
+                    row.append($("<td><a href='assets/attached/Acuses/" + rowInfo.lote_acuse + ".zip' target='_blank'>" + acuse + "</a></td>"));
+                    row.append($("<td><a href='assets/attached/Procesadas/" + rowInfo.lote + ".zip' target='_blank'>" + procesada + "</a></td>"));
                 }
             }
 
-            btnEnviarAltas.click(function (e) {
+                btnEnviarAltas.click(function (e) {
                 e.preventDefault();
                 var action = 'envioAltas',
                     fecha = $('#txtFechaAltas').val(),
@@ -796,17 +824,23 @@ $(document).ready(function () {
 
             btnEnviarAcuse.click(function (e) {
                 e.preventDefault();
-                var action = 'envioAcuse',
-                    fecha = $('#txtFechaAltas').val();
+                var action = 'envioAcuse';
+
+                let numerosNomina = [];
+                $.each($("input[name='noNomina']:checked"), function(){            
+                    numerosNomina.push($(this).val());
+                });
+
+                console.log(numerosNomina.join("|"));
 
                 let adjunto_Acuse = document.getElementById('txtAcuse');
                 let adjuntoAcuse = adjunto_Acuse.files[0];
                 let nombreAdjuntoAcuse = adjunto_Acuse.files[0].name;
-                nombreAdjuntoAcuse = nombreAdjuntoAcuse.substr(21, 9);
+                nombreAdjuntoAcuse = nombreAdjuntoAcuse.substr(23, 9);
 
                 var datosAcuse = new FormData();
                 datosAcuse.append('action', action);
-                datosAcuse.append('fecha', fecha);
+                datosAcuse.append('arrNomina', numerosNomina.join("|"));
                 datosAcuse.append('nombreAdjuntoAcuse', nombreAdjuntoAcuse);
 
                 var xhr = new XMLHttpRequest();
@@ -815,7 +849,6 @@ $(document).ready(function () {
                 xhr.onload = function () {
                     if (this.status === 200 && this.readyState == 4) {
                         var respuesta = JSON.parse(xhr.responseText);
-                        console.log(respuesta);
                         if (respuesta.estado === 'OK') {
                             Swal.fire({
                                 title: 'Alta exitosa!',
@@ -851,10 +884,71 @@ $(document).ready(function () {
                         // console.log(respuesta);
                     }
                 }
+            });
 
+            btnEnviarProcesada.click(function (e) {
+                e.preventDefault();
+                let action = 'envioProcesada';
+                let numerosNomina = [];
+                $.each($("input[name='noNomina']:checked"), function(){            
+                    numerosNomina.push($(this).val());
+                });
 
+                let adjunto_Procesada = document.getElementById('txtProcesada');
+                let adjuntoProcesada = adjunto_Procesada.files[0];
+                let nombreAdjuntoProcesada = adjunto_Procesada.files[0].name;
+                nombreAdjuntoProcesada = nombreAdjuntoProcesada.substr(21, 9);
+
+                var datosProcesada = new FormData();
+                datosProcesada.append('action', action);
+                datosProcesada.append('arrNomina', numerosNomina.join("|"));
+                datosProcesada.append('nombreAdjuntoProcesada', nombreAdjuntoProcesada);
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', backendURL, true);
+                xhr.send(datosProcesada);
+                xhr.onload = function () {
+                    if (this.status === 200 && this.readyState == 4) {
+                        var respuesta = JSON.parse(xhr.responseText);
+                        if (respuesta.estado === 'OK') {
+                            Swal.fire({
+                                title: 'Alta exitosa!',
+                                text: 'Alta de procesada exitosa!',
+                                type: 'success'
+                            })
+                                .then(resultado => {
+                                    if (resultado.value) {
+                                        location.reload();
+                                    }
+                                })
+                        } else {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Hubo un error',
+                                type: 'error'
+                            })
+                        }
+                    }
+                }
+
+                var archivoProcesada = new FormData();
+                archivoProcesada.append('action', action);
+                archivoProcesada.append('adjuntoProcesada', adjuntoProcesada);
+                archivoProcesada.append('nombreAdjuntoProcesada', nombreAdjuntoProcesada);
+
+                var xhtr = new XMLHttpRequest();
+                xhtr.open('POST', localBackend + 'control.php', true);
+                xhtr.send(archivoProcesada);
+                xhtr.onload = function () {
+                    if (this.status === 200 && this.readyState == 4) {
+                        // var respuesta = JSON.parse(xhtr.responseText);
+                        // console.log(respuesta);
+                    }
+                }
 
             });
+
+
 
             break;
         /**ALTAS SEMANALES */

@@ -114,6 +114,8 @@ GO
 --TRUNCATE TABLE tbdatos_empleados
 
 SELECT * FROM tbdatos_empleados WHERE numero_nomina = '19905'
+ALTER TABLE tbdatos_empleados ADD lote_acuse [varchar](15) DEFAULT '';
+
 
 /**CREAR TABLA DATOS EMPLEADOS*/
 USE [MEXQApptemp]
