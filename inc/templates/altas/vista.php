@@ -56,28 +56,30 @@
             </div>
             <hr>
 
-            <div class="col-md-2 offset-5">
-                <div class="btn-group" role="group" aria-label="Basic example">
-                    <button type="button" class="btn btn-info mr-1" id="radioAcuse"><i class="fas fa-file-import"></i> Acuse de Altas</button>
-                    <button type="button" class="btn btn-success" id="radioProcesada"><i class="fas fa-file-export"></i> Procesadas IMSS</button>
+            <div class="d-none" id="seccionAcuseAltas">
+                <div class="col-md-2 offset-5">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-info mr-1" id="radioAcuse"><i class="fas fa-file-import"></i> Acuse de Altas</button>
+                        <button type="button" class="btn btn-success" id="radioProcesada"><i class="fas fa-file-export"></i> Procesadas IMSS</button>
+                    </div>
                 </div>
-            </div>
 
-            <br><br>
-            <div class="col-md-10 offset-1">
-                <div class="col-md-5 d-none" id="divAcuses">
-                    <div class="form-group">
-                        <label class="h3" for="txtAcuse">Acuse de alta</label>
-                        <input type="file" class="form-control-file" id="txtAcuse">
+                <br><br>
+                <div class="col-md-10 offset-1">
+                    <div class="col-md-5 d-none" id="divAcuses">
+                        <div class="form-group">
+                            <label class="h3" for="txtAcuse">Acuse de alta</label>
+                            <input type="file" class="form-control-file" id="txtAcuse">
+                        </div>
+                        <button class="btn btn-info" id="btnEnviarAcuse" accept="application/pdf,application/vnd.ms-excel"><i class="fas fa-file-upload"></i> SUBIR ACUSE</button>
                     </div>
-                    <button class="btn btn-info" id="btnEnviarAcuse" accept="application/pdf,application/vnd.ms-excel"><i class="fas fa-file-upload"></i> SUBIR ACUSE</button>
-                </div>
-                <div class="col-md-5 offset-8 d-none" id="divProcesadas">
-                    <div class="form-group">
-                        <label class="h3" for="txtProcesada">Procesada de altas</label>
-                        <input type="file" class="form-control-file" id="txtProcesada">
+                    <div class="col-md-5 offset-8 d-none" id="divProcesadas">
+                        <div class="form-group">
+                            <label class="h3" for="txtProcesada">Procesada de altas</label>
+                            <input type="file" class="form-control-file" id="txtProcesada">
+                        </div>
+                        <button class="btn btn-success" id="btnEnviarProcesada" accept="application/pdf,application/vnd.ms-excel"><i class="fas fa-file-upload"></i> SUBIR PROCESADA</button>
                     </div>
-                    <button class="btn btn-success" id="btnEnviarProcesada" accept="application/pdf,application/vnd.ms-excel"><i class="fas fa-file-upload"></i> SUBIR PROCESADA</button>
                 </div>
             </div>
         
