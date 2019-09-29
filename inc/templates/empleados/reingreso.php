@@ -292,17 +292,17 @@
                         <label for="txtNfonacot">Número de fonacot</label>
                         <input type="text" class="form-control" id="txtNfonacot" required>
                     </div>
-                    <div class="form-group col-md-1">
+                    <div class="form-group col-md-2">
                         <label for="txtBanco">Tarjeta</label>
-                        <select class="form-control" id="txtBanco" required>
-                            <option value="" selected>---</option>
-                            <option value="SI">SI</option>
-                            <option value="NO">NO</option>
+                        <select class="form-control" id="txtBanco">
+                        <option value="" selected>Tramitar tarjeta?</option>
+                        <option value="SI">SI</option>
+                        <option value="NO">NO</option>
                         </select>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         <label for="txtCuenta">Número de cuenta banco</label>
-                        <input type="text" class="form-control" id="txtCuenta" required>
+                        <input type="text" class="form-control" id="txtCuenta">
                     </div>
                 </div>
 

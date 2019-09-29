@@ -990,26 +990,17 @@ $(document).ready(function () {
 
             function tablaAltasSemanales(rowInfo) {
                 var row = $("<tr>");
-                let tipo_nomina = 'NA',
-                    clasificacion = 'NA';
                 seccionExportar.removeClass('d-none');
-                tipo_nomina = (rowInfo.nomina === 'Q' ? 'QUIN' : 'SEM');
-
-                if (rowInfo.clasificacion === 'A')
-                    clasificacion = 'Administrativo'
-                else if (rowInfo.clasificacion === 'AO')
-                    clasificacion = 'Administrativo Operativo'
-                else if (rowInfo.clasificacion === 'O')
-                    clasificacion = 'Operativo'
 
                 $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
+                row.append($("<td>" + rowInfo.cve_sucursal + " </td>"));
                 row.append($("<td>" + rowInfo.sucursal + " </td>"));
                 row.append($("<td>" + rowInfo.planta + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.claveSocio + " </td>"));
                 row.append($("<td>" + rowInfo.fechaAlta + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.puesto + " </td>"));
-                row.append($("<td class='d-none'>" + clasificacion + " </td>"));
-                row.append($("<td class='d-none'>" + tipo_nomina + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.clasificacion + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.nomina + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.registro_patronal + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.salario_diario + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.lote + " </td>"));
@@ -1033,7 +1024,7 @@ $(document).ready(function () {
                 row.append($("<td class='d-none'>" + rowInfo.numero_exterior + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.numero_interior + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.fraccionamiento + " </td>"));
-                row.append($("<td class='d-none'>" + rowInfo.cp + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.codigo_postal + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.localidad + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.municipio + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.estado + " </td>"));
@@ -1041,7 +1032,7 @@ $(document).ready(function () {
                 row.append($("<td class='d-none'>" + rowInfo.numero_cuenta + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.infonavit + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.numero_infonavit + " </td>"));
-                row.append($("<td class='d-none'>" + rowInfo.fonacto + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.fonacot + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.numero_fonacot + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.correo + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.celular + " </td>"));
@@ -2037,15 +2028,21 @@ $(document).ready(function () {
             let camposClave = () => {
                 genero = (textocurp.charAt(10) === 'M') ? 'F' : 'M';
                 $("#txtGenero").val(genero);
+                let extractRFC = textocurp.substr(0,10);
                 var aNacimiento = textocurp.substr(4, 2),
                     mNacimiento = textocurp.substr(6, 2),
                     dNacimiento = textocurp.substr(8, 2);
+                /**WORK IT */
+                if(aNacimiento.substr(0,1) === '0'){
+                    aNacimiento = '200'+aNacimiento.substr(1,1);
+                }
                 var now = new Date(aNacimiento, mNacimiento - 1, dNacimiento);
                 var nyear = now.getFullYear();
 
                 var fNacimiento = nyear + '-' + mNacimiento + '-' + dNacimiento;
 
                 $("#txtfechaNacimiento").val(fNacimiento);
+                $('#txtRFC').val(extractRFC);
 
                 //ASIGNAR ENTIDAD DE NACIMIENTO DESDE CURP
                 var url = 'inc/model/entidades.json',
@@ -2161,6 +2158,8 @@ $(document).ready(function () {
                 }
                 xmlCEL.send(listaCEL);
             }
+
+            
 
             //LLENAR PUESTOS POR CELULA SELECCIONADA
             $('#txtCelula').focusout(function () {
@@ -2289,12 +2288,12 @@ $(document).ready(function () {
             //VALIDAR NUMERO CUENTA BANCO
             $("#txtBanco").change(function () {
                 var infonavit = $("#txtBanco").val();
-                if (infonavit === 'NO') {
+                if (infonavit !== 'NO') {
                     $("#txtCuenta").attr('disabled', 'disabled');
                     $("#txtCuenta").val('NA');
                 } else {
                     $("#txtCuenta").removeAttr('disabled', 'disabled');
-                    $("#txtCuenta").val('Retenido');
+                    $("#txtCuenta").val('');
                 }
             });
 
@@ -2325,7 +2324,7 @@ $(document).ready(function () {
                     aPaterno = $('#txtPaterno').val(),
                     aMaterno = $('#txtMaterno').val(),
                     curp = $('#txtCURP').val(),
-                    rfc = $('#txtRFC').val(),
+                    rfc = `${$('#txtRFC').val()}${$('#txtHClave').val()}`,
                     nss = $('#txtNSS').val(),
                     dv = $('#txtDV').val(),
                     fechaNacimiento = $('#txtfechaNacimiento').val(),
@@ -2362,7 +2361,6 @@ $(document).ready(function () {
                 rfcini = rfc.substr(0, 4);
                 rfcfin = rfc.substr(10, 3);
                 domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
-
                 if
                     (
                     salarioDiario.trim() === '' || celula.trim() === '' ||

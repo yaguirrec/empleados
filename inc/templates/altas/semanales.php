@@ -39,6 +39,7 @@
             
             <thead class="font-weight-bold">
                 <tr>
+                    <th scope="col">Clave Sucursal</th>
                     <th scope="col">Sucursal</th>
                     <th scope="col">Planta</th>
                     <th scope="col" class="d-none">Clave Socio</th>
