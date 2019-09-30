@@ -8,6 +8,7 @@ $( document ).ready(function() {
      * 5 - LABORALES
      * 6 - NOMINAS
      * 7 - TRANSPORTES
+     * 8 - LABORALES SUPERVISOR  
      */
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let usuario_activo = document.querySelector('#emp_activo').value;
@@ -29,7 +30,7 @@ $( document ).ready(function() {
         rh = $(".rh"),
         nominas = $(".nominas");
 
-    console.log('campo ' + empleado_activo);
+    console.log('campo ' + nivel_usuario);
 
 
     switch (nivel_usuario){
@@ -42,6 +43,8 @@ $( document ).ready(function() {
         case '2':
             general.removeClass('d-none');
             laborales.removeClass('d-none');
+            laborales.removeAttr('disabled');
+            laborales.removeAttr('readonly');
             break;
         case '3':
             seccionLateral.removeClass('d-none');
@@ -70,6 +73,15 @@ $( document ).ready(function() {
             seccionLateral.removeClass('d-none');
             seccionPanel.removeClass('d-none');
             transportes.removeClass('d-none');
+            break;
+        case '8':
+            seccionLateral.removeClass('d-none');
+            seccionPanel.removeClass('d-none');
+            laborales.removeClass('d-none');
+            seccionEnvioAltas.removeClass('d-none');
+            laborales.removeAttr('disabled');
+            laborales.removeAttr('readonly');
+            // gafetes.removeClass('d-none');
             break;
         default:
             seccionLateral.removeClass('d-none');

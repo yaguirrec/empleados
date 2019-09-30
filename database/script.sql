@@ -1331,6 +1331,12 @@ ALTER PROCEDURE updateEmployeeData(
 @nombre varchar(35), 
 @apaterno varchar(35),
 @amaterno varchar(35),
+	@sexo varchar(5),
+	@curpi varchar(25),
+	@curpf varchar(25),
+	@rfcini varchar(25),
+	@rfcfin varchar(25),
+	@fechan DATE,
 @nss varchar(25),
 @empleado_status varchar(1),
 @fechaa DATE,
@@ -1428,6 +1434,12 @@ BEGIN TRANSACTION
 			  ,[nombre] = UPPER(@nombre)
 			  ,[apellido_paterno] = UPPER(@apaterno)
 			  ,[apellido_materno] = UPPER(@amaterno)
+			  ,[curpini] = @curpi
+			  ,[curpfin] = @curpf
+			  ,[rfcini] = @rfcini
+			  ,[rfcfin] = @rfcfin
+			  ,[fecha_nacimiento] = @fechan
+			  ,[sexo] = @sexo
 			  ,[nss] = @nss
 			  ,[fecha_alta] = @fechaa
 			  ,[status] = @empleado_status
@@ -1452,8 +1464,6 @@ BEGIN TRANSACTION
  BEGIN CATCH
   ROLLBACK
  END CATCH
-
- SELECT * FROM tbempleados where numero_nomina = '88894'
 
 
  EXEC firedEmployee '26549','TEST','TEST','2019-08-04','19905';

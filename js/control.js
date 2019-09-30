@@ -1446,13 +1446,13 @@ $(document).ready(function () {
                     nombre = $('#txtNombre').val(),
                     aPaterno = $('#txtPaterno').val(),
                     aMaterno = $('#txtMaterno').val(),
-                    // curp = $('#txtCURP').val(),
-                    // rfc = $('#txtRFC').val(),
+                    curp = $('#txtCURP').val(),
+                    rfc = $('#txtRFC').val(),
                     nss = $('#txtNSS').val(),
                     dv = $('#txtDV').val(),
-                    // fechaNacimiento = $('#txtfechaNacimiento').val(),
+                    fechaNacimiento = $('#txtfechaNacimiento').val(),
                     lNacimiento = $('#txtLnacimiento').val(),
-                    // genero = $('#txtGenero').val(),
+                    genero = $('#txtGenero').val(),
                     tIdentificacion = $('#txtTI').val(),
                     id = $('#txtID').val(),
                     eCivil = $('#txtCivil').val(),
@@ -1479,8 +1479,10 @@ $(document).ready(function () {
                     celular = $('#txtCelular').val(),
                     contacto = $('#txtContacto').val(),
                     nContacto = $('#txtNcontacto').val(),
-                    // curpini = curp.substr(0, 4),
-                    // curpfin = curp.substr(10, 8);
+                    curpini = curp.substr(0, 4),
+                    curpfin = curp.substr(10, 8),
+                    rfcini = rfc.substr(0, 4),
+                    rfcfin = rfc.substr(10, 3);
                     domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
                 if
                     (
@@ -1530,6 +1532,12 @@ $(document).ready(function () {
                             nombre: nombre,
                             aPaterno: aPaterno,
                             aMaterno: aMaterno,
+                            curpini: curpini,
+                            curpfin: curpfin,
+                            rfcini: rfcini,
+                            rfcfin: rfcfin,
+                            genero: genero,
+                            fechaNacimiento: fechaNacimiento,
                             nombreLargo: nombreLargo,
                             lNacimiento: lNacimiento,
                             tIdentificacion: tIdentificacion,

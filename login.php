@@ -35,7 +35,7 @@
                   </form>
                   <hr>
                   <div class="text-center">
-                    <a class="small" href="#">Olvidaste tu clave?</a>
+                    <a class="small" href="http://187.188.159.205:8090/Mexqintra/RH/inicio/index.php">Olvidaste tu clave?</a>
                   </div>
                 </div>
               </div>
