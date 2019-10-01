@@ -79,8 +79,8 @@ $( document ).ready(function() {
             seccionPanel.removeClass('d-none');
             laborales.removeClass('d-none');
             seccionEnvioAltas.removeClass('d-none');
-            laborales.removeAttr('disabled');
-            laborales.removeAttr('readonly');
+            // laborales.removeAttr('disabled');
+            // laborales.removeAttr('readonly');
             // gafetes.removeClass('d-none');
             break;
         default:

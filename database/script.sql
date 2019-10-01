@@ -67,7 +67,8 @@ GO
 
 
 EXEC sp_rename 'tbestado.tipo', 'numero_nomina', 'COLUMN';
-select * from tbcelula
+USE [MEXQApptemp]
+select * from [tbestado]
 
 /*CREAR TABLA ESTADO*/
 USE [MEXQApptemp]
@@ -78,7 +79,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[tbestado](
 	[id_estado] [int] IDENTITY(1,1) NOT NULL,
-	[tipo] [varchar](50) DEFAULT '',
+	[numero_nomina] [varchar](50) DEFAULT '',
 	[estado] [int] DEFAULT 0,
 	[descripcion] [varchar](100) DEFAULT '',
 	[comentario] [text] DEFAULT '',
@@ -112,9 +113,6 @@ GO
 
 --DROP TABLE tbjefe_empleado
 --TRUNCATE TABLE tbdatos_empleados
-
-SELECT * FROM tbdatos_empleados WHERE numero_nomina = '19905'
-ALTER TABLE tbdatos_empleados ADD lote_acuse [varchar](15) DEFAULT '';
 
 
 /**CREAR TABLA DATOS EMPLEADOS*/
@@ -344,7 +342,7 @@ ALTER TABLE tbprivilegios_emp
 ADD [panel_dh] [int] DEFAULT 0;
 */
 
-INSERT INTO tbprivilegios_emp (tipo,descripcion,created_at) VALUES ('Transportes','Acceso al departamento de transportes',GETDATE())
+INSERT INTO tbprivilegios_emp (tipo,descripcion,created_at) VALUES ('Laborales Supervisor','Acceso al departamento de laborales como supervisor',GETDATE())
 SELECT * FROM tbprivilegios_emp
 
 /*CREAR TABLA RELACION EMPLEADOS-PERMISOS*/
@@ -365,9 +363,10 @@ CREATE TABLE [dbo].[tbemp_permisos](
 ) ON [PRIMARY]
 GO
 
-INSERT INTO tbemp_permisos (numero_nomina,created_at,emp_proy) VALUES ('16588',GETDATE(),7)
-SELECT * FROM tbemp_permisos
---UPDATE tbemp_permisos SET numero_nomina = '16588' WHERE id = 9
+INSERT INTO tbemp_permisos (numero_nomina,created_at,emp_proy) VALUES ('02550',GETDATE(),8)
+SELECT * FROM tbemp_permisos ORDER BY emp_proy
+--UPDATE tbemp_permisos SET emp_proy = 2 WHERE numero_nomina = '19905'
+SELECT * FROM P1ACCESOWEB WHERE employee = '19905'
 
 SELECT * FROM [dbo].[departamentos_nomipaq]
 SELECT * FROM [dbo].[puestos_nomipaq] where idpuesto = '520'
@@ -1466,7 +1465,10 @@ BEGIN TRANSACTION
  END CATCH
 
 
- EXEC firedEmployee '26549','TEST','TEST','2019-08-04','19905';
+USE [MEXQApptemp]
+select * from [tbestado]
+
+EXEC firedEmployee '26836','TEST','TEST','2019-09-30','19905';
 
  /**insert empleados en PJEMPLOY / TBEMPLEADOS / TBEMPLEADOS_DATOIS**/
 CREATE PROCEDURE firedEmployee(

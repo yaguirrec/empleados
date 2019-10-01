@@ -20,10 +20,9 @@
     </form>
   </div>
 </li> -->
-
 <!-- ELICEWEB -->
 <li class="nav-item dropdown no-arrow mt-4">
-  <p class="text-uppercase">ELICEWEB</p>
+  <p class="text-uppercase">ELICEWEB <small id="version"></small></p>
 </li>
 
 <!-- Nav Item - Alerts -->

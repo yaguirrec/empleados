@@ -15,6 +15,9 @@ $(document).ready(function () {
     let url_dev = 'http://localhost/';
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
+    let version = 'V.0110191';
+
+    $('#version').html(version);
 
     $('#searchBox').keyup(function (event) {
         event.preventDefault();
@@ -1219,6 +1222,7 @@ $(document).ready(function () {
                             }).done(function (response) {
                                 respuesta = JSON.parse(response);
                                 let estadoRespuesta = respuesta.estado;
+                                console.log(respuesta);
                                 if (estadoRespuesta === 'OK') {
                                     Swal.fire({
                                         title: 'Baja Exitosa',
@@ -1763,7 +1767,7 @@ $(document).ready(function () {
             listarDatosEmpleados(codigoEmpleado);
             setTimeout(function () {
                 $('#txtTipo').val('R');
-            }, 320);
+            }, 530);
             
             btnReingresarEmpleado.click(function(e){
                 e.preventDefault();
@@ -1784,13 +1788,13 @@ $(document).ready(function () {
                 nombre = $('#txtNombre').val(),
                 aPaterno = $('#txtPaterno').val(),
                 aMaterno = $('#txtMaterno').val(),
-                // curp = $('#txtCURP').val(),
-                // rfc = $('#txtRFC').val(),
+                curp = $('#txtCURP').val(),
+                rfc = $('#txtRFC').val(),
                 nss = $('#txtNSS').val(),
                 dv = $('#txtDV').val(),
-                // fechaNacimiento = $('#txtfechaNacimiento').val(),
+                fechaNacimiento = $('#txtfechaNacimiento').val(),
                 lNacimiento = $('#txtLnacimiento').val(),
-                // genero = $('#txtGenero').val(),
+                genero = $('#txtGenero').val(),
                 tIdentificacion = $('#txtTI').val(),
                 id = $('#txtID').val(),
                 eCivil = $('#txtCivil').val(),
@@ -1818,8 +1822,10 @@ $(document).ready(function () {
                 celular = $('#txtCelular').val(),
                 contacto = $('#txtContacto').val(),
                 nContacto = $('#txtNcontacto').val(),
-                // curpini = curp.substr(0, 4),
-                // curpfin = curp.substr(10, 8);
+                curpini = curp.substr(0, 4),
+                curpfin = curp.substr(10, 8),
+                rfcini = rfc.substr(0, 4),
+                rfcfin = rfc.substr(10, 3);
                 domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
                 if
                     (
@@ -1854,7 +1860,7 @@ $(document).ready(function () {
                             jefenomina: jefenomina,
                             tipoNomina: tipoNomina,
                             empleado_status: tipo,
-                            lote : lote,
+                            lote: lote,
                             sucursal: sucursal,
                             clasificacion: clasificacion,
                             salarioDiario: salarioDiario,
@@ -1863,12 +1869,18 @@ $(document).ready(function () {
                             fechaAlta: fechaAlta,
                             registro: registro,
                             puesto: puesto,
-                            nss : nss,
-                            dv : dv,
+                            nss: nss,
+                            dv: dv,
                             comentario: comentario,
                             nombre: nombre,
                             aPaterno: aPaterno,
                             aMaterno: aMaterno,
+                            curpini: curpini,
+                            curpfin: curpfin,
+                            rfcini: rfcini,
+                            rfcfin: rfcfin,
+                            genero: genero,
+                            fechaNacimiento: fechaNacimiento,
                             nombreLargo: nombreLargo,
                             lNacimiento: lNacimiento,
                             tIdentificacion: tIdentificacion,

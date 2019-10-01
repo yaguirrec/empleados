@@ -117,11 +117,11 @@
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label for="txtCURP">CURP</label>
-                        <input type="text" class="form-control" id="txtCURP" readonly>
+                        <input type="text" class="form-control" id="txtCURP">
                     </div>
                     <div class="form-group col-md-4">
                         <label for="txtRFC">RFC</label>
-                        <input type="text" class="form-control" id="txtRFC" readonly>
+                        <input type="text" class="form-control" id="txtRFC">
                     </div>
 
                     <div class="form-group col-md-3">
@@ -136,7 +136,7 @@
                 <div class="form-row">
                     <div class="form-group col-md-2">
                         <label for="txtfechaNacimiento">Fecha Nacimiento</label>
-                        <input type="date" class="form-control" id="txtfechaNacimiento" readonly>
+                        <input type="date" class="form-control" id="txtfechaNacimiento">
                     </div>
                     <div class="form-group col-md-2">
                         <label for="txtLnacimiento">Lugar de nacimiento</label>
@@ -144,7 +144,7 @@
                     </div>
                     <div class="form-group col-md-2">
                         <label for="txtGenero">Genero</label>
-                        <select class="form-control" id="txtGenero" disabled>
+                        <select class="form-control" id="txtGenero">
                             <option value="M" selected>Hombre</option>
                             <option value="F">Mujer</option>
                         </select>
