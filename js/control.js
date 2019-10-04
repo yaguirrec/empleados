@@ -15,7 +15,7 @@ $(document).ready(function () {
     let url_dev = 'http://localhost/';
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
-    let version = 'V.0110191';
+    let version = 'V.0310191';
 
     $('#version').html(version);
 
@@ -1176,7 +1176,8 @@ $(document).ready(function () {
                         abandono: 'Abandono',
                         despido: 'Despido',
                         renuncia: 'Renuncia',
-                        contrato: 'Contrato'
+                        contrato: 'Contrato',
+                        bpcdp: 'Baja por cambio de puesto'
                     },
                     inputPlaceholder: 'Causa de la baja',
                 })

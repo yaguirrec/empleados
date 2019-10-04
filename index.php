@@ -48,6 +48,9 @@
               case 'altas':
                 include 'inc/templates/altas/vista.php';
               break;
+              case 'administrarBajas':
+                include 'inc/templates/bajas/vista.php';
+              break;
               case 'semanales':
                 include 'inc/templates/altas/semanales.php';
                 break;

@@ -1,24 +1,24 @@
 <div class="row m-4">
     <div class="col-md-12">
-        <h1 class="text-center">Envio de altas</h1>
+        <h1 class="text-center">Envio de bajas</h1>
         <hr>
         <form class="text-center offset-5">
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    <label for="txtfechaAlta">Fecha de Altas</label>
-                    <input type="date" class="form-control" id="txtFechaAltas" value="<?php echo date("Y-m-d");?>">
+                    <label for="txtFechaBajas">Fecha de Bajas</label>
+                    <input type="date" class="form-control" id="txtFechaBajas" value="<?php echo date("Y-m-d");?>">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    <button class="btn btn-primary btn-block" id="btnConsultaAltas" role="button"><i class="fas fa-search"></i> CONSULTAR</button>
+                    <button class="btn btn-primary btn-block" id="btnConsultaBajas" role="button"><i class="fas fa-search"></i> CONSULTAR</button>
                 </div>
             </div>
         </form>
     </div>
     <br>
     <div class="col-md-12">
-        <h2 class="text-center">Altas de la fecha</h2>
+        <h2 class="text-center">Bajas de la fecha</h2>
         <br>
         <div class="col-md-10 offset-1">
             <h3 class="text-center">Reporte</h3>
@@ -42,8 +42,8 @@
                     <th scope="col">Alta</th>
                     <th scope="col">Reg Patronal</th>
                     <th scope="col">Nomina</th>
-                    <th scope="col">Acuse</th>
-                    <th scope="col">Procesada</th>
+                    <th scope="col">Acuse Baja</th>
+                    <th scope="col">Procesada Baja</th>
                 </tr>
             </thead>
             <tbody id="dataTable">
@@ -59,8 +59,8 @@
             <div class="d-none" id="seccionAcuseAltas">
                 <div class="col-md-2 offset-5">
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-info mr-1" id="radioAcuse"><i class="fas fa-file-import"></i> Acuse de Altas</button>
-                        <button type="button" class="btn btn-success" id="radioProcesada"><i class="fas fa-file-export"></i> Procesadas IMSS</button>
+                        <button type="button" class="btn btn-info mr-1" id="radioAcuse"><i class="fas fa-file-import"></i> Acuse de Bajas</button>
+                        <button type="button" class="btn btn-success" id="radioProcesada"><i class="fas fa-file-export"></i> Procesadas de Bajas</button>
                     </div>
                 </div>
 
@@ -68,14 +68,14 @@
                 <div class="col-md-10 offset-1">
                     <div class="col-md-5 d-none" id="divAcuses">
                         <div class="form-group">
-                            <label class="h3" for="txtAcuse">Acuse de alta</label>
+                            <label class="h3" for="txtAcuse">Acuse de baja</label>
                             <input type="file" class="form-control-file" id="txtAcuse">
                         </div>
                         <button class="btn btn-info" id="btnEnviarAcuse" accept="application/pdf,application/vnd.ms-excel"><i class="fas fa-file-upload"></i> SUBIR ACUSE</button>
                     </div>
                     <div class="col-md-5 offset-8 d-none" id="divProcesadas">
                         <div class="form-group">
-                            <label class="h3" for="txtProcesada">Procesada de altas</label>
+                            <label class="h3" for="txtProcesada">Procesada de baja</label>
                             <input type="file" class="form-control-file" id="txtProcesada">
                         </div>
                         <button class="btn btn-success" id="btnEnviarProcesada" accept="application/pdf,application/vnd.ms-excel"><i class="fas fa-file-upload"></i> SUBIR PROCESADA</button>
@@ -85,7 +85,7 @@
         
 
            <div class="col-md-8 offset-2 d-none" id="seccionEnvioAltas">
-                <button class="btn btn-success btn-block" id="btnEnviarAltas"><i class="fas fa-paper-plane"></i> ENVIAR</button>
+                <button class="btn btn-success btn-block" id="btnEnviarBajas"><i class="fas fa-paper-plane"></i> ENVIAR</button>
             </div>
 
     </div>
