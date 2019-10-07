@@ -1464,6 +1464,74 @@ BEGIN TRANSACTION
   ROLLBACK
  END CATCH
 
+ CREATE PROCEDURE bajas_diarias
+@FECHA_BAJA DATE
+AS
+	BEGIN
+		SELECT te.numero_nomina,CONCAT('''',te.nss,td.dv) AS nss,UPPER(te.nombre_largo) AS nombre_largo,
+		td.salario_diario,
+		ts.nombre AS sucursal,
+		tc.nombre planta,
+		CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaBaja,
+		td.registro_patronal,
+		CASE WHEN td.nomina = 'S' THEN 'SEM'
+		WHEN td.nomina = 'Q' THEN 'QUIN'
+		ELSE 'NA' END AS tipo_nomina,
+		CASE
+			WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
+			THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
+			ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+		END AS puesto,
+		td.baja_acuse,td.baja_procesada,te.created_at
+		FROM tbempleados AS te
+		INNER JOIN tbsucursal AS ts
+		ON te.id_sucursal = ts.id_sucursal 
+		INNER JOIN tbcelula AS tc
+		ON tc.id_celula = te.id_celula
+		INNER JOIN tbarea AS ta
+		ON ta.codigo = tc.codigo_area
+		INNER JOIN tbdatos_empleados AS td
+		ON te.numero_nomina = td.numero_nomina
+		WHERE te.status = 'B' AND te.fecha_baja = @FECHA_BAJA AND td.clasificacion <> 'B'
+		GROUP BY te.numero_nomina,te.numero_nomina,te.nss,td.dv,te.nombre_largo,td.salario_diario,ts.nombre,tc.nombre,te.fecha_baja,td.registro_patronal,td.nomina,td.baja_procesada,te.created_at,te.puesto_temp,te.id_puesto,td.baja_acuse,te.status
+		ORDER BY te.status ASC, te.created_at DESC
+	END
+GO
+
+CREATE PROCEDURE bajas_diarias
+@FECHA_BAJA DATE
+AS
+	BEGIN
+		SELECT te.numero_nomina,CONCAT('''',te.nss,td.dv) AS nss,UPPER(te.nombre_largo) AS nombre_largo,
+		td.salario_diario,
+		ts.nombre AS sucursal,
+		tc.nombre planta,
+		CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaBaja,
+		td.registro_patronal,
+		CASE WHEN td.nomina = 'S' THEN 'SEM'
+		WHEN td.nomina = 'Q' THEN 'QUIN'
+		ELSE 'NA' END AS tipo_nomina,
+		CASE
+			WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
+			THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
+			ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+		END AS puesto,
+		td.baja_acuse,td.baja_procesada,te.created_at
+		FROM tbempleados AS te
+		INNER JOIN tbsucursal AS ts
+		ON te.id_sucursal = ts.id_sucursal 
+		INNER JOIN tbcelula AS tc
+		ON tc.id_celula = te.id_celula
+		INNER JOIN tbarea AS ta
+		ON ta.codigo = tc.codigo_area
+		INNER JOIN tbdatos_empleados AS td
+		ON te.numero_nomina = td.numero_nomina
+		WHERE te.status = 'B' AND te.fecha_baja = @FECHA_BAJA AND td.clasificacion <> 'B'
+		GROUP BY te.numero_nomina,te.numero_nomina,te.nss,td.dv,te.nombre_largo,td.salario_diario,ts.nombre,tc.nombre,te.fecha_baja,td.registro_patronal,td.nomina,td.baja_procesada,te.created_at,te.puesto_temp,te.id_puesto,td.baja_acuse,te.status
+		ORDER BY te.status ASC, te.created_at DESC
+	END
+GO
+
 
 USE [MEXQApptemp]
 select * from [tbestado]

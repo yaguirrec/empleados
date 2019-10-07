@@ -39,7 +39,7 @@
                     <th scope="col">S.D.I.</th>
                     <th scope="col">Sucursal</th>
                     <th scope="col">Planta</th>
-                    <th scope="col">Alta</th>
+                    <th scope="col">Baja</th>
                     <th scope="col">Reg Patronal</th>
                     <th scope="col">Nomina</th>
                     <th scope="col">Acuse Baja</th>
@@ -54,38 +54,43 @@
             <div class="alert alert-danger d-none text-uppercase text-center h4" id="alertaM" role="alert">
                 <p>No hay información disponible de la fecha seleccionada.</p>
             </div>
+
             <hr>
+
+            <div class="col-md-2">
+                <!-- <button type="button" class="btn btn-primary mr-1" id="btnFechaBaja"><i class="fas fa-file-import"></i> Cambiar Fecha de Baja</button> -->
+            </div>
 
             <div class="d-none" id="seccionAcuseAltas">
                 <div class="col-md-2 offset-5">
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-info mr-1" id="radioAcuse"><i class="fas fa-file-import"></i> Acuse de Bajas</button>
-                        <button type="button" class="btn btn-success" id="radioProcesada"><i class="fas fa-file-export"></i> Procesadas de Bajas</button>
+                        <button type="button" class="btn btn-info mr-1" id="radioAcuseBaja"><i class="fas fa-file-import"></i> Acuse de Bajas</button>
+                        <button type="button" class="btn btn-success" id="radioProcesadasBaja"><i class="fas fa-file-export"></i> Procesadas de Bajas</button>
                     </div>
                 </div>
 
                 <br><br>
                 <div class="col-md-10 offset-1">
-                    <div class="col-md-5 d-none" id="divAcuses">
+                    <div class="col-md-5 d-none" id="divAcusesBaja">
                         <div class="form-group">
-                            <label class="h3" for="txtAcuse">Acuse de baja</label>
-                            <input type="file" class="form-control-file" id="txtAcuse">
+                            <label class="h3" for="txtAcuseBaja">Acuse de baja</label>
+                            <input type="file" class="form-control-file" id="txtAcuseBaja">
                         </div>
-                        <button class="btn btn-info" id="btnEnviarAcuse" accept="application/pdf,application/vnd.ms-excel"><i class="fas fa-file-upload"></i> SUBIR ACUSE</button>
+                        <button class="btn btn-info" id="btnEnviarAcuseBaja" accept="application/pdf,application/vnd.ms-excel"><i class="fas fa-file-upload"></i> SUBIR ACUSE DE BAJA</button>
                     </div>
-                    <div class="col-md-5 offset-8 d-none" id="divProcesadas">
+                    <div class="col-md-5 offset-8 d-none" id="divProcesadasBaja">
                         <div class="form-group">
-                            <label class="h3" for="txtProcesada">Procesada de baja</label>
-                            <input type="file" class="form-control-file" id="txtProcesada">
+                            <label class="h3" for="txtProcesadaBaja">Procesada de baja</label>
+                            <input type="file" class="form-control-file" id="txtProcesadaBaja">
                         </div>
-                        <button class="btn btn-success" id="btnEnviarProcesada" accept="application/pdf,application/vnd.ms-excel"><i class="fas fa-file-upload"></i> SUBIR PROCESADA</button>
+                        <button class="btn btn-success" id="btnEnviarProcesadaBaja" accept="application/pdf,application/vnd.ms-excel"><i class="fas fa-file-upload"></i> SUBIR PROCESADA DE BAJA</button>
                     </div>
                 </div>
             </div>
         
 
            <div class="col-md-8 offset-2 d-none" id="seccionEnvioAltas">
-                <button class="btn btn-success btn-block" id="btnEnviarBajas"><i class="fas fa-paper-plane"></i> ENVIAR</button>
+                <button class="btn btn-success btn-block" id="btnEnviarBajas"><i class="fas fa-paper-plane"></i> ENVIAR BAJAS</button>
             </div>
 
     </div>

@@ -106,6 +106,54 @@ switch($action)
                 );
             }
         break;
+        case 'envioAcuseBaja':
+            // die(json_encode($_POST));
+            $nombreAdjuntoAcuse = $_POST['nombreAdjuntoAcuse'];
+            
+            if(isset($_FILES["adjuntoAcuse"]["name"])){
+                $respuesta = array(
+                    'estado' => 'OK'
+                );
+                $directorio = '../../assets/attached/Bajas/Acuses';
+                $targetDir = $directorio."/";       
+                if(!file_exists($directorio))
+                {
+                    mkdir($directorio, 0777,true);
+                }
+                $temp = explode(".", $_FILES["adjuntoAcuse"]["name"]);
+                $newfilename = $nombreAdjuntoAcuse . '.' . end($temp);
+                
+                move_uploaded_file($_FILES["adjuntoAcuse"]["tmp_name"], $targetDir . $newfilename);
+            } else {
+                $respuesta = array(
+                    'estado' => 'NOK'
+                );
+            }
+        break;
+        case 'envioProcesadaBaja':
+            // die(json_encode($_POST));
+            $nombreAdjuntoProcesada = $_POST['nombreAdjuntoProcesada'];
+            
+            if(isset($_FILES["adjuntoProcesada"]["name"])){
+                $respuesta = array(
+                    'estado' => 'OK'
+                );
+                $directorio = '../../assets/attached/Bajas/Procesadas';
+                $targetDir = $directorio."/";       
+                if(!file_exists($directorio))
+                {
+                    mkdir($directorio, 0777,true);
+                }
+                $temp = explode(".", $_FILES["adjuntoProcesada"]["name"]);
+                $newfilename = $nombreAdjuntoProcesada . '.' . end($temp);
+                
+                move_uploaded_file($_FILES["adjuntoProcesada"]["tmp_name"], $targetDir . $newfilename);
+            } else {
+                $respuesta = array(
+                    'estado' => 'NOK'
+                );
+            }
+        break;
         default:
             $respuesta = array(
                 'estado' => 'ERROR',

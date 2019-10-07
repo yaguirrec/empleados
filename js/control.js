@@ -15,7 +15,7 @@ $(document).ready(function () {
     let url_dev = 'http://localhost/';
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
-    let version = 'V.0310191';
+    let version = 'V.0610191';
 
     $('#version').html(version);
 
@@ -954,6 +954,323 @@ $(document).ready(function () {
 
 
             break;
+            case 'administrarBajas':
+                let btnConsultaBajas = $('#btnConsultaBajas'),
+                    btnEnviarBajas = $('#btnEnviarBajas'),
+                    btnEnviarAcuseBaja = $('#btnEnviarAcuseBaja'),
+                    btnEnviarProcesadaBaja = $('#btnEnviarProcesadaBaja'),
+                    radioAcuseBaja = $('#radioAcuseBaja'),
+                    radioProcesadasBaja = $('#radioProcesadasBaja'),
+                    divAcusesBaja = $('#divAcusesBaja'),
+                    divProcesadasBaja = $('#divProcesadasBaja'),
+                    btnFechaBaja = $('#btnFechaBaja'),
+                    datosEmpleadosBajas = [];
+
+                    let obtenerBajas = () => {
+                        var action = 'bajas',
+                            fecha = $('#txtFechaBajas').val();
+                        var dataTable = new FormData();
+                        dataTable.append('action', action);
+                        dataTable.append('prop', fecha);
+                        var xmlhr = new XMLHttpRequest();
+                        xmlhr.open('POST', backendURL, true);
+                        xmlhr.onload = function () {
+                            if (this.status === 200) {
+                                var respuesta = JSON.parse(xmlhr.responseText);
+                                if (respuesta.estado === 'OK') {
+                                    var datos = respuesta.informacion.length;
+                                    var informacion = respuesta.informacion;
+                                    if (datos < 1) {
+                                        $('#alertaM').removeClass('d-none');
+                                        seccionEnvioAltas.addClass('d-none');
+                                        seccionAcuseAltas.addClass('d-none');
+                                    }
+                                    else {
+                                        $('#alertaM').addClass('d-none');
+                                        
+                                        for (var i in informacion) {
+                                            tablaBajas(informacion[i]);
+                                            datosEmpleadosBajas[i] = `${informacion[i].numero_nomina} - ${informacion[i].nombre_largo}.`;
+                                        }
+                                    }
+                                } else if (respuesta.status === 'error') {
+                                    var informacion = respuesta.informacion;
+                                    $('#alertaM').removeClass('d-none');
+                                }
+                            }
+                        }
+                        xmlhr.send(dataTable);
+        
+                        function tablaBajas(rowInfo) {
+                            var row = $("<tr>"),
+                                acuse = rowInfo.baja_acuse,
+                                procesada = rowInfo.baja_procesada;
+        
+                            if(acuse == null || acuse == ''){
+                                acuse = '';
+                            }
+                            if(procesada == null || procesada == ''){
+                                procesada = '';
+                            }
+                            
+                            seccionExportar.removeClass('d-none');
+        
+                            $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
+        
+                            row.append($("<td><input class='form-check-input position-static ml-2 text-center' name='noNomina' type='checkbox' id='blankCheckbox' value='" + rowInfo.numero_nomina + "'>" + "</td>"));
+                            // row.append($("<td><a href='formato.php?emp=" + rowInfo.numero_nomina + "' title='Formato de Alta' target='_blank'>" + rowInfo.numero_nomina + "</a></td>"));
+                            row.append($("<td>" + rowInfo.numero_nomina + "</td>"));
+                            row.append($("<td> " + rowInfo.nss + " </td>"));
+                            row.append($("<td> " + rowInfo.nombre_largo + " </td>"));
+                            row.append($("<td> " + rowInfo.salario_diario + " </td>"));
+                            row.append($("<td> " + rowInfo.sucursal + " </td>"));
+                            row.append($("<td> " + rowInfo.planta + " </td>"));
+                            row.append($("<td> " + rowInfo.fechaBaja + " </td>"));
+                            row.append($("<td> " + rowInfo.registro_patronal + " </td>"));
+                            row.append($("<td> " + rowInfo.registro_patronal + ' ' + rowInfo.tipo_nomina + " </td>"));
+                            row.append($("<td><a href='assets/attached/Bajas/Acuses/" + rowInfo.baja_acuse + ".zip' target='_blank'>" + acuse + "</a></td>"));
+                            row.append($("<td><a href='assets/attached/Bajas/Procesadas/" + rowInfo.baja_procesada + ".zip' target='_blank'>" + procesada + "</a></td>"));
+                        }
+                    }
+
+                obtenerBajas();
+
+                btnConsultaBajas.click(function (e) {
+                    e.preventDefault();
+                    $('#dataTable').empty();
+                    obtenerBajas();
+                });
+    
+                radioAcuseBaja.click(function(e){
+                    divAcusesBaja.removeClass('d-none');
+                    divProcesadasBaja.addClass('d-none');
+                });
+    
+                radioProcesadasBaja.click(function(e){
+                    divProcesadasBaja.removeClass('d-none');
+                    divAcusesBaja.addClass('d-none');
+                });
+                  
+    
+                btnEnviarBajas.click(function (e) {
+                    e.preventDefault();
+                    var action = 'envioBajas',
+                        fecha = $('#txtFechaBajas').val(),
+                        cc = $('#usuario_correo').val();
+    
+                    $.ajax({
+                        type: 'POST',
+                        url: localBackend + 'sender.php',
+                        data: { action: action, fecha: fecha, datos: datosEmpleadosBajas, cc: cc },
+                        success: function (response) {
+                            let respuesta = JSON.parse(response);
+                            console.log(respuesta);
+                        }
+                    });
+                    Swal.fire({
+                        position: 'center',
+                        type: 'success',
+                        title: 'Informe de altas enviado a Nominas',
+                        showConfirmButton: false,
+                        timer: 1800
+                    })
+                });
+    
+                btnEnviarAcuseBaja.click(function (e) {
+                    e.preventDefault();
+                    var action = 'envioAcuseBaja';
+    
+                    let numerosNominaBaja = [];
+                    $.each($("input[name='noNomina']:checked"), function(){            
+                        numerosNominaBaja.push($(this).val());
+                    });
+    
+                    console.log(numerosNominaBaja.join("|"));
+    
+                    let adjunto_AcuseBaja = document.getElementById('txtAcuseBaja');
+                    let adjuntoAcuseBaja = adjunto_AcuseBaja.files[0];
+                    let nombreAdjuntoAcuseBaja = adjunto_AcuseBaja.files[0].name;
+                    nombreAdjuntoAcuseBaja = nombreAdjuntoAcuseBaja.substr(23, 9);
+    
+                    var datosAcuseBaja = new FormData();
+                    datosAcuseBaja.append('action', action);
+                    datosAcuseBaja.append('arrNomina', numerosNominaBaja.join("|"));
+                    datosAcuseBaja.append('nombreAdjuntoAcuse', nombreAdjuntoAcuseBaja);
+    
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', backendURL, true);
+                    xhr.send(datosAcuseBaja);
+                    xhr.onload = function () {
+                        if (this.status === 200 && this.readyState == 4) {
+                            var respuesta = JSON.parse(xhr.responseText);
+                            if (respuesta.estado === 'OK') {
+                                Swal.fire({
+                                    title: 'Alta exitosa!',
+                                    text: 'Alta de acuse exitosa!',
+                                    type: 'success'
+                                })
+                                    .then(resultado => {
+                                        if (resultado.value) {
+                                            location.reload();
+                                        }
+                                    })
+                            } else {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'Hubo un error',
+                                    type: 'error'
+                                })
+                            }
+                        }
+                    }
+    
+                    var archivoAcuseBaja = new FormData();
+                    archivoAcuseBaja.append('action', action);
+                    archivoAcuseBaja.append('adjuntoAcuse', adjuntoAcuseBaja);
+                    archivoAcuseBaja.append('nombreAdjuntoAcuse', nombreAdjuntoAcuseBaja);
+    
+                    var xhtr = new XMLHttpRequest();
+                    xhtr.open('POST', localBackend + 'control.php', true);
+                    xhtr.send(archivoAcuseBaja);
+                    xhtr.onload = function () {
+                        if (this.status === 200 && this.readyState == 4) {
+                            // var respuesta = JSON.parse(xhtr.responseText);
+                            // console.log(respuesta);
+                        }
+                    }
+                });
+
+                btnFechaBaja.click(async function(e){
+                    e.preventDefault();
+                    var action = 'cambioFechaBaja';
+                    let numerosNominaBaja = [];
+                    $.each($("input[name='noNomina']:checked"), function(){            
+                        numerosNominaBaja.push($(this).val());
+                    });
+    
+                    if(numerosNominaBaja.length === 0){
+                        Swal.fire({
+                        title: 'Selección Nula!',
+                        html: 'Debe seleccionar al menos un empleado',
+                        timer: 1300})
+                    } else {
+
+                        const { value: fechaBaja } = await Swal.fire({
+                            title: 'Fecha de baja',
+                            html:
+                                '<input type="date" class="form-control" id="txtfechaBaja" value="<?php echo date("Y-m-d");?>',
+                            showCancelButton: true,
+                            preConfirm: () => {
+                                return [
+                                    document.getElementById('txtfechaBaja').value
+                                ]
+                            }
+                        })
+                        let fecha_Baja = JSON.stringify(fechaBaja);
+                        if (fecha_Baja[2] !== '"') {
+                            // let fecha_Baja = JSON.stringify(fechaBaja);
+                            fecha_Baja = fecha_Baja.substr(2, 10);
+                            $.ajax({
+                                type: 'POST',
+                                url: backendURL,
+                                data: {
+                                    action: action,
+                                    arrNomina: numerosNominaBaja.join("|"),
+                                    fechaBaja: fecha_Baja,
+                                    empleadoControl: empleado_activo
+                                }
+                            }).done(function (response) {
+                                respuesta = JSON.parse(response);
+                                let estadoRespuesta = respuesta.estado;
+                                console.log(respuesta);
+                                if (estadoRespuesta === 'OK') {
+                                    Swal.fire({
+                                        title: 'Baja Actualizada',
+                                        text: 'La fecha de baja fue actualizada',
+                                        type: 'info'
+                                    })
+                                        .then(resultado => {
+                                            if (resultado.value) {
+                                                location.reload();
+                                            }
+                                        })
+                                } else {
+                                    Swal.fire({
+                                        title: 'Error',
+                                        text: 'Ocurrio un error al procesar los datos',
+                                        type: 'error'
+                                    })
+                                }
+                            });
+                        } else {
+                            return false;
+                        }
+
+                    }
+                });
+    
+                btnEnviarProcesadaBaja.click(function (e) {
+                    e.preventDefault();
+                    let action = 'envioProcesadaBaja';
+                    let numerosNominaBaja = [];
+                    $.each($("input[name='noNomina']:checked"), function(){            
+                        numerosNominaBaja.push($(this).val());
+                    });
+    
+                    let adjunto_ProcesadaBaja = document.getElementById('txtProcesadaBaja');
+                    let adjuntoProcesadaBaja = adjunto_ProcesadaBaja.files[0];
+                    let nombreAdjuntoProcesadaBaja = adjunto_ProcesadaBaja.files[0].name;
+                    nombreAdjuntoProcesadaBaja = nombreAdjuntoProcesadaBaja.substr(21, 9);
+    
+                    var datosProcesadaBaja = new FormData();
+                    datosProcesadaBaja.append('action', action);
+                    datosProcesadaBaja.append('arrNomina', numerosNominaBaja.join("|"));
+                    datosProcesadaBaja.append('nombreAdjuntoProcesada', nombreAdjuntoProcesadaBaja);
+    
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', backendURL, true);
+                    xhr.send(datosProcesadaBaja);
+                    xhr.onload = function () {
+                        if (this.status === 200 && this.readyState == 4) {
+                            var respuesta = JSON.parse(xhr.responseText);
+                            if (respuesta.estado === 'OK') {
+                                Swal.fire({
+                                    title: 'Alta exitosa!',
+                                    text: 'Alta de procesada exitosa!',
+                                    type: 'success'
+                                })
+                                    .then(resultado => {
+                                        if (resultado.value) {
+                                            location.reload();
+                                        }
+                                    })
+                            } else {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'Hubo un error',
+                                    type: 'error'
+                                })
+                            }
+                        }
+                    }
+    
+                    var archivoProcesadaBaja = new FormData();
+                    archivoProcesadaBaja.append('action', action);
+                    archivoProcesadaBaja.append('adjuntoProcesada', adjuntoProcesadaBaja);
+                    archivoProcesadaBaja.append('nombreAdjuntoProcesada', nombreAdjuntoProcesadaBaja);
+    
+                    var xhtr = new XMLHttpRequest();
+                    xhtr.open('POST', localBackend + 'control.php', true);
+                    xhtr.send(archivoProcesadaBaja);
+                    xhtr.onload = function () {
+                        if (this.status === 200 && this.readyState == 4) {
+                            // var respuesta = JSON.parse(xhtr.responseText);
+                            // console.log(respuesta);
+                        }
+                    }
+    
+                });
+        break;
         /**ALTAS SEMANALES */
         case 'semanales':
             let btnMostrarAltas = $('#btnMostrarAltas'),

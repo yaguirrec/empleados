@@ -62,10 +62,9 @@
             <a class="collapse-item" href="index.php?request=altas">Administrar Altas</a>
             <a class="collapse-item" href="index.php?request=semanales">Altas Semanales</a>
             <hr class="sidebar-divider">
-            <!-- <h6 class="collapse-header">Administrar Bajas:</h6> -->
-            <!-- <a class="collapse-item" href="index.php?request=alta-empleado">Alta de empleado</a> -->
-            <!-- <a class="collapse-item" href="index.php?request=administrarBajas">Administrar Bajas</a> -->
-            <!-- <a class="collapse-item" href="index.php?request=semanales">Altas Semanales</a> -->
+            <h6 class="collapse-header">Administrar Bajas</h6>
+            <!-- <a class="collapse-item" href="index.php?request=alta-empleado">Baja de empleado</a> -->
+            <a class="collapse-item" href="index.php?request=administrarBajas">Administrar Bajas</a>
           </div>
         </div>
       </li>
@@ -111,6 +110,9 @@
             <h6 class="collapse-header">Administrar registros:</h6>
             <a class="collapse-item" href="index.php?request=altas">Administrar Altas</a>
             <a class="collapse-item" href="index.php?request=semanales">Altas Semanales</a>
+            <h6 class="collapse-header">Administrar Bajas</h6>
+            <!-- <a class="collapse-item" href="index.php?request=alta-empleado">Baja de empleado</a> -->
+            <a class="collapse-item" href="index.php?request=administrarBajas">Administrar Bajas</a>
           </div>
         </div>
       </li>
