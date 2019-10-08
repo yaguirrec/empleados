@@ -363,7 +363,7 @@ CREATE TABLE [dbo].[tbemp_permisos](
 ) ON [PRIMARY]
 GO
 
-INSERT INTO tbemp_permisos (numero_nomina,created_at,emp_proy) VALUES ('02550',GETDATE(),8)
+INSERT INTO tbemp_permisos (numero_nomina,created_at,emp_proy) VALUES ('26692',GETDATE(),5)
 SELECT * FROM tbemp_permisos ORDER BY emp_proy
 --UPDATE tbemp_permisos SET emp_proy = 2 WHERE numero_nomina = '19905'
 SELECT * FROM P1ACCESOWEB WHERE employee = '19905'
@@ -1464,11 +1464,11 @@ BEGIN TRANSACTION
   ROLLBACK
  END CATCH
 
- CREATE PROCEDURE bajas_diarias
+ALTER PROCEDURE bajas_diarias
 @FECHA_BAJA DATE
 AS
 	BEGIN
-		SELECT te.numero_nomina,CONCAT('''',te.nss,td.dv) AS nss,UPPER(te.nombre_largo) AS nombre_largo,
+		SELECT TOP 200 te.numero_nomina,CONCAT('''',te.nss,td.dv) AS nss,UPPER(te.nombre_largo) AS nombre_largo,
 		td.salario_diario,
 		ts.nombre AS sucursal,
 		tc.nombre planta,
@@ -1492,11 +1492,15 @@ AS
 		ON ta.codigo = tc.codigo_area
 		INNER JOIN tbdatos_empleados AS td
 		ON te.numero_nomina = td.numero_nomina
-		WHERE te.status = 'B' AND te.fecha_baja = @FECHA_BAJA AND td.clasificacion <> 'B'
+		AND te.status = 'B' AND td.clasificacion <> 'B'
+		WHERE NOT EXISTS 
+		(SELECT descripcion FROM tbestado WHERE descripcion = 'bpcdp' AND numero_nomina = te.numero_nomina)
 		GROUP BY te.numero_nomina,te.numero_nomina,te.nss,td.dv,te.nombre_largo,td.salario_diario,ts.nombre,tc.nombre,te.fecha_baja,td.registro_patronal,td.nomina,td.baja_procesada,te.created_at,te.puesto_temp,te.id_puesto,td.baja_acuse,te.status
 		ORDER BY te.status ASC, te.created_at DESC
 	END
 GO
+
+EXEC bajas_diarias '2019-10-07'
 
 CREATE PROCEDURE bajas_diarias
 @FECHA_BAJA DATE
@@ -1594,3 +1598,4 @@ SELECT MAX(id_registro) id
 DELETE FROM tbdatos_empleados WHERE id_registro NOT IN (SELECT id FROM #tmp_userd);
 
 DROP TABLE #tmp_userd;
+

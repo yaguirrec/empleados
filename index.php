@@ -33,6 +33,9 @@
               case 'empleado': case'bajas':
                 include 'inc/templates/empleados/vista.php';
                 break;
+              case'bajaPuesto':
+                include 'inc/templates/bajas/baja-puesto.php';
+              break;
               case 'alta-empleado':
                 include 'inc/templates/empleados/alta-empleado.php';
                 break;

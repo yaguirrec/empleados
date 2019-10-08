@@ -15,7 +15,7 @@ $(document).ready(function () {
     let url_dev = 'http://localhost/';
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
-    let version = 'V.0610191';
+    let version = 'V.0710191';
 
     $('#version').html(version);
 
@@ -708,6 +708,84 @@ $(document).ready(function () {
                 });
             }
             break;
+        //SECCION BAJAS POR PUESTO
+        case 'bajaPuesto':
+            seccionBuscar.removeClass('d-none');
+            var action = 'listaBajasPuesto';
+            var titulo = 'Bajas por cambio de puesto';
+            $('.seccionTitulo').text(titulo);
+
+            var dataTable = new FormData();
+            dataTable.append('action', action);
+            var xmlhr = new XMLHttpRequest();
+            xmlhr.open('POST', backendURL, true);
+            xmlhr.onload = function () {
+                if (this.status === 200) {
+                    var respuesta = JSON.parse(xmlhr.responseText);
+                    if (respuesta.estado === 'OK') {
+                        var informacion = respuesta.informacion;
+                        for (var i in informacion) {
+                            tablaBajasPuesto(informacion[i]);
+                        }
+                    } else if (respuesta.status === 'error') {
+                        var informacion = respuesta.informacion;
+                    }
+                }
+            }
+            xmlhr.send(dataTable);
+
+            function tablaBajasPuesto(rowInfo) {
+                var st = rowInfo.status,
+                    status = 'Activo',
+                    estado = '';
+
+                $('#loadingIndicator').addClass('d-none');
+
+                if (st === 'B') {
+                    estado = "alert-secondary";
+                    status = 'Baja';
+                }
+                if (st === 'R') {
+                    estado = "text-secondary";
+                    status = 'Re-ingreso';
+                }
+                var row = $("<tr class='" + estado + " text-secondary'>");
+
+                $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
+                // NUMERO DE EQUIPO
+                // row.append($("<td><a href='formato.php?emp=" + rowInfo.numero_nomina + "' title='Formato de Alta' target='_blank'>" + rowInfo.numero_nomina + "</a></td>"));
+                // NOMINA DEL EMPLEADO
+                row.append($("<td class='text-left'> " + rowInfo.numero_nomina + " </td>"));
+                row.append($("<td class='text-left'> " + rowInfo.Nombre + " </td>"));
+                row.append($("<td class='text-left'> " + rowInfo.Puesto + " </td>"));
+                row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
+                if (st === 'B') {
+                    row.append($("<td> " + rowInfo.fechaBaja + " </td>"));
+                }
+                row.append($("<td> " + rowInfo.Sucursal + " </td>"));
+                row.append($("<td> " + rowInfo.Celula + " </td>"));
+                row.append($("<td> " + status + " </td>"));
+                // COLUMNA ACCION
+                row.append($("<td class='text-center'>"
+                    + "<a class='btn btnConsulta text-white btn-facebook btn-circle btn-sm' data-id='" + rowInfo.numero_nomina + "' role='button' title='Ver información'><i class='fas fa-info'></i></a>"
+                    + "</td>"));
+
+                $(".btnConsulta").unbind().click(function () {
+                    var employeeID = $((this)).data('id'),
+                        url = "index.php?request=datos";
+                    // newTab = window.open(url, '_blank');
+
+                    //SAVE EMPLOYEE ID ON LOCAL STORAGE AS codigoEmpleado
+                    localStorage.setItem('codigoEmpleado', employeeID);
+
+                    // OPEN ON CURRENT TAB
+                    $(location).attr('href', url);
+
+                    // OPEN ON NEW TAB
+                    // newTab.focus();
+                });
+            }
+            break;
         // ENVIAR ALTAS A NOMINAS
         case 'altas':
             let btnConsultarAltas = $('#btnConsultaAltas'),
@@ -1084,58 +1162,67 @@ $(document).ready(function () {
                     $.each($("input[name='noNomina']:checked"), function(){            
                         numerosNominaBaja.push($(this).val());
                     });
-    
-                    console.log(numerosNominaBaja.join("|"));
-    
-                    let adjunto_AcuseBaja = document.getElementById('txtAcuseBaja');
-                    let adjuntoAcuseBaja = adjunto_AcuseBaja.files[0];
-                    let nombreAdjuntoAcuseBaja = adjunto_AcuseBaja.files[0].name;
-                    nombreAdjuntoAcuseBaja = nombreAdjuntoAcuseBaja.substr(23, 9);
-    
-                    var datosAcuseBaja = new FormData();
-                    datosAcuseBaja.append('action', action);
-                    datosAcuseBaja.append('arrNomina', numerosNominaBaja.join("|"));
-                    datosAcuseBaja.append('nombreAdjuntoAcuse', nombreAdjuntoAcuseBaja);
-    
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('POST', backendURL, true);
-                    xhr.send(datosAcuseBaja);
-                    xhr.onload = function () {
-                        if (this.status === 200 && this.readyState == 4) {
-                            var respuesta = JSON.parse(xhr.responseText);
-                            if (respuesta.estado === 'OK') {
-                                Swal.fire({
-                                    title: 'Alta exitosa!',
-                                    text: 'Alta de acuse exitosa!',
-                                    type: 'success'
-                                })
-                                    .then(resultado => {
-                                        if (resultado.value) {
-                                            location.reload();
-                                        }
+                    
+                    if(numerosNominaBaja.length === 0){
+                        Swal.fire({
+                            type: 'error',
+                        title: 'Selección Nula!',
+                        html: 'Debe seleccionar al menos un empleado',
+                        timer: 1300})
+                    } else {
+                    
+                        let adjunto_AcuseBaja = document.getElementById('txtAcuseBaja');
+                        let adjuntoAcuseBaja = adjunto_AcuseBaja.files[0];
+                        let nombreAdjuntoAcuseBaja = adjunto_AcuseBaja.files[0].name;
+                        nombreAdjuntoAcuseBaja = nombreAdjuntoAcuseBaja.substr(23, 9);
+        
+                        var datosAcuseBaja = new FormData();
+                        datosAcuseBaja.append('action', action);
+                        datosAcuseBaja.append('arrNomina', numerosNominaBaja.join("|"));
+                        datosAcuseBaja.append('nombreAdjuntoAcuse', nombreAdjuntoAcuseBaja);
+        
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('POST', backendURL, true);
+                        xhr.send(datosAcuseBaja);
+                        xhr.onload = function () {
+                            if (this.status === 200 && this.readyState == 4) {
+                                var respuesta = JSON.parse(xhr.responseText);
+                                
+                                if (respuesta.estado === 'OK') {
+                                    Swal.fire({
+                                        title: 'Alta exitosa!',
+                                        text: 'Alta de acuse exitosa!',
+                                        type: 'success'
                                     })
-                            } else {
-                                Swal.fire({
-                                    title: 'Error!',
-                                    text: 'Hubo un error',
-                                    type: 'error'
-                                })
+                                        .then(resultado => {
+                                            if (resultado.value) {
+                                                location.reload();
+                                            }
+                                        })
+                                } else {
+                                    Swal.fire({
+                                        title: 'Error!',
+                                        text: 'Hubo un error',
+                                        type: 'error'
+                                    })
+                                }
                             }
                         }
-                    }
+                    
     
-                    var archivoAcuseBaja = new FormData();
-                    archivoAcuseBaja.append('action', action);
-                    archivoAcuseBaja.append('adjuntoAcuse', adjuntoAcuseBaja);
-                    archivoAcuseBaja.append('nombreAdjuntoAcuse', nombreAdjuntoAcuseBaja);
-    
-                    var xhtr = new XMLHttpRequest();
-                    xhtr.open('POST', localBackend + 'control.php', true);
-                    xhtr.send(archivoAcuseBaja);
-                    xhtr.onload = function () {
-                        if (this.status === 200 && this.readyState == 4) {
-                            // var respuesta = JSON.parse(xhtr.responseText);
-                            // console.log(respuesta);
+                        var archivoAcuseBaja = new FormData();
+                        archivoAcuseBaja.append('action', action);
+                        archivoAcuseBaja.append('adjuntoAcuse', adjuntoAcuseBaja);
+                        archivoAcuseBaja.append('nombreAdjuntoAcuse', nombreAdjuntoAcuseBaja);
+        
+                        var xhtr = new XMLHttpRequest();
+                        xhtr.open('POST', localBackend + 'control.php', true);
+                        xhtr.send(archivoAcuseBaja);
+                        xhtr.onload = function () {
+                            if (this.status === 200 && this.readyState == 4) {
+                                // var respuesta = JSON.parse(xhtr.responseText);
+                                // console.log(respuesta);
+                            }
                         }
                     }
                 });
@@ -1174,7 +1261,7 @@ $(document).ready(function () {
                                 type: 'POST',
                                 url: backendURL,
                                 data: {
-                                    action: action,
+                                    action: 'cambioFechaBaja',
                                     arrNomina: numerosNominaBaja.join("|"),
                                     fechaBaja: fecha_Baja,
                                     empleadoControl: empleado_activo
@@ -1216,56 +1303,65 @@ $(document).ready(function () {
                     $.each($("input[name='noNomina']:checked"), function(){            
                         numerosNominaBaja.push($(this).val());
                     });
+
+                    if(numerosNominaBaja.length === 0){
+                        Swal.fire({
+                            type: 'error',
+                        title: 'Selección Nula!',
+                        html: 'Debe seleccionar al menos un empleado',
+                        timer: 1300})
+                    } else {
     
-                    let adjunto_ProcesadaBaja = document.getElementById('txtProcesadaBaja');
-                    let adjuntoProcesadaBaja = adjunto_ProcesadaBaja.files[0];
-                    let nombreAdjuntoProcesadaBaja = adjunto_ProcesadaBaja.files[0].name;
-                    nombreAdjuntoProcesadaBaja = nombreAdjuntoProcesadaBaja.substr(21, 9);
-    
-                    var datosProcesadaBaja = new FormData();
-                    datosProcesadaBaja.append('action', action);
-                    datosProcesadaBaja.append('arrNomina', numerosNominaBaja.join("|"));
-                    datosProcesadaBaja.append('nombreAdjuntoProcesada', nombreAdjuntoProcesadaBaja);
-    
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('POST', backendURL, true);
-                    xhr.send(datosProcesadaBaja);
-                    xhr.onload = function () {
-                        if (this.status === 200 && this.readyState == 4) {
-                            var respuesta = JSON.parse(xhr.responseText);
-                            if (respuesta.estado === 'OK') {
-                                Swal.fire({
-                                    title: 'Alta exitosa!',
-                                    text: 'Alta de procesada exitosa!',
-                                    type: 'success'
-                                })
-                                    .then(resultado => {
-                                        if (resultado.value) {
-                                            location.reload();
-                                        }
+                        let adjunto_ProcesadaBaja = document.getElementById('txtProcesadaBaja');
+                        let adjuntoProcesadaBaja = adjunto_ProcesadaBaja.files[0];
+                        let nombreAdjuntoProcesadaBaja = adjunto_ProcesadaBaja.files[0].name;
+                        nombreAdjuntoProcesadaBaja = nombreAdjuntoProcesadaBaja.substr(21, 9);
+        
+                        var datosProcesadaBaja = new FormData();
+                        datosProcesadaBaja.append('action', action);
+                        datosProcesadaBaja.append('arrNomina', numerosNominaBaja.join("|"));
+                        datosProcesadaBaja.append('nombreAdjuntoProcesada', nombreAdjuntoProcesadaBaja);
+        
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('POST', backendURL, true);
+                        xhr.send(datosProcesadaBaja);
+                        xhr.onload = function () {
+                            if (this.status === 200 && this.readyState == 4) {
+                                var respuesta = JSON.parse(xhr.responseText);
+                                if (respuesta.estado === 'OK') {
+                                    Swal.fire({
+                                        title: 'Alta exitosa!',
+                                        text: 'Alta de procesada exitosa!',
+                                        type: 'success'
                                     })
-                            } else {
-                                Swal.fire({
-                                    title: 'Error!',
-                                    text: 'Hubo un error',
-                                    type: 'error'
-                                })
+                                        .then(resultado => {
+                                            if (resultado.value) {
+                                                location.reload();
+                                            }
+                                        })
+                                } else {
+                                    Swal.fire({
+                                        title: 'Error!',
+                                        text: 'Hubo un error',
+                                        type: 'error'
+                                    })
+                                }
                             }
                         }
-                    }
-    
-                    var archivoProcesadaBaja = new FormData();
-                    archivoProcesadaBaja.append('action', action);
-                    archivoProcesadaBaja.append('adjuntoProcesada', adjuntoProcesadaBaja);
-                    archivoProcesadaBaja.append('nombreAdjuntoProcesada', nombreAdjuntoProcesadaBaja);
-    
-                    var xhtr = new XMLHttpRequest();
-                    xhtr.open('POST', localBackend + 'control.php', true);
-                    xhtr.send(archivoProcesadaBaja);
-                    xhtr.onload = function () {
-                        if (this.status === 200 && this.readyState == 4) {
-                            // var respuesta = JSON.parse(xhtr.responseText);
-                            // console.log(respuesta);
+        
+                        var archivoProcesadaBaja = new FormData();
+                        archivoProcesadaBaja.append('action', action);
+                        archivoProcesadaBaja.append('adjuntoProcesada', adjuntoProcesadaBaja);
+                        archivoProcesadaBaja.append('nombreAdjuntoProcesada', nombreAdjuntoProcesadaBaja);
+        
+                        var xhtr = new XMLHttpRequest();
+                        xhtr.open('POST', localBackend + 'control.php', true);
+                        xhtr.send(archivoProcesadaBaja);
+                        xhtr.onload = function () {
+                            if (this.status === 200 && this.readyState == 4) {
+                                // var respuesta = JSON.parse(xhtr.responseText);
+                                // console.log(respuesta);
+                            }
                         }
                     }
     
