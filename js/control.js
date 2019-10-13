@@ -15,7 +15,7 @@ $(document).ready(function () {
     let url_dev = 'http://localhost/';
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
-    let version = 'V.0710191';
+    let version = 'V.1310191';
 
     $('#version').html(version);
 
@@ -354,7 +354,7 @@ $(document).ready(function () {
                     var informacion = respuesta.informacion;
                     var s = '<option value="" selected>Seleccionar una Sucursal</option>';
                     for (var i in informacion) {
-                        s += '<option value="' + informacion[i].id_sucursal + '">' + informacion[i].codigo.substr(0, 5) + ' - ' + informacion[i].nombre + '</option>';
+                        s += '<option value="' + informacion[i].id_sucursal + '">' + informacion[i].nombre + '</option>';
                     }
                     $('#txtSucursal').html(s);
                 } else if (respuesta.status === 'error') {
@@ -380,7 +380,7 @@ $(document).ready(function () {
                     var informacion = respuesta.informacion;
                     var s = '<option value="">Seleccionar celula</option>';
                     for (var i in informacion) {
-                        s += '<option value="' + informacion[i].id_celula + '">' + informacion[i].codigo + ' - ' + informacion[i].nombre + '</option>';
+                        s += '<option value="' + informacion[i].id_celula + '">' + informacion[i].nombre + ' - ' + informacion[i].codigo + '</option>';
                     }
                     $('#txtCelula').html(s);
                 } else if (respuesta.status === 'error') {
@@ -2522,7 +2522,7 @@ $(document).ready(function () {
                         var informacion = respuesta.informacion;
                         var s = '<option value="" selected>Seleccionar una Sucursal</option>';
                         for (var i in informacion) {
-                            s += '<option value="' + informacion[i].id_sucursal + '">' + informacion[i].codigo.substr(0, 5) + ' - ' + informacion[i].nombre + '</option>';
+                            s += '<option value="' + informacion[i].id_sucursal + '">' + informacion[i].nombre + '</option>';
                         }
                         txtSucursal.html(s);
                     } else if (respuesta.status === 'error') {
@@ -2582,7 +2582,7 @@ $(document).ready(function () {
                             var informacion = respuesta.informacion;
                             var s = '<option value="">Seleccionar celula</option>';
                             for (var i in informacion) {
-                                s += '<option value="' + informacion[i].id_celula + '">' + informacion[i].codigo + ' - ' + informacion[i].nombre + '</option>';
+                                s += '<option value="' + informacion[i].id_celula + '">' + informacion[i].nombre + ' - ' + informacion[i].codigo + '</option>';
                             }
                             txtCelula.html(s);
                         } else if (respuesta.status === 'error') {
