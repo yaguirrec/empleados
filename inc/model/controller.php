@@ -659,7 +659,7 @@
         case 'bajas':
             // die(json_encode($_POST));
             $props = $_POST['prop'];
-            $update = "UPDATE tb SET baja_procesada = '".$nombreAdjuntoProcesada."' WHERE numero_nomina IN ('".$arrNomina_."');";
+            $query = "EXEC bajas_diarias ?";
 
             $params = array($props);
 
@@ -692,7 +692,6 @@
             echo json_encode($respuesta);
             sqlsrv_free_stmt( $stmt);
             sqlsrv_close( $con );
-
         break;
         case 'cambioFechaBaja':
             die(json_encode($_POST));

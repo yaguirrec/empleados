@@ -38,8 +38,6 @@ if (check) {
             if(lote === 'NULL')
                 lote = '';
 
-
-
             $('#formatoFecha').html(informacion.fechaAlta);
             $('#nombreSucursal').html(informacion.sucursal);
             $('#nombrePlanta').html(informacion.planta);
@@ -81,6 +79,7 @@ if (check) {
             $('#telefonoCasa').html(informacion.celular);
             $('#numeroCuenta').html(informacion.numero_cuenta);
 
+            $("#empFoto").attr("src","assets/files/" + informacion.numero_nomina + "/" + informacion.numero_nomina + ".jpg");
 
             if (empGenero === 'F')
                 $('#empGenero').html('Femenino');

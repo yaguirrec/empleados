@@ -16,7 +16,7 @@ font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;}
 <body>
     <div class="row mb-5">
 
-    <di v id='front'>
+    <div id='front'>
     <img src="img/gafete/gafete.png" style="margin-left:3.8px;width:5.9cm;height:9.2cm;position: absolute; z-index: 1;">
 
     <img  class='img-circle' style="height:3.8cm; width:3.8cm; border-radius: 94%; position: absolute;z-index: 2;top:3.4cm;left:.76cm;" id="empFoto" alt="Foto"> 

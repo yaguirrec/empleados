@@ -35,6 +35,16 @@ p{
 }
 
 /**CAMPOS FORMATO**/
+#empFoto{
+    position: absolute;
+    height:2.5cm;
+    width:2.4cm;
+    z-index: 2;
+    top:2.28cm;
+    left: 2.40cm;
+}
+
+
 #formatoFecha{
     top: 126; 
     left: 201; 

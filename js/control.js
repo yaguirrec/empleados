@@ -15,7 +15,7 @@ $(document).ready(function () {
     let url_dev = 'http://localhost/';
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
-    let version = 'V.1310191';
+    let version = 'V.3010191';
 
     $('#version').html(version);
 
@@ -1055,6 +1055,7 @@ $(document).ready(function () {
                         xmlhr.onload = function () {
                             if (this.status === 200) {
                                 var respuesta = JSON.parse(xmlhr.responseText);
+                                // console.log(respuesta);
                                 if (respuesta.estado === 'OK') {
                                     var datos = respuesta.informacion.length;
                                     var informacion = respuesta.informacion;

@@ -3,6 +3,7 @@
 <body class="container">
     <img id="imagenFormato" src="assets/formatoAltas.png">
     
+    <img id="empFoto" alt="Foto"> 
     <p id="formatoFecha"></p>
     <p id="nombreSucursal"></p>
     <p id="nombrePlanta"></p>
