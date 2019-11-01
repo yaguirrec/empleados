@@ -1522,7 +1522,6 @@ $(document).ready(function () {
 
                 labelNomina = (labelNomina === 'S' ? 'Sem' : 'Quin');
                 labelGenero = (labelGenero === 'F' ? 'Femenino' : 'Masculino');
-                labelGenero = (labelGenero === 'F' ? 'Femenino' : 'Masculino');
                 labelEscolaridad = (labelEscolaridad === 'b_tecnico' ? 'Bachillerato' : labelEscolaridad);
 
                 let nombrePadre = nombreCompletoPadre.split('|');
