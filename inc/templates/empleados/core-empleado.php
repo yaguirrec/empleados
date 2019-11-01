@@ -11,15 +11,19 @@
         <tr>
             <th>Sucursal:</th>
             <td><dd id="txtSucursal"></dd></td>
+            <th>Estado:</th>
+            <td><dd class="statusEmpleado" id="txtStatus"></dd></td>
             <th>Departamento:</th>
-            <td><dd id="txtDepartamento"></dd></td>
-            <th>Celula:</th>
             <td><dd id="txtCelula"></dd></td>
             
         </tr>
         <tr>
-            <th>Estado:</th>
-            <td><dd class="statusEmpleado" id="txtStatus"></dd></td>
+            <th>Clasificacion:</th>
+            <td><dd id="txtClasificacion"></dd></td>
+            <th>Nomina:</th>
+            <td><dd id="txtTipoNomina"></dd></td>
+            <th>Registro:</th>
+            <td><dd id="txtRegistro"></dd></td>
         </tr>
     </tbody>
 </table>

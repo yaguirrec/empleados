@@ -15,7 +15,7 @@ $(document).ready(function () {
     let url_dev = 'http://localhost/';
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
-    let version = 'V.3010191';
+    let version = 'V.3110191';
 
     $('#version').html(version);
 
@@ -1488,25 +1488,101 @@ $(document).ready(function () {
             xmlhr.send(dataEmp);
 
             function imprimirEmpleado(rowInfo) {
-                let statusEmpleadoR = rowInfo.status;
-                if (statusEmpleadoR.substr(0,1) === 'B') {
+                let statusEmpleadoR = rowInfo.status,
+                    labelSt = '',
+                    labelClasificacion = rowInfo.clasificacion,
+                    labelNomina = rowInfo.nomina,
+                    labelRegistro = rowInfo.registro_patronal,
+                    labelGenero = rowInfo.sexo,
+                    labelEstadoCivil = rowInfo.estado_civil,
+                    labelEscolaridad = rowInfo.escolaridad,
+                    nombreCompletoMadre = rowInfo.nombre_madre,
+                    nombreCompletoPadre = rowInfo.nombre_padre;
+
+                if (statusEmpleadoR === 'B') {
                     statusEmpleado.addClass('text-danger');
                     statusEmpleado.removeClass('text-success');
+                    labelSt = 'BAJA';
                 } else {
                     statusEmpleado.removeClass('text-danger');
                     statusEmpleado.addClass('text-success');
+                    labelSt = 'ACTIVO';
                 }
+
+                if (labelClasificacion === 'O')
+                    labelClasificacion = 'Operativo';
+                else if (labelClasificacion === 'AO')
+                    labelClasificacion = 'Administrativo operativo';
+                else if (labelClasificacion === 'A')
+                    labelClasificacion = 'Administrativo';
+                else if (labelClasificacion === 'E')
+                    labelClasificacion = 'Especial';
+                else if (labelClasificacion === 'B')
+                    labelClasificacion = 'Becario';
+
+                labelNomina = (labelNomina === 'S' ? 'Sem' : 'Quin');
+                labelGenero = (labelGenero === 'F' ? 'Femenino' : 'Masculino');
+                labelGenero = (labelGenero === 'F' ? 'Femenino' : 'Masculino');
+                labelEscolaridad = (labelEscolaridad === 'b_tecnico' ? 'Bachillerato' : labelEscolaridad);
+
+                let nombrePadre = nombreCompletoPadre.split('|');
+                let nombreMadre = nombreCompletoMadre.split('|');
+
                 var nomina = rowInfo.numero_nomina,
                     urlFoto = 'assets/files/' + nomina + '/' + nomina + '.jpg',
                     action = 'revisarImagen';
                 $("#empImagen").attr('src', urlFoto);
-                $('#txtNomina').text(rowInfo.numero_nomina);
+                $('#txtTitulo').html('DATOS GENERALES DEL EMPLEADO <strong>' + rowInfo.numero_nomina + '</strong>');
+                $('#txtNomina').html('<strong>' + rowInfo.numero_nomina + '</strong>');
                 $('#txtNombre').text(rowInfo.nombre_largo);
-                $('#txtPuesto').text(rowInfo.Puesto);
-                $('#txtSucursal').text(rowInfo.Sucursal);
-                $('#txtDepartamento').text(rowInfo.Departamento);
-                $('#txtCelula').text(rowInfo.Celula);
-                $('#txtStatus').text(rowInfo.status);
+                $('#txtPuesto').text(rowInfo.puesto);
+                $('#txtSucursal').text(rowInfo.sucursal);
+                $('#txtCelula').text(rowInfo.planta);
+                $('#txtStatus').text(labelSt);
+                $('#txtSalario').text('$'+rowInfo.salario_diario);
+                $('#txtClasificacion').text(labelClasificacion);
+                $('#txtTipoNomina').text(labelNomina);
+                $('#txtRegistro').text(labelRegistro);
+                $('#txtAlta').text(rowInfo.fechaAlta);
+                $('#txtCURP').html('<strong> CURP: </strong>' + rowInfo.CURP);
+                $('#txtRFC').html('<strong> RFC: </strong>' + rowInfo.RFC);
+                $('#txtNSS').html('<strong> IMSS: </strong>' + rowInfo.nss + rowInfo.dv);
+                $('#txtGenero').html('<strong> Genero: </strong>' + labelGenero);
+                $('#txtFechaN').html('<strong> Fecha de Nacimiento: </strong>' + rowInfo.fechaNacimiento);
+                $('#txtLugarN').html('<strong> Lugar de Nacimiento: </strong>' + rowInfo.lugar_nacimiento);
+                $('#txtEstadoCivil').html('<strong> Estado Civil: </strong>' + labelEstadoCivil);
+                $('#txtEducacion').html('<strong> Escolaridad: </strong>' + labelEscolaridad);
+
+                $('#txtID').html('<strong> Identificacion: </strong>' + rowInfo.identificacion);
+                $('#txtIDN').html('<strong> Numero Identificacion: </strong>' + rowInfo.numero_identificacion);
+                
+                $('#txtNombrePadre').html('<strong> Nombre del padre: </strong>' + nombrePadre[2] + ' ' + nombrePadre[0] + ' ' + nombrePadre[1]);
+                $('#txtNombreMadre').html('<strong> Nombre de la madre: </strong>' + nombreMadre[2] + ' ' + nombreMadre[0] + ' ' + nombreMadre[1]);
+
+                $('#txtEstado').html('<strong> Estado: </strong>' + rowInfo.estado);
+                $('#txtMunicipio').html('<strong> Municipio: </strong>' + rowInfo.municipio);
+                $('#txtLocalidad').html('<strong> Localidad: </strong>' + rowInfo.localidad);
+                $('#txtCP').html('<strong> CP: </strong>' + rowInfo.codigo_postal);
+                $('#txtCalle').html('<strong> Calle: </strong>' + rowInfo.calle);
+                $('#txtNumero').html('<strong> Numero exterior: </strong>' + rowInfo.numero_exterior + '<strong>     Numero interior: </strong>' + rowInfo.numero_interior);
+                $('#txtFraccionamiento').html('<strong> Fraccionamiento: </strong>' + rowInfo.fraccionamiento);
+                
+                $('#txtCuenta').html('<strong> Cuenta bancaria: </strong>' + rowInfo.numero_cuenta);
+                $('#txtInfonavit').html('<strong> Infonavit: </strong>' + rowInfo.numero_infonavit);
+                $('#txtFonacot').html('<strong> Fonacot: </strong>' + rowInfo.numero_fonacot);
+
+                $('#txtTelefono').html('<strong> Telefono: </strong>' + rowInfo.telefono);
+                $('#txtCelular').html('<strong> Celular: </strong>' + rowInfo.celular);
+                $('#txtCorreo').html('<strong> Email: </strong>' + rowInfo.correo);
+                
+                $('#txtAltaAcuse').html('<strong> Acuse Alta: </strong> <a href="assets/attached/Acuses/'+rowInfo.lote_acuse+'.zip">'+rowInfo.lote_acuse+'</a>');
+                $('#txtAltaProcesada').html('<strong> Procesada Alta: </strong> <a href="assets/attached/Acuses/'+rowInfo.lote+'.zip">'+rowInfo.lote+'</a>');
+
+                if (statusEmpleadoR === 'B') {
+                $('#txtBajaAcuse').html('<strong> Acuse Baja: </strong> <a href="assets/attached/Acuses/'+rowInfo.baja_acuse+'.zip">'+rowInfo.baja_acuse+'</a>');
+                $('#txtBajaProcesada').html('<strong> Acuse Baja: </strong> <a href="assets/attached/Acuses/'+rowInfo.baja_procesada+'.zip">'+rowInfo.baja_procesada+'</a>');
+                }
+
 
 
                 $.ajax({
