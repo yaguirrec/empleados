@@ -1524,6 +1524,16 @@ $(document).ready(function () {
                 labelGenero = (labelGenero === 'F' ? 'Femenino' : 'Masculino');
                 labelEscolaridad = (labelEscolaridad === 'b_tecnico' ? 'Bachillerato' : labelEscolaridad);
 
+                if (labelEstadoCivil === 'S')
+                    labelEstadoCivil = 'Soltero(a)';
+                else if (labelEstadoCivil === 'C')
+                    labelEstadoCivil = 'Casado(a)';
+                else if (labelEstadoCivil === 'D')
+                    labelEstadoCivil = 'Divorciado(a)';
+                else if (labelEstadoCivil === 'V')
+                    labelEstadoCivil = 'Viudo(a)';
+            
+
                 let nombrePadre = nombreCompletoPadre.split('|');
                 let nombreMadre = nombreCompletoMadre.split('|');
 
