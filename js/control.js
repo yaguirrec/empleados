@@ -1584,12 +1584,12 @@ $(document).ready(function () {
                 $('#txtCelular').html('<strong> Celular: </strong>' + rowInfo.celular);
                 $('#txtCorreo').html('<strong> Email: </strong>' + rowInfo.correo);
                 
-                $('#txtAltaAcuse').html('<strong> Acuse Alta: </strong> <a href="assets/attached/Acuses/'+rowInfo.lote_acuse+'.zip">'+rowInfo.lote_acuse+'</a>');
-                $('#txtAltaProcesada').html('<strong> Procesada Alta: </strong> <a href="assets/attached/Acuses/'+rowInfo.lote+'.zip">'+rowInfo.lote+'</a>');
+                $('#txtAltaAcuse').html('<strong> Acuse Alta: </strong> <a href="assets/attached/Acuses/'+rowInfo.lote_acuse+'.zip" target="_blank">'+rowInfo.lote_acuse+'</a>');
+                $('#txtAltaProcesada').html('<strong> Procesada Alta: </strong> <a href="assets/attached/Acuses/'+rowInfo.lote+'.zip" target="_blank">'+rowInfo.lote+'</a>');
 
                 if (statusEmpleadoR === 'B') {
-                $('#txtBajaAcuse').html('<strong> Acuse Baja: </strong> <a href="assets/attached/Acuses/'+rowInfo.baja_acuse+'.zip">'+rowInfo.baja_acuse+'</a>');
-                $('#txtBajaProcesada').html('<strong> Acuse Baja: </strong> <a href="assets/attached/Acuses/'+rowInfo.baja_procesada+'.zip">'+rowInfo.baja_procesada+'</a>');
+                $('#txtBajaAcuse').html('<strong> Acuse Baja: </strong> <a href="assets/attached/Acuses/'+rowInfo.baja_acuse+'.zip" target="_blank">'+rowInfo.baja_acuse+'</a>');
+                $('#txtBajaProcesada').html('<strong> Acuse Baja: </strong> <a href="assets/attached/Acuses/'+rowInfo.baja_procesada+'.zip" target="_blank">'+rowInfo.baja_procesada+'</a>');
                 }
 
 
