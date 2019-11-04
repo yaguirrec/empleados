@@ -1,5 +1,6 @@
     <div class="col-md-12">
         <h2>Baja de empleado</h2>
+        <hr>
         <div class="row">
             <div class="col-sm"><p id="txtNomina"></p></div>
             <div class="col-sm"><p id="txtNombre"></p></div>

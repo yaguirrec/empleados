@@ -8,14 +8,14 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar')
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
     let url_dev = 'http://localhost/';
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
-    let version = 'V.3110191';
+    let version = 'V.0411191';
 
     $('#version').html(version);
 
@@ -1667,6 +1667,89 @@ $(document).ready(function () {
 
             //DAR DE BAJA EMPLEADO
             btnBaja.click(async function () {
+                var action = 'bajaEmpleado';
+                const { value: razonBaja } = await Swal.fire({
+                    title: 'Razón de la baja',
+                    input: 'select',
+                    inputOptions: {
+                        abandono: 'Abandono',
+                        despido: 'Despido',
+                        renuncia: 'Renuncia',
+                        contrato: 'Contrato',
+                        bpcdp: 'Baja por cambio de puesto'
+                    },
+                    inputPlaceholder: 'Causa de la baja',
+                })
+
+                if (razonBaja) {
+                    const { value: comentariosBaja } = await Swal.fire({
+                        input: 'textarea',
+                        title: 'Comentarios',
+                        inputPlaceholder: 'Comentarios de la baja del empleado...',
+                        inputAttributes: {
+                            'aria-label': 'Comentarios de la baja del empleado'
+                        },
+                        showCancelButton: true
+                    })
+
+                    if (comentariosBaja) {
+                        const { value: fechaBaja } = await Swal.fire({
+                            title: 'Fecha de baja',
+                            html:
+                                '<input type="date" class="form-control" id="txtfechaBaja" value="<?php echo date("Y-m-d");?>',
+                            showCancelButton: true,
+                            preConfirm: () => {
+                                return [
+                                    document.getElementById('txtfechaBaja').value
+                                ]
+                            }
+                        })
+
+                        if (fechaBaja) {
+                            let fecha_Baja = JSON.stringify(fechaBaja);
+                            fecha_Baja = fecha_Baja.substr(2, 10);
+                            $.ajax({
+                                type: 'POST',
+                                url: backendURL,
+                                data: {
+                                    action: action,
+                                    nominaEmpleado: codigoEmpleado,
+                                    razonBaja: razonBaja,
+                                    comentariosBaja: comentariosBaja,
+                                    fechaBaja: fecha_Baja,
+                                    empleadoControl: empleado_activo
+                                }
+                            }).done(function (response) {
+                                respuesta = JSON.parse(response);
+                                let estadoRespuesta = respuesta.estado;
+                                console.log(respuesta);
+                                if (estadoRespuesta === 'OK') {
+                                    Swal.fire({
+                                        title: 'Baja Exitosa',
+                                        text: 'La persona fue dada de baja en el sistema',
+                                        type: 'info'
+                                    })
+                                        .then(resultado => {
+                                            if (resultado.value) {
+                                                location.reload();
+                                            }
+                                        })
+                                } else {
+                                    Swal.fire({
+                                        title: 'Error',
+                                        text: 'Ocurrio un error al procesar los datos',
+                                        type: 'error'
+                                    })
+                                }
+                            });
+                        }
+
+                    }
+                }
+
+            });
+
+            btnBajaNULL.click(async function () {
                 let empleadoBaja = $('#txtNomina').html()
                 localStorage.setItem('empleadoBaja', $('#txtNomina').html());
                 var url = "index.php?request=empleadoBaja";
@@ -1679,6 +1762,7 @@ $(document).ready(function () {
             var action = 'mostrar-empleado';
             localStorage.removeItem('empleadoBaja');
             console.log(empleado_baja);
+            
 
             var dataEmp = new FormData();
             dataEmp.append('action', action);
@@ -1707,10 +1791,137 @@ $(document).ready(function () {
                 $('#txtAlta').html('Fecha Alta: ' + rowInfo.fechaAlta);
             }
 
+            let clasificacionBajas = () => {
+                var bajaCla = new FormData(),
+                action = 'claBajas',
+                param = 'clasificacion';
+                bajaCla.append('action', action);
+                bajaCla.append('param', param);
+                var xmlBCla = new XMLHttpRequest();
+                xmlBCla.open('POST', backendURL, true);
+                xmlBCla.onload = function () {
+                    if (this.status === 200) {
+                        var respuesta = JSON.parse(xmlBCla.responseText);
+                        if (respuesta.estado === 'OK') {
+                            var informacion = respuesta.informacion;
+                            var s = '<option value="" selected>Seleccionar Clasificacion</option>';
+                            for (var i in informacion) {
+                                s += '<option value="' + informacion[i].codigo + '">' + informacion[i].descripcion + '</option>';
+                            }
+                            $('#txtClasificacion').html(s);
+                        } else if (respuesta.status === 'error') {
+                            var informacion = respuesta.informacion;
+                        }
+                    }
+                }
+                xmlBCla.send(bajaCla);
+            }
+
+            let motivoBajas = (key) => {
+                var bajaMot = new FormData(),
+                action = 'claBajas',
+                param = 'motivo';
+                bajaMot.append('action', action);
+                bajaMot.append('param', param);
+                bajaMot.append('key', key);
+                var xmlBMot = new XMLHttpRequest();
+                xmlBMot.open('POST', backendURL, true);
+                xmlBMot.onload = function () {
+                    if (this.status === 200) {
+                        var respuesta = JSON.parse(xmlBMot.responseText);
+                        if (respuesta.estado === 'OK') {
+                            var informacion = respuesta.informacion;
+                            var s = '<option value="" selected>Seleccionar Motivo</option>';
+                            for (var i in informacion) {
+                                s += '<option value="' + informacion[i].codigo + '">' + informacion[i].descripcion + '</option>';
+                            }
+                            $('#txtMotivo').html(s);
+                        } else if (respuesta.status === 'error') {
+                            var informacion = respuesta.informacion;
+                        }
+                    }
+                }
+                xmlBMot.send(bajaMot);
+            }
+
+            let explicacionBajas = (key) => {
+                var expMot = new FormData(),
+                action = 'claBajas',
+                param = 'explicacion';
+                expMot.append('action', action);
+                expMot.append('param', param);
+                expMot.append('key', key);
+                var xmlBExp = new XMLHttpRequest();
+                xmlBExp.open('POST', backendURL, true);
+                xmlBExp.onload = function () {
+                    if (this.status === 200) {
+                        var respuesta = JSON.parse(xmlBExp.responseText);
+                        if (respuesta.estado === 'OK') {
+                            var informacion = respuesta.informacion;
+                            var s = '<option value="" selected>Seleccionar Explicacion de la baja</option>';
+                            for (var i in informacion) {
+                                s += '<option value="' + informacion[i].codigo + '">' + informacion[i].descripcion + '</option>';
+                            }
+                            $('#txtExplicacion').html(s);
+                        } else if (respuesta.status === 'error') {
+                            var informacion = respuesta.informacion;
+                        }
+                    }
+                }
+                xmlBExp.send(expMot);
+            }
+
+            clasificacionBajas();
+            
+            $('#txtClasificacion').focusout(function(){
+                let key = ($('#txtClasificacion').val()).substr(0,3);
+                if(key.length !== 0)
+                    motivoBajas(key);
+                else
+                $('#txtMotivo').empty().append('<option selected="" value="">Selecciona una Clasificacion</option>');
+            });
+
+            $('#txtMotivo').focusout(function(){
+                let key = ($('#txtMotivo').val()).substr(6,2);
+                console.log(key.length);
+                if(key.length !== 0)
+                    explicacionBajas(key);
+                else
+                $('#txtExplicacion').empty().append('<option selected="" value="">Selecciona un Motivo</option>');
+            });
+
             $("#btnBajaEmpleado").click(function (e) {
+                let fechaBaja = $('#txtFechaBaja').val(),
+                    claBaja = $('#txtClasificacion').val(),
+                    motBaja = $('#txtMotivo').val(),
+                    expBaja = $('#txtExplicacion').val(),
+                    comBaja = $('#txtComentario').val();
                 e.preventDefault();
-                let empleado_Baja = $('#txtNomina').html()
-                console.log(empleado_Baja);
+                let empleado_Baja = $('#txtNomina').html();
+
+                if(claBaja.length === 0){
+                    Swal.fire(
+                        'Seleccionar opcion!',
+                        'La Clasificacion de la baja esta vacia, favor de elegir una opcion!',
+                        'warning'
+                    )
+                } else if(motBaja.length === 0){
+                    Swal.fire(
+                        'Seleccionar opcion!',
+                        'El Motivo de la baja esta vacia, favor de elegir una opcion!',
+                        'warning'
+                    )
+                } else if(expBaja.length === 0){
+                    Swal.fire(
+                        'Seleccionar opcion!',
+                        'La Explicacion de la baja esta vacia, favor de elegir una opcion!',
+                        'warning'
+                    )
+                } else {
+                    let paramBaja = `${claBaja}|${motBaja}|${expBaja}`;
+
+                    console.log(paramBaja);
+                }
             });
 
 
