@@ -20,8 +20,9 @@
   <div class="card-body text-center">
     <h5 class="card-title">Administrar Empleado</h5>
     <div class="btn-group-vertical">
-      <button class="btn btn-block btn-info mb-2" id="btnModificar">Modificar datos</button>
-      <button class="btn btn-block btn-danger" id="btnBaja">Dar de baja</button>
+      <button class="btn btn-block btn-lg btn-info mb-2" id="btnModificar">Modificar datos</button>
+      <button class="btn btn-block btn-lg btn-danger mb-2" id="btnBaja">Dar de baja</button>
+      <button class="btn btn-block btn-lg btn-secondary" id="btnCambioPuesto">Cambio de Puesto</button>
     </div>
   </div>
   <div class="card-footer">

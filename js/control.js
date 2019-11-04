@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar')
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -1503,6 +1503,8 @@ $(document).ready(function () {
                     statusEmpleado.addClass('text-danger');
                     statusEmpleado.removeClass('text-success');
                     labelSt = 'BAJA';
+                    btnBaja.addClass('d-none');
+                    $('#btnCambioPuesto').addClass('d-none');
                 } else {
                     statusEmpleado.removeClass('text-danger');
                     statusEmpleado.addClass('text-success');
@@ -1666,16 +1668,12 @@ $(document).ready(function () {
             });
 
             //DAR DE BAJA EMPLEADO
-            btnBaja.click(async function () {
+            $('#btnCambioPuesto').click(async function () {
                 var action = 'bajaEmpleado';
                 const { value: razonBaja } = await Swal.fire({
                     title: 'Razón de la baja',
                     input: 'select',
                     inputOptions: {
-                        abandono: 'Abandono',
-                        despido: 'Despido',
-                        renuncia: 'Renuncia',
-                        contrato: 'Contrato',
                         bpcdp: 'Baja por cambio de puesto'
                     },
                     inputPlaceholder: 'Causa de la baja',
@@ -1683,9 +1681,10 @@ $(document).ready(function () {
 
                 if (razonBaja) {
                     const { value: comentariosBaja } = await Swal.fire({
-                        input: 'textarea',
+                        input: 'text',
                         title: 'Comentarios',
                         inputPlaceholder: 'Comentarios de la baja del empleado...',
+                        inputValue: 'Baja por cambio de puesto',
                         inputAttributes: {
                             'aria-label': 'Comentarios de la baja del empleado'
                         },
@@ -1749,7 +1748,7 @@ $(document).ready(function () {
 
             });
 
-            btnBajaNULL.click(async function () {
+            btnBaja.click(function () {
                 let empleadoBaja = $('#txtNomina').html()
                 localStorage.setItem('empleadoBaja', $('#txtNomina').html());
                 var url = "index.php?request=empleadoBaja";
@@ -1919,8 +1918,42 @@ $(document).ready(function () {
                     )
                 } else {
                     let paramBaja = `${claBaja}|${motBaja}|${expBaja}`;
-
-                    console.log(paramBaja);
+                    action = 'bajaEmpleado';
+                    console.log(empleado_baja + empleado_activo);
+                    $.ajax({
+                        type: 'POST',
+                        url: backendURL,
+                        data: {
+                            action: action,
+                            nominaEmpleado: empleado_baja,
+                            razonBaja: paramBaja,
+                            comentariosBaja: comBaja,
+                            fechaBaja: fechaBaja,
+                            empleadoControl: empleado_activo
+                        }
+                    }).done(function (response) {
+                        respuesta = JSON.parse(response);
+                        let estadoRespuesta = respuesta.estado;
+                        console.log(respuesta);
+                        if (estadoRespuesta === 'OK') {
+                            Swal.fire({
+                                title: 'Baja Exitosa',
+                                text: 'La persona fue dada de baja en el sistema',
+                                type: 'info'
+                            })
+                                .then(resultado => {
+                                    if (resultado.value) {
+                                        history.back();
+                                    }
+                                })
+                        } else {
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Ocurrio un error al procesar los datos',
+                                type: 'error'
+                            })
+                        }
+                    });
                 }
             });
 
