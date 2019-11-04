@@ -45,6 +45,9 @@
               case 'modificar-empleado':
                 include 'inc/templates/empleados/modificar.php';
                 break;
+              case 'empleadoBaja':
+                  include 'inc/templates/empleados/baja-empleado.php';
+                  break;
               case 'reingreso-empleado':
                   include 'inc/templates/empleados/reingreso.php';
                   break;

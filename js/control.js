@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar')
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -1542,7 +1542,7 @@ $(document).ready(function () {
                     action = 'revisarImagen';
                 $("#empImagen").attr('src', urlFoto);
                 $('#txtTitulo').html('DATOS GENERALES DEL EMPLEADO <strong>' + rowInfo.numero_nomina + '</strong>');
-                $('#txtNomina').html('<strong>' + rowInfo.numero_nomina + '</strong>');
+                $('#txtNomina').html(rowInfo.numero_nomina);
                 $('#txtNombre').text(rowInfo.nombre_largo);
                 $('#txtPuesto').text(rowInfo.puesto);
                 $('#txtSucursal').text(rowInfo.sucursal);
@@ -1667,87 +1667,53 @@ $(document).ready(function () {
 
             //DAR DE BAJA EMPLEADO
             btnBaja.click(async function () {
-                var action = 'bajaEmpleado';
-                const { value: razonBaja } = await Swal.fire({
-                    title: 'Razón de la baja',
-                    input: 'select',
-                    inputOptions: {
-                        abandono: 'Abandono',
-                        despido: 'Despido',
-                        renuncia: 'Renuncia',
-                        contrato: 'Contrato',
-                        bpcdp: 'Baja por cambio de puesto'
-                    },
-                    inputPlaceholder: 'Causa de la baja',
-                })
+                let empleadoBaja = $('#txtNomina').html()
+                localStorage.setItem('empleadoBaja', $('#txtNomina').html());
+                var url = "index.php?request=empleadoBaja";
+                    // newTab = window.open(url, '_blank');
+                    $(location).attr('href', url);
+            });
+        break;
+        case 'empleadoBaja':
+            let empleado_baja = localStorage.getItem('empleadoBaja');
+            var action = 'mostrar-empleado';
+            localStorage.removeItem('empleadoBaja');
+            console.log(empleado_baja);
 
-                if (razonBaja) {
-                    const { value: comentariosBaja } = await Swal.fire({
-                        input: 'textarea',
-                        title: 'Comentarios',
-                        inputPlaceholder: 'Comentarios de la baja del empleado...',
-                        inputAttributes: {
-                            'aria-label': 'Comentarios de la baja del empleado'
-                        },
-                        showCancelButton: true
-                    })
-
-                    if (comentariosBaja) {
-                        const { value: fechaBaja } = await Swal.fire({
-                            title: 'Fecha de baja',
-                            html:
-                                '<input type="date" class="form-control" id="txtfechaBaja" value="<?php echo date("Y-m-d");?>',
-                            showCancelButton: true,
-                            preConfirm: () => {
-                                return [
-                                    document.getElementById('txtfechaBaja').value
-                                ]
-                            }
-                        })
-
-                        if (fechaBaja) {
-                            let fecha_Baja = JSON.stringify(fechaBaja);
-                            fecha_Baja = fecha_Baja.substr(2, 10);
-                            $.ajax({
-                                type: 'POST',
-                                url: backendURL,
-                                data: {
-                                    action: action,
-                                    nominaEmpleado: codigoEmpleado,
-                                    razonBaja: razonBaja,
-                                    comentariosBaja: comentariosBaja,
-                                    fechaBaja: fecha_Baja,
-                                    empleadoControl: empleado_activo
-                                }
-                            }).done(function (response) {
-                                respuesta = JSON.parse(response);
-                                let estadoRespuesta = respuesta.estado;
-                                console.log(respuesta);
-                                if (estadoRespuesta === 'OK') {
-                                    Swal.fire({
-                                        title: 'Baja Exitosa',
-                                        text: 'La persona fue dada de baja en el sistema',
-                                        type: 'info'
-                                    })
-                                        .then(resultado => {
-                                            if (resultado.value) {
-                                                location.reload();
-                                            }
-                                        })
-                                } else {
-                                    Swal.fire({
-                                        title: 'Error',
-                                        text: 'Ocurrio un error al procesar los datos',
-                                        type: 'error'
-                                    })
-                                }
-                            });
+            var dataEmp = new FormData();
+            dataEmp.append('action', action);
+            dataEmp.append('prop', empleado_baja);
+            var xmlhr = new XMLHttpRequest();
+            xmlhr.open('POST', backendURL, true);
+            xmlhr.onload = function () {
+                if (this.status === 200) {
+                    var respuesta = JSON.parse(xmlhr.responseText);
+                    if (respuesta.estado === 'OK') {
+                        var informacion = respuesta.informacion;
+                        for (var i in informacion) {
+                            imprimir_Empleado(informacion[i]);
                         }
-
+                    } else if (respuesta.status === 'error') {
+                        var informacion = respuesta.informacion;
                     }
                 }
+            }
+            xmlhr.send(dataEmp);
 
+            function imprimir_Empleado(rowInfo) {
+                $('#txtNomina').html('Nómina: ' + rowInfo.numero_nomina);
+                $('#txtNombre').html('Nombres: ' + rowInfo.nombre_largo);
+                $('#txtSucursal').html('Sucursal: ' + rowInfo.sucursal);
+                $('#txtAlta').html('Fecha Alta: ' + rowInfo.fechaAlta);
+            }
+
+            $("#btnBajaEmpleado").click(function (e) {
+                e.preventDefault();
+                let empleado_Baja = $('#txtNomina').html()
+                console.log(empleado_Baja);
             });
+
+
         break;
         //PERFIL DEL EMPLEADO
         case 'perfil':

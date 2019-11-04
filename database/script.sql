@@ -363,6 +363,24 @@ CREATE TABLE [dbo].[tbemp_permisos](
 ) ON [PRIMARY]
 GO
 
+/*CREAR TABLA SUCURSALES*/
+USE [MEXQAPPTEMP]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbcodigos](
+	[id_codigo] [int] IDENTITY(1,1) NOT NULL,
+	[codigo] [varchar](15) NOT NULL,
+	[descripcion] [varchar](500) DEFAULT '',
+	[created_at] [datetime],
+	[created_by] [char](10) DEFAULT '00001',
+	[updated_at] [datetime] default GETDATE(),
+	[updated_by] [char](10) DEFAULT '00001'
+) ON [PRIMARY]
+GO
+
 INSERT INTO tbemp_permisos (numero_nomina,created_at,emp_proy) VALUES ('26692',GETDATE(),5)
 SELECT * FROM tbemp_permisos ORDER BY emp_proy
 --UPDATE tbemp_permisos SET emp_proy = 2 WHERE numero_nomina = '19905'
