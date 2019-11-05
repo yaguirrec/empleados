@@ -42,6 +42,7 @@
                     <th scope="col">Baja</th>
                     <th scope="col">Reg Patronal</th>
                     <th scope="col">Nomina</th>
+                    <th scope="col">Motivo Baja</th>
                     <th scope="col">Acuse Baja</th>
                     <th scope="col">Procesada Baja</th>
                 </tr>

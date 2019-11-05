@@ -1082,8 +1082,12 @@ $(document).ready(function () {
         
                         function tablaBajas(rowInfo) {
                             var row = $("<tr>"),
+                                motivoBaja = rowInfo.bajaMotivo,
                                 acuse = rowInfo.baja_acuse,
                                 procesada = rowInfo.baja_procesada;
+
+                            if(motivoBaja == null)
+                                motivoBaja = 'No especificado';
         
                             if(acuse == null || acuse == ''){
                                 acuse = '';
@@ -1107,6 +1111,7 @@ $(document).ready(function () {
                             row.append($("<td> " + rowInfo.fechaBaja + " </td>"));
                             row.append($("<td> " + rowInfo.registro_patronal + " </td>"));
                             row.append($("<td> " + rowInfo.registro_patronal + ' ' + rowInfo.tipo_nomina + " </td>"));
+                            row.append($("<td> " + motivoBaja + " </td>"));
                             row.append($("<td><a href='assets/attached/Bajas/Acuses/" + rowInfo.baja_acuse + ".zip' target='_blank'>" + acuse + "</a></td>"));
                             row.append($("<td><a href='assets/attached/Bajas/Procesadas/" + rowInfo.baja_procesada + ".zip' target='_blank'>" + procesada + "</a></td>"));
                         }
@@ -1524,7 +1529,7 @@ $(document).ready(function () {
 
                 labelNomina = (labelNomina === 'S' ? 'Sem' : 'Quin');
                 labelGenero = (labelGenero === 'F' ? 'Femenino' : 'Masculino');
-                labelEscolaridad = (labelEscolaridad === 'b_tecnico' ? 'Bachillerato' : labelEscolaridad);
+                labelEscolaridad = (labelEscolaridad === 'B_TECNICO' ? 'Bachillerato' : labelEscolaridad);
 
                 if (labelEstadoCivil === 'S')
                     labelEstadoCivil = 'Soltero(a)';
@@ -1535,11 +1540,7 @@ $(document).ready(function () {
                 else if (labelEstadoCivil === 'V')
                     labelEstadoCivil = 'Viudo(a)';
             
-
-                let nombrePadre = nombreCompletoPadre.split('|');
-                let nombreMadre = nombreCompletoMadre.split('|');
-
-                var nomina = rowInfo.numero_nomina,
+                var nomina = rowInfo.numero_nomina, 
                     urlFoto = 'assets/files/' + nomina + '/' + nomina + '.jpg',
                     action = 'revisarImagen';
                 $("#empImagen").attr('src', urlFoto);
@@ -1567,8 +1568,8 @@ $(document).ready(function () {
                 $('#txtID').html('<strong> Identificacion: </strong>' + rowInfo.identificacion);
                 $('#txtIDN').html('<strong> Numero Identificacion: </strong>' + rowInfo.numero_identificacion);
                 
-                $('#txtNombrePadre').html('<strong> Nombre del padre: </strong>' + nombrePadre[2] + ' ' + nombrePadre[0] + ' ' + nombrePadre[1]);
-                $('#txtNombreMadre').html('<strong> Nombre de la madre: </strong>' + nombreMadre[2] + ' ' + nombreMadre[0] + ' ' + nombreMadre[1]);
+                $('#txtNombrePadre').html('<strong> Nombre del padre: </strong>' + rowInfo.nombrePadre + ' ' + rowInfo.apellidoPaternoPadre + ' ' + rowInfo.apellidoMaternoPadre);
+                $('#txtNombreMadre').html('<strong> Nombre de la madre: </strong>' + rowInfo.nombreMadre + ' ' + rowInfo.apellidoPaternoMadre + ' ' + rowInfo.apellidoMaternoMadre);
 
                 $('#txtEstado').html('<strong> Estado: </strong>' + rowInfo.estado);
                 $('#txtMunicipio').html('<strong> Municipio: </strong>' + rowInfo.municipio);
@@ -1592,6 +1593,11 @@ $(document).ready(function () {
                 if (statusEmpleadoR === 'B') {
                 $('#txtBajaAcuse').html('<strong> Acuse Baja: </strong> <a href="assets/attached/Acuses/'+rowInfo.baja_acuse+'.zip" target="_blank">'+rowInfo.baja_acuse+'</a>');
                 $('#txtBajaProcesada').html('<strong> Acuse Baja: </strong> <a href="assets/attached/Acuses/'+rowInfo.baja_procesada+'.zip" target="_blank">'+rowInfo.baja_procesada+'</a>');
+                $('#txtseccionBaja').html('<strong> INFORMACION DE LA BAJA DEL EMPLEADO </strong>');
+                $('#txtclasificacionBaja').html('<strong> Clasificacion: </strong>' + rowInfo.bajaClasficacion);
+                $('#txtmotivoBaja').html('<strong> Motivo: </strong>' + rowInfo.bajaMotivo);
+                $('#txtexplicacionBaja').html('<strong> Explicacion: </strong>' + rowInfo.bajaExplicacion);
+                $('#txtcomentarioBaja').html('<strong> Comentarios: </strong>' + rowInfo.bajaComentario);
                 }
 
 

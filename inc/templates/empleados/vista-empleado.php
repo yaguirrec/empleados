@@ -107,11 +107,22 @@
               <div class="col-sm"><p id="txtNumeroContacto"></p></div>
             </div>
 
-            <div class="row">
+            <div class="row mt-2">
               <div class="col-sm"><p id="txtAltaAcuse"></p></div>
               <div class="col-sm"><p id="txtAltaProcesada"></p></div>
               <div class="col-sm"><p id="txtBajaAcuse"></p></div>
               <div class="col-sm"><p id="txtBajaProcesada"></p></div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-sm text-center"><p id="txtseccionBaja"></p></div>
+            </div>
+            <div class="row">
+              <div class="col-sm"><p id="txtclasificacionBaja"></p></div>
+              <div class="col-sm"><p id="txtmotivoBaja"></p></div>
+            </div>
+            <div class="row">
+              <div class="col-sm"><p id="txtexplicacionBaja"></p></div>
+              <div class="col-sm"><p id="txtcomentarioBaja"></p></div>
             </div>
 
 
