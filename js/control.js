@@ -15,7 +15,7 @@ $(document).ready(function () {
     let url_dev = 'http://localhost/';
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
-    let version = 'V.0411191';
+    let version = 'V.0611191DEV';
 
     $('#version').html(version);
 
@@ -3228,16 +3228,18 @@ $(document).ready(function () {
                 btnCancelar = $('#btnCancelar'),
                 form_nPuesto = $('#form_nPuesto'),
                 btnGuardarPuesto = $('#btnGuardarPuesto'),
-                btnEditarPuesto = $('#btnEditarPuesto'),
+                btnActualizarPuesto = $('#btnActualizarPuesto'),
                 txtPuestoL = $('#txttPuesto'),
                 txtCelulaL = $('#txtnDepartamento');
 
+
             btnNuevo.on('click', function () {
                 // limpiarCampos();
+                console.log(3);
                 panelNuevo.removeClass('d-none');
                 btnGuardarPuesto.removeClass('d-none');
                 btnNuevo.addClass('d-none');
-                btnEditarPuesto.addClass('d-none');
+                btnActualizarPuesto.addClass('d-none');
                 llenarTipoPuesto();
                 llenarDepartamento();
             });
@@ -3305,9 +3307,9 @@ $(document).ready(function () {
                                 ("<tr><td class='trCode'>" + puesto[i].codigo + " </td>" +
                                     "<td>" + puesto[i].nombre + " </td>" +
                                     "<td>" + puesto[i].descripcion + " </td>" +
-                                    "<td>" + puesto[i].id_nivel + " </td>" +
-                                    "<td>" + puesto[i].created_at.date + " </td>" +
-                                    "<td>" + puesto[i].updated_at.date + " </td>" +
+                                    "<td class='d-none'>" + puesto[i].id_nivel + " </td>" +
+                                    "<td>" + (puesto[i].created_at.date).substr(0,10) + " </td>" +
+                                    "<td>" + (puesto[i].updated_at.date).substr(0,10) + " </td>" +
                                     "<td>" + puesto[i].updated_by + " </td>" +
                                     "<td><a class='btn btn-primary btnEditarRegistro text-white btn-block'" +
                                     "data-codigo='" + puesto[i].codigo + "'" +
@@ -3326,9 +3328,10 @@ $(document).ready(function () {
                                 id_nivel = $((this)).data('id_nivel'),
                                 departamento = $((this)).data('departamento'),
                                 descripcion = $((this)).data('descripcion'),
-                                nombre = $((this)).data('nombre');
+                                nombre = $((this)).data('nombre'),
+                                codigo = $((this)).data('codigo');
                             btnNuevo.addClass('d-none');
-                            btnEditarPuesto.removeClass('d-none');
+                            btnActualizarPuesto.removeClass('d-none');
                             panelNuevo.removeClass('d-none');
                             setTimeout(function () {
                                 $("#txttPuesto").val(id_nivel).attr('selected', true);
@@ -3341,8 +3344,8 @@ $(document).ready(function () {
                                     $("#txtnDepartamento").val(departamento).attr('selected', true);
                             }, 150);
                             $('#txtdPuesto').val(descripcion);
+                            $('#txtCodigoPuesto').val(codigo);
                         });
-
                     }
                 });
             }
@@ -3350,8 +3353,62 @@ $(document).ready(function () {
 
             llenarTablaPuestos();
 
+            btnActualizarPuesto.on('click', function (e) {
+                e.preventDefault();
+                let puestoNivel = $('#txttPuesto').val(),
+                    puestoNombre = $('#txtnPuesto').val(),
+                    puestoDepartamento = $('#txtnDepartamento').val(),
+                    puestoDescripcion = $('#txtdPuesto').val(),
+                    puestoCodigo = $('#txtCodigoPuesto').val(),
+                    puestoCorto = (puestoNombre.split(/\s/).reduce((response,word)=> response+=word.slice(0,1),'')).toUpperCase();
+
+                if (puestoNombre.trim() === '' || puestoDescripcion.trim() === '') {
+                    Swal.fire({
+                        position: 'center',
+                        type: 'warning',
+                        title: 'Debe llenar todos los datos',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                } else {
+                    $.ajax({
+                        type: 'POST',
+                        url: backendURL,
+                        data: { action: 'actualizarPuesto', puestoCodigo: puestoCodigo, puestoNivel: puestoNivel, puestoNombre : puestoNombre,puestoCorto : puestoCorto, puestoDepartamento : puestoDepartamento, puestoDescripcion : puestoDescripcion, empleadoControl: empleado_activo},
+                        success: function (response) {
+                            let respuesta = JSON.parse(response);
+                            if (respuesta.estado === 'OK') {
+                                Swal.fire({
+                                    title: 'Correcto',
+                                    text: 'Puesto actualizado correctamente!',
+                                    type: 'success'
+                                })
+                                    .then(resultado => {
+                                        if (resultado.value) {
+                                            // location.reload();
+                                            window.location.href = 'index.php?request=puestos';
+                                        }
+                                    })
+                            } else {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: respuesta.informacion,
+                                    type: 'error'
+                                })
+                                    .then(resultado => {
+                                        if (resultado.value) {
+                                            // location.reload();
+                                        }
+                                    })
+                            }
+                        }
+                    });
+                }
+            });
+
             btnGuardarPuesto.on('click', function (e) {
                 e.preventDefault();
+                
                 let puestoNivel = $('#txttPuesto').val(),
                     puestoNombre = $('#txtnPuesto').val(),
                     puestoDepartamento = $('#txtnDepartamento').val(),
@@ -3389,7 +3446,7 @@ $(document).ready(function () {
                             } else {
                                 Swal.fire({
                                     title: 'Error',
-                                    text: 'No se realizo el guardado',
+                                    text: respuesta.informacion,
                                     type: 'error'
                                 })
                                     .then(resultado => {

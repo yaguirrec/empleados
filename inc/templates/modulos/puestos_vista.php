@@ -19,7 +19,7 @@
             <th scope="col">Código</th>
             <th scope="col">Nombre</th>
             <th scope="col">Descripcion</th>
-            <th scope="col">Nivel</th>
+            <th class="d-none" scope="col">Nivel</th>
             <th scope="col">Fecha Creado</th>
             <th scope="col">Fecha Actualizado</th>
             <th scope="col">Usuario</th>
