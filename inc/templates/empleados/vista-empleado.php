@@ -117,6 +117,7 @@
               <div class="col-sm text-center"><p id="txtseccionBaja"></p></div>
             </div>
             <div class="row">
+              <div class="col-sm"><p id="txtReingreso"></p></div>
               <div class="col-sm"><p id="txtclasificacionBaja"></p></div>
               <div class="col-sm"><p id="txtmotivoBaja"></p></div>
             </div>

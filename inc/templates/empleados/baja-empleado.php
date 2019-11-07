@@ -33,6 +33,14 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-12">
+                        <div class="custom-control custom-checkbox mr-sm-2">
+                            <input type="checkbox" class="custom-control-input text-danger" id="cbReingreso">
+                            <label class="custom-control-label" for="cbReingreso">No permitir el reingreso del empleado?</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
                         <label for="txtComentario">Comentarios</label>
                         <textarea class="form-control" id="txtComentario" rows="3">Dado de baja en laborales.</textarea>
                     </div>

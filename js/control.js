@@ -15,7 +15,8 @@ $(document).ready(function () {
     let url_dev = 'http://localhost/';
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
-    let version = 'V.0611191DEV';
+
+    let version = 'V.0711191DEV';
 
     $('#version').html(version);
 
@@ -513,8 +514,9 @@ $(document).ready(function () {
 
             createXLSLFormatObj.push(xlsHeader);
             $.each(xlsRows, function (index, value) {
-                var innerRowData = [];
-                $("tbody").append('<tr><td>' + value.numero_nomina + '</td><td>' + value.Nombre + '</td><td>' + value.Puesto + '</td><td>' + '</td><td>' + value.fechaAlta + '</td><td>' + value.Sucursal + '</td><td>' + value.Celula + '</td><td>' + value.status + '</td></tr>');
+                var innerRowData = [],
+                    numeroNomina = value.numero_nomina;
+                $("tbody").append('<tr><td>' + numeroNomina + '</td><td>' + value.Nombre + '</td><td>' + value.Puesto + '</td><td>' + '</td><td>' + value.fechaAlta + '</td><td>' + value.Sucursal + '</td><td>' + value.Celula + '</td><td>' + value.status + '</td></tr>');
                 $.each(value, function (ind, val) {
                     innerRowData.push(val);
                 });
@@ -1501,8 +1503,8 @@ $(document).ready(function () {
                     labelGenero = rowInfo.sexo,
                     labelEstadoCivil = rowInfo.estado_civil,
                     labelEscolaridad = rowInfo.escolaridad,
-                    nombreCompletoMadre = rowInfo.nombre_madre,
-                    nombreCompletoPadre = rowInfo.nombre_padre;
+                    valueReingreso = rowInfo.bajaReingreso,
+                    labelReingreso;
 
                 if (statusEmpleadoR === 'B') {
                     statusEmpleado.addClass('text-danger');
@@ -1526,8 +1528,9 @@ $(document).ready(function () {
                     labelClasificacion = 'Especial';
                 else if (labelClasificacion === 'B')
                     labelClasificacion = 'Becario';
-
+                     
                 labelNomina = (labelNomina === 'S' ? 'Sem' : 'Quin');
+                labelReingreso = (valueReingreso === '0' ? 'PERMITIR REINGRESO' : 'NO PERMITIR EL REINGRESO');
                 labelGenero = (labelGenero === 'F' ? 'Femenino' : 'Masculino');
                 labelEscolaridad = (labelEscolaridad === 'B_TECNICO' ? 'Bachillerato' : labelEscolaridad);
 
@@ -1539,6 +1542,10 @@ $(document).ready(function () {
                     labelEstadoCivil = 'Divorciado(a)';
                 else if (labelEstadoCivil === 'V')
                     labelEstadoCivil = 'Viudo(a)';
+
+                if (valueReingreso === '0') $('#txtReingreso').addClass('text-success'); else $('#txtReingreso').addClass('text-danger');
+
+                    
             
                 var nomina = rowInfo.numero_nomina, 
                     urlFoto = 'assets/files/' + nomina + '/' + nomina + '.jpg',
@@ -1594,6 +1601,7 @@ $(document).ready(function () {
                 $('#txtBajaAcuse').html('<strong> Acuse Baja: </strong> <a href="assets/attached/Acuses/'+rowInfo.baja_acuse+'.zip" target="_blank">'+rowInfo.baja_acuse+'</a>');
                 $('#txtBajaProcesada').html('<strong> Acuse Baja: </strong> <a href="assets/attached/Acuses/'+rowInfo.baja_procesada+'.zip" target="_blank">'+rowInfo.baja_procesada+'</a>');
                 $('#txtseccionBaja').html('<strong> INFORMACION DE LA BAJA DEL EMPLEADO </strong>');
+                $('#txtReingreso').html('<strong> ' + labelReingreso + ' </strong>');
                 $('#txtclasificacionBaja').html('<strong> Clasificacion: </strong>' + rowInfo.bajaClasficacion);
                 $('#txtmotivoBaja').html('<strong> Motivo: </strong>' + rowInfo.bajaMotivo);
                 $('#txtexplicacionBaja').html('<strong> Explicacion: </strong>' + rowInfo.bajaExplicacion);
@@ -1900,10 +1908,12 @@ $(document).ready(function () {
                     claBaja = $('#txtClasificacion').val(),
                     motBaja = $('#txtMotivo').val(),
                     expBaja = $('#txtExplicacion').val(),
+                    ctrlBaja = 0,
                     comBaja = $('#txtComentario').val();
                 e.preventDefault();
                 let empleado_Baja = $('#txtNomina').html();
-
+                if($('#cbReingreso').is(':checked'))
+                    ctrlBaja = 1;
                 if(claBaja.length === 0){
                     Swal.fire(
                         'Seleccionar opcion!',
@@ -1923,9 +1933,8 @@ $(document).ready(function () {
                         'warning'
                     )
                 } else {
-                    let paramBaja = `${claBaja}|${motBaja}|${expBaja}`;
+                    let paramBaja = `${claBaja}|${motBaja}|${expBaja}|${ctrlBaja}`;
                     action = 'bajaEmpleado';
-                    console.log(empleado_baja + empleado_activo);
                     $.ajax({
                         type: 'POST',
                         url: backendURL,
@@ -2704,17 +2713,12 @@ $(document).ready(function () {
                 }
             });
 
-            //VALIDAR CURP
-            botonValidar.on("click", function (e) {
-                e.preventDefault();
-                txtCURP.val(textocurp);
-                let action = 'validaCURP',
-                    curp = txtCURP.val();
-                // console.log(`${action} ${curp}`);
+            //VALIDAR EL REINGRESO DEL EMPLEADO
+            let validarReingreso = (curp) => {
                 $.ajax({
                     type: 'POST',
                     url: backendURL,
-                    data: { action: action, curp: curp },
+                    data: { action: 'validaReingreso', curp: curp },
                     success: function (response) {
                         var respuesta = JSON.parse(response);
                         if (respuesta.informacion.length === 0) {
@@ -2724,22 +2728,43 @@ $(document).ready(function () {
                             txtTipo.val('Alta');
                             altaEmpleado.removeClass('d-none');
                         }else {
-                            let datoNomina = respuesta.informacion[0].numero_nomina;
-                            localStorage.setItem('codigoEmpleado', datoNomina);
-                            vcurp.addClass('d-none');
-                            Swal.fire({
-                                position: 'top-end',
-                                type: 'info',
-                                title: 'El CURP ya existe en la base de datos',
-                                showConfirmButton: false,
-                                timer: 1500
-                            })
-                            window.location.href = 'index.php?request=reingreso-empleado';
+                            let ctrlReingreso = respuesta.informacion[0].controlReingreso;
+                            let ctrlEmpleado = respuesta.informacion[0].numero_nomina;
+                            let ctrlNombre = respuesta.informacion[0].nombre_largo;
+                            if (ctrlReingreso === '1') {
+                                Swal.fire({
+                                    position: 'center',
+                                    type: 'warning',
+                                    title: 'Reingreso NO Permitido!',
+                                    text: 'No es posible reingresar a: ' + ctrlNombre + ' con Numero de nomina: ' + ctrlEmpleado + ', ya que asi se definio durante su baja en Recursos Humanos.',
+                                    showConfirmButton: false,
+                                    timer: 10000
+                                })
+                            }else{
+                                localStorage.setItem('codigoEmpleado', ctrlEmpleado);
+                                vcurp.addClass('d-none');
+                                Swal.fire({
+                                    position: 'top-end',
+                                    type: 'info',
+                                    title: 'El CURP ya existe en la base de datos',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                                window.location.href = 'index.php?request=reingreso-empleado';
+                            }
                         }
                     }
                 });
+            };
 
-            });
+
+            //VALIDAR CURP
+            botonValidar.on("click", function (e) {
+                e.preventDefault();
+                txtCURP.val(textocurp);
+                let curp = txtCURP.val();
+                validarReingreso(curp);
+            });            
 
             //VALIDAR CATEGORIA $$$
             txtSalarioMensual.focusout(function () {

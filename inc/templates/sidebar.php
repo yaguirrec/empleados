@@ -129,6 +129,18 @@
           </div>
         </div>
       </li>
+      <li class="nav-item administrador d-none">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#administrador" aria-expanded="true" aria-controls="administrador">
+          <i class="fas fa-fw fa-cog"></i>
+          <span>Módulo Administrador</span>
+        </a>
+        <div id="administrador" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Modulos</h6>
+            <a class="collapse-item" href="index.php?request=administrar">Administrar</a>
+          </div>
+        </div>
+      </li>
 
 
       <!-- Divider -->

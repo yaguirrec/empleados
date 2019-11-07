@@ -72,6 +72,9 @@
               case 'puestos':
                 include 'inc/templates/modulos/puestos_vista.php';
                 break;
+              case 'administrar':
+                include 'inc/templates/administracion/main.php';
+                break;
               default:
                 include 'inc/templates/main-content.php';
                 break;
