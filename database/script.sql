@@ -381,9 +381,9 @@ CREATE TABLE [dbo].[tbcodigos](
 ) ON [PRIMARY]
 GO
 
-INSERT INTO tbemp_permisos (numero_nomina,created_at,emp_proy) VALUES ('26692',GETDATE(),5)
-SELECT * FROM tbemp_permisos ORDER BY emp_proy
---UPDATE tbemp_permisos SET emp_proy = 2 WHERE numero_nomina = '19905'
+INSERT INTO tbemp_permisos (numero_nomina,created_at,emp_proy) VALUES ('22720',GETDATE(),2)
+SELECT * FROM tbemp_permisos ORDER BY numero_nomina
+--UPDATE tbemp_permisos SET emp_proy = 1 WHERE numero_nomina = '22720'
 SELECT * FROM P1ACCESOWEB WHERE employee = '19905'
 
 SELECT * FROM [dbo].[departamentos_nomipaq]

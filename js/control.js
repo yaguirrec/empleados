@@ -240,6 +240,24 @@ $(document).ready(function () {
             };
     };
 
+    //LLENAR SUCURSAL TABULADOR
+    let sucursalTabulador = () => {
+        $.ajax({
+            type: 'POST',
+            url: backendURL,
+            data: { action: 'sucursalTabulador' },
+            success: function (response) {
+                let respuesta = JSON.parse(response);
+                let sucursalTab = respuesta.informacion,
+                    campo = '<option value="">Selecciona un Sucursal...</option>';
+                for (var i in sucursalTab) {
+                    campo += '<option value="' + sucursalTab[i].code_value + '">' + sucursalTab[i].code_value + '</option>';
+                }
+                $('#txtTabSucursal').html(campo);
+            }
+        });
+    }
+
     let listarDatosEmpleados = (numero_nomina) => {
         listarSucursales();
         $.ajax({
@@ -2067,10 +2085,14 @@ $(document).ready(function () {
                 if (respuesta.estado === 'OK') {
                     let datos = respuesta.informacion[0];
                     let nombreCompletoMadre = datos.nombre_madre,
-                        nombreCompletoPadre = datos.nombre_padre;
+                        nombreCompletoPadre = datos.nombre_padre,
+                        tabulador = datos.tabulador;
                     
                     let nombrePadre = nombreCompletoPadre.split('|');
                     let nombreMadre = nombreCompletoMadre.split('|');
+                    let vTabulador = tabulador.split('|');
+                    
+                    sucursalTabulador();
 
                     $("#txtNomina").val(datos.numero_nomina);
                     $("#txtTipo").val(datos.status);
@@ -2136,6 +2158,8 @@ $(document).ready(function () {
                         $("#txtEdo").val(datos.estado);
                         $("#txtMunicipio").val(datos.municipio);
                         $("#txtLocalidad").val(datos.localidad);
+                        $("#txtTabClave").val(vTabulador[0]);
+                        $("#txtTabSucursal").val(vTabulador[1]);
                     }, 280);
 
                     $("#txtClasificacion").focusout(function(){
@@ -2691,6 +2715,8 @@ $(document).ready(function () {
                 ccurp = $("#campo-curp"),
                 genero = '';
 
+            
+
             ccurp.focusout(function () {
                 textocurp = $("#campo-curp").val();
                 //ASIGNAR FECHA NACIMIENTO DESDE CURP
@@ -2979,6 +3005,34 @@ $(document).ready(function () {
                 }
                 xmlJefe.send(listaJefe);
             });
+            
+            $('#txtTabClave').keypress(function(e){
+                $('#txtTabClave').css("border", "");
+            });
+
+            $('#txtTabSucursal').focus(function(e){
+                $('#txtTabSucursal').css("border", "");
+            });
+
+
+            //VALIDAR CODIGO TABULADOR
+            $('#txtTabClave').focusout(function (e) {
+                if (parseInt($("#txtTabClave").val()) > 100) {
+                    Swal.fire({
+                        position: 'center',
+                        type: 'warning',
+                        tittle: 'Error',
+                        text: 'EL codigo del tabulador debe ser menor a 100',
+                        showConfirmButton: false,
+                        timer: 1000
+                    });
+                    $('#txtTabClave').val('');
+                }
+            });
+
+            //LLENAR SUCURSAL TABULADOR
+            sucursalTabulador();
+            
 
             //CONTROL CODIGO POSTAL
             $("#txtCP").focusout(function () {
@@ -3070,6 +3124,7 @@ $(document).ready(function () {
                 e.preventDefault();
                 let nomina = $('#txtNomina').val(),
                     jefenomina = txtJefe.val(),
+                    claveTabulador = `${$('#txtTabClave').val()}|${$('#txtTabSucursal').val()}`,
                     tipoNomina = $('#txtTipoNomina').val(),
                     tipo = $('#txtTipo').val(),
                     sucursal = $('#txtSucursal').val(),
@@ -3122,7 +3177,24 @@ $(document).ready(function () {
                 rfcini = rfc.substr(0, 4);
                 rfcfin = rfc.substr(10, 3);
                 domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
-                if
+                //VALIDAR SI EL TABULADOR ES MANDATORIO
+                if($('#txtTabSucursal').val() === '' && $('#txtTabClave').val().trim() === ''){
+                    if(tipoNomina.trim() === 'S' && (clasificacion === 'O' || clasificacion === 'AO')){
+                        Swal.fire({
+                            position: 'center',
+                            type: 'warning',
+                            title: 'El tabulador es necesario',
+                            showConfirmButton: false,
+                            timer: 3500
+                        });
+                        $('#txtTabSucursal').css("border", "1px solid red");
+                        $('#txtTabSucursal').focus();
+                        $('#txtTabClave').css("border", "1px solid red");
+                        $('#txtTabClave').focus();
+                        $("html, body").animate({ scrollTop: 0 }, 500);
+                    }
+                }
+                else if
                     (
                     salarioDiario.trim() === '' || celula.trim() === '' ||
                     registro.trim() === '' || puesto.trim() === '' ||
@@ -3155,6 +3227,7 @@ $(document).ready(function () {
                             action: 'guardarEmpleado',
                             nomina: nomina,
                             jefenomina: jefenomina,
+                            claveTabulador: claveTabulador,
                             tipoNomina: tipoNomina,
                             tipo: tipo,
                             sucursal: sucursal,
