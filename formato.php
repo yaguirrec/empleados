@@ -10,6 +10,7 @@
     <p id="claveSocio"></p>
     <p id="empLote"></p>
     <p id="empFechaAlta"></p>
+    <p id="empTabulador"></p>
     <p id="empPuesto"></p>
     <p id="empCategoria"></p>
     <p id="empNomina"></p>

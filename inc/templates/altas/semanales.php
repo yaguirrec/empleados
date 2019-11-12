@@ -44,6 +44,7 @@
                     <th scope="col">Planta</th>
                     <th scope="col" class="d-none">Clave Socio</th>
                     <th scope="col">Fecha Alta</th>
+                    <th scope="col" class="d-none">Tabulador</th>
                     <th scope="col" class="d-none">Puesto</th>
                     <th scope="col" class="d-none">Clasificacion</th>
                     <th scope="col" class="d-none">Nomina</th>

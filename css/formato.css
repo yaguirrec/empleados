@@ -112,10 +112,18 @@ p{
     font-weight: bold;
 }
 
+#empTabulador{
+    top: 240; 
+    left: 93; 
+    font-size: 80%;
+    font-weight: bold;
+}
+
+
 #empPuesto{
     top: 240; 
-    left: 95; 
-    font-size: 80%;
+    left: 160; 
+    font-size: 70%;
     font-weight: bold;
 }
 

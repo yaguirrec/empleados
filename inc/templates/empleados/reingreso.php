@@ -90,7 +90,7 @@
                         <label for="txtTabSucursal">Sucursal Tabulador</label>
                         <select class="form-control" id="txtTabSucursal"></select>
                     </div>
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-8">
                         <label for="txtJefe">Jefe directo</label>
                         <select class="form-control text-uppercase" id="txtJefe">
                         </select>

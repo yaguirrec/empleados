@@ -28,9 +28,15 @@ if (check) {
                 fonacot = informacion.fonacot,
                 cuenta = informacion.cuenta,
                 lote = informacion.lote,
-                nombreCompletoPadre = informacion.nombre_padre;
+                nombreCompletoPadre = informacion.nombre_padre,
+                tabulador = informacion.tabulador;
 
             console.log(informacion);
+
+            if(tabulador === null){
+                tabulador = '000|XXX'
+            }
+            let vTabulador = tabulador.split('|');
 
             let nombrePadre = nombreCompletoPadre.split('|');
             let nombreMadre = nombreCompletoMadre.split('|');
@@ -47,6 +53,7 @@ if (check) {
             $('#empNombre').html(informacion.nombreEmpleado);
             $('#empApellidoPaterno').html(informacion.apellidoPaterno);
             $('#empApellidoMaterno').html(informacion.apellidoMaterno);
+            $('#empTabulador').html(vTabulador[0]+vTabulador[1]);
             $('#empPuesto').html(informacion.puesto);
             $('#empCategoria').html(`$${informacion.salario_diario}`);
             $('#empRFC').html(informacion.RFC);

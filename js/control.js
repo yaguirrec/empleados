@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar')
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V.0711191DEV';
+    let version = 'V.1111191';
 
     $('#version').html(version);
 
@@ -270,8 +270,16 @@ $(document).ready(function () {
             if (respuesta.estado === 'OK') {
                 var datos = respuesta.informacion[0];
                 let nombreCompletoMadre = datos.nombre_madre,
-                    nombreCompletoPadre = datos.nombre_padre;
+                    nombreCompletoPadre = datos.nombre_padre,
+                    tabulador = datos.tabulador;
+                    
+                if(tabulador === null){
+                    tabulador = '00|X'
+                }
+                let vTabulador = tabulador.split('|');
                 
+                sucursalTabulador();
+            
                 let nombrePadre = nombreCompletoPadre.split('|');
                 let nombreMadre = nombreCompletoMadre.split('|');
 
@@ -338,6 +346,8 @@ $(document).ready(function () {
                     $("#txtEdo").val(datos.estado);
                     $("#txtMunicipio").val(datos.municipio);
                     $("#txtLocalidad").val(datos.localidad);
+                    $("#txtTabClave").val(vTabulador[0]);
+                    $("#txtTabSucursal").val(vTabulador[1]);
                 }, 280);
 
                 $("#txtClasificacion").focusout(function(){
@@ -496,7 +506,7 @@ $(document).ready(function () {
     $("#exportInfo").click(function () {
         var action = 'json-empleados';
         var prop = (seccionActual === 'empleado' ? 'activos' : 'bajas');
-        var encabezados = (seccionActual === 'empleado' ? ["NOMINA", "NOMBRE", "PUESTO", "FECHA ALTA", "SUCURSAL", "AREA", "CELULA", "ESTADO"] : ["NOMINA", "NOMBRE", "PUESTO", "FECHA ALTA", "FECHA BAJA", "SUCURSAL", "AREA", "CELULA", "ESTADO"]);
+        var encabezados = (seccionActual === 'empleado' ? ["NOMINA", "NOMBRE", "TABULADOR", "PUESTO", "FECHA ALTA", "SUCURSAL", "AREA", "CELULA", "ESTADO"] : ["NOMINA", "NOMBRE", "TABULADOR", "PUESTO", "FECHA ALTA", "FECHA BAJA", "SUCURSAL", "AREA", "CELULA", "ESTADO"]);
         var titulo = (seccionActual === 'empleado' ? 'Empleados activos' : 'Empleados inactivos');
         $('.seccionTitulo').text(titulo);
         if (seccionActual === 'empleado') {
@@ -534,7 +544,7 @@ $(document).ready(function () {
             $.each(xlsRows, function (index, value) {
                 var innerRowData = [],
                     numeroNomina = value.numero_nomina;
-                $("tbody").append('<tr><td>' + numeroNomina + '</td><td>' + value.Nombre + '</td><td>' + value.Puesto + '</td><td>' + '</td><td>' + value.fechaAlta + '</td><td>' + value.Sucursal + '</td><td>' + value.Celula + '</td><td>' + value.status + '</td></tr>');
+                $("tbody").append('<tr><td>' + numeroNomina + '</td><td>' + value.Nombre + '</td><td>' + value.tabulador + '</td><td>' + value.Puesto + '</td><td>' + '</td><td>' + value.fechaAlta + '</td><td>' + value.Sucursal + '</td><td>' + value.Celula + '</td><td>' + value.status + '</td></tr>');
                 $.each(value, function (ind, val) {
                     innerRowData.push(val);
                 });
@@ -618,6 +628,7 @@ $(document).ready(function () {
                 row.append($("<td class='trCode'>" + rowInfo.numero_nomina + " </td>"));
                 // NOMINA DEL EMPLEADO
                 row.append($("<td class='text-left'> " + rowInfo.Nombre + " </td>"));
+                row.append($("<td class='text-left'> " + rowInfo.tabulador + " </td>"));
                 row.append($("<td class='text-left'> " + rowInfo.Puesto + " </td>"));
                 row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
                 if (st === 'B') {
@@ -1440,6 +1451,7 @@ $(document).ready(function () {
                 row.append($("<td>" + rowInfo.planta + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.claveSocio + " </td>"));
                 row.append($("<td>" + rowInfo.fechaAlta + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.tabulador + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.puesto + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.clasificacion + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.nomina + " </td>"));
@@ -1522,7 +1534,13 @@ $(document).ready(function () {
                     labelEstadoCivil = rowInfo.estado_civil,
                     labelEscolaridad = rowInfo.escolaridad,
                     valueReingreso = rowInfo.bajaReingreso,
-                    labelReingreso;
+                    labelReingreso,
+                    tabulador = rowInfo.tabulador;
+
+                if(tabulador === null){
+                    tabulador = '000|XXX'
+                }
+                let vTabulador = tabulador.split('|');
 
                 if (statusEmpleadoR === 'B') {
                     statusEmpleado.addClass('text-danger');
@@ -1590,6 +1608,7 @@ $(document).ready(function () {
                 $('#txtEstadoCivil').html('<strong> Estado Civil: </strong>' + labelEstadoCivil);
                 $('#txtEducacion').html('<strong> Escolaridad: </strong>' + labelEscolaridad);
 
+                $('#txtTabulador').html('<strong> Tabulador: </strong>' + vTabulador[0]+vTabulador[1]);
                 $('#txtID').html('<strong> Identificacion: </strong>' + rowInfo.identificacion);
                 $('#txtIDN').html('<strong> Numero Identificacion: </strong>' + rowInfo.numero_identificacion);
                 
@@ -2090,6 +2109,9 @@ $(document).ready(function () {
                     
                     let nombrePadre = nombreCompletoPadre.split('|');
                     let nombreMadre = nombreCompletoMadre.split('|');
+                    if(tabulador === null){
+                        tabulador = '00|X'
+                    }
                     let vTabulador = tabulador.split('|');
                     
                     sucursalTabulador();
@@ -2184,6 +2206,7 @@ $(document).ready(function () {
                 e.preventDefault();
                 let nomina = $('#txtNomina').val(),
                     jefenomina = $('#txtJefe').val(),
+                    claveTabulador = `${$('#txtTabClave').val()}|${$('#txtTabSucursal').val()}`,
                     tipoNomina = $('#txtTipoNomina').val(),
                     tipo = $('#txtTipo').val(),
                     lote = $("#txtLote").val(),
@@ -2268,6 +2291,7 @@ $(document).ready(function () {
                             action: 'modificarEmpleado',
                             nomina: nomina,
                             jefenomina: jefenomina,
+                            claveTabulador : claveTabulador,
                             tipoNomina: tipoNomina,
                             empleado_status: tipo,
                             lote : lote,
@@ -2522,6 +2546,7 @@ $(document).ready(function () {
                 e.preventDefault();
                 nomina = $('#txtNomina').val(),
                 jefenomina = $('#txtJefe').val(),
+                claveTabulador = `${$('#txtTabClave').val()}|${$('#txtTabSucursal').val()}`,
                 tipoNomina = $('#txtTipoNomina').val(),
                 tipo = $('#txtTipo').val(),
                 lote = $("#txtLote").val(),
@@ -2607,6 +2632,7 @@ $(document).ready(function () {
                             action: 'modificarEmpleado',
                             nomina: nomina,
                             jefenomina: jefenomina,
+                            claveTabulador : claveTabulador,
                             tipoNomina: tipoNomina,
                             empleado_status: tipo,
                             lote: lote,
@@ -2672,8 +2698,8 @@ $(document).ready(function () {
                                 })
                                     .then(resultado => {
                                         if (resultado.value) {
-                                            location.reload();
-                                            // window.location.href = 'index.php?request=empleado';
+                                            // location.reload();
+                                            window.location.href = 'index.php?request=empleado';
                                         }
                                     })
                             } else {

@@ -61,6 +61,7 @@
                 <div class="col-sm"><p id="txtEducacion"></p></div>
             </div>
             <div class="row">
+                <div class="col-sm"><p id="txtTabulador"></p></div>
                 <div class="col-sm"><p id="txtID"></p></div>
                 <div class="col-sm"><p id="txtIDN"></p></div>
             </div>
