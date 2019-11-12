@@ -144,24 +144,7 @@
         case 'mostrar-empleado':
             // die(json_encode($_POST));
             $props = $_POST['prop'];
-            $query = "SELECT te.numero_nomina, te.nombre_largo, 
-                        CASE WHEN tp.nombre IS NULL THEN 'Sin asignar' ELSE tp.nombre END AS 'Puesto',
-                        ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento', tc.nombre AS 'Celula',
-                        CASE
-                            WHEN te.status = 'B' THEN 'Baja'
-                            WHEN te.status = 'A' THEN 'Activo'
-                            WHEN te.status = 'R' THEN 'Re Ingreso'
-                        END AS status
-                        FROM tbempleados AS te
-                        INNER JOIN tbsucursal AS ts
-                        ON te.id_sucursal = ts.id_sucursal
-                        INNER JOIN tbcelula AS tc
-                        ON tc.id_celula = te.id_celula
-                        INNER JOIN tbarea AS ta
-                        ON tc.codigo_area = ta.codigo
-                        LEFT JOIN tbpuesto AS tp
-                        ON te.id_puesto = tp.id_puesto
-                        WHERE te.numero_nomina = ?";
+            $query = "EXEC consulta_datos_empleado ?";
 
             $params = array($props);//Pasar parametros a las consulta ?
             
@@ -201,9 +184,13 @@
             {
                 $query = "SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
                             CASE
-                                WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
-                                THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
-                                ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+								WHEN td.tabulador IS NULL THEN 'NA'
+								ELSE REPLACE(td.tabulador,'|','') 
+							END AS tabulador,
+                            CASE
+                                WHEN (SELECT id_puesto FROM tbempleados WHERE numero_nomina = te.numero_nomina) < 1
+                                THEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                                ELSE (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
                             END AS Puesto,
                             CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
                             ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
@@ -214,16 +201,22 @@
                             ON tc.id_celula = te.id_celula
                             INNER JOIN tbarea AS ta
                             ON ta.codigo = tc.codigo_area
+                            INNER JOIN tbdatos_empleados AS td
+							ON td.numero_nomina = te.numero_nomina
                             WHERE te.status <> 'B' 
                             ORDER BY te.status ASC, te.created_at DESC";
             } 
             else if ($props == 'bajas')
             {
-                $query = "SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
+                $query = "SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre,
                             CASE
-                                WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
-                                THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
-                                ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+								WHEN td.tabulador IS NULL THEN 'NA'
+								ELSE REPLACE(td.tabulador,'|','') 
+							END AS tabulador, 
+                            CASE
+                                WHEN (SELECT id_puesto FROM tbempleados WHERE numero_nomina = te.numero_nomina) < 1
+                                THEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                                ELSE (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
                             END AS Puesto,
                             CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
                             CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaBaja,
@@ -235,6 +228,8 @@
                             ON tc.id_celula = te.id_celula
                             INNER JOIN tbarea AS ta
                             ON ta.codigo = tc.codigo_area
+                            INNER JOIN tbdatos_empleados AS td
+							ON td.numero_nomina = te.numero_nomina
                             AND te.status = 'B'
                             WHERE NOT EXISTS 
                             (SELECT descripcion FROM tbestado WHERE descripcion = 'bpcdp' AND numero_nomina = te.numero_nomina)
@@ -276,9 +271,9 @@
             
             $query = "SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
                         CASE
-                            WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
-                            THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
-                            ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                            WHEN (SELECT id_puesto FROM tbempleados WHERE numero_nomina = te.numero_nomina) < 1
+                        THEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                        ELSE (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
                         END AS Puesto,
                         CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
                         CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaBaja,
@@ -362,11 +357,15 @@
             $props = $_POST['prop'];
             if ($props == 'activos')
             {
-                $query = "SELECT te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
+                $query = "SELECT numero_nomina,UPPER(te.nombre_largo) AS Nombre,
                             CASE
-                                WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
-                                THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
-                                ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+								WHEN td.tabulador IS NULL THEN 'NA'
+								ELSE REPLACE(td.tabulador,'|','') 
+							END AS tabulador, 
+                            CASE
+                                WHEN (SELECT id_puesto FROM tbempleados WHERE numero_nomina = te.numero_nomina) < 1
+                                THEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                                ELSE (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
                             END AS Puesto,
                             CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
                             ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
@@ -377,6 +376,8 @@
                             ON tc.id_celula = te.id_celula
                             INNER JOIN tbarea AS ta
                             ON ta.codigo = tc.codigo_area
+                            INNER JOIN tbdatos_empleados AS td
+							ON td.numero_nomina = te.numero_nomina
                             WHERE te.status <> 'B' 
                             ORDER BY te.status ASC, te.created_at DESC";
             } 
@@ -384,9 +385,13 @@
             {
                 $query = "SELECT te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
                             CASE
-                                WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
-                                THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
-                                ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+								WHEN td.tabulador IS NULL THEN 'NA'
+								ELSE REPLACE(td.tabulador,'|','') 
+							END AS tabulador,
+                            CASE
+                                WHEN (SELECT id_puesto FROM tbempleados WHERE numero_nomina = te.numero_nomina) < 1
+                                THEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                                ELSE (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
                             END AS Puesto,
                             CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
                             CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaBaja,
@@ -398,6 +403,8 @@
                             ON tc.id_celula = te.id_celula
                             INNER JOIN tbarea AS ta
                             ON ta.codigo = tc.codigo_area
+                            INNER JOIN tbdatos_empleados AS td
+							ON td.numero_nomina = te.numero_nomina
                             WHERE te.status = 'B' 
                             ORDER BY te.status ASC, te.created_at DESC";
             } 
@@ -445,9 +452,9 @@
                         WHEN td.nomina = 'Q' THEN 'QUIN'
                         ELSE 'NA' END AS tipo_nomina,
                         CASE
-                            WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
-                            THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
-                            ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                            WHEN (SELECT id_puesto FROM tbempleados WHERE numero_nomina = te.numero_nomina) < 1
+			    THEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+			    ELSE (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
                         END AS puesto,
                         td.lote,td.lote_acuse,te.created_at
                         FROM tbempleados AS te
@@ -740,9 +747,13 @@
             {
                 $query = "SELECT te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
                             CASE
-                                WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
-                                THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
-                                ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+								WHEN td.tabulador IS NULL THEN 'NA'
+								ELSE REPLACE(td.tabulador,'|','') 
+							END AS tabulador,
+                            CASE
+                                WHEN (SELECT id_puesto FROM tbempleados WHERE numero_nomina = te.numero_nomina) < 1
+                                THEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                                ELSE (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
                             END AS Puesto,
                             CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
                             ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
@@ -753,6 +764,8 @@
                             ON tc.id_celula = te.id_celula
                             INNER JOIN tbarea AS ta
                             ON ta.codigo = tc.codigo_area
+                            INNER JOIN tbdatos_empleados AS td
+							ON td.numero_nomina = te.numero_nomina
                             WHERE te.status <> 'B' ";
                             if (empty($valorBuscado)){ 
                                 $query .= "AND (te.numero_nomina LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR te.nombre_largo LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR ts.nombre LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR ta.nombre LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR tc.nombre LIKE '%' + CONVERT(NVARCHAR, ?) + '%'
@@ -765,9 +778,13 @@
             {
                 $query = "SELECT TOP 250 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
                             CASE
-                                WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
-                                THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
-                                ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+								WHEN td.tabulador IS NULL THEN 'NA'
+								ELSE REPLACE(td.tabulador,'|','') 
+							END AS tabulador,
+                            CASE
+                                WHEN (SELECT id_puesto FROM tbempleados WHERE numero_nomina = te.numero_nomina) < 1
+                                THEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+                                ELSE (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
                             END AS Puesto,
                             CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
                             CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaBaja,
@@ -779,6 +796,8 @@
                             ON tc.id_celula = te.id_celula
                             INNER JOIN tbarea AS ta
                             ON ta.codigo = tc.codigo_area
+                            INNER JOIN tbdatos_empleados AS td
+							ON td.numero_nomina = te.numero_nomina
                             WHERE te.status = 'B'";
                             if (empty($valorBuscado)){ 
                                 $query .= "AND (te.numero_nomina LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR te.nombre_largo LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR ts.nombre LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR ta.nombre LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR tc.nombre LIKE '%' + CONVERT(NVARCHAR, ?) + '%'
@@ -818,6 +837,51 @@
             sqlsrv_free_stmt( $stmt);
             sqlsrv_close( $con );
         break;
+        //BAJA DEL EMPLEADO
+        case 'claBajas':
+            // die(json_encode($_POST));
+            $param = $_POST['param'];
+            $key = $_POST['key'];
+            if($param == 'clasificacion')
+                $query = "SELECT codigo,descripcion FROM tbcodigos WHERE codigo LIKE '%CLAB' ORDER BY id_codigo ASC";
+            else if($param == 'motivo')
+                $query = "SELECT codigo,descripcion FROM tbcodigos WHERE codigo LIKE '".$key."MOT%' AND codigo NOT LIKE '%CLAB' ORDER BY id_codigo ASC";
+            else if($param == 'explicacion' && strlen($key) == 2)
+                $query = "SELECT codigo,descripcion FROM tbcodigos WHERE codigo LIKE '0%".$key."EXP%' AND codigo NOT LIKE '%CLAB' ORDER BY id_codigo ASC";
+            else if($param == 'explicacion' && strlen($key) == 1)
+                $query = "SELECT codigo,descripcion FROM tbcodigos WHERE codigo LIKE '00%".$key."EXP%' AND codigo NOT LIKE '%CLAB' ORDER BY id_codigo ASC";
+                
+            $stmt = sqlsrv_query( $con, $query);
+
+            $result = array();
+            
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'                
+                );
+            } else {
+                do {
+                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                    $result[] = $row; 
+                    }
+                } while (sqlsrv_next_result($stmt));
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => $result,
+                    'mensaje' => 'Informacion obtenida'                
+                );
+            }
+
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+        break;
+        //BAJA DEL EMPLEADO
         case 'highlights':
             // die(json_encode($_POST));
             $query = "SELECT COUNT(*) AS cifras FROM tbempleados WHERE status <> 'B' UNION ALL
@@ -1293,6 +1357,41 @@
                 sqlsrv_free_stmt( $stmt);
                 sqlsrv_close( $con );
             break;
+            //OBTENER LAS SUCURSALES PARA EL TABULADOR
+            case 'sucursalTabulador':
+                //die(json_encode($_POST));
+                $query = "SELECT RTRIM(code_value) AS code_value FROM PJCODE WHERE code_type = 'SUC' AND code_value <> '000' ORDER BY code_type";
+
+                $stmt = sqlsrv_query( $con, $query);
+
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
             case 'buscarJefe':
                 // die(json_encode($_POST));
                 $param = $_POST['param'];
@@ -1351,10 +1450,12 @@
                 sqlsrv_free_stmt( $stmt);
                 sqlsrv_close( $con );
             break;
-            case 'validaCURP':
-                // die(json_encode($_POST));
+            case 'validaReingreso':
+                //die(json_encode($_POST));
                 $curp =  $_POST['curp'];
-                $query = "SELECT numero_nomina FROM tbempleados
+                $query = "SELECT te.numero_nomina,te.nombre_largo,RIGHT(descripcion,1) as controlReingreso FROM tbempleados AS te
+                            INNER JOIN tbestado as ts
+                            ON te.numero_nomina = ts.numero_nomina
                             WHERE CONCAT(curpini + RIGHT(YEAR(fecha_nacimiento),2) , FORMAT(fecha_nacimiento,'MM') , CONVERT(CHAR(2),fecha_nacimiento,103) , curpfin) = ?";
 
                 $params = array($curp);
@@ -1423,9 +1524,10 @@
                 sqlsrv_close( $con );
             break;
             case 'guardarEmpleado':
-                // die(json_encode($_POST));
+                 //die(json_encode($_POST));
                     $nomina =  $_POST['nomina'];
                     $jefeNomina =  $_POST['jefenomina'];
+                    $claveTabulador =  $_POST['claveTabulador'];
                     $nombre =  $_POST['nombre'];
                     $aPaterno =  $_POST['aPaterno'];
                     $aMaterno =  $_POST['aMaterno'];
@@ -1486,10 +1588,10 @@
 
 
                     $fechaControl =  date('Y-m-d H:i:s');
-                    $userControl =  'testUser';
                     
                     $insert = "EXEC insertEmployeeData @nnomina = ?, 
                                                         @jnomina = ?,
+                                                        @codigo_tabulador = ?,
                                                         @nlargo = ?, 
                                                         @nombre = ?,
                                                         @apaterno = ?,
@@ -1548,7 +1650,7 @@
                                                         @nominaControl = ?";
 
 
-                    $params = array($nomina,$jefeNomina,$nombreLargo,$nombre,$aPaterno,$aMaterno,$genero,$curpini,$curpfin,$rfcini,$rfcfin,$nss,$fechaNacimiento,$fechaAlta,$fechaBaja,$status,$sucursal,$area,$celula,$puesto,
+                    $params = array($nomina,$jefeNomina,$claveTabulador,$nombreLargo,$nombre,$aPaterno,$aMaterno,$genero,$curpini,$curpfin,$rfcini,$rfcfin,$nss,$fechaNacimiento,$fechaAlta,$fechaBaja,$status,$sucursal,$area,$celula,$puesto,
                                     $clasificacion,$salarioDiario,$salarioMensual,$tipoNomina,$comentario,$registro,$lote,$dv,$lNacimiento,$tIdentificacion,$id,$eCivil,$escolaridad,$cEscolaridad,$nPadre,$nMadre,$calle,$numE,$numI,$fraccionamiento,
                                     $domicilio,$cp,$edo,$municipio,$localidad,$infonavit,$nInfonavit,$fonacot,$nFonacot,$banco,$cuenta,$correo,$telefono,$celular,$contacto,$nContacto,$posicion,$empleado_activo);
                     
@@ -1579,6 +1681,7 @@
                 // die(json_encode($_POST));
                     $nomina =  $_POST['nomina'];
                     $jefeNomina =  $_POST['jefenomina'];
+                    $claveTabulador =  $_POST['claveTabulador'];
                     $nombre =  $_POST['nombre'];
                     $aPaterno =  $_POST['aPaterno'];
                     $aMaterno =  $_POST['aMaterno'];
@@ -1638,16 +1741,17 @@
 
                     $insert = "EXEC updateEmployeeData @nnomina = ?, 
                                                         @jnomina = ?,
+                                                        @codigo_tabulador = ?,
                                                         @nlargo = ?, 
                                                         @nombre = ?,
                                                         @apaterno = ?,
                                                         @amaterno = ?,
-                                                            @sexo = ?,
-                                                            @curpi = ?,
-                                                            @curpf = ?,
-                                                            @rfcini = ?,
-                                                            @rfcfin = ?,
-                                                            @fechan = ?,
+                                                        @sexo = ?,
+                                                        @curpi = ?,
+                                                        @curpf = ?,
+                                                        @rfcini = ?,
+                                                        @rfcfin = ?,
+                                                        @fechan = ?,
                                                         @nss = ?,
                                                         @fechaa = ?,
                                                         @empleado_status = ?,
@@ -1694,7 +1798,7 @@
                                                         @nominaControl = ?";
 
 
-                    $params = array($nomina,$jefeNomina,$nombreLargo,$nombre,$aPaterno,$aMaterno,$genero,$curpini,$curpfin,$rfcini,$rfcfin,$fechaNacimiento,$nss,$fechaAlta,$empleado_status,$sucursal,$area,$celula,$puesto,$clasificacion,$salarioDiario,$salarioMensual,$tipoNomina,
+                    $params = array($nomina,$jefeNomina,$claveTabulador,$nombreLargo,$nombre,$aPaterno,$aMaterno,$genero,$curpini,$curpfin,$rfcini,$rfcfin,$fechaNacimiento,$nss,$fechaAlta,$empleado_status,$sucursal,$area,$celula,$puesto,$clasificacion,$salarioDiario,$salarioMensual,$tipoNomina,
                                     $comentario,$registro,$lote,$dv,$lNacimiento,$tIdentificacion,$id,$eCivil,$escolaridad,$cEscolaridad,$nPadre,$nMadre,$calle,$numE,$numI,$fraccionamiento,
                                     $domicilio,$cp,$edo,$municipio,$localidad,$infonavit,$nInfonavit,$fonacot,$nFonacot,$banco,$cuenta,$correo,$telefono,$celular,$contacto,$nContacto,$empleado_activo);
                     
@@ -1829,7 +1933,7 @@
                 sqlsrv_close( $con ); 
             break;
             case 'guardarPuesto':
-                die(json_encode($_POST));
+                //die(json_encode($_POST));
                 $puestoNombre =  $_POST['puestoNombre'];
                 $puestoDepartamento =  $_POST['puestoDepartamento'];
                 $puestoDescripcion =  $_POST['puestoDescripcion'];
@@ -1837,10 +1941,17 @@
                 $empleadoControl = $_POST['empleadoControl'];
                 $puestoCorto = $_POST['puestoCorto'];
                 $puestoJefe = 2;
+                $hoy = date("Y-m-d H:m:s");  
 
+                $query = "SELECT CONCAT('P',MAX( id_puesto )) AS nuevoCodigo FROM tbpuesto";
 
+                $stmnt = sqlsrv_query( $con, $query);
 
-                $insert = "INSERT INTO [dbo].[tbpuesto]
+                if ($row = sqlsrv_fetch_array( $stmnt, SQLSRV_FETCH_ASSOC)) {
+                    $codigoPuesto = trim($row['nuevoCodigo']);
+                }
+
+                $insert = "INSERT INTO tbpuesto
                         ([codigo]
                         ,[nombre]
                         ,[descripcion]
@@ -1852,9 +1963,9 @@
                         ,[created_at]
                         ,[created_by])
                 VALUES
-                        ((SELECT CONCAT('P',MAX( id_puesto )+1) FROM tbpuesto),?,?,?,?,?,?,?,GETDATE(),?)";
+                        (?,?,?,?,?,?,?,?,?,?)";
 
-                $params = array($puestoNombre,$puestoDescripcion,$puestoCorto,$puestoNivel,$puestoJefe,$puestoDepartamento,$puestoNivel,GETDATE(),$empleadoControl);
+                $params = array($codigoPuesto,$puestoNombre,$puestoDescripcion,$puestoCorto,$puestoNivel,$puestoJefe,$puestoDepartamento,$puestoNivel,$hoy,$empleadoControl);
             
                 $stmt = sqlsrv_query( $con, $insert, $params);
 
@@ -1870,7 +1981,54 @@
                     $respuesta = array(
                         'estado' => 'NOK',
                         'tipo' => 'error',
-                        'informacion' => 'No existe informacion',
+                        'informacion' => $codigoPuesto,
+                        'mensaje' => 'No hay datos en la BD'             
+                    );
+                }               
+
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+            break;
+            case 'actualizarPuesto':
+                //die(json_encode($_POST));
+                $puestoNombre =  $_POST['puestoNombre'];
+                $puestoDepartamento =  $_POST['puestoDepartamento'];
+                $puestoDescripcion =  $_POST['puestoDescripcion'];
+                $puestoNivel =  $_POST['puestoNivel'];
+                $empleadoControl = $_POST['empleadoControl'];
+                $puestoCorto = $_POST['puestoCorto'];
+                $puestoCodigo = $_POST['puestoCodigo'];
+                $hoy = date("Y-m-d H:m:s");
+
+                $insert = "UPDATE tbpuesto SET 
+                        [nombre] = ?
+                        ,[descripcion] = ?
+                        ,[nombre_corto] = ?
+                        ,[id_nivel] = ?
+                        ,[id_celula] = ?
+                        ,[id_clasificacion] = ?
+                        ,[updated_by] = ?
+                        ,[updated_at] = ?
+                        WHERE [codigo] = ?;";
+
+                $params = array($puestoNombre,$puestoDescripcion,$puestoCorto,$puestoNivel,$puestoDepartamento,$puestoNivel,$empleadoControl,$hoy,$puestoCodigo);
+            
+                $stmt = sqlsrv_query( $con, $insert, $params);
+
+                if( $stmt ) {
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => 'Actualizado',
+                        'mensaje' => 'Informacion obtenida'                  
+                    );
+                } 
+                else {
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'Error al actualizar',
                         'mensaje' => 'No hay datos en la BD'             
                     );
                 }               
@@ -1881,7 +2039,7 @@
             break;
             case 'obtenerPuestos':
                 // die(json_encode($_POST));
-                $query = "SELECT * FROM tbpuesto";
+                $query = "SELECT * FROM tbpuesto ORDER BY updated_at DESC";
                 
                 $stmt = sqlsrv_query( $con, $query);
 
@@ -1957,7 +2115,7 @@
                 sqlsrv_close( $con );
             break;
             case 'datos-formato':
-                // die(json_encode($_POST));
+                //die(json_encode($_POST));
                 $nomina =  $_POST['nomina'];
                 $query = "EXEC datos_empleado_formato @NUMERO_NOMINA = ?";
 

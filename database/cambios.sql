@@ -1,15 +1,15 @@
 SELECT * FROM tbdatos_empleados WHERE numero_nomina = '26841'
 
 EXEC datos_empleado_consulta '26841'
-EXEC datos_empleado_formato '26830'
-EXEC consulta_datos_empleado '26841'
+EXEC datos_empleado_formato '26757'
+EXEC consulta_datos_empleado '26757'
 
 /**AGREGAR COLUMAND E TABULADRO A TABLA DE DATOS EMPLEADOS**/
 ALTER TABLE tbdatos_empleados
 ADD tabulador varchar(10);
 
 /**ACTUALIZAR SP INSERTAR NUEVO EMPLEADO**/
-USE [MEXQAppTemp]
+USE [MEXQApppr]
 GO
 /****** Object:  StoredProcedure [dbo].[insertEmployeeData]    Script Date: 08/11/2019 03:13:28 p. m. ******/
 SET ANSI_NULLS ON
@@ -173,7 +173,7 @@ BEGIN TRY
  /**ACTUALIZAR SP INSERTAR NUEVO EMPLEADO**/
 
  /**ACTUALIZAR SP PARA MOSTRAR DATOS**/
- USE [MEXQAppTemp]
+ USE [MEXQApppr]
 GO
 /****** Object:  StoredProcedure [dbo].[datos_empleado_consulta]    Script Date: 08/11/2019 03:37:05 p. m. ******/
 SET ANSI_NULLS ON
@@ -206,7 +206,7 @@ AS
 	END
 
 /**CONSULTA DATOS EMPLEADOS**/
-USE [MEXQAppTemp]
+USE [MEXQAPPPR]
 GO
 /****** Object:  StoredProcedure [dbo].[bajas_diarias]    Script Date: 05/11/2019 08:34:50 a. m. ******/
 SET ANSI_NULLS ON
@@ -224,9 +224,9 @@ AS
 		ts.nombre_corto AS sucursal,tc.nombre AS planta,
 		CONVERT(VARCHAR(10), te.fecha_alta, 103) AS 'fechaAlta',
 		CASE
-			WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
-			THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
-			ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+			WHEN (SELECT id_puesto FROM tbempleados WHERE numero_nomina = te.numero_nomina) < 1
+            THEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+            ELSE (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
 		END AS puesto,
 		td.clasificacion,td.nomina,td.registro_patronal,td.salario_diario,td.lote,
 		te.status,te.numero_nomina,UPPER(te.apellido_paterno) AS 'apellidoPaterno',UPPER(te.apellido_materno) AS 'apellidoMaterno',te.nombre AS nombreEmpleado,
@@ -303,7 +303,7 @@ AS
 	END
 
 	/**CONSULTA DE BAJAS**/
-	USE [MEXQAppTemp]
+USE [MEXQApppr]
 GO
 /****** Object:  StoredProcedure [dbo].[bajas_diarias]    Script Date: 05/11/2019 08:34:50 a. m. ******/
 SET ANSI_NULLS ON
@@ -368,7 +368,7 @@ AS
 
 
 /**ACTUALIZA DATOS DEL EMPLEADO**/
-USE [MEXQAppTemp]
+USE [MEXQApppr]
 GO
 /****** Object:  StoredProcedure [dbo].[updateEmployeeData]    Script Date: 11/11/2019 05:38:26 p. m. ******/
 SET ANSI_NULLS ON
@@ -517,3 +517,80 @@ BEGIN TRANSACTION
  BEGIN CATCH
   ROLLBACK
  END CATCH
+
+ /**ALTAS SEMANALES**/
+ USE [MEXQApppr]
+GO
+/****** Object:  StoredProcedure [dbo].[altasSemanales]    Script Date: 11/11/2019 07:11:02 p. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ALTER PROCEDURE [dbo].[altasSemanales]
+(
+@FECHA_INI DATE,
+@FECHA_FIN DATE
+)
+AS
+	BEGIN
+		SELECT 
+		ts.codigo AS cve_sucursal,ts.nombre AS sucursal,tc.nombre AS planta,tc.codigo AS 'claveSocio',
+		CONVERT(VARCHAR(10), te.fecha_alta, 105) AS 'fechaAlta',
+		CASE
+			WHEN td.tabulador IS NULL THEN 'NA'
+			ELSE REPLACE(td.tabulador,'|','') 
+		END AS tabulador,
+		CASE
+			WHEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp) IS NULL
+			THEN (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
+			ELSE (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
+		END AS puesto,
+		CASE 
+			WHEN td.clasificacion = 'O' THEN 'Operativo'
+			WHEN td.clasificacion = 'A' THEN 'Administrativo'
+			WHEN td.clasificacion = 'AO' THEN 'Administrativo Operativo'
+			WHEN td.clasificacion = 'E' THEN 'Especial'
+			ELSE 'Becario'
+		END AS clasificacion,
+		CASE 
+			WHEN td.nomina = 'S' THEN 'Semanal'
+			WHEN td.nomina = 'Q' THEN 'Quincenal'
+		END AS nomina,
+		CASE 
+			WHEN td.registro_patronal = 'CNO' THEN 'Calidad del Norte'
+			ELSE 'SAC'
+		END AS registro_patronal,
+		td.salario_diario,td.lote,
+		te.status,CONCAT('''',te.numero_nomina) AS numero_nomina,UPPER(te.apellido_paterno) AS 'apellidoPaterno',UPPER(te.apellido_materno) AS 'apellidoMaterno',te.nombre AS nombreEmpleado,
+		te.fecha_nacimiento AS fechaNacimiento,td.municipio,td.estado,td.lugar_nacimiento,
+		CASE 
+			WHEN te.sexo = 'F' THEN 'Femenino'
+			ELSE 'Masculino'
+		END AS sexo,
+		CONCAT(te.rfcini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.rfcfin) AS RFC,
+		CONCAT(te.curpini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.curpfin) AS CURP,
+		CONCAT('''',te.nss,td.dv) AS nss,td.numero_identificacion,
+		CASE 
+			WHEN td.estado_civil = 'C' THEN 'Casado(a)'
+			WHEN td.estado_civil = 'D' THEN 'Divorciado(a)'
+			WHEN td.estado_civil = 'S' THEN 'Soltero(a)'
+			WHEN td.estado_civil = 'V' THEN 'Viudo(a)'
+		END AS estado_civil,
+		CASE 
+			WHEN td.escolaridad = 'b_tecnico' THEN UPPER('Bachillerato Técnico')
+			WHEN td.escolaridad = 'carrera_tecnica' THEN UPPER('Carrera Técnica')
+			ELSE UPPER(td.escolaridad)
+		END AS escolaridad,
+		REPLACE(td.nombre_padre,'|',' ') AS nombre_padre,REPLACE(td.nombre_madre,'|',' ') AS nombre_madre,
+		td.calle,td.numero_exterior,td.numero_interior,td.fraccionamiento,td.codigo_postal,td.localidad,td.municipio,td.estado,
+		td.cuenta,td.numero_cuenta,td.infonavit,td.numero_infonavit,td.fonacot,td.numero_fonacot,td.correo,td.celular,td.telefono,te.nombre_largo
+		FROM tbempleados AS te
+		INNER JOIN tbsucursal AS ts
+		ON te.id_sucursal = ts.id_sucursal 
+		INNER JOIN tbcelula AS tc
+		ON tc.id_celula = te.id_celula
+		INNER JOIN tbdatos_empleados AS td
+		ON td.numero_nomina = te.numero_nomina
+		AND te.fecha_alta >= @FECHA_INI AND te.fecha_alta <= @FECHA_FIN
+		ORDER BY te.status ASC, te.created_at ASC
+	END
