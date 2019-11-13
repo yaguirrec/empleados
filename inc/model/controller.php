@@ -1395,32 +1395,16 @@
             case 'buscarJefe':
                 // die(json_encode($_POST));
                 $param = $_POST['param'];
-                $param2 = $_POST['param2'];
-
-                $query = "SELECT tp.id_nivel,tp.id_puesto,tp.nombre,UPPER(te.nombre_largo) as nombre_largo,te.numero_nomina FROM 
-                            tbpuesto AS tp
-                            INNER JOIN tbempleados AS te
-                            ON tp.id_puesto = te.id_puesto
-                            INNER JOIN tbcelula AS tc
-                            ON te.id_celula = tc.id_celula
-                            INNER JOIN tbarea AS ta
-                            ON tc.codigo_area = ta.codigo
-                            AND tp.id_nivel < (SELECT id_nivel FROM tbpuesto WHERE id_puesto = ?)
-                            AND (tp.id_celula = (SELECT id_celula FROM tbpuesto WHERE id_puesto = ?)) 
-                            AND te.status <> 'B'
-                            UNION ALL
-                            SELECT tp.id_nivel,tp.id_puesto,tp.nombre,UPPER(te.nombre_largo) as nombre_largo,te.numero_nomina FROM tbpuesto AS tp
-                            INNER JOIN tbempleados AS te
-                            ON tp.id_puesto = te.id_puesto
-                            INNER JOIN (SELECT id_celula FROM tbcelula WHERE codigo_area =
-                            (SELECT area_superior FROM tbarea WHERE codigo = (SELECT codigo_area FROM tbcelula WHERE id_celula = ?)))
-                            AS temp
-                            ON temp.id_celula = tp.id_celula
-                            ORDER BY id_nivel";
+                $query = "SELECT numero_nomina,nombre_largo FROM tbempleados AS te
+                            INNER JOIN tbpuesto AS tp
+                            ON te.id_puesto = tp.id_puesto
+                            AND tp.id_nivel <= 6";
+                if($param == 'O' || $param == 'AO'){
+                    $query .= "UNION SELECT REPLACE(employee,' ','') AS employee, emp_name FROM PJEMPLOY WHERE emp_name LIKE 'rh%'";
+                }
                 
-                $params = array($param,$param,$param2);
-
-                $stmt = sqlsrv_query( $con, $query, $params);
+                
+                $stmt = sqlsrv_query( $con, $query);
 
                 $result = array();
                 

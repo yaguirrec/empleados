@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V.1111191';
+    let version = 'V.1311191';
 
     $('#version').html(version);
 
@@ -362,8 +362,8 @@ $(document).ready(function () {
                     listarFraccionamientos($("#txtCP").val());
                 });
 
-                $("#txtPuesto").focusout(function(){
-                    listarJefes($("#txtPuesto").val(), $("#txtCelula").val());
+                $("#txtClasificacion").focusout(function(){
+                    listarJefes($("#txtClasificacion").val());
                 });
             }
         });
@@ -446,12 +446,11 @@ $(document).ready(function () {
         xmlP.send(listaP);
     }
 
-    let listarJefes = (paramPuesto, paramCel) => {
+    let listarJefes = (paramClasificacion) => {
         var listaJefe = new FormData(),
             action = 'buscarJefe';
         listaJefe.append('action', action);
-        listaJefe.append('param', paramPuesto);
-        listaJefe.append('param2', paramCel);
+        listaJefe.append('param', paramClasificacion);
         var xmlJefe = new XMLHttpRequest();
         xmlJefe.open('POST', backendURL, true);
         xmlJefe.onload = function () {
@@ -471,6 +470,7 @@ $(document).ready(function () {
         }
         xmlJefe.send(listaJefe);
     }
+
 
     let listarFraccionamientos = (cp) => {
         if (cp.length === 5) {
@@ -2105,12 +2105,14 @@ $(document).ready(function () {
                     let datos = respuesta.informacion[0];
                     let nombreCompletoMadre = datos.nombre_madre,
                         nombreCompletoPadre = datos.nombre_padre,
-                        tabulador = datos.tabulador;
+                        tabulador = '';
                     
                     let nombrePadre = nombreCompletoPadre.split('|');
                     let nombreMadre = nombreCompletoMadre.split('|');
-                    if(tabulador === null){
-                        tabulador = '00|X'
+                    if(datos.tabulador === null){
+                        tabulador = '###|XXX';
+                    } else {
+                        tabulador = datos.tabulador;
                     }
                     let vTabulador = tabulador.split('|');
                     
@@ -2127,7 +2129,9 @@ $(document).ready(function () {
                     $("#txtfechaAlta").val((datos.fecha_alta.date).substr(0, 10));
                     $("#txtRegistro").val(datos.registro_patronal);
                     listarPuestos(datos.id_celula, datos.clasificacion);
-                    listarJefes(datos.id_puesto, datos.id_celula);
+                    setTimeout(function () {
+                        listarJefes(datos.clasificacion);
+                    }, 100);
                     $("#txtComentario").val(datos.comentarios);
                     $("#txtNombre").val(datos.nombre);
                     $("#txtPaterno").val(datos.apellido_paterno);
@@ -2196,8 +2200,8 @@ $(document).ready(function () {
                         listarFraccionamientos($("#txtCP").val());
                     });
 
-                    $("#txtPuesto").focusout(function(){
-                        listarJefes($("#txtPuesto").val(), $("#txtCelula").val());
+                    $("#txtClasificacion").focusout(function(){
+                        listarJefes($("#txtClasificacion").val());
                     });
                 }
             });
@@ -3004,32 +3008,8 @@ $(document).ready(function () {
 
 
             //LLENAR JEFE DIRECTO POR NIVEL DE PUESTO SELECCIONADO
-            $('#txtPuesto').focusout(function () {
-                var listaJefe = new FormData(),
-                    action = 'buscarJefe',
-                    paramPuesto = $('#txtPuesto option:selected').val(),
-                    paramCel = $('#txtCelula option:selected').val();
-                listaJefe.append('action', action);
-                listaJefe.append('param', paramPuesto);
-                listaJefe.append('param2', paramCel);
-                var xmlJefe = new XMLHttpRequest();
-                xmlJefe.open('POST', backendURL, true);
-                xmlJefe.onload = function () {
-                    if (this.status === 200) {
-                        var respuesta = JSON.parse(xmlJefe.responseText);
-                        if (respuesta.estado === 'OK') {
-                            var informacion = respuesta.informacion;
-                            var s = '<option value="-1">Seleccionar jefe directo</option>';
-                            for (var i in informacion) {
-                                s += '<option class="text-uppercase" value="' + informacion[i].numero_nomina + '">' + informacion[i].numero_nomina + ' - ' + informacion[i].nombre_largo + '</option>';
-                            }
-                            txtJefe.html(s);
-                        } else if (respuesta.status === 'error') {
-                            var informacion = respuesta.informacion;
-                        }
-                    }
-                }
-                xmlJefe.send(listaJefe);
+            $("#txtClasificacion").focusout(function(){
+                listarJefes($("#txtClasificacion").val());
             });
             
             $('#txtTabClave').keypress(function(e){
