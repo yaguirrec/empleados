@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V.1311191';
+    let version = 'V.0512191';
 
     $('#version').html(version);
 
@@ -2188,22 +2188,25 @@ $(document).ready(function () {
                         $("#txtTabSucursal").val(vTabulador[1]);
                     }, 280);
 
-                    $("#txtClasificacion").focusout(function(){
-                        listarDepartamentos($("#txtSucursal").val(),$("#txtClasificacion").val());
-                    });
-
-                    $("#txtCelula").focusout(function(){
-                        listarPuestos($("#txtCelula").val(),$("#txtClasificacion").val());
-                    });
                     
-                    $("#txtCP").focusout(function(){
-                        listarFraccionamientos($("#txtCP").val());
-                    });
-
-                    $("#txtClasificacion").focusout(function(){
-                        listarJefes($("#txtClasificacion").val());
-                    });
                 }
+            });
+
+            //EDITAR CP
+            $("#txtCP").focusout(function(){
+                listarFraccionamientos($("#txtCP").val());
+            });
+
+            $("#txtClasificacion").focusout(function(){
+                listarDepartamentos($("#txtSucursal").val(),$("#txtClasificacion").val());
+            });
+
+            $("#txtCelula").focusout(function(){
+                listarPuestos($("#txtCelula").val(),$("#txtClasificacion").val());
+            });
+            
+            $("#txtClasificacion").focusout(function(){
+                listarJefes($("#txtClasificacion").val());
             });
 
             $('#btnModificarEmpleado').click(function(e){
