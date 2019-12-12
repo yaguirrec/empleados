@@ -341,13 +341,16 @@ $(document).ready(function () {
                     $("#txtCelula").val(datos.id_celula);
                     $("#txtPuesto").val(datos.id_puesto);
                     $("#txtJefe").val(datos.jefe_nomina);
-                    $("#txtFraccionamiento").val(datos.fraccionamiento);
                     $("#txtEdo").val(datos.estado);
                     $("#txtMunicipio").val(datos.municipio);
                     $("#txtLocalidad").val(datos.localidad);
                     $("#txtTabClave").val(vTabulador[0]);
                     $("#txtTabSucursal").val(vTabulador[1]);
                 }, 280);
+
+                setTimeout(function () {
+                    $("#txtFraccionamiento").val(datos.fraccionamiento.toUpperCase());
+                }, 1000);
 
                 $("#txtClasificacion").focusout(function () {
                     listarDepartamentos($("#txtSucursal").val(), $("#txtClasificacion").val());
@@ -483,7 +486,8 @@ $(document).ready(function () {
                         $("#txtEdo").val(datos[i].estado);
                         $("#txtMunicipio").val(datos[i].municipio);
                         $("#txtLocalidad").val(datos[i].ciudad);
-                        s += '<option value="' + datos[i].asentamiento + '">' + datos[i].asentamiento + '</option>';
+                        s += '<option class="text-uppercase" value="' + datos[i].asentamiento.toUpperCase() + '">' + datos[i].asentamiento.toUpperCase() + '</option>';
+                        //console.log(datos[i].asentamiento.trim());
                     }
                     $("#txtFraccionamiento").html(s);
                 },
@@ -2167,13 +2171,17 @@ $(document).ready(function () {
                         $("#txtCelula").val(datos.id_celula);
                         $("#txtPuesto").val(datos.id_puesto);
                         $("#txtJefe").val(datos.jefe_nomina);
-                        $("#txtFraccionamiento").val(datos.fraccionamiento);
+                        
                         $("#txtEdo").val(datos.estado);
                         $("#txtMunicipio").val(datos.municipio);
                         $("#txtLocalidad").val(datos.localidad);
                         $("#txtTabClave").val(vTabulador[0]);
                         $("#txtTabSucursal").val(vTabulador[1]);
                     }, 280);
+
+                    setTimeout(function () {
+                        $("#txtFraccionamiento").val(datos.fraccionamiento.toUpperCase());
+                    }, 1000);
 
 
                 }
@@ -3595,7 +3603,7 @@ $(document).ready(function () {
                                     "<td>" + reg[i].Departamento + " </td>" +
                                     "<td>" + reg[i].fechaCreado + " </td>" +
                                     "<td>" + reg[i].created_by + " </td>" +
-                                    "<td><a class='btn btn-sm btn-danger text-white deleteRole' data-nomina='" + reg[i].numero_nomina + "' role='button'>Borrar</a></td></tr>");
+                                    "<td><a class='btn btn-sm btn-danger text-white deleteRole' data-nomina='" + reg[i].numero_nomina + "' role='button'>Borrar <i class='fas fa-backspace'></i></a></td></tr>");
                         }
                         $(".deleteRole").click(function () {
                             eliminarRolEmpleado($(this));
@@ -3619,7 +3627,7 @@ $(document).ready(function () {
                                     "<tr><td class='trCode'>" + rol[i].id + " </td>" +
                                     "<td>" + rol[i].tipo + "</td>" +
                                     "<td>" + rol[i].fecha + " </td>" +
-                                    "<td><a class='btn btn-sm btn-success text-white selectRole' data-id='" + rol[i].id + "' data-nombre='" + rol[i].tipo + "' data-descripcion='" + rol[i].descripcion + "' data-fecha='" + rol[i].fecha + "' role='button'>IR</a></td></tr>");
+                                    "<td><a class='btn btn-sm btn-success text-white selectRole' data-id='" + rol[i].id + "' data-nombre='" + rol[i].tipo + "' data-descripcion='" + rol[i].descripcion + "' data-fecha='" + rol[i].fecha + "' role='button'>IR <i class='fas fa-arrow-circle-right'></i></a></td></tr>");
                         }
                         $(".selectRole").click(function () {
                             let idRol = $((this)).data('id'),
