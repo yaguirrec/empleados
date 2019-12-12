@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar')
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V.0512191';
+    let version = 'V.1112191';
 
     $('#version').html(version);
 
@@ -266,7 +266,6 @@ $(document).ready(function () {
             data: { action: 'datos-empleado', numero_nomina: numero_nomina }
         }).done(function (response) {
             let respuesta = JSON.parse(response);
-            console.log(respuesta);
             if (respuesta.estado === 'OK') {
                 var datos = respuesta.informacion[0];
                 let nombreCompletoMadre = datos.nombre_madre,
@@ -476,19 +475,17 @@ $(document).ready(function () {
         if (cp.length === 5) {
             $.ajax({
                 type: "GET",
-                url: "http://localhost/mqws/control.php?param=" + cp,
+                url: "http://mexq.mx/devweb/webServices/cpmx/control.php?param=" + cp,
                 success: function (data) {
-                    /*$("#txtEdo").val(data.estado);
-                    $("#txtMunicipio").val(data.municipio);
-                    $("#txtLocalidad").val(data.municipio);
-                    var colonias = data.asentamiento,
-                        s = '';
-                    for (var i in colonias) {
-                        console.log(colonias[i]);
-                        s += '<option value="' + colonias[i] + '">' + colonias[i] + '</option>';
+                    let datos = JSON.parse(data),
+                    s = '';
+                    for (var i in datos) {
+                        $("#txtEdo").val(datos[i].estado);
+                        $("#txtMunicipio").val(datos[i].municipio);
+                        $("#txtLocalidad").val(datos[i].ciudad);
+                        s += '<option value="' + datos[i].asentamiento + '">' + datos[i].asentamiento + '</option>';
                     }
-                    $("#txtFraccionamiento").html(s);*/
-                    console.log(data);
+                    $("#txtFraccionamiento").html(s);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR.status);
@@ -944,9 +941,6 @@ $(document).ready(function () {
                 $.each($("input[name='noNomina']:checked"), function () {
                     numerosNomina.push($(this).val());
                 });
-
-                console.log(numerosNomina.join("|"));
-
                 let adjunto_Acuse = document.getElementById('txtAcuse');
                 let adjuntoAcuse = adjunto_Acuse.files[0];
                 let nombreAdjuntoAcuse = adjunto_Acuse.files[0].name;
@@ -1181,7 +1175,6 @@ $(document).ready(function () {
                     data: { action: action, fecha: fecha, datos: datosEmpleadosBajas, cc: cc },
                     success: function (response) {
                         let respuesta = JSON.parse(response);
-                        console.log(respuesta);
                     }
                 });
                 Swal.fire({
@@ -1310,7 +1303,6 @@ $(document).ready(function () {
                         }).done(function (response) {
                             respuesta = JSON.parse(response);
                             let estadoRespuesta = respuesta.estado;
-                            console.log(respuesta);
                             if (estadoRespuesta === 'OK') {
                                 Swal.fire({
                                     title: 'Baja Actualizada',
@@ -1571,7 +1563,7 @@ $(document).ready(function () {
                     labelClasificacion = 'Becario';
 
                 labelNomina = (labelNomina === 'S' ? 'Sem' : 'Quin');
-                labelReingreso = (valueReingreso === '0' ? 'PERMITIR REINGRESO' : 'NO PERMITIR EL REINGRESO');
+                if (valueReingreso === '0' || valueReingreso === null) labelReingreso ='PERMITIR REINGRESO'; else labelReingreso ='NO PERMITIR REINGRESO';
                 labelGenero = (labelGenero === 'F' ? 'Femenino' : 'Masculino');
                 labelEscolaridad = (labelEscolaridad === 'B_TECNICO' ? 'Bachillerato' : labelEscolaridad);
 
@@ -1584,7 +1576,7 @@ $(document).ready(function () {
                 else if (labelEstadoCivil === 'V')
                     labelEstadoCivil = 'Viudo(a)';
 
-                if (valueReingreso === '0') $('#txtReingreso').addClass('text-success'); else $('#txtReingreso').addClass('text-danger');
+                if (valueReingreso === '0' || valueReingreso === null) $('#txtReingreso').addClass('text-success'); else $('#txtReingreso').addClass('text-danger');
 
 
 
@@ -1702,12 +1694,8 @@ $(document).ready(function () {
                 xhr.onload = function () {
                     if (this.status === 200) {
                         var respuesta = JSON.parse(xhr.responseText);
-                        console.log(respuesta);
-                        console.log('ok');
                     } else {
                         var respuesta = JSON.parse(xhr.responseText);
-                        console.log(respuesta);
-                        console.log('error');
                     }
                 }
 
@@ -1777,7 +1765,6 @@ $(document).ready(function () {
                             }).done(function (response) {
                                 respuesta = JSON.parse(response);
                                 let estadoRespuesta = respuesta.estado;
-                                console.log(respuesta);
                                 if (estadoRespuesta === 'OK') {
                                     Swal.fire({
                                         title: 'Baja Exitosa',
@@ -1816,9 +1803,6 @@ $(document).ready(function () {
             let empleado_baja = localStorage.getItem('empleadoBaja');
             var action = 'mostrar-empleado';
             localStorage.removeItem('empleadoBaja');
-            console.log(empleado_baja);
-
-
             var dataEmp = new FormData();
             dataEmp.append('action', action);
             dataEmp.append('prop', empleado_baja);
@@ -1938,7 +1922,6 @@ $(document).ready(function () {
 
             $('#txtMotivo').focusout(function () {
                 let key = ($('#txtMotivo').val()).substr(6, 2);
-                console.log(key.length);
                 if (key.length !== 0)
                     explicacionBajas(key);
                 else
@@ -1991,7 +1974,6 @@ $(document).ready(function () {
                     }).done(function (response) {
                         respuesta = JSON.parse(response);
                         let estadoRespuesta = respuesta.estado;
-                        console.log(respuesta);
                         if (estadoRespuesta === 'OK') {
                             Swal.fire({
                                 title: 'Baja Exitosa',
@@ -2360,7 +2342,6 @@ $(document).ready(function () {
                         },
                         success: function (response) {
                             var respuesta = JSON.parse(response);
-                            console.log(respuesta);
                             if (respuesta.estado === 'OK') {
                                 Swal.fire({
                                     title: 'Correcto',
@@ -2701,7 +2682,6 @@ $(document).ready(function () {
                         },
                         success: function (response) {
                             var respuesta = JSON.parse(response);
-                            console.log(respuesta);
                             if (respuesta.estado === 'OK') {
                                 Swal.fire({
                                     title: 'Correcto',
@@ -3051,34 +3031,7 @@ $(document).ready(function () {
             //CONTROL CODIGO POSTAL
             $("#txtCP").focusout(function () {
                 var cp = $('#txtCP').val();
-                if (cp.length === 5) {
-                    $.ajax({
-                        type: "GET",
-                        url: "https://api-codigos-postales.herokuapp.com/v2/codigo_postal/" + cp,
-                        success: function (data) {
-                            $("#txtEdo").val(data.estado);
-                            $("#txtMunicipio").val(data.municipio);
-                            $("#txtLocalidad").val(data.municipio);
-                            var colonias = data.colonias,
-                                s = '';
-                            for (var i in colonias) {
-                                s += '<option value="' + colonias[i] + '">' + colonias[i] + '</option>';
-                            }
-                            txtFraccionamiento.html(s);
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            console.log(jqXHR.status);
-                        }
-                    });
-                } else {
-                    Swal.fire({
-                        position: 'center',
-                        type: 'warning',
-                        title: 'EL CP debe tener 5 digitos',
-                        showConfirmButton: false,
-                        timer: 1000
-                    })
-                }
+                listarFraccionamientos(cp);
             });
 
             $("#txtPaterno").focusout(function () {
@@ -3297,7 +3250,6 @@ $(document).ready(function () {
                         },
                         success: function (response) {
                             var respuesta = JSON.parse(response);
-                            console.log(respuesta);
                             if (respuesta.estado === 'OK') {
                                 Swal.fire({
                                     title: 'Correcto',
@@ -3344,7 +3296,6 @@ $(document).ready(function () {
 
             btnNuevo.on('click', function () {
                 // limpiarCampos();
-                console.log(3);
                 panelNuevo.removeClass('d-none');
                 btnGuardarPuesto.removeClass('d-none');
                 btnNuevo.addClass('d-none');
@@ -3539,7 +3490,6 @@ $(document).ready(function () {
                         data: { action: 'guardarPuesto', puestoNivel: puestoNivel, puestoNombre: puestoNombre, puestoCorto: puestoCorto, puestoDepartamento: puestoDepartamento, puestoDescripcion: puestoDescripcion, empleadoControl: empleado_activo },
                         success: function (response) {
                             let respuesta = JSON.parse(response);
-                            console.log(respuesta);
                             if (respuesta.estado === 'OK') {
                                 Swal.fire({
                                     title: 'Correcto',
@@ -3742,7 +3692,6 @@ $(document).ready(function () {
                         data: { action: action, numero_nomina: empRol, idrol: idRol, empleadoControl: empleado_activo },
                         success: function (response) {
                             let respuesta = JSON.parse(response);
-                            console.log(respuesta);
                             if (respuesta.estado === 'OK') {
                                 Swal.fire({
                                     title: 'Correcto',

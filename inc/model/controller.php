@@ -9,7 +9,7 @@
         die();
     }
 
-        include 'connection.php';   
+        include 'connection_.php';   
         $con = connDB();
         $sesion = false;
         $action  = $_POST['action'];
@@ -48,7 +48,7 @@
                         $usuario_nivel = trim($row['nivel']);
                         $usuario_departamento = trim($row['id_area']);
                         $usuario_correo = trim($row['correo']);
-                        $usuario_nombre = trim(ucwords(strtolower($row['nombre_largo'])));
+                        $usuario_nombre = utf8_decode(trim(ucwords(strtolower($row['nombre_largo']))));
                         $sesion = true;
 
                         $ubicacion = ((empty($usuario_nivel) || $usuario_nivel < 2) ? 'perfil' : 'main');
@@ -1398,7 +1398,7 @@
                 $query = "SELECT numero_nomina,nombre_largo FROM tbempleados AS te
                             INNER JOIN tbpuesto AS tp
                             ON te.id_puesto = tp.id_puesto
-                            AND tp.id_nivel <= 6";
+                            AND tp.id_nivel <= 6 AND te.status <> 'B'";
                 if($param == 'O' || $param == 'AO'){
                     $query .= "UNION SELECT REPLACE(employee,' ','') AS employee, emp_name FROM PJEMPLOY WHERE emp_name LIKE 'rh%'";
                 }
@@ -2176,6 +2176,188 @@
                 }
                     
                 echo json_encode($respuesta);
+            break;
+            case 'obtenerRoles':
+                $query = "SELECT id,tipo,FORMAT (created_at, 'dd-MM-yyyy') as fecha,descripcion FROM tbprivilegios_emp WHERE id > 1 ORDER BY id ASC";
+                
+                $stmt = sqlsrv_query( $con, $query);
+
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
+            case 'obtenerempRoles':
+                //SUSTITUIR POR SP
+                $idrol =  $_POST['idrol'];
+                $query = "SELECT te.numero_nomina,te.nombre_largo,te.status,ts.nombre AS Sucursal,tc.nombre AS Departamento,tp.tipo AS Permiso,
+                            tp.descripcion AS Descripcion,FORMAT (tpe.created_at, 'dd-MM-yyyy') as fechaCreado,tpe.created_by
+                            FROM tbemp_permisos AS tpe
+                            INNER JOIN tbempleados AS te
+                            ON te.numero_nomina = tpe.numero_nomina
+                            INNER JOIN tbprivilegios_emp AS tp
+                            ON tp.id = tpe.emp_proy
+                            INNER JOIN tbcelula tc
+                            ON te.id_celula = tc.id_celula
+                            INNER JOIN tbsucursal AS ts
+                            ON te.id_sucursal = ts.id_sucursal
+                            AND tp.id = ?";
+                
+                $params = array($idrol);
+                
+                $stmt = sqlsrv_query( $con, $query, $params);
+
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
+            case 'obtenerEmpleadosRoles':
+                //SUSTITUIR POR SP
+                $query = "SELECT numero_nomina,nombre_largo 
+                            FROM tbempleados 
+                            WHERE NOT EXISTS (SELECT * FROM tbemp_permisos WHERE tbempleados.numero_nomina = tbemp_permisos.numero_nomina) 
+                            AND status <> 'B'
+                            ORDER BY numero_nomina ASC";
+                
+                $stmt = sqlsrv_query( $con, $query);
+
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
+            case 'agregarempleadoRol':
+                // die(json_encode($_POST));
+                $empNomina = $_POST['numero_nomina'];
+                $idRol = $_POST['idrol'];
+                $empleadoControl = $_POST['empleadoControl'];
+
+                $insert = "EXEC spe_insert_emp_rol ?,?,?";
+
+                $params = array($empNomina,$empleadoControl,$idRol);
+            
+                $stmt = sqlsrv_query( $con, $insert, $params);
+
+
+                if( $stmt ) {
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => 'Transaccion exitosa',
+                        'mensaje' => 'Informacion obtenida'                  
+                    );
+                } 
+                else {
+                    $respuesta = array(
+                        'estado' => 'ERROR',
+                        'tipo' => 'warning',
+                        'informacion' => 'No se inserto informacion',
+                        'mensaje' => 'Informacion no btenida'                
+                    );
+                }               
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
+            case 'eliminarempleadoRol':
+                $empNomina = $_POST['numero_nomina'];
+                $delete = "DELETE FROM tbemp_permisos WHERE numero_nomina = ?";
+
+                $params = array($empNomina);
+
+                $stmt = sqlsrv_query( $con, $delete, $params);
+
+                if( $stmt ) {
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => 'El rol ha sido eliminado del usuario',
+                        'mensaje' => 'Informacion obtenida'                  
+                    );
+                } 
+                else {
+                    $respuesta = array(
+                        'estado' => 'ERROR',
+                        'tipo' => 'warning',
+                        'informacion' => 'No se pudo eliminar el rol',
+                        'mensaje' => 'Informacion no btenida'                
+                    );
+                }               
+
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
             break;
             default:
             echo 'NO DATA RETRIVE.';

@@ -23,6 +23,7 @@ $( document ).ready(function() {
     let backButton = $( "#backButton" ),
         seccionLateral = $("#sidePaneAdmin"),
         seccionPanel = $(".seccionPanel"),
+        administrador = $(".administrador"),
         transportes = $(".transportes"),
         general = $(".nav-item"),
         dh = $(".dh"),
