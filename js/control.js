@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar')
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -195,49 +195,49 @@ $(document).ready(function () {
             nContacto = $('#txtNcontacto').val(),
             curpini = curp.substr(0, 4),
             curpfin = curp.substr(10, 8);
-            rfcini = rfc.substr(0, 4);
-            rfcfin = rfc.substr(10, 3);
-            domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
-            return {
-                numero_nomina :nomina,
-                nomina_jefe : jefenomina,
-                tipo_nomina : tipoNomina,
-                tipo_registro : tipo,
-                lote :lote,
-                id_sucursal : sucursal,
-                clasificacion_empleado : clasificacion,
-                salario_diario : salarioDiario,
-                salario_mensual : salarioMensual,
-                departamento : celula,
-                fecha_alta : fechaAlta,
-                registro_patronal : registro,
-                puesto : puesto,
-                comentario : comentario,
-                nombre_emplead : nombre,
-                apellido_paterno : aPaterno,
-                apellido_materno : aMaterno,
-                CURP : curp,
-                CURPINI : curpini,
-                CURPFIN : curpfin,
-                RFC : rfc,
-                RFCINI: rfcini,
-                RFCINI : rfcfin,
-                NSS : nss,
-                DV : dv,
-                fecha_nacimiento : fechaNacimiento,
-                lugar_nacimiento : lNacimiento,
-                sexo : genero,
-                tipo_identificacion : tIdentificacion,
-                numero_identificacion : id,
-                estado_civil : eCivil,
-                nivel_escolaridad : escolaridad,
-                constancia : cEscolaridad,
-                nombre_padre : nPadre,
-                nombre_madre : nMadre,
-                calle : calle,
-                numero_exterior : numE,
-                numero_interior : numI
-            };
+        rfcini = rfc.substr(0, 4);
+        rfcfin = rfc.substr(10, 3);
+        domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
+        return {
+            numero_nomina: nomina,
+            nomina_jefe: jefenomina,
+            tipo_nomina: tipoNomina,
+            tipo_registro: tipo,
+            lote: lote,
+            id_sucursal: sucursal,
+            clasificacion_empleado: clasificacion,
+            salario_diario: salarioDiario,
+            salario_mensual: salarioMensual,
+            departamento: celula,
+            fecha_alta: fechaAlta,
+            registro_patronal: registro,
+            puesto: puesto,
+            comentario: comentario,
+            nombre_emplead: nombre,
+            apellido_paterno: aPaterno,
+            apellido_materno: aMaterno,
+            CURP: curp,
+            CURPINI: curpini,
+            CURPFIN: curpfin,
+            RFC: rfc,
+            RFCINI: rfcini,
+            RFCINI: rfcfin,
+            NSS: nss,
+            DV: dv,
+            fecha_nacimiento: fechaNacimiento,
+            lugar_nacimiento: lNacimiento,
+            sexo: genero,
+            tipo_identificacion: tIdentificacion,
+            numero_identificacion: id,
+            estado_civil: eCivil,
+            nivel_escolaridad: escolaridad,
+            constancia: cEscolaridad,
+            nombre_padre: nPadre,
+            nombre_madre: nMadre,
+            calle: calle,
+            numero_exterior: numE,
+            numero_interior: numI
+        };
     };
 
     //LLENAR SUCURSAL TABULADOR
@@ -272,14 +272,14 @@ $(document).ready(function () {
                 let nombreCompletoMadre = datos.nombre_madre,
                     nombreCompletoPadre = datos.nombre_padre,
                     tabulador = datos.tabulador;
-                    
-                if(tabulador === null){
+
+                if (tabulador === null) {
                     tabulador = '00|X'
                 }
                 let vTabulador = tabulador.split('|');
-                
+
                 sucursalTabulador();
-            
+
                 let nombrePadre = nombreCompletoPadre.split('|');
                 let nombreMadre = nombreCompletoMadre.split('|');
 
@@ -350,19 +350,19 @@ $(document).ready(function () {
                     $("#txtTabSucursal").val(vTabulador[1]);
                 }, 280);
 
-                $("#txtClasificacion").focusout(function(){
-                    listarDepartamentos($("#txtSucursal").val(),$("#txtClasificacion").val());
+                $("#txtClasificacion").focusout(function () {
+                    listarDepartamentos($("#txtSucursal").val(), $("#txtClasificacion").val());
                 });
 
-                $("#txtCelula").focusout(function(){
-                    listarPuestos($("#txtCelula").val(),$("#txtClasificacion").val());
+                $("#txtCelula").focusout(function () {
+                    listarPuestos($("#txtCelula").val(), $("#txtClasificacion").val());
                 });
-                
-                $("#txtCP").focusout(function(){
+
+                $("#txtCP").focusout(function () {
                     listarFraccionamientos($("#txtCP").val());
                 });
 
-                $("#txtClasificacion").focusout(function(){
+                $("#txtClasificacion").focusout(function () {
                     listarJefes($("#txtClasificacion").val());
                 });
             }
@@ -476,17 +476,19 @@ $(document).ready(function () {
         if (cp.length === 5) {
             $.ajax({
                 type: "GET",
-                url: "https://api-codigos-postales.herokuapp.com/v2/codigo_postal/" + cp,
+                url: "http://localhost/mqws/control.php?param=" + cp,
                 success: function (data) {
-                    $("#txtEdo").val(data.estado);
+                    /*$("#txtEdo").val(data.estado);
                     $("#txtMunicipio").val(data.municipio);
                     $("#txtLocalidad").val(data.municipio);
-                    var colonias = data.colonias,
+                    var colonias = data.asentamiento,
                         s = '';
                     for (var i in colonias) {
+                        console.log(colonias[i]);
                         s += '<option value="' + colonias[i] + '">' + colonias[i] + '</option>';
                     }
-                    $("#txtFraccionamiento").html(s);
+                    $("#txtFraccionamiento").html(s);*/
+                    console.log(data);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log(jqXHR.status);
@@ -835,16 +837,16 @@ $(document).ready(function () {
                 obtenerAltas();
             });
 
-            radioAcuse.click(function(e){
+            radioAcuse.click(function (e) {
                 divAcuses.removeClass('d-none');
                 divProcesadas.addClass('d-none');
             });
 
-            radioProcesadas.click(function(e){
+            radioProcesadas.click(function (e) {
                 divProcesadas.removeClass('d-none');
                 divAcuses.addClass('d-none');
             });
-              
+
             function obtenerAltas() {
                 var action = 'altas',
                     fecha = $('#txtFechaAltas').val();
@@ -866,7 +868,7 @@ $(document).ready(function () {
                             }
                             else {
                                 $('#alertaM').addClass('d-none');
-                                
+
                                 for (var i in informacion) {
                                     tablaAltas(informacion[i]);
                                     datosEmpleados[i] = `${informacion[i].numero_nomina} - ${informacion[i].nombre_largo}.`;
@@ -885,13 +887,13 @@ $(document).ready(function () {
                         acuse = rowInfo.lote_acuse,
                         procesada = rowInfo.lote;
 
-                    if(acuse == null || acuse == ''){
+                    if (acuse == null || acuse == '') {
                         acuse = '';
                     }
-                    if(procesada == null || procesada == ''){
+                    if (procesada == null || procesada == '') {
                         procesada = '';
                     }
-                    
+
                     seccionExportar.removeClass('d-none');
 
                     $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
@@ -911,7 +913,7 @@ $(document).ready(function () {
                 }
             }
 
-                btnEnviarAltas.click(function (e) {
+            btnEnviarAltas.click(function (e) {
                 e.preventDefault();
                 var action = 'envioAltas',
                     fecha = $('#txtFechaAltas').val(),
@@ -939,7 +941,7 @@ $(document).ready(function () {
                 var action = 'envioAcuse';
 
                 let numerosNomina = [];
-                $.each($("input[name='noNomina']:checked"), function(){            
+                $.each($("input[name='noNomina']:checked"), function () {
                     numerosNomina.push($(this).val());
                 });
 
@@ -1002,7 +1004,7 @@ $(document).ready(function () {
                 e.preventDefault();
                 let action = 'envioProcesada';
                 let numerosNomina = [];
-                $.each($("input[name='noNomina']:checked"), function(){            
+                $.each($("input[name='noNomina']:checked"), function () {
                     numerosNomina.push($(this).val());
                 });
 
@@ -1063,347 +1065,350 @@ $(document).ready(function () {
 
 
             break;
-            case 'administrarBajas':
-                let btnConsultaBajas = $('#btnConsultaBajas'),
-                    btnEnviarBajas = $('#btnEnviarBajas'),
-                    btnEnviarAcuseBaja = $('#btnEnviarAcuseBaja'),
-                    btnEnviarProcesadaBaja = $('#btnEnviarProcesadaBaja'),
-                    radioAcuseBaja = $('#radioAcuseBaja'),
-                    radioProcesadasBaja = $('#radioProcesadasBaja'),
-                    divAcusesBaja = $('#divAcusesBaja'),
-                    divProcesadasBaja = $('#divProcesadasBaja'),
-                    btnFechaBaja = $('#btnFechaBaja'),
-                    datosEmpleadosBajas = [];
+        case 'administrarBajas':
+            let btnConsultaBajas = $('#btnConsultaBajas'),
+                btnEnviarBajas = $('#btnEnviarBajas'),
+                btnEnviarAcuseBaja = $('#btnEnviarAcuseBaja'),
+                btnEnviarProcesadaBaja = $('#btnEnviarProcesadaBaja'),
+                radioAcuseBaja = $('#radioAcuseBaja'),
+                radioProcesadasBaja = $('#radioProcesadasBaja'),
+                divAcusesBaja = $('#divAcusesBaja'),
+                divProcesadasBaja = $('#divProcesadasBaja'),
+                btnFechaBaja = $('#btnFechaBaja'),
+                datosEmpleadosBajas = [];
 
-                    let obtenerBajas = () => {
-                        var action = 'bajas',
-                            fecha = $('#txtFechaBajas').val();
-                        var dataTable = new FormData();
-                        dataTable.append('action', action);
-                        dataTable.append('prop', fecha);
-                        var xmlhr = new XMLHttpRequest();
-                        xmlhr.open('POST', backendURL, true);
-                        xmlhr.onload = function () {
-                            if (this.status === 200) {
-                                var respuesta = JSON.parse(xmlhr.responseText);
-                                // console.log(respuesta);
-                                if (respuesta.estado === 'OK') {
-                                    var datos = respuesta.informacion.length;
-                                    var informacion = respuesta.informacion;
-                                    if (datos < 1) {
-                                        $('#alertaM').removeClass('d-none');
-                                        seccionEnvioAltas.addClass('d-none');
-                                        seccionAcuseAltas.addClass('d-none');
-                                    }
-                                    else {
-                                        $('#alertaM').addClass('d-none');
-                                        
-                                        for (var i in informacion) {
-                                            tablaBajas(informacion[i]);
-                                            datosEmpleadosBajas[i] = `${informacion[i].numero_nomina} - ${informacion[i].nombre_largo}.`;
-                                        }
-                                    }
-                                } else if (respuesta.status === 'error') {
-                                    var informacion = respuesta.informacion;
-                                    $('#alertaM').removeClass('d-none');
+            let obtenerBajas = () => {
+                var action = 'bajas',
+                    fecha = $('#txtFechaBajas').val();
+                var dataTable = new FormData();
+                dataTable.append('action', action);
+                dataTable.append('prop', fecha);
+                var xmlhr = new XMLHttpRequest();
+                xmlhr.open('POST', backendURL, true);
+                xmlhr.onload = function () {
+                    if (this.status === 200) {
+                        var respuesta = JSON.parse(xmlhr.responseText);
+                        // console.log(respuesta);
+                        if (respuesta.estado === 'OK') {
+                            var datos = respuesta.informacion.length;
+                            var informacion = respuesta.informacion;
+                            if (datos < 1) {
+                                $('#alertaM').removeClass('d-none');
+                                seccionEnvioAltas.addClass('d-none');
+                                seccionAcuseAltas.addClass('d-none');
+                            }
+                            else {
+                                $('#alertaM').addClass('d-none');
+
+                                for (var i in informacion) {
+                                    tablaBajas(informacion[i]);
+                                    datosEmpleadosBajas[i] = `${informacion[i].numero_nomina} - ${informacion[i].nombre_largo}.`;
                                 }
                             }
-                        }
-                        xmlhr.send(dataTable);
-        
-                        function tablaBajas(rowInfo) {
-                            var row = $("<tr>"),
-                                motivoBaja = rowInfo.bajaMotivo,
-                                acuse = rowInfo.baja_acuse,
-                                procesada = rowInfo.baja_procesada;
-
-                            if(motivoBaja == null)
-                                motivoBaja = 'No especificado';
-        
-                            if(acuse == null || acuse == ''){
-                                acuse = '';
-                            }
-                            if(procesada == null || procesada == ''){
-                                procesada = '';
-                            }
-                            
-                            seccionExportar.removeClass('d-none');
-        
-                            $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
-        
-                            row.append($("<td><input class='form-check-input position-static ml-2 text-center' name='noNomina' type='checkbox' id='blankCheckbox' value='" + rowInfo.numero_nomina + "'>" + "</td>"));
-                            // row.append($("<td><a href='formato.php?emp=" + rowInfo.numero_nomina + "' title='Formato de Alta' target='_blank'>" + rowInfo.numero_nomina + "</a></td>"));
-                            row.append($("<td>" + rowInfo.numero_nomina + "</td>"));
-                            row.append($("<td> " + rowInfo.nss + " </td>"));
-                            row.append($("<td> " + rowInfo.nombre_largo + " </td>"));
-                            row.append($("<td> " + rowInfo.salario_diario + " </td>"));
-                            row.append($("<td> " + rowInfo.sucursal + " </td>"));
-                            row.append($("<td> " + rowInfo.planta + " </td>"));
-                            row.append($("<td> " + rowInfo.fechaBaja + " </td>"));
-                            row.append($("<td> " + rowInfo.registro_patronal + " </td>"));
-                            row.append($("<td> " + rowInfo.registro_patronal + ' ' + rowInfo.tipo_nomina + " </td>"));
-                            row.append($("<td> " + motivoBaja + " </td>"));
-                            row.append($("<td><a href='assets/attached/Bajas/Acuses/" + rowInfo.baja_acuse + ".zip' target='_blank'>" + acuse + "</a></td>"));
-                            row.append($("<td><a href='assets/attached/Bajas/Procesadas/" + rowInfo.baja_procesada + ".zip' target='_blank'>" + procesada + "</a></td>"));
+                        } else if (respuesta.status === 'error') {
+                            var informacion = respuesta.informacion;
+                            $('#alertaM').removeClass('d-none');
                         }
                     }
+                }
+                xmlhr.send(dataTable);
 
+                function tablaBajas(rowInfo) {
+                    var row = $("<tr>"),
+                        motivoBaja = rowInfo.bajaMotivo,
+                        acuse = rowInfo.baja_acuse,
+                        procesada = rowInfo.baja_procesada;
+
+                    if (motivoBaja == null)
+                        motivoBaja = 'No especificado';
+
+                    if (acuse == null || acuse == '') {
+                        acuse = '';
+                    }
+                    if (procesada == null || procesada == '') {
+                        procesada = '';
+                    }
+
+                    seccionExportar.removeClass('d-none');
+
+                    $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
+
+                    row.append($("<td><input class='form-check-input position-static ml-2 text-center' name='noNomina' type='checkbox' id='blankCheckbox' value='" + rowInfo.numero_nomina + "'>" + "</td>"));
+                    // row.append($("<td><a href='formato.php?emp=" + rowInfo.numero_nomina + "' title='Formato de Alta' target='_blank'>" + rowInfo.numero_nomina + "</a></td>"));
+                    row.append($("<td>" + rowInfo.numero_nomina + "</td>"));
+                    row.append($("<td> " + rowInfo.nss + " </td>"));
+                    row.append($("<td> " + rowInfo.nombre_largo + " </td>"));
+                    row.append($("<td> " + rowInfo.salario_diario + " </td>"));
+                    row.append($("<td> " + rowInfo.sucursal + " </td>"));
+                    row.append($("<td> " + rowInfo.planta + " </td>"));
+                    row.append($("<td> " + rowInfo.fechaBaja + " </td>"));
+                    row.append($("<td> " + rowInfo.registro_patronal + " </td>"));
+                    row.append($("<td> " + rowInfo.registro_patronal + ' ' + rowInfo.tipo_nomina + " </td>"));
+                    row.append($("<td> " + motivoBaja + " </td>"));
+                    row.append($("<td><a href='assets/attached/Bajas/Acuses/" + rowInfo.baja_acuse + ".zip' target='_blank'>" + acuse + "</a></td>"));
+                    row.append($("<td><a href='assets/attached/Bajas/Procesadas/" + rowInfo.baja_procesada + ".zip' target='_blank'>" + procesada + "</a></td>"));
+                }
+            }
+
+            obtenerBajas();
+
+            btnConsultaBajas.click(function (e) {
+                e.preventDefault();
+                $('#dataTable').empty();
                 obtenerBajas();
+            });
 
-                btnConsultaBajas.click(function (e) {
-                    e.preventDefault();
-                    $('#dataTable').empty();
-                    obtenerBajas();
+            radioAcuseBaja.click(function (e) {
+                divAcusesBaja.removeClass('d-none');
+                divProcesadasBaja.addClass('d-none');
+            });
+
+            radioProcesadasBaja.click(function (e) {
+                divProcesadasBaja.removeClass('d-none');
+                divAcusesBaja.addClass('d-none');
+            });
+
+
+            btnEnviarBajas.click(function (e) {
+                e.preventDefault();
+                var action = 'envioBajas',
+                    fecha = $('#txtFechaBajas').val(),
+                    cc = $('#usuario_correo').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: localBackend + 'sender.php',
+                    data: { action: action, fecha: fecha, datos: datosEmpleadosBajas, cc: cc },
+                    success: function (response) {
+                        let respuesta = JSON.parse(response);
+                        console.log(respuesta);
+                    }
                 });
-    
-                radioAcuseBaja.click(function(e){
-                    divAcusesBaja.removeClass('d-none');
-                    divProcesadasBaja.addClass('d-none');
+                Swal.fire({
+                    position: 'center',
+                    type: 'success',
+                    title: 'Informe de altas enviado a Nominas',
+                    showConfirmButton: false,
+                    timer: 1800
+                })
+            });
+
+            btnEnviarAcuseBaja.click(function (e) {
+                e.preventDefault();
+                var action = 'envioAcuseBaja';
+
+                let numerosNominaBaja = [];
+                $.each($("input[name='noNomina']:checked"), function () {
+                    numerosNominaBaja.push($(this).val());
                 });
-    
-                radioProcesadasBaja.click(function(e){
-                    divProcesadasBaja.removeClass('d-none');
-                    divAcusesBaja.addClass('d-none');
-                });
-                  
-    
-                btnEnviarBajas.click(function (e) {
-                    e.preventDefault();
-                    var action = 'envioBajas',
-                        fecha = $('#txtFechaBajas').val(),
-                        cc = $('#usuario_correo').val();
-    
-                    $.ajax({
-                        type: 'POST',
-                        url: localBackend + 'sender.php',
-                        data: { action: action, fecha: fecha, datos: datosEmpleadosBajas, cc: cc },
-                        success: function (response) {
-                            let respuesta = JSON.parse(response);
-                            console.log(respuesta);
-                        }
-                    });
+
+                if (numerosNominaBaja.length === 0) {
                     Swal.fire({
-                        position: 'center',
-                        type: 'success',
-                        title: 'Informe de altas enviado a Nominas',
-                        showConfirmButton: false,
-                        timer: 1800
+                        type: 'error',
+                        title: 'Selección Nula!',
+                        html: 'Debe seleccionar al menos un empleado',
+                        timer: 1300
                     })
-                });
-    
-                btnEnviarAcuseBaja.click(function (e) {
-                    e.preventDefault();
-                    var action = 'envioAcuseBaja';
-    
-                    let numerosNominaBaja = [];
-                    $.each($("input[name='noNomina']:checked"), function(){            
-                        numerosNominaBaja.push($(this).val());
-                    });
-                    
-                    if(numerosNominaBaja.length === 0){
-                        Swal.fire({
-                            type: 'error',
-                        title: 'Selección Nula!',
-                        html: 'Debe seleccionar al menos un empleado',
-                        timer: 1300})
-                    } else {
-                    
-                        let adjunto_AcuseBaja = document.getElementById('txtAcuseBaja');
-                        let adjuntoAcuseBaja = adjunto_AcuseBaja.files[0];
-                        let nombreAdjuntoAcuseBaja = adjunto_AcuseBaja.files[0].name;
-                        nombreAdjuntoAcuseBaja = nombreAdjuntoAcuseBaja.substr(23, 9);
-        
-                        var datosAcuseBaja = new FormData();
-                        datosAcuseBaja.append('action', action);
-                        datosAcuseBaja.append('arrNomina', numerosNominaBaja.join("|"));
-                        datosAcuseBaja.append('nombreAdjuntoAcuse', nombreAdjuntoAcuseBaja);
-        
-                        var xhr = new XMLHttpRequest();
-                        xhr.open('POST', backendURL, true);
-                        xhr.send(datosAcuseBaja);
-                        xhr.onload = function () {
-                            if (this.status === 200 && this.readyState == 4) {
-                                var respuesta = JSON.parse(xhr.responseText);
-                                
-                                if (respuesta.estado === 'OK') {
-                                    Swal.fire({
-                                        title: 'Alta exitosa!',
-                                        text: 'Alta de acuse exitosa!',
-                                        type: 'success'
+                } else {
+
+                    let adjunto_AcuseBaja = document.getElementById('txtAcuseBaja');
+                    let adjuntoAcuseBaja = adjunto_AcuseBaja.files[0];
+                    let nombreAdjuntoAcuseBaja = adjunto_AcuseBaja.files[0].name;
+                    nombreAdjuntoAcuseBaja = nombreAdjuntoAcuseBaja.substr(23, 9);
+
+                    var datosAcuseBaja = new FormData();
+                    datosAcuseBaja.append('action', action);
+                    datosAcuseBaja.append('arrNomina', numerosNominaBaja.join("|"));
+                    datosAcuseBaja.append('nombreAdjuntoAcuse', nombreAdjuntoAcuseBaja);
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', backendURL, true);
+                    xhr.send(datosAcuseBaja);
+                    xhr.onload = function () {
+                        if (this.status === 200 && this.readyState == 4) {
+                            var respuesta = JSON.parse(xhr.responseText);
+
+                            if (respuesta.estado === 'OK') {
+                                Swal.fire({
+                                    title: 'Alta exitosa!',
+                                    text: 'Alta de acuse exitosa!',
+                                    type: 'success'
+                                })
+                                    .then(resultado => {
+                                        if (resultado.value) {
+                                            location.reload();
+                                        }
                                     })
-                                        .then(resultado => {
-                                            if (resultado.value) {
-                                                location.reload();
-                                            }
-                                        })
-                                } else {
-                                    Swal.fire({
-                                        title: 'Error!',
-                                        text: 'Hubo un error',
-                                        type: 'error'
-                                    })
-                                }
-                            }
-                        }
-                    
-    
-                        var archivoAcuseBaja = new FormData();
-                        archivoAcuseBaja.append('action', action);
-                        archivoAcuseBaja.append('adjuntoAcuse', adjuntoAcuseBaja);
-                        archivoAcuseBaja.append('nombreAdjuntoAcuse', nombreAdjuntoAcuseBaja);
-        
-                        var xhtr = new XMLHttpRequest();
-                        xhtr.open('POST', localBackend + 'control.php', true);
-                        xhtr.send(archivoAcuseBaja);
-                        xhtr.onload = function () {
-                            if (this.status === 200 && this.readyState == 4) {
-                                // var respuesta = JSON.parse(xhtr.responseText);
-                                // console.log(respuesta);
+                            } else {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'Hubo un error',
+                                    type: 'error'
+                                })
                             }
                         }
                     }
-                });
 
-                btnFechaBaja.click(async function(e){
-                    e.preventDefault();
-                    var action = 'cambioFechaBaja';
-                    let numerosNominaBaja = [];
-                    $.each($("input[name='noNomina']:checked"), function(){            
-                        numerosNominaBaja.push($(this).val());
-                    });
-    
-                    if(numerosNominaBaja.length === 0){
-                        Swal.fire({
-                        title: 'Selección Nula!',
-                        html: 'Debe seleccionar al menos un empleado',
-                        timer: 1300})
-                    } else {
 
-                        const { value: fechaBaja } = await Swal.fire({
-                            title: 'Fecha de baja',
-                            html:
-                                '<input type="date" class="form-control" id="txtfechaBaja" value="<?php echo date("Y-m-d");?>',
-                            showCancelButton: true,
-                            preConfirm: () => {
-                                return [
-                                    document.getElementById('txtfechaBaja').value
-                                ]
-                            }
-                        })
-                        let fecha_Baja = JSON.stringify(fechaBaja);
-                        if (fecha_Baja[2] !== '"') {
-                            // let fecha_Baja = JSON.stringify(fechaBaja);
-                            fecha_Baja = fecha_Baja.substr(2, 10);
-                            $.ajax({
-                                type: 'POST',
-                                url: backendURL,
-                                data: {
-                                    action: 'cambioFechaBaja',
-                                    arrNomina: numerosNominaBaja.join("|"),
-                                    fechaBaja: fecha_Baja,
-                                    empleadoControl: empleado_activo
-                                }
-                            }).done(function (response) {
-                                respuesta = JSON.parse(response);
-                                let estadoRespuesta = respuesta.estado;
-                                console.log(respuesta);
-                                if (estadoRespuesta === 'OK') {
-                                    Swal.fire({
-                                        title: 'Baja Actualizada',
-                                        text: 'La fecha de baja fue actualizada',
-                                        type: 'info'
-                                    })
-                                        .then(resultado => {
-                                            if (resultado.value) {
-                                                location.reload();
-                                            }
-                                        })
-                                } else {
-                                    Swal.fire({
-                                        title: 'Error',
-                                        text: 'Ocurrio un error al procesar los datos',
-                                        type: 'error'
-                                    })
-                                }
-                            });
-                        } else {
-                            return false;
-                        }
+                    var archivoAcuseBaja = new FormData();
+                    archivoAcuseBaja.append('action', action);
+                    archivoAcuseBaja.append('adjuntoAcuse', adjuntoAcuseBaja);
+                    archivoAcuseBaja.append('nombreAdjuntoAcuse', nombreAdjuntoAcuseBaja);
 
-                    }
-                });
-    
-                btnEnviarProcesadaBaja.click(function (e) {
-                    e.preventDefault();
-                    let action = 'envioProcesadaBaja';
-                    let numerosNominaBaja = [];
-                    $.each($("input[name='noNomina']:checked"), function(){            
-                        numerosNominaBaja.push($(this).val());
-                    });
-
-                    if(numerosNominaBaja.length === 0){
-                        Swal.fire({
-                            type: 'error',
-                        title: 'Selección Nula!',
-                        html: 'Debe seleccionar al menos un empleado',
-                        timer: 1300})
-                    } else {
-    
-                        let adjunto_ProcesadaBaja = document.getElementById('txtProcesadaBaja');
-                        let adjuntoProcesadaBaja = adjunto_ProcesadaBaja.files[0];
-                        let nombreAdjuntoProcesadaBaja = adjunto_ProcesadaBaja.files[0].name;
-                        nombreAdjuntoProcesadaBaja = nombreAdjuntoProcesadaBaja.substr(21, 9);
-        
-                        var datosProcesadaBaja = new FormData();
-                        datosProcesadaBaja.append('action', action);
-                        datosProcesadaBaja.append('arrNomina', numerosNominaBaja.join("|"));
-                        datosProcesadaBaja.append('nombreAdjuntoProcesada', nombreAdjuntoProcesadaBaja);
-        
-                        var xhr = new XMLHttpRequest();
-                        xhr.open('POST', backendURL, true);
-                        xhr.send(datosProcesadaBaja);
-                        xhr.onload = function () {
-                            if (this.status === 200 && this.readyState == 4) {
-                                var respuesta = JSON.parse(xhr.responseText);
-                                if (respuesta.estado === 'OK') {
-                                    Swal.fire({
-                                        title: 'Alta exitosa!',
-                                        text: 'Alta de procesada exitosa!',
-                                        type: 'success'
-                                    })
-                                        .then(resultado => {
-                                            if (resultado.value) {
-                                                location.reload();
-                                            }
-                                        })
-                                } else {
-                                    Swal.fire({
-                                        title: 'Error!',
-                                        text: 'Hubo un error',
-                                        type: 'error'
-                                    })
-                                }
-                            }
-                        }
-        
-                        var archivoProcesadaBaja = new FormData();
-                        archivoProcesadaBaja.append('action', action);
-                        archivoProcesadaBaja.append('adjuntoProcesada', adjuntoProcesadaBaja);
-                        archivoProcesadaBaja.append('nombreAdjuntoProcesada', nombreAdjuntoProcesadaBaja);
-        
-                        var xhtr = new XMLHttpRequest();
-                        xhtr.open('POST', localBackend + 'control.php', true);
-                        xhtr.send(archivoProcesadaBaja);
-                        xhtr.onload = function () {
-                            if (this.status === 200 && this.readyState == 4) {
-                                // var respuesta = JSON.parse(xhtr.responseText);
-                                // console.log(respuesta);
-                            }
+                    var xhtr = new XMLHttpRequest();
+                    xhtr.open('POST', localBackend + 'control.php', true);
+                    xhtr.send(archivoAcuseBaja);
+                    xhtr.onload = function () {
+                        if (this.status === 200 && this.readyState == 4) {
+                            // var respuesta = JSON.parse(xhtr.responseText);
+                            // console.log(respuesta);
                         }
                     }
-    
+                }
+            });
+
+            btnFechaBaja.click(async function (e) {
+                e.preventDefault();
+                var action = 'cambioFechaBaja';
+                let numerosNominaBaja = [];
+                $.each($("input[name='noNomina']:checked"), function () {
+                    numerosNominaBaja.push($(this).val());
                 });
-        break;
+
+                if (numerosNominaBaja.length === 0) {
+                    Swal.fire({
+                        title: 'Selección Nula!',
+                        html: 'Debe seleccionar al menos un empleado',
+                        timer: 1300
+                    })
+                } else {
+
+                    const { value: fechaBaja } = await Swal.fire({
+                        title: 'Fecha de baja',
+                        html:
+                            '<input type="date" class="form-control" id="txtfechaBaja" value="<?php echo date("Y-m-d");?>',
+                        showCancelButton: true,
+                        preConfirm: () => {
+                            return [
+                                document.getElementById('txtfechaBaja').value
+                            ]
+                        }
+                    })
+                    let fecha_Baja = JSON.stringify(fechaBaja);
+                    if (fecha_Baja[2] !== '"') {
+                        // let fecha_Baja = JSON.stringify(fechaBaja);
+                        fecha_Baja = fecha_Baja.substr(2, 10);
+                        $.ajax({
+                            type: 'POST',
+                            url: backendURL,
+                            data: {
+                                action: 'cambioFechaBaja',
+                                arrNomina: numerosNominaBaja.join("|"),
+                                fechaBaja: fecha_Baja,
+                                empleadoControl: empleado_activo
+                            }
+                        }).done(function (response) {
+                            respuesta = JSON.parse(response);
+                            let estadoRespuesta = respuesta.estado;
+                            console.log(respuesta);
+                            if (estadoRespuesta === 'OK') {
+                                Swal.fire({
+                                    title: 'Baja Actualizada',
+                                    text: 'La fecha de baja fue actualizada',
+                                    type: 'info'
+                                })
+                                    .then(resultado => {
+                                        if (resultado.value) {
+                                            location.reload();
+                                        }
+                                    })
+                            } else {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: 'Ocurrio un error al procesar los datos',
+                                    type: 'error'
+                                })
+                            }
+                        });
+                    } else {
+                        return false;
+                    }
+
+                }
+            });
+
+            btnEnviarProcesadaBaja.click(function (e) {
+                e.preventDefault();
+                let action = 'envioProcesadaBaja';
+                let numerosNominaBaja = [];
+                $.each($("input[name='noNomina']:checked"), function () {
+                    numerosNominaBaja.push($(this).val());
+                });
+
+                if (numerosNominaBaja.length === 0) {
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Selección Nula!',
+                        html: 'Debe seleccionar al menos un empleado',
+                        timer: 1300
+                    })
+                } else {
+
+                    let adjunto_ProcesadaBaja = document.getElementById('txtProcesadaBaja');
+                    let adjuntoProcesadaBaja = adjunto_ProcesadaBaja.files[0];
+                    let nombreAdjuntoProcesadaBaja = adjunto_ProcesadaBaja.files[0].name;
+                    nombreAdjuntoProcesadaBaja = nombreAdjuntoProcesadaBaja.substr(21, 9);
+
+                    var datosProcesadaBaja = new FormData();
+                    datosProcesadaBaja.append('action', action);
+                    datosProcesadaBaja.append('arrNomina', numerosNominaBaja.join("|"));
+                    datosProcesadaBaja.append('nombreAdjuntoProcesada', nombreAdjuntoProcesadaBaja);
+
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', backendURL, true);
+                    xhr.send(datosProcesadaBaja);
+                    xhr.onload = function () {
+                        if (this.status === 200 && this.readyState == 4) {
+                            var respuesta = JSON.parse(xhr.responseText);
+                            if (respuesta.estado === 'OK') {
+                                Swal.fire({
+                                    title: 'Alta exitosa!',
+                                    text: 'Alta de procesada exitosa!',
+                                    type: 'success'
+                                })
+                                    .then(resultado => {
+                                        if (resultado.value) {
+                                            location.reload();
+                                        }
+                                    })
+                            } else {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'Hubo un error',
+                                    type: 'error'
+                                })
+                            }
+                        }
+                    }
+
+                    var archivoProcesadaBaja = new FormData();
+                    archivoProcesadaBaja.append('action', action);
+                    archivoProcesadaBaja.append('adjuntoProcesada', adjuntoProcesadaBaja);
+                    archivoProcesadaBaja.append('nombreAdjuntoProcesada', nombreAdjuntoProcesadaBaja);
+
+                    var xhtr = new XMLHttpRequest();
+                    xhtr.open('POST', localBackend + 'control.php', true);
+                    xhtr.send(archivoProcesadaBaja);
+                    xhtr.onload = function () {
+                        if (this.status === 200 && this.readyState == 4) {
+                            // var respuesta = JSON.parse(xhtr.responseText);
+                            // console.log(respuesta);
+                        }
+                    }
+                }
+
+            });
+            break;
         /**ALTAS SEMANALES */
         case 'semanales':
             let btnMostrarAltas = $('#btnMostrarAltas'),
@@ -1537,7 +1542,7 @@ $(document).ready(function () {
                     labelReingreso,
                     tabulador = rowInfo.tabulador;
 
-                if(tabulador === null){
+                if (tabulador === null) {
                     tabulador = '000|XXX'
                 }
                 let vTabulador = tabulador.split('|');
@@ -1564,7 +1569,7 @@ $(document).ready(function () {
                     labelClasificacion = 'Especial';
                 else if (labelClasificacion === 'B')
                     labelClasificacion = 'Becario';
-                     
+
                 labelNomina = (labelNomina === 'S' ? 'Sem' : 'Quin');
                 labelReingreso = (valueReingreso === '0' ? 'PERMITIR REINGRESO' : 'NO PERMITIR EL REINGRESO');
                 labelGenero = (labelGenero === 'F' ? 'Femenino' : 'Masculino');
@@ -1581,9 +1586,9 @@ $(document).ready(function () {
 
                 if (valueReingreso === '0') $('#txtReingreso').addClass('text-success'); else $('#txtReingreso').addClass('text-danger');
 
-                    
-            
-                var nomina = rowInfo.numero_nomina, 
+
+
+                var nomina = rowInfo.numero_nomina,
                     urlFoto = 'assets/files/' + nomina + '/' + nomina + '.jpg',
                     action = 'revisarImagen';
                 $("#empImagen").attr('src', urlFoto);
@@ -1594,7 +1599,7 @@ $(document).ready(function () {
                 $('#txtSucursal').text(rowInfo.sucursal);
                 $('#txtCelula').text(rowInfo.planta);
                 $('#txtStatus').text(labelSt);
-                $('#txtSalario').text('$'+rowInfo.salario_diario);
+                $('#txtSalario').text('$' + rowInfo.salario_diario);
                 $('#txtClasificacion').text(labelClasificacion);
                 $('#txtTipoNomina').text(labelNomina);
                 $('#txtRegistro').text(labelRegistro);
@@ -1608,10 +1613,10 @@ $(document).ready(function () {
                 $('#txtEstadoCivil').html('<strong> Estado Civil: </strong>' + labelEstadoCivil);
                 $('#txtEducacion').html('<strong> Escolaridad: </strong>' + labelEscolaridad);
 
-                $('#txtTabulador').html('<strong> Tabulador: </strong>' + vTabulador[0]+vTabulador[1]);
+                $('#txtTabulador').html('<strong> Tabulador: </strong>' + vTabulador[0] + vTabulador[1]);
                 $('#txtID').html('<strong> Identificacion: </strong>' + rowInfo.identificacion);
                 $('#txtIDN').html('<strong> Numero Identificacion: </strong>' + rowInfo.numero_identificacion);
-                
+
                 $('#txtNombrePadre').html('<strong> Nombre del padre: </strong>' + rowInfo.nombrePadre + ' ' + rowInfo.apellidoPaternoPadre + ' ' + rowInfo.apellidoMaternoPadre);
                 $('#txtNombreMadre').html('<strong> Nombre de la madre: </strong>' + rowInfo.nombreMadre + ' ' + rowInfo.apellidoPaternoMadre + ' ' + rowInfo.apellidoMaternoMadre);
 
@@ -1622,7 +1627,7 @@ $(document).ready(function () {
                 $('#txtCalle').html('<strong> Calle: </strong>' + rowInfo.calle);
                 $('#txtNumero').html('<strong> Numero exterior: </strong>' + rowInfo.numero_exterior + '<strong>     Numero interior: </strong>' + rowInfo.numero_interior);
                 $('#txtFraccionamiento').html('<strong> Fraccionamiento: </strong>' + rowInfo.fraccionamiento);
-                
+
                 $('#txtCuenta').html('<strong> Cuenta bancaria: </strong>' + rowInfo.numero_cuenta);
                 $('#txtInfonavit').html('<strong> Infonavit: </strong>' + rowInfo.numero_infonavit);
                 $('#txtFonacot').html('<strong> Fonacot: </strong>' + rowInfo.numero_fonacot);
@@ -1630,19 +1635,19 @@ $(document).ready(function () {
                 $('#txtTelefono').html('<strong> Telefono: </strong>' + rowInfo.telefono);
                 $('#txtCelular').html('<strong> Celular: </strong>' + rowInfo.celular);
                 $('#txtCorreo').html('<strong> Email: </strong>' + rowInfo.correo);
-                
-                $('#txtAltaAcuse').html('<strong> Acuse Alta: </strong> <a href="assets/attached/Acuses/'+rowInfo.lote_acuse+'.zip" target="_blank">'+rowInfo.lote_acuse+'</a>');
-                $('#txtAltaProcesada').html('<strong> Procesada Alta: </strong> <a href="assets/attached/Acuses/'+rowInfo.lote+'.zip" target="_blank">'+rowInfo.lote+'</a>');
+
+                $('#txtAltaAcuse').html('<strong> Acuse Alta: </strong> <a href="assets/attached/Acuses/' + rowInfo.lote_acuse + '.zip" target="_blank">' + rowInfo.lote_acuse + '</a>');
+                $('#txtAltaProcesada').html('<strong> Procesada Alta: </strong> <a href="assets/attached/Acuses/' + rowInfo.lote + '.zip" target="_blank">' + rowInfo.lote + '</a>');
 
                 if (statusEmpleadoR === 'B') {
-                $('#txtBajaAcuse').html('<strong> Acuse Baja: </strong> <a href="assets/attached/Acuses/'+rowInfo.baja_acuse+'.zip" target="_blank">'+rowInfo.baja_acuse+'</a>');
-                $('#txtBajaProcesada').html('<strong> Acuse Baja: </strong> <a href="assets/attached/Acuses/'+rowInfo.baja_procesada+'.zip" target="_blank">'+rowInfo.baja_procesada+'</a>');
-                $('#txtseccionBaja').html('<strong> INFORMACION DE LA BAJA DEL EMPLEADO </strong>');
-                $('#txtReingreso').html('<strong> ' + labelReingreso + ' </strong>');
-                $('#txtclasificacionBaja').html('<strong> Clasificacion: </strong>' + rowInfo.bajaClasficacion);
-                $('#txtmotivoBaja').html('<strong> Motivo: </strong>' + rowInfo.bajaMotivo);
-                $('#txtexplicacionBaja').html('<strong> Explicacion: </strong>' + rowInfo.bajaExplicacion);
-                $('#txtcomentarioBaja').html('<strong> Comentarios: </strong>' + rowInfo.bajaComentario);
+                    $('#txtBajaAcuse').html('<strong> Acuse Baja: </strong> <a href="assets/attached/Acuses/' + rowInfo.baja_acuse + '.zip" target="_blank">' + rowInfo.baja_acuse + '</a>');
+                    $('#txtBajaProcesada').html('<strong> Acuse Baja: </strong> <a href="assets/attached/Acuses/' + rowInfo.baja_procesada + '.zip" target="_blank">' + rowInfo.baja_procesada + '</a>');
+                    $('#txtseccionBaja').html('<strong> INFORMACION DE LA BAJA DEL EMPLEADO </strong>');
+                    $('#txtReingreso').html('<strong> ' + labelReingreso + ' </strong>');
+                    $('#txtclasificacionBaja').html('<strong> Clasificacion: </strong>' + rowInfo.bajaClasficacion);
+                    $('#txtmotivoBaja').html('<strong> Motivo: </strong>' + rowInfo.bajaMotivo);
+                    $('#txtexplicacionBaja').html('<strong> Explicacion: </strong>' + rowInfo.bajaExplicacion);
+                    $('#txtcomentarioBaja').html('<strong> Comentarios: </strong>' + rowInfo.bajaComentario);
                 }
 
 
@@ -1803,16 +1808,16 @@ $(document).ready(function () {
                 let empleadoBaja = $('#txtNomina').html()
                 localStorage.setItem('empleadoBaja', $('#txtNomina').html());
                 var url = "index.php?request=empleadoBaja";
-                    // newTab = window.open(url, '_blank');
-                    $(location).attr('href', url);
+                // newTab = window.open(url, '_blank');
+                $(location).attr('href', url);
             });
-        break;
+            break;
         case 'empleadoBaja':
             let empleado_baja = localStorage.getItem('empleadoBaja');
             var action = 'mostrar-empleado';
             localStorage.removeItem('empleadoBaja');
             console.log(empleado_baja);
-            
+
 
             var dataEmp = new FormData();
             dataEmp.append('action', action);
@@ -1843,8 +1848,8 @@ $(document).ready(function () {
 
             let clasificacionBajas = () => {
                 var bajaCla = new FormData(),
-                action = 'claBajas',
-                param = 'clasificacion';
+                    action = 'claBajas',
+                    param = 'clasificacion';
                 bajaCla.append('action', action);
                 bajaCla.append('param', param);
                 var xmlBCla = new XMLHttpRequest();
@@ -1869,8 +1874,8 @@ $(document).ready(function () {
 
             let motivoBajas = (key) => {
                 var bajaMot = new FormData(),
-                action = 'claBajas',
-                param = 'motivo';
+                    action = 'claBajas',
+                    param = 'motivo';
                 bajaMot.append('action', action);
                 bajaMot.append('param', param);
                 bajaMot.append('key', key);
@@ -1896,8 +1901,8 @@ $(document).ready(function () {
 
             let explicacionBajas = (key) => {
                 var expMot = new FormData(),
-                action = 'claBajas',
-                param = 'explicacion';
+                    action = 'claBajas',
+                    param = 'explicacion';
                 expMot.append('action', action);
                 expMot.append('param', param);
                 expMot.append('key', key);
@@ -1922,22 +1927,22 @@ $(document).ready(function () {
             }
 
             clasificacionBajas();
-            
-            $('#txtClasificacion').focusout(function(){
-                let key = ($('#txtClasificacion').val()).substr(0,3);
-                if(key.length !== 0)
+
+            $('#txtClasificacion').focusout(function () {
+                let key = ($('#txtClasificacion').val()).substr(0, 3);
+                if (key.length !== 0)
                     motivoBajas(key);
                 else
-                $('#txtMotivo').empty().append('<option selected="" value="">Selecciona una Clasificacion</option>');
+                    $('#txtMotivo').empty().append('<option selected="" value="">Selecciona una Clasificacion</option>');
             });
 
-            $('#txtMotivo').focusout(function(){
-                let key = ($('#txtMotivo').val()).substr(6,2);
+            $('#txtMotivo').focusout(function () {
+                let key = ($('#txtMotivo').val()).substr(6, 2);
                 console.log(key.length);
-                if(key.length !== 0)
+                if (key.length !== 0)
                     explicacionBajas(key);
                 else
-                $('#txtExplicacion').empty().append('<option selected="" value="">Selecciona un Motivo</option>');
+                    $('#txtExplicacion').empty().append('<option selected="" value="">Selecciona un Motivo</option>');
             });
 
             $("#btnBajaEmpleado").click(function (e) {
@@ -1949,21 +1954,21 @@ $(document).ready(function () {
                     comBaja = $('#txtComentario').val();
                 e.preventDefault();
                 let empleado_Baja = $('#txtNomina').html();
-                if($('#cbReingreso').is(':checked'))
+                if ($('#cbReingreso').is(':checked'))
                     ctrlBaja = 1;
-                if(claBaja.length === 0){
+                if (claBaja.length === 0) {
                     Swal.fire(
                         'Seleccionar opcion!',
                         'La Clasificacion de la baja esta vacia, favor de elegir una opcion!',
                         'warning'
                     )
-                } else if(motBaja.length === 0){
+                } else if (motBaja.length === 0) {
                     Swal.fire(
                         'Seleccionar opcion!',
                         'El Motivo de la baja esta vacia, favor de elegir una opcion!',
                         'warning'
                     )
-                } else if(expBaja.length === 0){
+                } else if (expBaja.length === 0) {
                     Swal.fire(
                         'Seleccionar opcion!',
                         'La Explicacion de la baja esta vacia, favor de elegir una opcion!',
@@ -2010,7 +2015,7 @@ $(document).ready(function () {
             });
 
 
-        break;
+            break;
         //PERFIL DEL EMPLEADO
         case 'perfil':
             let estadoEmpleado = $('#txtStatus');
@@ -2040,7 +2045,7 @@ $(document).ready(function () {
 
             function mostrarEmpleado(rowInfo) {
                 let estadoEmpleadoR = rowInfo.status;
-                if (estadoEmpleadoR.substr(0,1) === 'B') {
+                if (estadoEmpleadoR.substr(0, 1) === 'B') {
                     estadoEmpleado.addClass('text-danger');
                     estadoEmpleado.removeClass('text-success');
                 } else {
@@ -2087,8 +2092,8 @@ $(document).ready(function () {
                     $("#btnGafete").prop('disabled', true);
                 }
             });
-           
-        break;
+
+            break;
         //LLENAR FORMULARIO DATOS DEL EMPLEADO
         case 'modificar-empleado':
             // let btnModificarEmpleado = $('#btnModificarEmpleado');
@@ -2106,16 +2111,16 @@ $(document).ready(function () {
                     let nombreCompletoMadre = datos.nombre_madre,
                         nombreCompletoPadre = datos.nombre_padre,
                         tabulador = '';
-                    
+
                     let nombrePadre = nombreCompletoPadre.split('|');
                     let nombreMadre = nombreCompletoMadre.split('|');
-                    if(datos.tabulador === null){
+                    if (datos.tabulador === null) {
                         tabulador = '###|XXX';
                     } else {
                         tabulador = datos.tabulador;
                     }
                     let vTabulador = tabulador.split('|');
-                    
+
                     sucursalTabulador();
 
                     $("#txtNomina").val(datos.numero_nomina);
@@ -2188,28 +2193,28 @@ $(document).ready(function () {
                         $("#txtTabSucursal").val(vTabulador[1]);
                     }, 280);
 
-                    
+
                 }
             });
 
             //EDITAR CP
-            $("#txtCP").focusout(function(){
+            $("#txtCP").focusout(function () {
                 listarFraccionamientos($("#txtCP").val());
             });
 
-            $("#txtClasificacion").focusout(function(){
-                listarDepartamentos($("#txtSucursal").val(),$("#txtClasificacion").val());
+            $("#txtClasificacion").focusout(function () {
+                listarDepartamentos($("#txtSucursal").val(), $("#txtClasificacion").val());
             });
 
-            $("#txtCelula").focusout(function(){
-                listarPuestos($("#txtCelula").val(),$("#txtClasificacion").val());
+            $("#txtCelula").focusout(function () {
+                listarPuestos($("#txtCelula").val(), $("#txtClasificacion").val());
             });
-            
-            $("#txtClasificacion").focusout(function(){
+
+            $("#txtClasificacion").focusout(function () {
                 listarJefes($("#txtClasificacion").val());
             });
 
-            $('#btnModificarEmpleado').click(function(e){
+            $('#btnModificarEmpleado').click(function (e) {
                 e.preventDefault();
                 let nomina = $('#txtNomina').val(),
                     jefenomina = $('#txtJefe').val(),
@@ -2266,7 +2271,7 @@ $(document).ready(function () {
                     curpfin = curp.substr(10, 8),
                     rfcini = rfc.substr(0, 4),
                     rfcfin = rfc.substr(10, 3);
-                    domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
+                domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
                 if
                     (
                     salarioDiario.trim() === '' || celula.trim() === '' ||
@@ -2298,10 +2303,10 @@ $(document).ready(function () {
                             action: 'modificarEmpleado',
                             nomina: nomina,
                             jefenomina: jefenomina,
-                            claveTabulador : claveTabulador,
+                            claveTabulador: claveTabulador,
                             tipoNomina: tipoNomina,
                             empleado_status: tipo,
-                            lote : lote,
+                            lote: lote,
                             sucursal: sucursal,
                             clasificacion: clasificacion,
                             salarioDiario: salarioDiario,
@@ -2310,8 +2315,8 @@ $(document).ready(function () {
                             fechaAlta: fechaAlta,
                             registro: registro,
                             puesto: puesto,
-                            nss : nss,
-                            dv : dv,
+                            nss: nss,
+                            dv: dv,
                             comentario: comentario,
                             nombre: nombre,
                             aPaterno: aPaterno,
@@ -2548,65 +2553,65 @@ $(document).ready(function () {
             setTimeout(function () {
                 $('#txtTipo').val('R');
             }, 530);
-            
-            btnReingresarEmpleado.click(function(e){
+
+            btnReingresarEmpleado.click(function (e) {
                 e.preventDefault();
                 nomina = $('#txtNomina').val(),
-                jefenomina = $('#txtJefe').val(),
-                claveTabulador = `${$('#txtTabClave').val()}|${$('#txtTabSucursal').val()}`,
-                tipoNomina = $('#txtTipoNomina').val(),
-                tipo = $('#txtTipo').val(),
-                lote = $("#txtLote").val(),
-                sucursal = $('#txtSucursal').val(),
-                clasificacion = $('#txtClasificacion').val(),
-                salarioDiario = $('#txtSalarioDiario').val(),
-                salarioMensual = $('#txtSalarioMensual').val(),
-                celula = $('#txtCelula').val(),
-                fechaAlta = $('#txtfechaAlta').val(),
-                registro = $('#txtRegistro').val(),
-                puesto = $('#txtPuesto').val(),
-                comentario = $('#txtComentario').val(),
-                nombre = $('#txtNombre').val(),
-                aPaterno = $('#txtPaterno').val(),
-                aMaterno = $('#txtMaterno').val(),
-                curp = $('#txtCURP').val(),
-                rfc = $('#txtRFC').val(),
-                nss = $('#txtNSS').val(),
-                dv = $('#txtDV').val(),
-                fechaNacimiento = $('#txtfechaNacimiento').val(),
-                lNacimiento = $('#txtLnacimiento').val(),
-                genero = $('#txtGenero').val(),
-                tIdentificacion = $('#txtTI').val(),
-                id = $('#txtID').val(),
-                eCivil = $('#txtCivil').val(),
-                escolaridad = $('#txtEscolaridad').val(),
-                cEscolaridad = $('#txtStescolaridad').val(),
-                ///DATOS PADRES
-                nPadre = `${$('#txtApePatPadre').val()}|${$('#txtApeMatPadre').val()}|${$('#txtNombrePadre').val()}`,
-                nMadre = `${$('#txtApePatMadre').val()}|${$('#txtApeMatMadre').val()}|${$('#txtNombreMadre').val()}`,
-                calle = $('#txtCalle').val(),
-                numE = $('#txtNume').val(),
-                numI = $('#txtNumi').val(),
-                cp = $('#txtCP').val(),
-                edo = $('#txtEdo').val(),
-                municipio = $('#txtMunicipio').val(),
-                localidad = $('#txtLocalidad').val(),
-                fraccionamiento = $('#txtFraccionamiento').val(),
-                infonavit = $('#txtInfonavit').val(),
-                nInfonavit = $('#txtNinfonavit').val(),
-                fonacot = $('#txtFonacot').val(),
-                nFonacot = $('#txtNfonacot').val(),
-                banco = $('#txtBanco').val(),
-                cuenta = $('#txtCuenta').val(),
-                correo = $('#txtCorreo').val(),
-                telefono = $('#txtTelefono').val(),
-                celular = $('#txtCelular').val(),
-                contacto = $('#txtContacto').val(),
-                nContacto = $('#txtNcontacto').val(),
-                curpini = curp.substr(0, 4),
-                curpfin = curp.substr(10, 8),
-                rfcini = rfc.substr(0, 4),
-                rfcfin = rfc.substr(10, 3);
+                    jefenomina = $('#txtJefe').val(),
+                    claveTabulador = `${$('#txtTabClave').val()}|${$('#txtTabSucursal').val()}`,
+                    tipoNomina = $('#txtTipoNomina').val(),
+                    tipo = $('#txtTipo').val(),
+                    lote = $("#txtLote").val(),
+                    sucursal = $('#txtSucursal').val(),
+                    clasificacion = $('#txtClasificacion').val(),
+                    salarioDiario = $('#txtSalarioDiario').val(),
+                    salarioMensual = $('#txtSalarioMensual').val(),
+                    celula = $('#txtCelula').val(),
+                    fechaAlta = $('#txtfechaAlta').val(),
+                    registro = $('#txtRegistro').val(),
+                    puesto = $('#txtPuesto').val(),
+                    comentario = $('#txtComentario').val(),
+                    nombre = $('#txtNombre').val(),
+                    aPaterno = $('#txtPaterno').val(),
+                    aMaterno = $('#txtMaterno').val(),
+                    curp = $('#txtCURP').val(),
+                    rfc = $('#txtRFC').val(),
+                    nss = $('#txtNSS').val(),
+                    dv = $('#txtDV').val(),
+                    fechaNacimiento = $('#txtfechaNacimiento').val(),
+                    lNacimiento = $('#txtLnacimiento').val(),
+                    genero = $('#txtGenero').val(),
+                    tIdentificacion = $('#txtTI').val(),
+                    id = $('#txtID').val(),
+                    eCivil = $('#txtCivil').val(),
+                    escolaridad = $('#txtEscolaridad').val(),
+                    cEscolaridad = $('#txtStescolaridad').val(),
+                    ///DATOS PADRES
+                    nPadre = `${$('#txtApePatPadre').val()}|${$('#txtApeMatPadre').val()}|${$('#txtNombrePadre').val()}`,
+                    nMadre = `${$('#txtApePatMadre').val()}|${$('#txtApeMatMadre').val()}|${$('#txtNombreMadre').val()}`,
+                    calle = $('#txtCalle').val(),
+                    numE = $('#txtNume').val(),
+                    numI = $('#txtNumi').val(),
+                    cp = $('#txtCP').val(),
+                    edo = $('#txtEdo').val(),
+                    municipio = $('#txtMunicipio').val(),
+                    localidad = $('#txtLocalidad').val(),
+                    fraccionamiento = $('#txtFraccionamiento').val(),
+                    infonavit = $('#txtInfonavit').val(),
+                    nInfonavit = $('#txtNinfonavit').val(),
+                    fonacot = $('#txtFonacot').val(),
+                    nFonacot = $('#txtNfonacot').val(),
+                    banco = $('#txtBanco').val(),
+                    cuenta = $('#txtCuenta').val(),
+                    correo = $('#txtCorreo').val(),
+                    telefono = $('#txtTelefono').val(),
+                    celular = $('#txtCelular').val(),
+                    contacto = $('#txtContacto').val(),
+                    nContacto = $('#txtNcontacto').val(),
+                    curpini = curp.substr(0, 4),
+                    curpfin = curp.substr(10, 8),
+                    rfcini = rfc.substr(0, 4),
+                    rfcfin = rfc.substr(10, 3);
                 domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
                 if
                     (
@@ -2639,7 +2644,7 @@ $(document).ready(function () {
                             action: 'modificarEmpleado',
                             nomina: nomina,
                             jefenomina: jefenomina,
-                            claveTabulador : claveTabulador,
+                            claveTabulador: claveTabulador,
                             tipoNomina: tipoNomina,
                             empleado_status: tipo,
                             lote: lote,
@@ -2725,7 +2730,7 @@ $(document).ready(function () {
                     });
                 }
             });
-        break;
+            break;
         //GUARDAR EMPLEADO  
         case 'alta-empleado':
             var botonValidar = $("#btnValidar"),
@@ -2748,7 +2753,7 @@ $(document).ready(function () {
                 ccurp = $("#campo-curp"),
                 genero = '';
 
-            
+
 
             ccurp.focusout(function () {
                 textocurp = $("#campo-curp").val();
@@ -2786,7 +2791,7 @@ $(document).ready(function () {
                             obtenerNomina();
                             txtTipo.val('Alta');
                             altaEmpleado.removeClass('d-none');
-                        }else {
+                        } else {
                             let ctrlReingreso = respuesta.informacion[0].controlReingreso;
                             let ctrlEmpleado = respuesta.informacion[0].numero_nomina;
                             let ctrlNombre = respuesta.informacion[0].nombre_largo;
@@ -2799,7 +2804,7 @@ $(document).ready(function () {
                                     showConfirmButton: false,
                                     timer: 10000
                                 })
-                            }else{
+                            } else {
                                 localStorage.setItem('codigoEmpleado', ctrlEmpleado);
                                 vcurp.addClass('d-none');
                                 Swal.fire({
@@ -2823,12 +2828,12 @@ $(document).ready(function () {
                 txtCURP.val(textocurp);
                 let curp = txtCURP.val();
                 validarReingreso(curp);
-            });            
+            });
 
             //VALIDAR CATEGORIA $$$
             txtSalarioMensual.focusout(function () {
                 let salarioMensual = parseFloat(txtSalarioMensual.val());
-                if(txtClasificacion.val() === 'A'){
+                if (txtClasificacion.val() === 'A') {
                     if (salarioMensual < 2250 || salarioMensual > 20000 || !($.isNumeric(salarioMensual))) {
                         txtSalarioMensual.val('');
                         txtSalarioMensual.addClass('btn-outline-danger');
@@ -2848,13 +2853,13 @@ $(document).ready(function () {
             let camposClave = () => {
                 genero = (textocurp.charAt(10) === 'M') ? 'F' : 'M';
                 $("#txtGenero").val(genero);
-                let extractRFC = textocurp.substr(0,10);
+                let extractRFC = textocurp.substr(0, 10);
                 var aNacimiento = textocurp.substr(4, 2),
                     mNacimiento = textocurp.substr(6, 2),
                     dNacimiento = textocurp.substr(8, 2);
                 /**WORK IT */
-                if(aNacimiento.substr(0,1) === '0'){
-                    aNacimiento = '200'+aNacimiento.substr(1,1);
+                if (aNacimiento.substr(0, 1) === '0') {
+                    aNacimiento = '200' + aNacimiento.substr(1, 1);
                 }
                 var now = new Date(aNacimiento, mNacimiento - 1, dNacimiento);
                 var nyear = now.getFullYear();
@@ -2979,7 +2984,7 @@ $(document).ready(function () {
                 xmlCEL.send(listaCEL);
             }
 
-            
+
 
             //LLENAR PUESTOS POR CELULA SELECCIONADA
             $('#txtCelula').focusout(function () {
@@ -3011,15 +3016,15 @@ $(document).ready(function () {
 
 
             //LLENAR JEFE DIRECTO POR NIVEL DE PUESTO SELECCIONADO
-            $("#txtClasificacion").focusout(function(){
+            $("#txtClasificacion").focusout(function () {
                 listarJefes($("#txtClasificacion").val());
             });
-            
-            $('#txtTabClave').keypress(function(e){
+
+            $('#txtTabClave').keypress(function (e) {
                 $('#txtTabClave').css("border", "");
             });
 
-            $('#txtTabSucursal').focus(function(e){
+            $('#txtTabSucursal').focus(function (e) {
                 $('#txtTabSucursal').css("border", "");
             });
 
@@ -3041,7 +3046,7 @@ $(document).ready(function () {
 
             //LLENAR SUCURSAL TABULADOR
             sucursalTabulador();
-            
+
 
             //CONTROL CODIGO POSTAL
             $("#txtCP").focusout(function () {
@@ -3187,8 +3192,8 @@ $(document).ready(function () {
                 rfcfin = rfc.substr(10, 3);
                 domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
                 //VALIDAR SI EL TABULADOR ES MANDATORIO
-                if($('#txtTabSucursal').val() === '' && $('#txtTabClave').val().trim() === ''){
-                    if(tipoNomina.trim() === 'S' && (clasificacion === 'O' || clasificacion === 'AO')){
+                if ($('#txtTabSucursal').val() === '' && $('#txtTabClave').val().trim() === '') {
+                    if (tipoNomina.trim() === 'S' && (clasificacion === 'O' || clasificacion === 'AO')) {
                         Swal.fire({
                             position: 'center',
                             type: 'warning',
@@ -3325,9 +3330,6 @@ $(document).ready(function () {
 
 
             });
-
-
-
             break;
         case 'puestos':
             let btnNuevo = $('#btnnPuesto'),
@@ -3415,8 +3417,8 @@ $(document).ready(function () {
                                     "<td>" + puesto[i].nombre + " </td>" +
                                     "<td>" + puesto[i].descripcion + " </td>" +
                                     "<td class='d-none'>" + puesto[i].id_nivel + " </td>" +
-                                    "<td>" + (puesto[i].created_at.date).substr(0,10) + " </td>" +
-                                    "<td>" + (puesto[i].updated_at.date).substr(0,10) + " </td>" +
+                                    "<td>" + (puesto[i].created_at.date).substr(0, 10) + " </td>" +
+                                    "<td>" + (puesto[i].updated_at.date).substr(0, 10) + " </td>" +
                                     "<td>" + puesto[i].updated_by + " </td>" +
                                     "<td><a class='btn btn-primary btnEditarRegistro text-white btn-block'" +
                                     "data-codigo='" + puesto[i].codigo + "'" +
@@ -3467,7 +3469,7 @@ $(document).ready(function () {
                     puestoDepartamento = $('#txtnDepartamento').val(),
                     puestoDescripcion = $('#txtdPuesto').val(),
                     puestoCodigo = $('#txtCodigoPuesto').val(),
-                    puestoCorto = (puestoNombre.split(/\s/).reduce((response,word)=> response+=word.slice(0,1),'')).toUpperCase();
+                    puestoCorto = (puestoNombre.split(/\s/).reduce((response, word) => response += word.slice(0, 1), '')).toUpperCase();
 
                 if (puestoNombre.trim() === '' || puestoDescripcion.trim() === '') {
                     Swal.fire({
@@ -3481,7 +3483,7 @@ $(document).ready(function () {
                     $.ajax({
                         type: 'POST',
                         url: backendURL,
-                        data: { action: 'actualizarPuesto', puestoCodigo: puestoCodigo, puestoNivel: puestoNivel, puestoNombre : puestoNombre,puestoCorto : puestoCorto, puestoDepartamento : puestoDepartamento, puestoDescripcion : puestoDescripcion, empleadoControl: empleado_activo},
+                        data: { action: 'actualizarPuesto', puestoCodigo: puestoCodigo, puestoNivel: puestoNivel, puestoNombre: puestoNombre, puestoCorto: puestoCorto, puestoDepartamento: puestoDepartamento, puestoDescripcion: puestoDescripcion, empleadoControl: empleado_activo },
                         success: function (response) {
                             let respuesta = JSON.parse(response);
                             if (respuesta.estado === 'OK') {
@@ -3515,12 +3517,12 @@ $(document).ready(function () {
 
             btnGuardarPuesto.on('click', function (e) {
                 e.preventDefault();
-                
+
                 let puestoNivel = $('#txttPuesto').val(),
                     puestoNombre = $('#txtnPuesto').val(),
                     puestoDepartamento = $('#txtnDepartamento').val(),
                     puestoDescripcion = $('#txtdPuesto').val(),
-                    puestoCorto = (puestoNombre.split(/\s/).reduce((response,word)=> response+=word.slice(0,1),'')).toUpperCase();
+                    puestoCorto = (puestoNombre.split(/\s/).reduce((response, word) => response += word.slice(0, 1), '')).toUpperCase();
 
                 if (puestoNombre.trim() === '' || puestoDescripcion.trim() === '') {
                     Swal.fire({
@@ -3534,7 +3536,7 @@ $(document).ready(function () {
                     $.ajax({
                         type: 'POST',
                         url: backendURL,
-                        data: { action: 'guardarPuesto', puestoNivel: puestoNivel, puestoNombre : puestoNombre,puestoCorto : puestoCorto, puestoDepartamento : puestoDepartamento, puestoDescripcion : puestoDescripcion, empleadoControl: empleado_activo},
+                        data: { action: 'guardarPuesto', puestoNivel: puestoNivel, puestoNombre: puestoNombre, puestoCorto: puestoCorto, puestoDepartamento: puestoDepartamento, puestoDescripcion: puestoDescripcion, empleadoControl: empleado_activo },
                         success: function (response) {
                             let respuesta = JSON.parse(response);
                             console.log(respuesta);
@@ -3564,10 +3566,218 @@ $(document).ready(function () {
                             }
                         }
                     });
-                    
+
                 }
             });
-        
+            break;
+        case 'admin-roles':
+
+            let eliminarRolEmpleado = (nomina) => {
+                let numero_nomina = nomina.data('nomina'),
+                    idRol = $('#txtidRol').html(),
+                    action = 'eliminarempleadoRol';
+                Swal.fire({
+                    title: 'Estas seguro?',
+                    text: "El rol sera eliminado para el empleado " + numero_nomina,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, eliminar rol!'
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            type: 'POST',
+                            url: backendURL,
+                            data: { action: action, numero_nomina: numero_nomina },
+                            success: function (response) {
+                                let respuesta = JSON.parse(response);
+                                console.log(respuesta);
+                                if (respuesta.estado === 'OK') {
+                                    Swal.fire({
+                                        title: 'Eliminado!',
+                                        text: respuesta.informacion,
+                                        type: respuesta.tipo
+                                    })
+                                        .then(resultado => {
+                                            if (resultado.value) {
+                                                //location.reload();
+                                                $('#tableRolEmployee').empty();
+                                                listarempRoles(idRol);
+                                            }
+                                        })
+                                } else {
+                                    Swal.fire({
+                                        title: 'Error',
+                                        text: respuesta.informacion,
+                                        type: respuesta.tipo
+                                    })
+                                        .then(resultado => {
+                                            if (resultado.value) {
+                                                //location.reload();
+                                                $('#tableRolEmployee').empty();
+                                                listarempRoles(idRol);
+                                            }
+                                        })
+                                }
+                            }
+                        });
+                    }
+                })
+            }
+
+            let listarempRoles = (idRol) => {
+                let action = 'obtenerempRoles';
+                $.ajax({
+                    type: 'POST',
+                    url: backendURL,
+                    data: { action: action, idrol: idRol },
+                    success: function (response) {
+                        let respuesta = JSON.parse(response);
+                        let reg = respuesta.informacion;
+                        for (var i in reg) {
+                            $('#tableRolEmployee').append
+                                (
+                                    "<tr><td class='trCode'>" + reg[i].numero_nomina + " </td>" +
+                                    "<td>" + reg[i].nombre_largo + "</td>" +
+                                    "<td>" + reg[i].status + " </td>" +
+                                    "<td>" + reg[i].Sucursal + " </td>" +
+                                    "<td>" + reg[i].Departamento + " </td>" +
+                                    "<td>" + reg[i].fechaCreado + " </td>" +
+                                    "<td>" + reg[i].created_by + " </td>" +
+                                    "<td><a class='btn btn-sm btn-danger text-white deleteRole' data-nomina='" + reg[i].numero_nomina + "' role='button'>Borrar</a></td></tr>");
+                        }
+                        $(".deleteRole").click(function () {
+                            eliminarRolEmpleado($(this));
+                        });
+                    }
+                });
+            }
+
+            let listarRoles = () => {
+                let action = 'obtenerRoles';
+                $.ajax({
+                    type: 'POST',
+                    url: backendURL,
+                    data: { action: action },
+                    success: function (response) {
+                        let respuesta = JSON.parse(response);
+                        let rol = respuesta.informacion;
+                        for (var i in rol) {
+                            $('#tableRoles').append
+                                (
+                                    "<tr><td class='trCode'>" + rol[i].id + " </td>" +
+                                    "<td>" + rol[i].tipo + "</td>" +
+                                    "<td>" + rol[i].fecha + " </td>" +
+                                    "<td><a class='btn btn-sm btn-success text-white selectRole' data-id='" + rol[i].id + "' data-nombre='" + rol[i].tipo + "' data-descripcion='" + rol[i].descripcion + "' data-fecha='" + rol[i].fecha + "' role='button'>IR</a></td></tr>");
+                        }
+                        $(".selectRole").click(function () {
+                            let idRol = $((this)).data('id'),
+                                nombreRol = $((this)).data('nombre'),
+                                descripcion = $((this)).data('descripcion'),
+                                fecha = $((this)).data('fecha');
+                            listarempRoles(idRol);
+                            $('.lista-roles').addClass('d-none');
+                            $('.rol-selecionado').removeClass('d-none');
+                            $("#txtidRol").html(idRol);
+                            $("#txtRol").html("<b>Rol: </b>" + nombreRol);
+                            $('#txtFechaRol').html("<b>Fecha creacion: </b>" + fecha);
+                            $('#txtRolDescripcion').html("<b>Descripcion: </b>" + descripcion);
+                        });
+                    }
+                });
+            }
+
+            let listarEmpleados = () => {
+                let action = 'obtenerEmpleadosRoles';
+                $.ajax({
+                    type: 'POST',
+                    url: backendURL,
+                    data: { action: action },
+                    success: function (response) {
+                        let respuesta = JSON.parse(response);
+                        let emp = respuesta.informacion,
+                            emprow = '<option value="" selected>Seleccionar Empleado</option>';
+                        for (var i in emp) {
+                            emprow += '<option value="' + emp[i].numero_nomina + '">' + emp[i].numero_nomina + ' ' + emp[i].nombre_largo + '</option>';
+                        }
+                        $('#txtDatosEmpleado').html(emprow);
+                    }
+                });
+            }
+
+            listarRoles();
+
+            $('#cancelarRol').click(function () {
+                $('.lista-roles').removeClass('d-none');
+                $('.rol-selecionado').addClass('d-none');
+                $('.empleadoRol').addClass('d-none');
+                $('#tableRoles').empty();
+                $('#tableRolEmployee').empty();
+                $('#txtNombreEmpleado').val('');
+                listarRoles();
+            });
+
+            $('#asignarRol').click(async function () {
+                $('.empleadoRol').removeClass('d-none');
+                listarEmpleados();
+            });
+
+            $('#btnAgregarEmpleadoRol').click(async function () {
+                let empRol = $('#txtNombreEmpleado').val().trim(),
+                    idRol = $('#txtidRol').html(),
+                    action = 'agregarempleadoRol';
+                if (empRol.length < 5 || empRol.trim() === '') {
+                    Swal.fire({
+                        position: 'center',
+                        type: 'warning',
+                        title: 'Favor de elegir un empleado de la lista mostrada',
+                        showConfirmButton: false,
+                        timer: 2000
+                    })
+                } else {
+                    $.ajax({
+                        type: 'POST',
+                        url: backendURL,
+                        data: { action: action, numero_nomina: empRol, idrol: idRol, empleadoControl: empleado_activo },
+                        success: function (response) {
+                            let respuesta = JSON.parse(response);
+                            console.log(respuesta);
+                            if (respuesta.estado === 'OK') {
+                                Swal.fire({
+                                    title: 'Correcto',
+                                    text: respuesta.informacion,
+                                    type: respuesta.tipo
+                                })
+                                    .then(resultado => {
+                                        if (resultado.value) {
+                                            //location.reload();
+                                            $('#txtNombreEmpleado').val('');
+                                            $('#tableRolEmployee').empty();
+                                            listarempRoles(idRol);
+                                        }
+                                    })
+                            } else {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: respuesta.informacion,
+                                    type: respuesta.tipo
+                                })
+                                    .then(resultado => {
+                                        if (resultado.value) {
+                                            //location.reload();
+                                            $('#txtNombreEmpleado').val('');
+                                            $('#tableRolEmployee').empty();
+                                            listarempRoles(idRol);
+                                        }
+                                    })
+                            }
+                        }
+                    });
+                }
+            });
+
+
 
             break;
         default:

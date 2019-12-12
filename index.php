@@ -72,6 +72,9 @@
               case 'puestos':
                 include 'inc/templates/modulos/puestos_vista.php';
                 break;
+              case 'admin-roles':
+                include 'inc/templates/administracion/roles.php';
+                break;
               case 'administrar':
                 include 'inc/templates/administracion/main.php';
                 break;
