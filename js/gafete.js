@@ -32,7 +32,7 @@ if (check) {
             $("#empAlta").html('Ingreso: ' + fechaAlta);
             $("#empNS").html(imss);
             $("#empEmergencia").html(telefonoEmergencia);
-            $("#empDireccion").html(`Calle ${informacion.calle} #${informacion.numero_exterior}  <br/> Fracc. ${informacion.fraccionamiento} <br/> C.P. ${informacion.cp} ${informacion.estado}`);
+            $("#empDireccion").html(`Calle ${informacion.calle} #${informacion.numero_exterior}  <br/> Fracc. ${informacion.fraccionamiento} <br/> C.P. ${informacion.codigo_postal} ${informacion.estado}`);
             // $("#empNomina").attr("src",url);
             JsBarcode("#empNomina", nomina,{lineColor: "#052467", font: "arial",displayValue: false});
         } else {
@@ -74,6 +74,6 @@ if (check) {
 
 botonImprimir.on('click',function(){
     // console.log('dsadasdasd');
-    //botonImprimir.addClass('d-none');
+    botonImprimir.addClass('d-none');
     window.print();
 });
