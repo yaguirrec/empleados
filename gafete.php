@@ -6,7 +6,7 @@ body{
 font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;}
 
 @media print {
-.noprint{display:none; }
+.noprint{display: none !important; }
 
  @page { margin: 0;size: portrait;}
 }
@@ -112,8 +112,8 @@ font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;}
     position: absolute; 
     text-align: center;
     width: 3.6cm; 
-    top:11.35cm;
-    font-size: 9px;
+    top:11.15cm;
+    font-size: 8px;
     font-family: 'Century Gothic', CenturyGothic, AppleGothic;
     z-index: 9;
     left: 1.2cm;
@@ -131,8 +131,8 @@ font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;}
     text-align: center;
     width: 4.5cm;
     font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
-    height: .9cm; 
-    top:10.45cm;
+    height: .8cm; 
+    top:10.35cm;
     z-index: 10;
     left: 0.7cm;" 
     alt='MEXQ' id="empNomina"/>
@@ -148,7 +148,7 @@ font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;}
     position: absolute; 
     text-align: center;
     width: 4cm; 
-    top:10cm;
+    top:9.95cm;
     font-size: 13px;
     font-family: 'Century Gothic', CenturyGothic, AppleGothic;
     z-index: 9;
@@ -160,7 +160,7 @@ font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;}
 
     </div>
     <br>
-    </div class="seccionBotonImprimir">
+    </div class="seccionBotonImprimir noprint">
         <a class="btn btn-lg btn-success botonImprimir" id="btnPrint" style="position: absolute; width: 3.2cm;top:19.4cm;font-size:12px;z-index: 12;left: 1cm;">IMPRIMIR</a>
     </div>
 </body>

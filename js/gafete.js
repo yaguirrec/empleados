@@ -74,6 +74,6 @@ if (check) {
 
 botonImprimir.on('click',function(){
     // console.log('dsadasdasd');
-    botonImprimir.addClass('d-none');
+    //botonImprimir.addClass('d-none');
     window.print();
 });
