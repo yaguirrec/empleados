@@ -60,9 +60,7 @@ p{
 }
 
 #nombrePlanta{
-    top: 138; 
     left: 403; 
-    font-size: 46%;
     font-weight: bold;
 }
 
@@ -277,29 +275,25 @@ p{
 
 #nombreCalle{
     top: 510; 
-    left: 100; 
+    left: 93; 
     font-size: 100%; 
     font-weight: bold;
 }
 
 #numeroExterior{
-    top: 510; 
-    left: 380; 
-    font-size: 100%; 
+    top: 513; 
+    left: 376; 
+    font-size: 80%; 
     font-weight: bold;
 }
 
 #numeroInterior{
-    top: 510; 
     left: 420; 
-    font-size: 100%; 
     font-weight: bold;
 }
 
 #fraccionamiento{
-    top: 510; 
-    left: 460; 
-    font-size: 100%; 
+    left: 458; 
     font-weight: bold;
 }
 
@@ -360,9 +354,7 @@ p{
 }
 
 #correoElectronico{
-    top: 585; 
-    left: 540; 
-    font-size: 68%; 
+    left: 536; 
     font-weight: bold;
 }
 

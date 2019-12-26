@@ -29,12 +29,18 @@ if (check) {
                 cuenta = informacion.cuenta,
                 lote = informacion.lote,
                 nombreCompletoPadre = informacion.nombre_padre,
-                tabulador = informacion.tabulador;
+                correo = informacion.correo,
+                calle = informacion.calle,
+                fraccionamiento = informacion.fraccionamiento,
+                planta = informacion.planta,
+                tabulador = '';
 
             console.log(informacion);
 
-            if(tabulador === null){
+            if(informacion.tabulador === undefined || informacion.tabulador === null){
                 tabulador = '000|XXX'
+            }else{
+                tabulador = informacion.tabulador
             }
             let vTabulador = tabulador.split('|');
 
@@ -46,7 +52,6 @@ if (check) {
 
             $('#formatoFecha').html(informacion.fechaAlta);
             $('#nombreSucursal').html(informacion.sucursal);
-            $('#nombrePlanta').html(informacion.planta);
             $('#claveSocio').html(informacion.clave_socio);
             $('#empLote').html(lote);
             $('#empNomina').html(informacion.numero_nomina);
@@ -71,17 +76,14 @@ if (check) {
             $('#apellidoPaternoMadre').html(nombreMadre[0]);
             $('#apellidoMaternoMadre').html(nombreMadre[1]);
             $('#nombreMadre').html(nombreMadre[2]);
-            $('#nombreCalle').html(informacion.calle);
-            $('#numeroExterior').html(informacion.numero_exterior);
-            $('#numeroInterior').html(informacion.numero_interior);
-            $('#fraccionamiento').html(informacion.fraccionamiento);
+            $('#numeroExterior').html(informacion.numero_exterior.replace(/\s/g, ""));
+            $('#numeroInterior').html(informacion.numero_interior.replace(/\s/g, ""));
             $('#codigoPostal').html(informacion.codigo_postal);
             $('#localidad').html(informacion.localidad);
             $('#municipio').html(informacion.municipio);
             $('#estado').html(informacion.estado);
             $('#numeroInfonavit').html(informacion.numero_infonavit);
             $('#numeroFonacot').html(informacion.numero_fonacot);
-            $('#correoElectronico').html(informacion.correo);
             $('#telefonoCelular').html(informacion.telefono);
             $('#telefonoCasa').html(informacion.celular);
             $('#numeroCuenta').html(informacion.numero_cuenta);
@@ -127,17 +129,60 @@ if (check) {
             }else if (empEstadoCivil === 'V')
                 $('#empCivil').html('Viudo(a)');
 
-            if (infonavit === 'Si')
+            //AJUSTAR TEXTO CORREO A CELDA
+            if (correo.length <= 30){
+                $('#correoElectronico').html(correo);
+                $('#correoElectronico').css('font-size','68%');
+                $('#correoElectronico').css('top','585px');
+            } else {
+                $('#correoElectronico').html(correo);
+                $('#correoElectronico').css('font-size','58%');
+                $('#correoElectronico').css('top','590px');
+            }
+
+            //AJUSTAR TEXTO CALLE A CELDA
+            if (calle.length <= 22){
+                $('#nombreCalle').html(calle);
+                $('#nombreCalle').css('font-size','100%');
+                $('#nombreCalle').css('top','510');
+            } else {
+                $('#nombreCalle').html(calle);
+                $('#nombreCalle').css('font-size','63%');
+                $('#nombreCalle').css('top','517');
+            }
+            
+            //AJUSTAR TEXTO FACCIONAMIENTO A CELDA
+            $('#fraccionamiento').html(informacion.fraccionamiento);
+            if (fraccionamiento.length <= 22){
+                $('#fraccionamiento').css('font-size','100%');
+                $('#fraccionamiento').css('top','510');
+            } else {
+                $('#fraccionamiento').css('font-size','50%');
+                $('#fraccionamiento').css('top','517');
+            }
+            
+            //AJUSTAR TEXTO PLANTA A CELDA
+            $('#nombrePlanta').html(informacion.planta);
+            if (planta.length <= 12){
+                $('#nombrePlanta').css('font-size','100%');
+                $('#nombrePlanta').css('top','128');
+            } else {
+                $('#nombrePlanta').css('font-size','50%');
+                $('#nombrePlanta').css('top','132');
+            }
+
+
+            if (infonavit.toLowerCase() === 'si')
                 $('#infonavit').css('left','225');
             else
                 $('#infonavit').css('left','185');
 
-            if (fonacot === 'Si')
+            if (fonacot.toLowerCase() === 'si')
                 $('#fonacot').css('left','225');
             else
                 $('#fonacot').css('left','185');
 
-            if (cuenta === 'No')
+            if (cuenta.toLowerCase() === 'no')
                 $('#cuentaBancaria').css('left','387');
             else
                 $('#cuentaBancaria').css('left','332');
