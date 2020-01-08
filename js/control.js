@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar')
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V.1112191';
+    let version = 'V.0801201DEV';
 
     $('#version').html(version);
 
@@ -39,6 +39,7 @@ $(document).ready(function () {
             xmlhr.onload = function () {
                 if (this.status === 200) {
                     var respuesta = JSON.parse(xmlhr.responseText);
+                    // console.log(respuesta);
                     if (respuesta.estado === 'OK') {
                         var informacion = respuesta.informacion,
                             datos = respuesta.informacion.length;
@@ -525,6 +526,7 @@ $(document).ready(function () {
         xmlhr.onload = function () {
             if (this.status === 200) {
                 var respuesta = JSON.parse(xmlhr.responseText);
+                console.log(respuesta);
                 if (respuesta.estado === 'OK') {
                     var informacion = respuesta.informacion;
 
@@ -597,6 +599,7 @@ $(document).ready(function () {
             xmlhr.onload = function () {
                 if (this.status === 200) {
                     var respuesta = JSON.parse(xmlhr.responseText);
+                    // console.log(respuesta);
                     if (respuesta.estado === 'OK') {
                         var informacion = respuesta.informacion;
                         for (var i in informacion) {
@@ -610,17 +613,29 @@ $(document).ready(function () {
             xmlhr.send(dataTable);
 
             function tablaEmpleados(rowInfo) {
-                var st = rowInfo.status,
-                    status = 'Activo',
-                    estado = '';
+                var stEW = rowInfo.status,
+                    stERP = rowInfo.emp_status,
+                    stNOM = rowInfo.nominas_status,
+                    vEW = 'fas fa-check',
+                    vERP = 'fas fa-check',
+                    vNOM = 'fas fa-check',
+                    estado = '',
+                    classEW = 'alert-success', 
+                    classERP = 'alert-success', 
+                    classNOM = 'alert-success';
 
                 $('#loadingIndicator').addClass('d-none');
 
-                if (st === 'B') {
+                if (stEW === 'B') {classEW = 'alert-danger'; vEW = 'fas fa-times';}
+                if (stERP === 'I') {classERP = 'alert-danger'; vERP = 'fas fa-times';}
+                if (stNOM === 'B') {classNOM = 'alert-danger'; vNOM = 'fas fa-times';}
+
+
+                if (stEW === 'B') {
                     estado = "alert-secondary";
                     status = 'Baja';
                 }
-                if (st === 'R') {
+                if (stEW === 'R') {
                     estado = "text-secondary";
                     status = 'Re-ingreso';
                 }
@@ -628,36 +643,39 @@ $(document).ready(function () {
 
                 $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
                 // NUMERO DE EQUIPO
-                row.append($("<td class='trCode'>" + rowInfo.numero_nomina + " </td>"));
+                // row.append($("<td class='trCode'>" + rowInfo.numero_nomina + " </td>"));
+                row.append($("<td class='trCode'><button type='button' class='btn btnConsulta btn-link' data-id='" + rowInfo.numero_nomina + "' title='Ver información'>" + rowInfo.numero_nomina + "</button></td>"));
                 // NOMINA DEL EMPLEADO
                 row.append($("<td class='text-left'> " + rowInfo.Nombre + " </td>"));
                 row.append($("<td class='text-left'> " + rowInfo.tabulador + " </td>"));
                 row.append($("<td class='text-left'> " + rowInfo.Puesto + " </td>"));
                 row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
-                if (st === 'B') {
+                if (stEW === 'B') {
                     row.append($("<td> " + rowInfo.fechaBaja + " </td>"));
                 }
                 row.append($("<td> " + rowInfo.Sucursal + " </td>"));
                 row.append($("<td> " + rowInfo.Celula + " </td>"));
-                row.append($("<td> " + status + " </td>"));
+                row.append($("<td> <i class='" + vEW +" "+ classEW + "'></i></td>"));
+                row.append($("<td> <i class='" + vERP +" "+ classERP + "'></i></td>"));
+                row.append($("<td> <i class='" + vNOM +" "+ classNOM + "'></i> </td>"));
                 // COLUMNA ACCION
-                row.append($("<td class='text-center'>"
-                    + "<a class='btn btnConsulta text-white btn-facebook btn-circle btn-sm' data-id='" + rowInfo.numero_nomina + "' role='button' title='Ver información'><i class='fas fa-info'></i></a>"
-                    + "</td>"));
+                // row.append($("<td class='text-center'>"
+                // + "<a class='btn btnConsulta text-white btn-primary' data-id='" + rowInfo.numero_nomina + "' role='button' title='Ver información'><i class='fas fa-info'></i> Ver</a>"
+                //   + "</td>"));
 
                 $(".btnConsulta").unbind().click(function () {
                     var employeeID = $((this)).data('id'),
                         url = "index.php?request=datos";
-                    // newTab = window.open(url, '_blank');
+                    var newTab = window.open(url, '_blank');
 
                     //SAVE EMPLOYEE ID ON LOCAL STORAGE AS codigoEmpleado
                     localStorage.setItem('codigoEmpleado', employeeID);
 
                     // OPEN ON CURRENT TAB
-                    $(location).attr('href', url);
+                    //$(location).attr('href', url);
 
                     // OPEN ON NEW TAB
-                    // newTab.focus();
+                    newTab.focus();
                 });
             }
             break;
@@ -1458,6 +1476,7 @@ $(document).ready(function () {
                 row.append($("<td class='d-none'>" + rowInfo.nomina + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.registro_patronal + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.salario_diario + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.salario_mensual + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.lote + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.status + " </td>"));
                 row.append($("<td>" + rowInfo.numero_nomina + " </td>"));

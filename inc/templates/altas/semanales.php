@@ -50,6 +50,7 @@
                     <th scope="col" class="d-none">Nomina</th>
                     <th scope="col" class="d-none">Registro Patronal</th>
                     <th scope="col" class="d-none">Categoria</th>
+                    <th scope="col" class="d-none">Salario Mensual</th>
                     <th scope="col" class="d-none">Lote</th>
                     <th scope="col" class="d-none">Estado</th>
                     <th scope="col">Numero Nomina</th>

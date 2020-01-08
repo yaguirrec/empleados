@@ -4,6 +4,7 @@ $( document ).ready(function() {
     // VALUE OF THE ACTUAL SECTION
     let searchParams = new URLSearchParams(window.location.search)
     let seccionActual = searchParams.get('request');
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
     var meses = [],
         empleados = [],
         empleadosB = [],
@@ -27,7 +28,7 @@ $( document ).ready(function() {
             consulta_parametros.append('action', action);
             consulta_parametros.append('props', props);
             var xmlhr = new XMLHttpRequest();
-            xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlhr.open('POST', backendURL, true);
                 xmlhr.onload = function()
                 {
                 if (this.status === 200) {
@@ -50,7 +51,7 @@ $( document ).ready(function() {
             consulta_parametros.append('action', action);
             consulta_parametros.append('props', props);
             var xmlhr = new XMLHttpRequest();
-            xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlhr.open('POST', backendURL, true);
                 xmlhr.onload = function()
                 {
                 if (this.status === 200) {
@@ -193,7 +194,7 @@ $( document ).ready(function() {
             var consulta_parametros = new FormData();
             consulta_parametros.append('action', action);
             var xmlhr = new XMLHttpRequest();
-            xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlhr.open('POST', backendURL, true);
                 xmlhr.onload = function()
                 {
                 if (this.status === 200) {
@@ -259,7 +260,7 @@ $( document ).ready(function() {
             var consulta_parametros = new FormData();
             consulta_parametros.append('action', action);
             var xmlhr = new XMLHttpRequest();
-            xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlhr.open('POST', backendURL, true);
                 xmlhr.onload = function()
                 {
                 if (this.status === 200) {

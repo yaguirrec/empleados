@@ -9,7 +9,7 @@
         die();
     }
 
-        include 'connection_.php';   
+        include 'connection.php';   
         $con = connDB();
         $sesion = false;
         $action  = $_POST['action'];
@@ -182,58 +182,11 @@
             $props = $_POST['prop'];
             if ($props == 'activos')
             {
-                $query = "SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
-                            CASE
-								WHEN td.tabulador IS NULL THEN 'NA'
-								ELSE REPLACE(td.tabulador,'|','') 
-							END AS tabulador,
-                            CASE
-                                WHEN (SELECT id_puesto FROM tbempleados WHERE numero_nomina = te.numero_nomina) < 1
-                                THEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
-                                ELSE (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
-                            END AS Puesto,
-                            CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
-                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
-                            FROM tbempleados AS te
-                            INNER JOIN tbsucursal AS ts
-                            ON te.id_sucursal = ts.id_sucursal 
-                            INNER JOIN tbcelula AS tc
-                            ON tc.id_celula = te.id_celula
-                            INNER JOIN tbarea AS ta
-                            ON ta.codigo = tc.codigo_area
-                            INNER JOIN tbdatos_empleados AS td
-							ON td.numero_nomina = te.numero_nomina
-                            WHERE te.status <> 'B' 
-                            ORDER BY te.status ASC, te.created_at DESC";
+                $query = "EXEC sp_listaempleados 'A'";
             } 
             else if ($props == 'bajas')
             {
-                $query = "SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre,
-                            CASE
-								WHEN td.tabulador IS NULL THEN 'NA'
-								ELSE REPLACE(td.tabulador,'|','') 
-							END AS tabulador, 
-                            CASE
-                                WHEN (SELECT id_puesto FROM tbempleados WHERE numero_nomina = te.numero_nomina) < 1
-                                THEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
-                                ELSE (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
-                            END AS Puesto,
-                            CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
-                            CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaBaja,
-                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.updated_at
-                            FROM tbempleados AS te
-                            INNER JOIN tbsucursal AS ts
-                            ON te.id_sucursal = ts.id_sucursal 
-                            INNER JOIN tbcelula AS tc
-                            ON tc.id_celula = te.id_celula
-                            INNER JOIN tbarea AS ta
-                            ON ta.codigo = tc.codigo_area
-                            INNER JOIN tbdatos_empleados AS td
-							ON td.numero_nomina = te.numero_nomina
-                            AND te.status = 'B'
-                            WHERE NOT EXISTS 
-                            (SELECT descripcion FROM tbestado WHERE descripcion = 'bpcdp' AND numero_nomina = te.numero_nomina)
-                            ORDER BY te.status ASC, te.updated_at DESC";
+                $query = "EXEC sp_listaempleados 'B'";
             } 
 
             $stmt = sqlsrv_query( $con, $query);
@@ -357,7 +310,7 @@
             $props = $_POST['prop'];
             if ($props == 'activos')
             {
-                $query = "SELECT numero_nomina,UPPER(te.nombre_largo) AS Nombre,
+                $query = "SELECT te.numero_nomina,UPPER(te.nombre_largo) AS Nombre,
                             CASE
 								WHEN td.tabulador IS NULL THEN 'NA'
 								ELSE REPLACE(td.tabulador,'|','') 
