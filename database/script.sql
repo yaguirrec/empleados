@@ -1084,7 +1084,6 @@ INSERT INTO tbcelula (codigo,nombre,descripcion,codigo_area,created_at) VALUES (
 UPDATE tbcelula SET codigo = '99CORD016' WHERE id_celula = 2
 
 SELECT * FROM tbempleados WHERE numero_nomina = '01885'
-UPDATE tbempleados SET id_celula = 361 WHERE numero_nomina = '01885'
 
 SELECT id_puesto,nombre FROM tbpuesto WHERE id_celula = 28 ORDER BY id_nivel ASC
 
@@ -1561,7 +1560,7 @@ select * from [tbestado]
 EXEC firedEmployee '26836','TEST','TEST','2019-09-30','19905';
 
  /**insert empleados en PJEMPLOY / TBEMPLEADOS / TBEMPLEADOS_DATOIS**/
-CREATE PROCEDURE firedEmployee(
+ALTER PROCEDURE firedEmployee(
 								@numeroNomina varchar(5), 
 								@descripcion varchar(45), 
 								@comentario text, 
@@ -1572,10 +1571,17 @@ AS
 BEGIN TRY
      BEGIN TRANSACTION
 	/*ALTA EN TABLA TBESTADO*/
-    INSERT INTO [tbestado]
+	IF (NOT EXISTS(SELECT * FROM [tbestado] WHERE [numero_nomina] = @numeroNomina))
+	BEGIN
+		INSERT INTO [tbestado]
                     ([numero_nomina],[estado],[descripcion],[comentario],[fecha],[created_at],[created_by])
                     VALUES
                     (@numeroNomina,0,@descripcion,@comentario,@fechaBaja,GETDATE(),@nominaControl);
+	END
+	ELSE
+	BEGIN
+		UPDATE [tbestado] SET [descripcion] = @descripcion, [comentario] = @comentario, [updated_at] = GETDATE(), [updated_by] = @nominaControl WHERE [numero_nomina] = @numeroNomina
+	END
     /*ACTUALIZAR BAJA TBEMPLEADOS*/
 	UPDATE [tbempleados] SET [status] = 'B',[fecha_baja] = @fechaBaja, [updated_at] = GETDATE(), [updated_by] = @nominaControl WHERE [numero_nomina] = @numeroNomina
 	/*ACTUALIZAR BAJA PJEMPLOY PARA CONTROL EN ERP*/

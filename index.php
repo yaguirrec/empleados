@@ -75,6 +75,9 @@
               case 'admin-roles':
                 include 'inc/templates/administracion/roles.php';
                 break;
+                case 'admin-cp':
+                  include 'inc/templates/administracion/cp.php';
+                  break;
               case 'administrar':
                 include 'inc/templates/administracion/main.php';
                 break;

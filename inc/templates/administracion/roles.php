@@ -70,3 +70,8 @@
 
     </div>
 </div>
+<div class="row mx-1">
+    <div class="col-md-12">
+    <a href="javascript:history.back();" class="btn btn-primary btn-block px-5"><i class="fas fa-chevron-left"></i> Regresar</a>
+    </div>
+</div>

@@ -627,8 +627,12 @@ $(document).ready(function () {
                 $('#loadingIndicator').addClass('d-none');
 
                 if (stEW === 'B') {classEW = 'alert-danger'; vEW = 'fas fa-times';}
+                if (stEW === null) {classEW = 'alert-danger'; vEW = 'fas fa-times';}
                 if (stERP === 'I') {classERP = 'alert-danger'; vERP = 'fas fa-times';}
+                if (stERP === null) {classERP = 'alert-danger'; vERP = 'fas fa-times';}
                 if (stNOM === 'B') {classNOM = 'alert-danger'; vNOM = 'fas fa-times';}
+                if (stNOM === null) {classNOM = 'alert-danger'; vNOM = 'fas fa-times';}
+                
 
 
                 if (stEW === 'B') {
