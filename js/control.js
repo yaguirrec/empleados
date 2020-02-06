@@ -488,7 +488,6 @@ $(document).ready(function () {
                         $("#txtMunicipio").val(datos[i].municipio);
                         $("#txtLocalidad").val(datos[i].ciudad);
                         s += '<option class="text-uppercase" value="' + datos[i].asentamiento.toUpperCase() + '">' + datos[i].asentamiento.toUpperCase() + '</option>';
-                        //console.log(datos[i].asentamiento.trim());
                     }
                     $("#txtFraccionamiento").html(s);
                 },
@@ -2565,6 +2564,12 @@ $(document).ready(function () {
             setTimeout(function () {
                 $('#txtTipo').val('R');
             }, 530);
+
+            //CONTROL CODIGO POSTAL
+            $("#txtCP").focusout(function () {
+                var cp = $('#txtCP').val();
+                listarFraccionamientos(cp);
+            });
 
             btnReingresarEmpleado.click(function (e) {
                 e.preventDefault();
