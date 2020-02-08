@@ -2406,8 +2406,10 @@ $(document).ready(function () {
             var action = 'highlights',
                 totalEmpleados = $("#txtEmpleados"),
                 totalEmpleadosA = $("#txtEmpleadosA"),
+                totalEmpleadosAO = $("#txtEmpleadosAO"),
                 totalEmpleadosO = $("#txtEmpleadosO"),
-                totalEmpleadosN = $("#txtEmpleadosN"),
+                totalEmpleadosE = $("#txtEmpleadosE"),
+                totalEmpleadosB = $("#txtEmpleadosB"),
                 totalSucursales = $("#txtSucursales");
             //REMOVE VALUE FROM LS
             // localStorage.removeItem('codigoEmpleado');
@@ -2418,14 +2420,16 @@ $(document).ready(function () {
             xmlhr.onload = function () {
                 if (this.status === 200) {
                     var respuesta = JSON.parse(xmlhr.responseText);
-                    // console.log(respuesta);
+                    console.log(respuesta);
                     if (respuesta.estado === 'OK') {
                         var informacion = respuesta.informacion;
                         totalEmpleados.text(informacion[0].cifras);
                         totalEmpleadosA.text(informacion[1].cifras);
-                        totalEmpleadosO.text(informacion[2].cifras);
-                        totalEmpleadosN.text(informacion[3].cifras);
-                        totalSucursales.text(informacion[4].cifras);
+                        totalEmpleadosAO.text(informacion[2].cifras);
+                        totalEmpleadosO.text(informacion[3].cifras);
+                        totalEmpleadosE.text(informacion[4].cifras);
+                        totalEmpleadosB.text(informacion[5].cifras);
+                        totalSucursales.text(informacion[6].cifras);
                     } else if (respuesta.status === 'error') {
                         var informacion = respuesta.informacion;
                     }

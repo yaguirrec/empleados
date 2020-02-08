@@ -1,91 +1,117 @@
 <!-- Begin Page Content -->
 <div class="container-fluid report">
 
-<!-- Page Heading -->
-<div class="d-sm-flex align-items-center justify-content-between mb-4">
-  <h1 class="h3 mb-0 text-gray-800">PANEL INICIAL</h1>
-  <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
-</div>
-
-<!-- Content Row -->
-<div class="row">
-
-  <!-- Earnings (Monthly) Card Example -->
-  <div class="col-xl-3 col-md-6 mb-4">
-    <div class="card border-left-primary shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total de empleados</div>
-            <p class="h5 mb-0 font-weight-bold text-gray-800" id="txtEmpleados"></p>
-          </div>
-          <div class="col-auto">
-            <i class="fas fa-users fa-2x text-gray-300"></i>
-          </div>
-        </div>
-      </div>
-    </div>
+  <!-- Page Heading -->
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">PANEL INICIAL</h1>
+    <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
   </div>
 
-  <!-- Earnings (Monthly) Card Example -->
-  <div class="col-xl-3 col-md-6 mb-4">
-    <div class="card border-left-success shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Empleados Administrativos</div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800" id="txtEmpleadosA"></div>
-          </div>
-          <div class="col-auto">
-            <i class="fas fa-building fa-2x text-gray-300"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- Content Row -->
+  <div class="row">
 
-  <!-- Earnings (Monthly) Card Example -->
-  <div class="col-xl-3 col-md-6 mb-4">
-    <div class="card border-left-info shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Empleados Operativos</div>
-            <div class="row no-gutters align-items-center">
-              <div class="col-auto">
-                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="txtEmpleadosO"></div>
-              </div>
-              <!-- <div class="col">
-                <div class="progress progress-sm mr-2">
-                  <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-              </div> -->
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-2 col-md-6 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-1">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total de Empleados</div>
+              <p class="h5 mb-0 font-weight-bold text-gray-800" id="txtEmpleados"></p>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-users fa-2x text-gray-300"></i>
             </div>
           </div>
-          <div class="col-auto">
-            <i class="fas fa-user-friends fa-2x text-gray-300"></i>
-          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Pending Requests Card Example -->
-  <div class="col-xl-3 col-md-6 mb-4">
-    <div class="card border-left-warning shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Empleados nuevos</div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800" id="txtEmpleadosN"></div>
-          </div>
-          <div class="col-auto">
-            <i class="fas fa-comments fa-2x text-gray-300"></i>
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-2 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-1">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Administrativos</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800" id="txtEmpleadosA"></div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-building fa-2x text-gray-300"></i>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-2 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-1">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Administrativos Operativos</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800" id="txtEmpleadosAO"></div>
+            </div>
+            <div class="col-auto">
+              <i class="far fa-building fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-2 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-1">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Operativos</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800" id="txtEmpleadosO"></div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-industry fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-2 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-1">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Especiales</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800" id="txtEmpleadosE"></div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-user-shield fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+      <div class="col-xl-2 col-md-6 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-1">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Becarios</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800" id="txtEmpleadosB"></div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-graduation-cap fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
 </div>
 
 <!-- Content Row -->

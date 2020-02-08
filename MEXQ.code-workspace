@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "\\\\192.168.2.228\\c\\inetpub\\wwwroot\\devenv\\inicio"
+		},
+		{
+			"path": "\\\\192.168.2.228\\c\\inetpub\\wwwroot\\web_serv\\empService"
+		}
+	],
+	"settings": {}
+}
