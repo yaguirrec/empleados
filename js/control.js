@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar')
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -509,7 +509,7 @@ $(document).ready(function () {
     $("#exportInfo").click(function () {
         var action = 'json-empleados';
         var prop = (seccionActual === 'empleado' ? 'activos' : 'bajas');
-        var encabezados = (seccionActual === 'empleado' ? ["NOMINA", "NOMBRE", "TABULADOR", "PUESTO", "FECHA ALTA", "SUCURSAL", "AREA", "CELULA", "ESTADO"] : ["NOMINA", "NOMBRE", "TABULADOR", "PUESTO", "FECHA ALTA", "FECHA BAJA", "SUCURSAL", "AREA", "CELULA", "ESTADO"]);
+        var encabezados = (seccionActual === 'empleado' ? ["NOMINA", "NOMBRE", "TABULADOR", "PUESTO", "FECHA ALTA", "SUCURSAL", "AREA", "CELULA", "WEB", "ERP", "NOMIPAQ"] : ["NOMINA", "NOMBRE", "TABULADOR", "PUESTO", "FECHA ALTA", "FECHA BAJA", "SUCURSAL", "AREA", "CELULA", "WEB", "ERP", "NOMIPAQ"]);
         var titulo = (seccionActual === 'empleado' ? 'Empleados activos' : 'Empleados inactivos');
         $('.seccionTitulo').text(titulo);
         if (seccionActual === 'empleado') {
@@ -548,7 +548,7 @@ $(document).ready(function () {
             $.each(xlsRows, function (index, value) {
                 var innerRowData = [],
                     numeroNomina = value.numero_nomina;
-                $("tbody").append('<tr><td>' + numeroNomina + '</td><td>' + value.Nombre + '</td><td>' + value.tabulador + '</td><td>' + value.Puesto + '</td><td>' + '</td><td>' + value.fechaAlta + '</td><td>' + value.Sucursal + '</td><td>' + value.Celula + '</td><td>' + value.status + '</td></tr>');
+                $("tbody").append('<tr><td>' + numeroNomina + '</td><td>' + value.Nombre + '</td><td>' + value.tabulador + '</td><td>' + value.Puesto + '</td><td>' + '</td><td>' + value.fechaAlta + '</td><td>' + value.Sucursal + '</td><td>' + value.Celula + '</td><td>' + value.status + '</td><td>' + value.emp_status + '</td><td>' + value.nominas_status +   '</td></tr>');
                 $.each(value, function (ind, val) {
                     innerRowData.push(val);
                 });
