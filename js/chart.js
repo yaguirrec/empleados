@@ -89,6 +89,7 @@ $(document).ready(function() {
   obtenerSucursales();
   altasDiarias();
   bajasDiarias();
+  totalClasificacionSucursal();
 
   function obtenerEmpleados() {
     var action = "obtener-empleados-mes",
@@ -255,13 +256,6 @@ $(document).ready(function() {
   });
 
   // DIARIAS
-
-//   var diasPrevios = $('#diasPrevios');
-  
-//   diasPrevios.change(function () {
-//     var cantidad_dias = $("#diasPrevios :selected").val();
-//     console.log(cantidad_dias);
-//   }).change();
 
   function altasDiarias() {
     var action = "movimientos-diarios",
@@ -431,26 +425,28 @@ $(document).ready(function() {
 
   //GRAFICO ACTIVOS POR SUCURSAL
 
-  $.ajax({
-    type: 'POST',
-    url: backendURL,
-    data: {
-        action: 'consulta-sucursal'
-    }
-  }).done(function (response) {
-      respuesta = JSON.parse(response);
-      let estadoRespuesta = respuesta.estado;
-      if (estadoRespuesta === 'OK') {
-        var informacion = respuesta.informacion;
-        datosaltasporSucursal(informacion);
-      } else {
-          Swal.fire({
-              title: 'Error',
-              text: 'Ocurrio un error al procesar los datos',
-              type: 'error'
-          })
+  function totalClasificacionSucursal(){
+    $.ajax({
+      type: 'POST',
+      url: backendURL,
+      data: {
+          action: 'consulta-sucursal'
       }
-  });
+    }).done(function (response) {
+        respuesta = JSON.parse(response);
+        let estadoRespuesta = respuesta.estado;
+        if (estadoRespuesta === 'OK') {
+          var informacion = respuesta.informacion;
+          datosaltasporSucursal(informacion);
+        } else {
+            Swal.fire({
+                title: 'Error',
+                text: 'Ocurrio un error al procesar los datos',
+                type: 'error'
+            })
+        }
+    });
+  }
 
   function datosaltasporSucursal(params) {
     for (var i = 0; i < params.length; i++) {
@@ -479,10 +475,6 @@ $(document).ready(function() {
   var barChartData = {
     labels: DnombreSucursal,
     datasets: [{
-      label: 'Total Sucursal',
-      backgroundColor: window.chartColors.orange,
-      data: DtotalSucursal,
-    },{
       label: 'Administrativos',
       backgroundColor: window.chartColors.red,
       data: DtotalAdministrativos,
@@ -643,7 +635,7 @@ $(document).ready(function() {
     .filter(function(e) {
       return e.replace(/(\r\n|\n|\r)/gm, "");
     });
-    
+
   var ctxc = document.getElementById("chartSucursales");
   var myBarChart = new Chart(ctxc, {
     type: "bar",
