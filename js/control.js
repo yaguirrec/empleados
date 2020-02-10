@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V.0801201';
+    let version = 'V.0902201';
 
     $('#version').html(version);
 
@@ -2409,8 +2409,7 @@ $(document).ready(function () {
                 totalEmpleadosAO = $("#txtEmpleadosAO"),
                 totalEmpleadosO = $("#txtEmpleadosO"),
                 totalEmpleadosE = $("#txtEmpleadosE"),
-                totalEmpleadosB = $("#txtEmpleadosB"),
-                totalSucursales = $("#txtSucursales");
+                totalEmpleadosB = $("#txtEmpleadosB");
             //REMOVE VALUE FROM LS
             // localStorage.removeItem('codigoEmpleado');
             var dataEmp = new FormData();
@@ -2420,7 +2419,7 @@ $(document).ready(function () {
             xmlhr.onload = function () {
                 if (this.status === 200) {
                     var respuesta = JSON.parse(xmlhr.responseText);
-                    console.log(respuesta);
+                    // console.log(respuesta);
                     if (respuesta.estado === 'OK') {
                         var informacion = respuesta.informacion;
                         totalEmpleados.text(informacion[0].cifras);
@@ -2429,7 +2428,6 @@ $(document).ready(function () {
                         totalEmpleadosO.text(informacion[3].cifras);
                         totalEmpleadosE.text(informacion[4].cifras);
                         totalEmpleadosB.text(informacion[5].cifras);
-                        totalSucursales.text(informacion[6].cifras);
                     } else if (respuesta.status === 'error') {
                         var informacion = respuesta.informacion;
                     }

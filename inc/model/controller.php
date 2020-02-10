@@ -9,7 +9,7 @@
         die();
     }
 
-        include 'connection.php';   
+        include 'connection_.php';   
         $con = connDB();
         $sesion = false;
         $action  = $_POST['action'];
@@ -709,7 +709,9 @@
                                 ELSE (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
                             END AS Puesto,
                             CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
-                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
+                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,pe.emp_status,    
+                            (SELECT  top 1 estadoempleado FROM [vEmpleadosNM] WHERE codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS = te.numero_nomina) as nominas_status    
+                            ,te.created_at
                             FROM tbempleados AS te
                             INNER JOIN tbsucursal AS ts
                             ON te.id_sucursal = ts.id_sucursal 
@@ -719,6 +721,8 @@
                             ON ta.codigo = tc.codigo_area
                             INNER JOIN tbdatos_empleados AS td
 							ON td.numero_nomina = te.numero_nomina
+                            INNER JOIN PJEMPLOY AS pe    
+                            ON pe.employee = te.numero_nomina    
                             WHERE te.status <> 'B' ";
                             if (empty($valorBuscado)){ 
                                 $query .= "AND (te.numero_nomina LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR te.nombre_largo LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR ts.nombre LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR ta.nombre LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR tc.nombre LIKE '%' + CONVERT(NVARCHAR, ?) + '%'
@@ -741,7 +745,9 @@
                             END AS Puesto,
                             CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
                             CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaBaja,
-                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
+                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,pe.emp_status,    
+                            (SELECT  top 1 estadoempleado FROM [vEmpleadosNM] WHERE codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS = te.numero_nomina) as nominas_status    
+                            ,te.created_at
                             FROM tbempleados AS te
                             INNER JOIN tbsucursal AS ts
                             ON te.id_sucursal = ts.id_sucursal 
@@ -751,6 +757,8 @@
                             ON ta.codigo = tc.codigo_area
                             INNER JOIN tbdatos_empleados AS td
 							ON td.numero_nomina = te.numero_nomina
+                            INNER JOIN PJEMPLOY AS pe    
+                            ON pe.employee = te.numero_nomina    
                             WHERE te.status = 'B'";
                             if (empty($valorBuscado)){ 
                                 $query .= "AND (te.numero_nomina LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR te.nombre_largo LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR ts.nombre LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR ta.nombre LIKE '%' + CONVERT(NVARCHAR, ?) + '%' OR tc.nombre LIKE '%' + CONVERT(NVARCHAR, ?) + '%'
@@ -837,11 +845,12 @@
         //BAJA DEL EMPLEADO
         case 'highlights':
             // die(json_encode($_POST));
-            $query = "SELECT COUNT(*) AS cifras FROM tbempleados WHERE status <> 'B' UNION ALL
-                        SELECT COUNT(*) AS totalEmpleadosAdministrativos FROM tbempleados WHERE area_temp LIKE '99COR%' AND status <> 'B' UNION ALL
-                        SELECT COUNT(*) AS totalEmpleadosOperativos FROM tbempleados WHERE area_temp NOT LIKE '99COR%' AND status <> 'B' UNION ALL
-                        SELECT COUNT(*) AS totalEmpleadosActuales FROM tbempleados WHERE YEAR(fecha_alta) >= YEAR(GETDATE()) AND status <> 'B' UNION ALL
-                        select COUNT(*) AS totalSucursales from tbsucursal where codigo NOT IN ('000000000','99CON0000','99COR0000')";
+            $query = "SELECT COUNT(*) AS cifras FROM tbempleados AS te INNER JOIN tbdatos_empleados AS td ON te.numero_nomina = td.numero_nomina AND te.status <> 'B' UNION ALL
+                        SELECT COUNT(*) AS cifras FROM tbempleados AS te INNER JOIN tbdatos_empleados AS td ON te.numero_nomina = td.numero_nomina AND td.clasificacion = 'A' AND te.status <> 'B' UNION ALL
+                        SELECT COUNT(*) AS cifras FROM tbempleados AS te INNER JOIN tbdatos_empleados AS td ON te.numero_nomina = td.numero_nomina AND td.clasificacion = 'AO' AND te.status <> 'B' UNION ALL
+                        SELECT COUNT(*) AS cifras FROM tbempleados AS te INNER JOIN tbdatos_empleados AS td ON te.numero_nomina = td.numero_nomina AND td.clasificacion = 'O' AND te.status <> 'B' UNION ALL
+                        SELECT COUNT(*) AS cifras FROM tbempleados AS te INNER JOIN tbdatos_empleados AS td ON te.numero_nomina = td.numero_nomina AND td.clasificacion = 'E' AND te.status <> 'B' UNION ALL
+                        SELECT COUNT(*) AS cifras FROM tbempleados AS te INNER JOIN tbdatos_empleados AS td ON te.numero_nomina = td.numero_nomina AND td.clasificacion = 'B' AND te.status <> 'B'";
                            
             $stmt = sqlsrv_query( $con, $query);
 
@@ -925,6 +934,100 @@
             sqlsrv_free_stmt( $stmt);
             sqlsrv_close( $con );
             break;
+        case 'movimientos-diarios':
+                // die(json_encode($_POST));
+                $props = $_POST['props'];
+                $cantidadDias = $_POST['cantidadDias'];
+                
+                if($props == 'bajasD'){
+                    $query = "SELECT fecha_baja,count(*) AS cantidad 
+                                FROM tbempleados 
+                                WHERE fecha_baja >= getdate() - 30
+                                GROUP BY fecha_baja";
+                } else {
+                    $query = "SELECT fecha_alta,count(*) AS cantidad 
+                                FROM tbempleados 
+                                WHERE fecha_alta >= getdate() - 30
+                                GROUP BY fecha_alta";
+                }
+                $stmt = sqlsrv_query( $con, $query);
+    
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida de empleados'                
+                    );
+                }
+    
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+                break;
+        case 'consulta-sucursal':
+            // die(json_encode($_POST));
+            
+            $query = "SELECT ts.nombre,
+                        COUNT(*) AS totalSucursal,
+                        SUM(CASE WHEN td.clasificacion = 'A' THEN 1 ELSE 0 END) AS totalAdministrativos,
+                        SUM(CASE WHEN td.clasificacion = 'AO' THEN 1 ELSE 0 END) AS totalAdministrativosOperativos,
+                        SUM(CASE WHEN td.clasificacion = 'O' THEN 1 ELSE 0 END) AS totalOperativos,
+                        SUM(CASE WHEN td.clasificacion = 'E' THEN 1 ELSE 0 END) AS totalEspeciales
+                        FROM tbempleados AS te
+                        INNER JOIN tbsucursal AS ts
+                        ON ts.id_sucursal = te.id_sucursal
+                        INNER JOIN tbdatos_empleados AS td
+                        ON td.numero_nomina = te.numero_nomina
+                        AND te.status <> 'B'
+                        GROUP BY te.id_sucursal,ts.nombre
+                        ORDER BY ts.nombre";
+                
+            $stmt = sqlsrv_query( $con, $query);
+
+            $result = array();
+            
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'                
+                );
+            } else {
+                do {
+                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                    $result[] = $row; 
+                    }
+                } while (sqlsrv_next_result($stmt));
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => $result,
+                    'mensaje' => 'Informacion obtenida de empleados'                
+                );
+            }
+
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+            break;
         case 'obtener-datos-empleados':
             // die(json_encode($_POST));
 
@@ -966,11 +1069,17 @@
         case 'obtener-datos-sucursales':
             // die(json_encode($_POST));
 
-            $query = "SELECT SUBSTRING(area_temp,3,3) AS sucursal,COUNT (*) AS cantidad
-                        FROM tbempleados
-                        WHERE SUBSTRING(area_temp,3,3) <> '' AND status <> 'B'
-                        GROUP BY SUBSTRING(area_temp,3,3)
-                        ORDER BY cantidad DESC;";
+            $query = "SELECT ts.nombre,
+                        COUNT(*) AS totalSucursal
+                        FROM tbempleados AS te
+                        INNER JOIN tbsucursal AS ts
+                        ON ts.id_sucursal = te.id_sucursal
+                        INNER JOIN tbdatos_empleados AS td
+                        ON td.numero_nomina = te.numero_nomina
+                        AND te.status <> 'B'
+                        GROUP BY te.id_sucursal,ts.nombre
+                        ORDER BY ts.nombre
+                        ;";
                            
             $stmt = sqlsrv_query( $con, $query);
 
@@ -1390,8 +1499,11 @@
             case 'validaReingreso':
                 //die(json_encode($_POST));
                 $curp =  $_POST['curp'];
-                $query = "SELECT te.numero_nomina,te.nombre_largo,RIGHT(descripcion,1) as controlReingreso FROM tbempleados AS te
-                            INNER JOIN tbestado as ts
+                $query = "SELECT te.numero_nomina,te.nombre_largo,
+                            CASE 
+                            WHEN RIGHT(descripcion,1) IS NULL THEN '0' ELSE RIGHT(descripcion,1) END AS controlReingreso 
+                            FROM tbempleados AS te
+                            LEFT JOIN tbestado as ts
                             ON te.numero_nomina = ts.numero_nomina
                             WHERE CONCAT(curpini + RIGHT(YEAR(fecha_nacimiento),2) , FORMAT(fecha_nacimiento,'MM') , CONVERT(CHAR(2),fecha_nacimiento,103) , curpfin) = ?";
 

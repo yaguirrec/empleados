@@ -19,8 +19,8 @@
 <script type="text/javascript" src="//unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 
 <!-- LOCAL JS -->
+<script src="js/chart.js"></script>           
 <script src="js/control.js"></script>
-<script src="js/chart.js"></script>            
 
     <?php
         if ($controlInicio == "login.php")
@@ -57,7 +57,7 @@
                 }
         ?>
         <!-- Page level plugins -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.js"></script>
         
 </html>
 

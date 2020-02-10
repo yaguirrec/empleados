@@ -12083,3 +12083,9 @@ body.sidebar-toggled footer.sticky-footer {
   border-width: medium;
   border-color: #919294;
 }
+
+canvas {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
