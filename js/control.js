@@ -3322,6 +3322,7 @@ $(document).ready(function () {
             });
             break;
         case 'puestos':
+            seccionExportar.removeClass('d-none');
             let btnNuevo = $('#btnnPuesto'),
                 panelNuevo = $('#nuevo-puesto'),
                 btnCancelar = $('#btnCancelar'),
@@ -3404,6 +3405,7 @@ $(document).ready(function () {
                         for (var i in puesto) {
                             $('#dataTable').append
                                 ("<tr><td class='trCode'>" + puesto[i].codigo + " </td>" +
+                                    "<td>" + puesto[i].departamento + " </td>" +
                                     "<td>" + puesto[i].nombre + " </td>" +
                                     "<td>" + puesto[i].descripcion + " </td>" +
                                     "<td class='d-none'>" + puesto[i].id_nivel + " </td>" +

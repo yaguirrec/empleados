@@ -17,6 +17,7 @@
         <thead class="font-weight-bold">
             <tr>
             <th scope="col">Código</th>
+            <th scope="col">Departamento</th>
             <th scope="col">Nombre</th>
             <th scope="col">Descripcion</th>
             <th class="d-none" scope="col">Nivel</th>
