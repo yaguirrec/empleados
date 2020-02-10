@@ -12,8 +12,6 @@ $(document).ready(function() {
     empleadosB = [],
     empleados_activos = [],
     empleados_inactivos = [],
-    nombre_sucursal = [],
-    cantidad_sucursal = [],
     totalSucursal = [],
     totalAdministrativos = [],
     totalAdministrativosOperativos = [],
@@ -24,8 +22,6 @@ $(document).ready(function() {
     Dempleados,
     Dempleados_activos,
     Dempleados_inactivos,
-    Dnombre_sucursal,
-    Dcantidad_sucursal,
     dDia,
     dCantidadA,
     dCantidadB,
@@ -86,7 +82,6 @@ $(document).ready(function() {
   obtenerEmpleados();
   obtenerEmpleadosB();
   obtenerEmpleadosAO();
-  obtenerSucursales();
   altasDiarias();
   bajasDiarias();
   totalClasificacionSucursal();
@@ -594,56 +589,14 @@ $(document).ready(function() {
   });
 
   //POR SUCURSALES
-  function obtenerSucursales() {
-    var action = "obtener-datos-sucursales";
-    var consulta_parametros = new FormData();
-    consulta_parametros.append("action", action);
-    var xmlhr = new XMLHttpRequest();
-    xmlhr.open("POST", backendURL, true);
-    xmlhr.onload = function() {
-      if (this.status === 200) {
-        var respuesta = JSON.parse(xmlhr.responseText);
-        if (respuesta.estado === "OK") {
-          var informacion = respuesta.informacion;
-          datosSucursales(informacion);
-        } else if (respuesta.estado === "NOK") {
-          var informacion = respuesta.informacion;
-        }
-      }
-    };
-    xmlhr.send(consulta_parametros);
-  }
-
-  function datosSucursales(params) {
-    for (var i = 0; i < params.length; i++) {
-      nombre_sucursal.push(params[i].nombre);
-      cantidad_sucursal.push(params[i].totalSucursal);
-    }
-    localStorage.setItem("nombre_sucursal", nombre_sucursal);
-    localStorage.setItem("cantidad_sucursal", cantidad_sucursal);
-  }
-
-  Dnombre_sucursal = localStorage
-    .getItem("nombre_sucursal")
-    .split(",")
-    .filter(function(e) {
-      return e.replace(/(\r\n|\n|\r)/gm, "");
-    });
-  Dcantidad_sucursal = localStorage
-    .getItem("cantidad_sucursal")
-    .split(",")
-    .filter(function(e) {
-      return e.replace(/(\r\n|\n|\r)/gm, "");
-    });
-
   var ctxc = document.getElementById("chartSucursales");
   var myBarChart = new Chart(ctxc, {
     type: "bar",
     data: {
-      labels: Dnombre_sucursal,
+      labels: DnombreSucursal,
       datasets: [
         {
-          data: Dcantidad_sucursal,
+          data: DtotalSucursal,
           backgroundColor: bgColors,
           hoverBackgroundColor: hoverbgColors,
           hoverBorderColor: "rgba(234, 236, 244, 1)"
@@ -668,5 +621,45 @@ $(document).ready(function() {
       cutoutPercentage: 80
     }
   });
+
+  // ACTUALIZACIONES RECIENTES
+  function actualizarTarjeta(){
+    $.ajax({
+      type: 'POST',
+      url: backendURL,
+      data: {
+          action: 'datos-recientes'
+      }
+    }).done(function (response) {
+        respuesta = JSON.parse(response);
+        let estadoRespuesta = respuesta.estado,
+            row = 'Ultimas actualizaciones<hr>';
+        if (estadoRespuesta === 'OK') {
+          var informacion = respuesta.informacion;
+          // console.log('informacion');
+          for (var i in informacion) {
+            row += '<p>' + informacion[i].actualizado + ' | ' + informacion[i].estadoEmpleado + ' ' + informacion[i].numero_nomina + ' ' + informacion[i].nombre_largo + ' ' + informacion[i].Puesto + ' ' + informacion[i].Sucursal + ' ' + informacion[i].Departamento + '</p>';
+          }
+          $('#datos-recientes').html(row);
+        } else {
+            Swal.fire({
+                title: 'Error',
+                text: 'Ocurrio un error al procesar los datos',
+                type: 'error'
+            })
+        }
+    });
+  }
+
+  actualizarTarjeta();
+
+  var ntervaloTarjeta = setInterval(actualizarTarjeta, 10 * 2000);
+
+  var div = $('#datos-recientes');
+  setInterval(function(){
+      var pos = div.scrollTop();
+      div.scrollTop(pos + 2);
+  }, 250)
+  // ACTUALIZACIONES RECIENTES
 
 });

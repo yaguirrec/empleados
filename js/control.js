@@ -3399,6 +3399,7 @@ $(document).ready(function () {
                     data: { action: action },
                     success: function (response) {
                         let respuesta = JSON.parse(response);
+                        // console.log(respuesta);
                         let puesto = respuesta.informacion;
                         for (var i in puesto) {
                             $('#dataTable').append

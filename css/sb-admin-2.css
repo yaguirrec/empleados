@@ -12089,3 +12089,20 @@ canvas {
   -webkit-user-select: none;
   -ms-user-select: none;
 }
+
+#datos-recientes
+{
+    text-align: left;
+}
+
+#datos-recientes > p
+{
+    font-size: 12px;
+    line-height: .75em;
+}
+
+#datos-recientes {
+  background-color: whitesmoke;
+  height: 150px;
+  overflow-y: scroll;
+}
