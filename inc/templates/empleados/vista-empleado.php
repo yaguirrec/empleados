@@ -144,7 +144,7 @@
     
     <div class="row btnRegresar laborales d-none" id="backButton">
       <div class="col-md-12">
-        <a href="javascript:history.back();" class="btn btn-secondary btn-block px-5">Regresar</a>
+        <a href="javascript:window.open('','_self').close();" class="btn btn-info btn-block px-5">Cerrar</a>
       </div>
     </div>
 

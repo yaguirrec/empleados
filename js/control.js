@@ -7,7 +7,7 @@ $(document).ready(function () {
     let seccionBuscar = $(".seccionBuscar");
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
-    let seccionExportar = $('.seccionExportar')
+    let seccionExportar = $('.seccionExportar');
     let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
@@ -632,8 +632,6 @@ $(document).ready(function () {
                 if (stNOM === 'B') {classNOM = 'alert-danger'; vNOM = 'fas fa-times';}
                 if (stNOM === null) {classNOM = 'alert-danger'; vNOM = 'fas fa-times';}
                 
-
-
                 if (stEW === 'B') {
                     estado = "alert-secondary";
                     status = 'Baja';
@@ -647,7 +645,7 @@ $(document).ready(function () {
                 $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
                 // NUMERO DE EQUIPO
                 // row.append($("<td class='trCode'>" + rowInfo.numero_nomina + " </td>"));
-                row.append($("<td class='trCode'><button type='button' class='btn btnConsulta btn-link' data-id='" + rowInfo.numero_nomina + "' title='Ver información'>" + rowInfo.numero_nomina + "</button></td>"));
+                row.append($("<td class='trCode'><button type='button' class='btn btnConsulta btn-link' data-id=" + rowInfo.numero_nomina + "' title='Ver información'>'" + rowInfo.numero_nomina + "</button></td>"));
                 // NOMINA DEL EMPLEADO
                 row.append($("<td class='text-left'> " + rowInfo.Nombre + " </td>"));
                 row.append($("<td class='text-left'> " + rowInfo.tabulador + " </td>"));
