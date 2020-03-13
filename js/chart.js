@@ -5,7 +5,7 @@ $(document).ready(function() {
   let empleado_activo = document.querySelector('#empleado_activo').value;
   let nivel_usuario = document.querySelector('#nivel_usuario').value;
   let backendURL =
-    "http://187.188.159.205:8090/web_serv/empService/controller_.php";
+    "http://187.188.159.205:8090/web_serv/empService/controller.php";
   var meses = [],
     activosSUC = [],
     bajasSUC = [],
