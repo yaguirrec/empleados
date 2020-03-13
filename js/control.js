@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V.1203201';
+    let version = 'V.1203202DEV';
 
     $('#version').html(version);
 
@@ -588,8 +588,13 @@ $(document).ready(function () {
             seccionExportar.removeClass('d-none');
             var action = 'empleados-sucursal',
                 prop = (seccionActual === 'altasc' ? 'activos' : 'bajas');
-                var titulo = (seccionActual === 'empleado' ? 'Empleados activos' : 'Empleados inactivos');
+                var titulo = (seccionActual === 'altasc' ? 'Empleados activos' : 'Empleados inactivos');
                 $('.seccionTitulo').text(titulo);
+                if (seccionActual === 'altasc') {
+                    $('.columna-baja').addClass('d-none');
+                } else {
+                    $('.columna-baja').removeClass('d-none');
+                }
             $.ajax({
                 type: 'POST',
                 url: backendURL,
