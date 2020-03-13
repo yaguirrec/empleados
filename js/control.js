@@ -1758,7 +1758,7 @@ $(document).ready(function () {
                     }
                 }
 
-                var url = url_dev + "empleados/gafete.php?emp=" + numero_nomina,
+                var url = url_final + "empleados/gafete.php?emp=" + numero_nomina,
                     newTab = window.open(url, '_blank');
                 newTab.focus();
             });
