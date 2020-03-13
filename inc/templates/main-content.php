@@ -1,9 +1,122 @@
+<div class="row">
+  <div class="col-md-1 offset-11">
+    <button type="button" class="btn btn-outline-info btn-sm" id="btnSync"><i class="fas fa-sync"></i></button>
+  </div>
+</div>
+<!-- Content Coordinadoras -->
+
+<div class="container-fluid coordinadora d-none">
+ 
+  <h1 class="h3 mb-0 text-gray-800 text-center mb-4">PANEL INICIAL</h1>   
+  <div class="row">
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-1">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Empleados</div>
+              <p class="h3 mb-0 font-weight-bold text-gray-800" id="txtEmpleadosc"></p>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-users fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-warning shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-1">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Mujeres</div>
+              <p class="h3 mb-0 font-weight-bold text-gray-800" id="txtEmpleadosm"></p>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-female fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-1">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Hombres</div>
+              <p class="h2 mb-0 font-weight-bold text-gray-800" id="txtEmpleadosh"></p>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-male fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-1">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Plantas</div>
+              <p class="h3 mb-0 font-weight-bold text-gray-800" id="txtPlantasc"></p>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-industry fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+      
+    <div class="col-xl-12 col-md-6">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="h3m-0 font-weight-bold text-primary">Plantas</h6>
+        </div>
+        <div class="card-body">
+          <div class="pt-4 pb-2" style="width: 100%; height: 25%">
+            <canvas id="empleadosPlantaSUC"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-12 col-md-6">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary text-uppercase">Altas y Bajas Diarias</h6>
+          <br>
+        </div>
+        <div class="card-body">
+          <div class="chart-pie pt-4 pb-2">
+            <canvas id="chartaltasbajasDiariasSUC"></canvas>
+          </div>
+          <div class="mt-4 text-center small">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
 <!-- Begin Page Content -->
-<div class="container-fluid report">
+<div class="container-fluid report dashboard">
 
   <!-- Page Heading -->
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">PANEL INICIAL</h1>
+    <h1 class="h3 mb-0 text-gray-800 text-center">PANEL INICIAL</h1>
     <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
   </div>
 

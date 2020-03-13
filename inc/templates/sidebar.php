@@ -142,6 +142,20 @@
         </div>
       </li>
 
+      <li class="nav-item coordinadora d-none">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#capacitacion" aria-expanded="true" aria-controls="capacitacion">
+          <i class="fas fa-fw fa-cog"></i>
+          <span>Módulo Coordinadoras</span>
+        </a>
+        <div id="capacitacion" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Modulos</h6>
+            <a class="collapse-item" href="index.php?request=altasc">Altas</a>
+            <a class="collapse-item" href="index.php?request=bajasc">Bajas</a>
+          </div>
+        </div>
+      </li>
+
 
       <!-- Divider -->
       <!-- <hr class="sidebar-divider"> -->

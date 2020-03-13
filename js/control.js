@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V.0902201';
+    let version = 'V.1203201';
 
     $('#version').html(version);
 
@@ -74,6 +74,11 @@ $(document).ready(function () {
     let limpiarTabla = () => {
         $('#dataTable').empty();
     }
+
+    $("#btnSync").click(function (e) { 
+        e.preventDefault();
+        location.reload();
+     });
 
     /**EXPORTAR A EXCEL */
     $('.exportTable').click(function () {
@@ -579,6 +584,36 @@ $(document).ready(function () {
 
     switch (seccionActual) {
         /**CARGAR TABLA EMPLEADOS */
+        case 'altasc': case 'bajasc':
+            seccionExportar.removeClass('d-none');
+            var action = 'empleados-sucursal',
+                prop = (seccionActual === 'altasc' ? 'activos' : 'bajas');
+                var titulo = (seccionActual === 'empleado' ? 'Empleados activos' : 'Empleados inactivos');
+                $('.seccionTitulo').text(titulo);
+            $.ajax({
+                type: 'POST',
+                url: backendURL,
+                data: { action: action, nomina: empleado_activo, prop: prop},
+                success: function (response) {
+                    let respuesta = JSON.parse(response);
+                    // seccionExportarconsole.log(respuesta);
+                    if (respuesta.estado === 'OK') {
+                        var datos = respuesta.informacion.length;
+                        var informacion = respuesta.informacion;
+                        if (datos < 1) {
+                            $('#alertaM').removeClass('d-none');
+                        }
+                        else {
+                            $('#alertaM').addClass('d-none');
+                            for (var i in informacion) {
+                                tablaEmpleados(informacion[i]);
+                            }
+                        }
+                    }
+                }
+            });
+
+        break;
         case 'empleado': case 'bajas':
             seccionBuscar.removeClass('d-none');
             var action = 'lista-empleados';
@@ -1703,8 +1738,8 @@ $(document).ready(function () {
             //GENERAR GAFETE
             $("#btnGafete").click(function () {
                 var numero_nomina = $('#txtNomina').html(),
-                    invoiceAttach = document.getElementById('txtFoto');
-                empFoto = invoiceAttach.files[0],
+                    invoiceAttach = document.getElementById('txtFoto'),
+                    empFoto = invoiceAttach.files[0],
                     action = 'guardarFoto';
 
 
@@ -1723,7 +1758,7 @@ $(document).ready(function () {
                     }
                 }
 
-                var url = url_final + "empleados/gafete.php?emp=" + numero_nomina,
+                var url = url_dev + "empleados/gafete.php?emp=" + numero_nomina,
                     newTab = window.open(url, '_blank');
                 newTab.focus();
             });
@@ -2401,37 +2436,74 @@ $(document).ready(function () {
 
             break;
         case 'main':
-            var action = 'highlights',
+            if( nivel_usuario == 99 ){
+                
+                
+                    var action = 'panelCoordinadoras',
+                    totalEmpleados = $("#txtEmpleadosc"),
+                    empleadosM = $("#txtEmpleadosm"),
+                    empleadosH = $("#txtEmpleadosh"),
+                    totalPlantas = $("#txtPlantasc");
+                    //REMOVE VALUE FROM LS
+                    // localStorage.removeItem('codigoEmpleado');
+                    var dataEmp = new FormData();
+                    dataEmp.append('action', action);
+                    dataEmp.append('param', empleado_activo);
+                    var xmlhr = new XMLHttpRequest();
+                    xmlhr.open('POST', backendURL, true);
+                    xmlhr.onload = function () {
+                        if (this.status === 200) {
+                            var respuesta = JSON.parse(xmlhr.responseText);
+                            //console.log(respuesta);
+                            if (respuesta.estado === 'OK') {
+                                var informacion = respuesta.informacion;
+                                totalEmpleados.text(informacion[0].cifras);
+                                empleadosM.text(informacion[1].cifras);
+                                empleadosH.text(informacion[2].cifras);
+                                totalPlantas.text(informacion[3].cifras);
+                            } else if (respuesta.status === 'error') {
+                                var informacion = respuesta.informacion;
+                            }
+                        }
+                    }
+                    xmlhr.send(dataEmp);
+                                   
+               
+
+            } else {
+                var action = 'highlights',
                 totalEmpleados = $("#txtEmpleados"),
                 totalEmpleadosA = $("#txtEmpleadosA"),
                 totalEmpleadosAO = $("#txtEmpleadosAO"),
                 totalEmpleadosO = $("#txtEmpleadosO"),
                 totalEmpleadosE = $("#txtEmpleadosE"),
                 totalEmpleadosB = $("#txtEmpleadosB");
-            //REMOVE VALUE FROM LS
-            // localStorage.removeItem('codigoEmpleado');
-            var dataEmp = new FormData();
-            dataEmp.append('action', action);
-            var xmlhr = new XMLHttpRequest();
-            xmlhr.open('POST', backendURL, true);
-            xmlhr.onload = function () {
-                if (this.status === 200) {
-                    var respuesta = JSON.parse(xmlhr.responseText);
-                    // console.log(respuesta);
-                    if (respuesta.estado === 'OK') {
-                        var informacion = respuesta.informacion;
-                        totalEmpleados.text(informacion[0].cifras);
-                        totalEmpleadosA.text(informacion[1].cifras);
-                        totalEmpleadosAO.text(informacion[2].cifras);
-                        totalEmpleadosO.text(informacion[3].cifras);
-                        totalEmpleadosE.text(informacion[4].cifras);
-                        totalEmpleadosB.text(informacion[5].cifras);
-                    } else if (respuesta.status === 'error') {
-                        var informacion = respuesta.informacion;
+                //REMOVE VALUE FROM LS
+                // localStorage.removeItem('codigoEmpleado');
+                var dataEmp = new FormData();
+                dataEmp.append('action', action);
+                var xmlhr = new XMLHttpRequest();
+                xmlhr.open('POST', backendURL, true);
+                xmlhr.onload = function () {
+                    if (this.status === 200) {
+                        var respuesta = JSON.parse(xmlhr.responseText);
+                        // console.log(respuesta);
+                        if (respuesta.estado === 'OK') {
+                            var informacion = respuesta.informacion;
+                            totalEmpleados.text(informacion[0].cifras);
+                            totalEmpleadosA.text(informacion[1].cifras);
+                            totalEmpleadosAO.text(informacion[2].cifras);
+                            totalEmpleadosO.text(informacion[3].cifras);
+                            totalEmpleadosE.text(informacion[4].cifras);
+                            totalEmpleadosB.text(informacion[5].cifras);
+                        } else if (respuesta.status === 'error') {
+                            var informacion = respuesta.informacion;
+                        }
                     }
                 }
+                xmlhr.send(dataEmp);
             }
-            xmlhr.send(dataEmp);
+
             break;
         case 'direcciones':
             $('.toolsDH').removeClass('d-none');
@@ -3365,23 +3437,7 @@ $(document).ready(function () {
                 });
             }
 
-            let llenarDepartamento = () => {
-                let action = 'obtenerDepartamento';
-                $.ajax({
-                    type: 'POST',
-                    url: backendURL,
-                    data: { action: action },
-                    success: function (response) {
-                        let respuesta = JSON.parse(response);
-                        let departamento = respuesta.informacion,
-                            campo = '';
-                        for (var i in departamento) {
-                            campo += '<option value="' + departamento[i].id_celula + '">' + departamento[i].nombre + '</option>';
-                        }
-                        txtCelulaL.html(campo);
-                    }
-                });
-            }
+            
 
             let limpiarCampos = () => {
                 $('#txttPuesto').val(''),

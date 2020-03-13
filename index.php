@@ -30,7 +30,7 @@
       }else{
         switch ($request)
           {
-              case 'empleado': case'bajas':
+              case 'empleado': case'bajas': case'altasc': case 'bajasc':
                 include 'inc/templates/empleados/vista.php';
                 break;
               case'bajaPuesto':

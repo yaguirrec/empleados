@@ -416,7 +416,9 @@ SELECT te.numero_nomina,te.nombre_largo,te.nombre,te.apellido_paterno,te.apellid
                         ON ta.codigo = tc.codigo_area
                         AND te.numero_nomina = '08444'
 
-EXEC datos_empleado_acceso @NUMERO_NOMINA = '26344'
+EXEC datos_empleado_acceso @NUMERO_NOMINA = '99991'
+
+SELECT *FROM PJEMPLOY WHERE employee LIKE '99%'
 
 /**STORED FUINCTION LOGIN*/
 
@@ -1623,3 +1625,35 @@ DELETE FROM tbdatos_empleados WHERE id_registro NOT IN (SELECT id FROM #tmp_user
 
 DROP TABLE #tmp_userd;
 
+SELECT COUNT(*) AS cifras FROM tbempleados AS te INNER JOIN PJEMPLOY AS pe ON te.numero_nomina = REPLACE(pe.employee,' ','') AND pe.manager1 = '99991' AND te.status <> 'B' UNION ALL
+SELECT COUNT(*) AS cifras FROM tbempleados AS te INNER JOIN PJEMPLOY AS pe ON te.numero_nomina = REPLACE(pe.employee,' ','') AND pe.manager1 = '99991' AND te.status = 'B' UNION ALL
+SELECT COUNT(*) AS cifras FROM tbcelula WHERE id_celula IN (SELECT te.id_celula FROM tbempleados AS te INNER JOIN PJEMPLOY AS pe ON te.numero_nomina = REPLACE(pe.employee,' ','') AND pe.manager1 = '99991' AND te.status <> 'B')
+
+SELECT codigo AS Sucursal,nombre FROM tbsucursal WHERE id_sucursal IN (SELECT te.id_sucursal FROM tbempleados AS te INNER JOIN PJEMPLOY AS pe ON te.numero_nomina = REPLACE(pe.employee,' ','') AND pe.manager1 = '99991' AND te.status <> 'B') UNION ALL
+SELECT codigo, nombre AS cifras FROM tbcelula WHERE id_celula IN (SELECT te.id_celula FROM tbempleados AS te INNER JOIN PJEMPLOY AS pe ON te.numero_nomina = REPLACE(pe.employee,' ','') AND pe.manager1 = '99991' AND te.status <> 'B')
+
+SELECT tc.nombre AS Planta, 
+COUNT(*) AS totalE
+FROM 
+tbempleados AS te 
+INNER JOIN PJEMPLOY AS pe 
+ON te.numero_nomina = REPLACE(pe.employee,' ','')
+INNER JOIN tbcelula AS tc
+ON te.id_celula = tc.id_celula
+AND pe.manager1 = '99991' AND te.status <> 'B'
+GROUP BY tc.id_celula,tc.nombre
+ORDER BY tc.id_celula ASC
+
+SELECT 
+SUM(CASE WHEN te.status <> 'B' THEN 1 ELSE 0 END) AS Activos,
+SUM(CASE WHEN te.status = 'B' THEN 1 ELSE 0 END) AS Bajas
+FROM tbempleados AS te
+INNER JOIN tbcelula AS tc
+ON tc.id_celula = te.id_celula
+INNER JOIN tbdatos_empleados AS td
+ON td.numero_nomina = te.numero_nomina
+AND td.clasificacion IN ('O','AO')
+AND te.id_sucursal = (SELECT id_sucursal FROM tbsucursal WHERE nombre_corto = (SELECT RIGHT(REPLACE(emp_name,' ',''),3) FROM PJEMPLOY WHERE employee = '99991'))
+AND YEAR(te.updated_at) >= YEAR(GETDATE())-1
+
+SELECT MONTH(GETDATE())-12

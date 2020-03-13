@@ -2,30 +2,49 @@ $(document).ready(function() {
   // VALUE OF THE ACTUAL SECTION
   let searchParams = new URLSearchParams(window.location.search);
   let seccionActual = searchParams.get("request");
+  let empleado_activo = document.querySelector('#empleado_activo').value;
+  let nivel_usuario = document.querySelector('#nivel_usuario').value;
   let backendURL =
     "http://187.188.159.205:8090/web_serv/empService/controller.php";
   var meses = [],
+    activosSUC = [],
+    bajasSUC = [],
     dia = [],
+    diaSUC = [],
+    cantidadASUC = [],
     cantidadA = [],
     cantidadB = [],
+    cantidadBSUC = [],
     empleados = [],
     empleadosB = [],
     empleados_activos = [],
     empleados_inactivos = [],
     totalSucursal = [],
+    totalPlanta = [],
+    totalAOPlanta = [],
+    totalOPlanta = [],
     totalAdministrativos = [],
     totalAdministrativosOperativos = [],
     totalOperativos = [],
     totalEspeciales = [],
+    nombrePlanta = [],
     nombreSucursal = [];
   var Dmeses,
     Dempleados,
     Dempleados_activos,
     Dempleados_inactivos,
+    DactivosSUC,
+    DbajasSUC,
     dDia,
+    dDiaSUC,
     dCantidadA,
+    dCantidadASUC,
     dCantidadB,
+    dCantidadBSUC,
     DtotalSucursal,
+    DtotalPlanta,
+    DtotalAOPlanta,
+    DtotalAPlanta,
     DtotalAdministrativos,
     DtotalEspeciales,
     DtotalAdministrativosOperativos,
@@ -85,6 +104,7 @@ $(document).ready(function() {
   altasDiarias();
   bajasDiarias();
   totalClasificacionSucursal();
+
 
   function obtenerEmpleados() {
     var action = "obtener-empleados-mes",
@@ -662,4 +682,267 @@ $(document).ready(function() {
   }, 250)
   // ACTUALIZACIONES RECIENTES
 
+  //PANEL COORDINADORAS
+  //ACTIVOS POR SUCURSAL
+    totalPlantaSucursal();
+    altasDiariasSUC();
+    bajasDiariasSUC();
+
+    function totalPlantaSucursal(){
+      $.ajax({
+        type: 'POST',
+        url: backendURL,
+        data: {
+            action: 'personalPlantaSUC', param: empleado_activo
+        }
+      }).done(function (response) {
+          respuesta = JSON.parse(response);
+          //console.log(respuesta);
+          let estadoRespuesta = respuesta.estado;
+          if (estadoRespuesta === 'OK') {
+            var informacion = respuesta.informacion;
+            datosaltasporPlanta(informacion);
+          } else {
+              Swal.fire({
+                  title: 'Error',
+                  text: 'Ocurrio un error al procesar los datos',
+                  type: 'error'
+              })
+          }
+      });
+    }
+
+    function datosaltasporPlanta(params) {
+      for (var i = 0; i < params.length; i++) {
+        totalPlanta.push(params[i].totalPlanta);
+        totalAOPlanta.push(params[i].totalAdministrativosOperativos);
+        totalOPlanta.push(params[i].totalOperativos);
+        nombrePlanta.push(params[i].nombre);
+      }
+      localStorage.setItem("totalPlanta", totalPlanta);
+      localStorage.setItem("totalAOPlanta", totalAOPlanta);
+      localStorage.setItem("totalOPlanta", totalOPlanta);
+      localStorage.setItem("nombrePlanta", nombrePlanta);
+    }
+
+    DtotalPlanta = localStorage.getItem("totalPlanta").split(",");
+    DtotalAPlanta = localStorage.getItem("totalAOPlanta").split(",");
+    DtotalAOPlanta = localStorage.getItem("totalOPlanta").split(",");
+    DnombrePlanta = localStorage.getItem("nombrePlanta").split(",");
+
+    var barChartData = {
+      labels: DnombrePlanta,
+      datasets: [{
+        label: 'Total empleados',
+        backgroundColor: window.chartColors.red,
+        data: DtotalPlanta,
+      }, {
+        label: 'Administrativos Operativos',
+        backgroundColor: window.chartColors.blue,
+        data: DtotalAPlanta,
+      }, {
+        label: 'Operativos',
+        backgroundColor: window.chartColors.green,
+        data: DtotalAOPlanta,
+      }]
+
+    };
+      var ctxx = document.getElementById('empleadosPlantaSUC');
+      window.myBar = new Chart(ctxx, {
+        type: 'bar',
+        data: barChartData,
+        options: {
+          title: {
+            display: true,
+            text: 'Activos por Planta'
+          },
+          tooltips: {
+            mode: 'index',
+            intersect: false
+          },
+          responsive: true,
+          scales: {
+            xAxes: [{
+              stacked: true,
+            }],
+            yAxes: [{
+              stacked: true
+            }]
+          }
+        }
+      });
+
+      // DIARIAS
+
+    function altasDiariasSUC() {
+      var action = "movimientos-diariosSUC",
+          props = "altasD";
+      var consulta_parametros = new FormData();
+      consulta_parametros.append("action", action);
+      consulta_parametros.append("props", props);
+      consulta_parametros.append("param", empleado_activo);
+      var xmlhr = new XMLHttpRequest();
+      xmlhr.open("POST", backendURL, true);
+      xmlhr.onload = function() {
+        if (this.status === 200) {
+          var respuesta = JSON.parse(xmlhr.responseText);
+          if (respuesta.estado === "OK") {
+            var informacion = respuesta.informacion;
+            datosaltasDiariasSUC(informacion);
+          } else if (respuesta.estado === "NOK") {
+            var informacion = respuesta.informacion;
+          }
+        }
+      };
+      xmlhr.send(consulta_parametros);
+    }
+
+    function datosaltasDiariasSUC(params) {
+      for (var i = 0; i < params.length; i++) {
+        diaSUC.push(params[i].fecha_alta.date.substr(0, 10));
+        cantidadASUC.push(params[i].cantidad);
+      }
+      localStorage.setItem("diaSUC", dia);
+      localStorage.setItem("cantidadASUC", cantidadA);
+    }
+
+    dDiaSUC = localStorage.getItem("diaSUC").split(",");
+    dCantidadASUC = localStorage.getItem("cantidadASUC").split(",");
+
+    var datosAltasDiariasSUC = {
+      label: "Altas del dia",
+      data: dCantidadASUC,
+      lineTension: 0,
+      fill: false,
+      borderColor: "blue"
+    };
+
+    function bajasDiariasSUC() {
+      var action = "movimientos-diariosSUC",
+          props = "bajasD";
+          console.log(empleado_activo);
+      var consulta_parametros = new FormData();
+      consulta_parametros.append("action", action);
+      consulta_parametros.append("props", props);
+      consulta_parametros.append("param", empleado_activo);
+      var xmlhr = new XMLHttpRequest();
+      xmlhr.open("POST", backendURL, true);
+      xmlhr.onload = function() {
+        if (this.status === 200) {
+          var respuesta = JSON.parse(xmlhr.responseText);
+          if (respuesta.estado === "OK") {
+            var informacion = respuesta.informacion;
+            datosbajasDiariasSUC(informacion);
+          } else if (respuesta.estado === "NOK") {
+            var informacion = respuesta.informacion;
+          }
+        }
+      };
+      xmlhr.send(consulta_parametros);
+    }
+
+    function datosbajasDiariasSUC(params) {
+      for (var i = 0; i < params.length; i++) {
+      //   dia.push(params[i].fecha_alta.date.substr(0, 10));
+        cantidadBSUC.push(params[i].cantidad);
+      }
+      // localStorage.setItem("dia", dia);
+      localStorage.setItem("cantidadBSUC", cantidadBSUC);
+    }
+
+  //  Dia = localStorage.getItem("dia").split(",");
+    dCantidadBSUC = localStorage.getItem("cantidadBSUC").split(",");
+
+    var datosBajasDiariasSUC = {
+      label: "Bajas del dia",
+      data: dCantidadBSUC,
+      lineTension: 0,
+      fill: false,
+      borderColor: "red"
+    };
+
+    var datosAltasBajasDiariasSUC = {
+      labels: dDiaSUC,
+      datasets: [datosAltasDiariasSUC, datosBajasDiariasSUC]
+    };
+
+    var ctxAB = document.getElementById("chartaltasbajasDiariasSUC");
+    var myLineChart = new Chart(ctxAB, {
+      type: "line",
+      data: datosAltasBajasDiariasSUC,
+      options: {
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            left: 10,
+            right: 25,
+            top: 25,
+            bottom: 0
+          }
+        },
+        scales: {
+          xAxes: [
+            {
+              time: {
+                unit: "date"
+              },
+              gridLines: {
+                display: false,
+                drawBorder: false
+              },
+              ticks: {
+                maxTicksLimit: 7
+              }
+            }
+          ],
+          yAxes: [
+            {
+              ticks: {
+                maxTicksLimit: 5,
+                padding: 10,
+                // Include a dollar sign in the ticks
+                callback: function(value, index, values) {
+                  return value;
+                }
+              },
+              gridLines: {
+                color: "rgb(234, 236, 244)",
+                zeroLineColor: "rgb(234, 236, 244)",
+                drawBorder: false,
+                borderDash: [2],
+                zeroLineBorderDash: [2]
+              }
+            }
+          ]
+        },
+        legend: {
+          display: true
+        },
+        tooltips: {
+          backgroundColor: "rgb(255,255,255)",
+          bodyFontColor: "#858796",
+          titleMarginBottom: 10,
+          titleFontColor: "#6e707e",
+          titleFontSize: 14,
+          borderColor: "#dddfeb",
+          borderWidth: 1,
+          xPadding: 15,
+          yPadding: 15,
+          displayColors: false,
+          intersect: false,
+          mode: "index",
+          caretPadding: 10,
+          callbacks: {
+            label: function(tooltipItem, chart) {
+              var datasetLabel =
+                chart.datasets[tooltipItem.datasetIndex].label || "";
+              return datasetLabel + ": " + tooltipItem.yLabel;
+            }
+          }
+        }
+      }
+
+    });
+
 });
+

@@ -24,14 +24,16 @@ $( document ).ready(function() {
         seccionLateral = $("#sidePaneAdmin"),
         seccionPanel = $(".seccionPanel"),
         administrador = $(".administrador"),
+        dashboard = $(".dashboard"),
         transportes = $(".transportes"),
         general = $(".nav-item"),
         dh = $(".dh"),
         laborales = $(".laborales"),
         rh = $(".rh"),
+        coordinadora = $(".coordinadora"),
         nominas = $(".nominas");
 
-    console.log('campo ' + nivel_usuario);
+    console.log('Nivel usuario ' + nivel_usuario);
 
 
     switch (nivel_usuario){
@@ -84,6 +86,10 @@ $( document ).ready(function() {
             // laborales.removeAttr('readonly');
             // gafetes.removeClass('d-none');
             break;
+        case '99':
+            coordinadora.removeClass('d-none');
+            dashboard.addClass('d-none');
+        break;
         default:
             seccionLateral.removeClass('d-none');
             break;

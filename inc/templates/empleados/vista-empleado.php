@@ -137,12 +137,12 @@
 
     <br>
 
-  <div class="card-deck laborales d-none">
+  <div class="card-deck laborales coordinadora d-none">
     <?php include 'inc/templates/empleados/menu.php'; ?>
   </div>
     <hr>
     
-    <div class="row btnRegresar laborales d-none" id="backButton">
+    <div class="row btnRegresar" id="backButton">
       <div class="col-md-12">
         <a href="javascript:window.open('','_self').close();" class="btn btn-info btn-block px-5">Cerrar</a>
       </div>
