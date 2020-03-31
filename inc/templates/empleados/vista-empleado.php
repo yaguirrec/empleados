@@ -137,10 +137,17 @@
 
     <br>
 
-  <div class="card-deck laborales coordinadora d-none">
-    <?php include 'inc/templates/empleados/menu.php'; ?>
+  <div class="card-deck panelLaborales laborales coordinadora d-none">
+      <?php include 'inc/templates/empleados/menu.php'; ?>
   </div>
-    <hr>
+
+  <div class="card-deck panelSeguimiento d-none">
+    <div class="col-md-12">
+      <?php include 'inc/templates/empleados/seguimiento.php'; ?>
+    </div>
+  </div>
+  
+  <hr>
     
     <div class="row btnRegresar" id="backButton">
       <div class="col-md-12">

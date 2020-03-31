@@ -169,6 +169,34 @@ CREATE TABLE [dbo].[tbdatos_empleados](
 ) ON [PRIMARY]
 GO
 
+ALTER TABLE tbdatos_empleados ADD
+[comision] [int] DEFAULT 0,
+[sucursal_comision] [int] DEFAULT 0,
+[daltonismo] [varchar](15) DEFAULT 'NA',
+[agudeza] [varchar](15) DEFAULT 'NA',
+[entrega_tarjeta] [date],
+[entrega_contrato] [date],
+[guia] [varchar](50) DEFAULT 'NA',
+[entrega_personal] [date],
+[fin_contrato] [date]
+
+UPDATE tbdatos_empleados SET [entrega_tarjeta] = '1900-01-01',[entrega_contrato] = '1900-01-01',[entrega_personal] = '1900-01-01',[fin_contrato] = '1900-01-01'
+
+SELECT td.numero_nomina,te.nombre_largo,tc.nombre AS Departamento,tp.nombre AS Puesto,td.comision,td.sucursal_comision,td.daltonismo,td.agudeza,td.numero_cuenta,td.entrega_tarjeta,td.entrega_contrato,td.guia,
+td.entrega_personal,td.fin_contrato,te.fecha_alta,DATEADD(DD,30,te.fecha_alta) AS finContrato
+FROM tbdatos_empleados AS td
+INNER JOIN tbempleados AS te
+ON td.numero_nomina = te.numero_nomina
+INNER JOIN tbcelula AS tc
+ON tc.id_celula = te.id_celula
+INNER JOIN tbpuesto AS tp
+ON tp.id_puesto = te.id_puesto
+AND te.status IN ('A','R')
+ORDER BY td.updated_at DESC
+
+UPDATE tbdatos_empleados SET [comision] = ,[sucursal_comision] = ,[daltonismo] ] =,[agudeza] =,[entrega_tarjeta] =,[entrega_contrato] =,[guia] =,[entrega_personal] =,[fin_contrato] =, WHERE [numero_nomina] =
+
+select DATEADD(DD,30,GETDATE())
 
 
 /*TRIGGER INSERTAR NUEVAS SUCURSALES / CELULAS*/
@@ -416,7 +444,8 @@ SELECT te.numero_nomina,te.nombre_largo,te.nombre,te.apellido_paterno,te.apellid
                         ON ta.codigo = tc.codigo_area
                         AND te.numero_nomina = '08444'
 
-EXEC datos_empleado_acceso @NUMERO_NOMINA = '99991'
+EXEC datos_empleado_acceso @NUMERO_NOMINA = '19905'
+sp_helptext 'datos_empleado_acceso'
 
 SELECT *FROM PJEMPLOY WHERE employee LIKE '99%'
 
@@ -1657,3 +1686,20 @@ AND te.id_sucursal = (SELECT id_sucursal FROM tbsucursal WHERE nombre_corto = (S
 AND YEAR(te.updated_at) >= YEAR(GETDATE())-1
 
 SELECT MONTH(GETDATE())-12
+
+
+
+SELECT * FROM PJEMPLOY WHERE employee = '19497'
+--UPDATE PJEMPLOY SET manager1 = '146C1' WHERE employee = '18655'
+SELECT * FROM tbempleados WHERE numero_nomina = '19497'
+SELECT * FROM tbjefe_empleado WHERE empleado_nomina = '26812'
+SELECT * FROM tbdatos_empleados WHERE numero_nomina = '18655'
+
+
+SELECT  
+    name,
+    is_instead_of_trigger
+FROM 
+    sys.triggers  
+WHERE 
+    type = 'TR';

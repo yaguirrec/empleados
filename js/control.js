@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V.1203202';
+    let version = 'V.310320DEV';
 
     $('#version').html(version);
 
@@ -1559,7 +1559,8 @@ $(document).ready(function () {
         case 'datos':
             let btnBaja = $('#btnBaja'),
                 btnModificar = $('#btnModificar'),
-                statusEmpleado = $('#txtStatus');
+                statusEmpleado = $('#txtStatus'),
+                btnSeguimiento = $('#btnSeguimiento');
             //GET VALUE FROM LS
             var codigoEmpleado = localStorage.getItem('codigoEmpleado'),
                 action = 'mostrar-empleado';
@@ -1705,6 +1706,14 @@ $(document).ready(function () {
                     $('#txtexplicacionBaja').html('<strong> Explicacion: </strong>' + rowInfo.bajaExplicacion);
                     $('#txtcomentarioBaja').html('<strong> Comentarios: </strong>' + rowInfo.bajaComentario);
                 }
+
+                //BLOQUEAR GENERACION  DE GAFETE SI EL EMPLEADO NO TIENE PROCESADA
+                if(rowInfo.lote == '' || rowInfo.lote == null){
+                    $("#btnGafete").addClass('d-none');
+                    $("#txtFoto").addClass('d-none');
+                    $("#txtGafeteAlerta").removeClass('d-none');
+                }
+                //BLOQUEAR GENERACION  DE GAFETE SI EL EMPLEADO NO TIENE PROCESADA
 
 
 
@@ -1862,7 +1871,228 @@ $(document).ready(function () {
                 // newTab = window.open(url, '_blank');
                 $(location).attr('href', url);
             });
+
+            //SEGUIMIENTO AL EMPLEADO
+            btnSeguimiento.on('click',function(){
+                var numero_nomina = localStorage.getItem('codigoEmpleado').substr(0, 5);
+                $(".panelLaborales").addClass("d-none");
+                $(".panelSeguimiento").removeClass("d-none");
+
+
+                let segSucursales = () => {
+                    //LLENAR SUCURSALES
+                    var listaSUC = new FormData(),
+                        action = 'buscarSucursal';
+                    listaSUC.append('action', action);
+                    var xmlSUC = new XMLHttpRequest();
+                    xmlSUC.open('POST', backendURL, true);
+                    xmlSUC.onload = function () {
+                        if (this.status === 200) {
+                            var respuesta = JSON.parse(xmlSUC.responseText);
+                            if (respuesta.estado === 'OK') {
+                                var informacion = respuesta.informacion;
+                                var s = '<option value="" selected>Seleccionar una Sucursal</option>';
+                                for (var i in informacion) {
+                                    s += '<option value="' + informacion[i].id_sucursal + '">' + informacion[i].nombre + '</option>';
+                                }
+                                $('#segSucursal').html(s);
+                            } else if (respuesta.status === 'error') {
+                                var informacion = respuesta.informacion;
+                            }
+                        }
+                    }
+                    xmlSUC.send(listaSUC);
+                }
+
+                let datosSeguimiento = (numero_nomina) => {
+                    segSucursales();
+                    var listaSUC = new FormData(),
+                        action = 'datosSeguimiento';
+                    listaSUC.append('action', action);
+                    listaSUC.append('numero_nomina', numero_nomina);
+                    var xmlSUC = new XMLHttpRequest();
+                    xmlSUC.open('POST', backendURL, true);
+                    xmlSUC.onload = function () {
+                        if (this.status === 200) {
+                            var respuesta = JSON.parse(xmlSUC.responseText);
+                            var informacion = respuesta.informacion[0];
+                            // console.log(informacion);
+                            if(informacion.comision === 1){
+                                $("#segComision").prop("checked", true);
+                                $("#segSucursal").prop("disabled", false);
+                            } else {
+                                $("#segComision").prop("checked", false);
+                            }
+                            
+                            $("#segDaltonismo").val(informacion.daltonismo);
+                            $("#segAgudeza").val(informacion.agudeza);
+                            $("#segTarjeta").val(informacion.numero_cuenta);
+                            $("#segFechafincontrato").val(informacion.finContrato.date.substr(0, 10));
+                            $("#segFechatarjeta").val(informacion.entrega_tarjeta.date.substr(0, 10));
+                            $("#segFechacontrato").val(informacion.entrega_contrato.date.substr(0, 10));
+                            $("#segGuia").val(informacion.guia);
+                            $("#segFechaentregapersonal").val(informacion.entrega_personal.date.substr(0, 10));
+                            setTimeout(function () {
+                                $("#segSucursal").val(informacion.sucursal_comision);
+                            }, 150);
+                        }
+                    }
+                    xmlSUC.send(listaSUC);
+                }
+
+                
+                datosSeguimiento(numero_nomina);
+
+                $("#btnSalvarseguimiento").click(function(event){
+                    var action = 'guardarSeguimiento',
+                        segComision = 0,
+                        segSucursal = $("#segSucursal").val(),
+                        segDaltonismo = $("#segDaltonismo").val(),
+                        segAgudeza = $("#segAgudeza").val(),
+                        segTarjeta = $("#segTarjeta").val(),
+                        segFechafincontrato = $("#segFechafincontrato").val(),
+                        segFechatarjeta = $("#segFechatarjeta").val(),
+                        segFechacontrato = $("#segFechacontrato").val(),
+                        segGuia = $("#segGuia").val(),
+                        segFechaentregapersonal = $("#segFechaentregapersonal").val();
+                        
+                        if ($('#segComision').is(':checked'))
+                            segComision = 1;
+                    
+                        $.ajax({
+                            type: 'POST',
+                            url: backendURL,
+                            data: {
+                                action: action,
+                                segComision: segComision,
+                                segSucursal: segSucursal,
+                                segDaltonismo: segDaltonismo,
+                                segAgudeza: segAgudeza,
+                                segTarjeta: segTarjeta,
+                                segFechafincontrato: segFechafincontrato,
+                                segFechatarjeta: segFechatarjeta,
+                                segFechacontrato: segFechacontrato,
+                                segGuia: segGuia,
+                                segFechaentregapersonal: segFechaentregapersonal,
+                                numero_nomina: numero_nomina
+                            }
+                        }).done(function (response) {
+                            respuesta = JSON.parse(response);
+                            console.log(respuesta);
+                            let estadoRespuesta = respuesta.estado;
+                            if (estadoRespuesta === 'OK') {
+                                Swal.fire({
+                                    title: 'Guardado Exitoso',
+                                    text: 'Información guardada exitosamente',
+                                    type: 'info'
+                                })
+                                    .then(resultado => {
+                                        if (resultado.value) {
+                                            $(".panelLaborales").removeClass("d-none");
+                                            $(".panelSeguimiento").addClass("d-none");
+                                        }
+                                    })
+                            } else {
+                                Swal.fire({
+                                    title: 'Error',
+                                    text: 'Ocurrio un error al guardar los datos',
+                                    type: 'error'
+                                })
+                            }
+                        });
+                    
+                });
+
+            });
+
+            
+
+            $("#segComision").click(function(event){
+                if ($("#segComision").is(':checked')){
+                    $("#segSucursal").prop("disabled", false);
+                } else {
+                    $("#segSucursal").prop("disabled", true);
+                }
+            });
+
+            $("#btncerrarSeguimiento").click(function(event){
+                $(".panelLaborales").removeClass("d-none");
+                $(".panelSeguimiento").addClass("d-none");
+            });
+
             break;
+        case 'seguimiento':
+            seccionExportar.removeClass('d-none');
+            var action = 'tabla-seguimiento';
+            var titulo = 'Seguimiento al empleado';
+
+            $(".seccionTitulo").html(titulo);
+            
+            var dataTable = new FormData();
+            dataTable.append('action', action);
+            var xmlhr = new XMLHttpRequest();
+            xmlhr.open('POST', backendURL, true);
+            xmlhr.onload = function () {
+                if (this.status === 200) {
+                    var respuesta = JSON.parse(xmlhr.responseText);
+                    console.log(respuesta);
+                    if (respuesta.estado === 'OK') {
+                        var informacion = respuesta.informacion;
+                        for (var i in informacion) {
+                            tablaSeguimiento(informacion[i]);
+                        }
+                    } else if (respuesta.status === 'error') {
+                        var informacion = respuesta.informacion;
+                    }
+                }
+            }
+            xmlhr.send(dataTable);
+
+            function tablaSeguimiento(rowInfo) {
+                var comision = 'No';
+                $('#loadingIndicator').addClass('d-none');
+
+                var row = $("<tr class='text-secondary'>");
+                
+                if(rowInfo.comision === 1){
+                    comision = 'Si';
+                }
+
+                $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
+                // NUMERO DE EQUIPO
+                // row.append($("<td class='trCode'>" + rowInfo.numero_nomina + " </td>"));
+                row.append($("<td><button type='button' class='btn btnConsulta btn-link' data-id=" + rowInfo.numero_nomina + "' title='Ver información'>" + rowInfo.numero_nomina + "</button></td>"));
+                // NOMINA DEL EMPLEADO
+                row.append($("<td class='text-left'> " + rowInfo.nombre_largo + " </td>"));
+                row.append($("<td class='text-left'> " + rowInfo.Departamento + " </td>"));
+                row.append($("<td class='text-left'> " + rowInfo.Puesto + " </td>"));
+                row.append($("<td> " + comision + " </td>"));
+                row.append($("<td> " + rowInfo.sucursal_comision + " </td>"));
+                row.append($("<td> " + rowInfo.daltonismo + " </td>"));
+                row.append($("<td> " + rowInfo.agudeza + " </td>"));
+                row.append($("<td> " + rowInfo.numero_cuenta + " </td>"));
+                row.append($("<td> " + rowInfo.entrega_tarjeta.date.substr(0, 10) + " </td>"));
+                row.append($("<td> " + rowInfo.entrega_contrato.date.substr(0, 10) + " </td>"));
+                row.append($("<td> " + rowInfo.guia + " </td>"));
+                row.append($("<td> " + rowInfo.entrega_personal.date.substr(0, 10) + " </td>"));
+                row.append($("<td> " + rowInfo.finContrato.date.substr(0, 10) + " </td>"));
+
+                $(".btnConsulta").unbind().click(function () {
+                    var employeeID = $((this)).data('id'),
+                        url = "index.php?request=datos";
+                    var newTab = window.open(url, '_blank');
+
+                    //SAVE EMPLOYEE ID ON LOCAL STORAGE AS codigoEmpleado
+                    localStorage.setItem('codigoEmpleado', employeeID);
+
+                    // OPEN ON CURRENT TAB
+                    //$(location).attr('href', url);
+
+                    // OPEN ON NEW TAB
+                    newTab.focus();
+                });
+            }
+        break;
         case 'empleadoBaja':
             let empleado_baja = localStorage.getItem('empleadoBaja');
             var action = 'mostrar-empleado';

@@ -53,6 +53,8 @@
                   break;
               case 'altas':
                 include 'inc/templates/altas/vista.php';
+              case 'seguimiento':
+                include 'inc/templates/empleados/vista-seguimiento.php';
               break;
               case 'administrarBajas':
                 include 'inc/templates/bajas/vista.php';

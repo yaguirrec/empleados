@@ -1,5 +1,5 @@
 <div class="card coordinadora d-none laborales">
-  <img src="img/misc/01.jpg" class="card-img-top" alt="...">
+  <img src="img/misc/01.jpg" class="card-img-top" height="350" alt="...">
   <div class="card-body">
     <h5 class="card-title">Generar Gafete</h5>
     <p class="card-text">Cargar foto para generar gafete del empleado</p>
@@ -8,6 +8,9 @@
         <label for="txtFoto">Fotografia</label>
         <input type="file" class="form-control-file" id="txtFoto">
         <label id="lblImagen" class="text-success">El empleado ya cuenta con imagen</label>
+        <div class="alert alert-warning d-none" id="txtGafeteAlerta" role="alert">
+          El empleado aun no cuenta con procesada de alta.
+        </div>
       </div>
     </form>
   </div>
@@ -16,7 +19,7 @@
   </div>
 </div>
 <div class="card laborales d-none">
-  <img src="img/misc/02.jpg" class="card-img-top" alt="...">
+  <img src="img/misc/02.jpg" class="card-img-top" height="350" alt="...">
   <div class="card-body text-center">
     <h5 class="card-title">Administrar Empleado</h5>
     <div class="btn-group-vertical">
@@ -30,24 +33,13 @@
   </div>
 </div>
 <div class="card">
-  <!-- <img src="..." class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+  <img src="img/misc/03.jfif" class="card-img-top" height="350" alt="...">
+  <div class="card-body text-center">
+    <h5 class="card-title">Seguimiento</h5>
+    <div class="btn-group-vertical">
+      <button class="btn btn-block btn-lg btn-info" id="btnSeguimiento">Seguimiento</button>
+    </div>
   </div>
-  <div class="card-footer">
-    <small class="text-muted">Last updated 3 mins ago</small>
-  </div> -->
-</div>
-<div class="card">
-  <!-- <img src="..." class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">Card title</h5>
-    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-  </div>
-  <div class="card-footer">
-    <small class="text-muted">Last updated 3 mins ago</small>
-  </div> -->
 </div>
 <div class="card">
   <!-- <img src="..." class="card-img-top" alt="...">
