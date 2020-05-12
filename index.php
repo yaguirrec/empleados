@@ -44,15 +44,16 @@
                 break;
               case 'modificar-empleado':
                 include 'inc/templates/empleados/modificar.php';
-                break;
+              break;
               case 'empleadoBaja':
                   include 'inc/templates/empleados/baja-empleado.php';
-                  break;
+              break;
               case 'reingreso-empleado':
                   include 'inc/templates/empleados/reingreso.php';
-                  break;
+              break;
               case 'altas':
                 include 'inc/templates/altas/vista.php';
+              break;
               case 'seguimiento':
                 include 'inc/templates/empleados/vista-seguimiento.php';
               break;
@@ -61,31 +62,37 @@
               break;
               case 'semanales':
                 include 'inc/templates/altas/semanales.php';
-                break;
+              break;
               case 'datos':
                 include 'inc/templates/empleados/vista-empleado.php';
-                break;
+              break;
               case 'direcciones':
                 include 'inc/templates/transporte/vista.php';
-                break;
+              break;
               case 'fecha1': case 'fecha2':
                 include 'inc/templates/dh/vista.php';
-                break;
+              break;
+              case 'notificaciones':
+                  include 'inc/templates/dh/notificaciones.php';
+              break;
+              case 'imagenes-empleados':
+                include 'inc/templates/dh/imagenes-empleados.php';
+              break;
               case 'puestos':
                 include 'inc/templates/modulos/puestos_vista.php';
-                break;
+              break;
               case 'admin-roles':
                 include 'inc/templates/administracion/roles.php';
-                break;
-                case 'admin-cp':
-                  include 'inc/templates/administracion/cp.php';
-                  break;
+              break;
+              case 'admin-cp':
+                include 'inc/templates/administracion/cp.php';
+              break;
               case 'administrar':
                 include 'inc/templates/administracion/main.php';
-                break;
+              break;
               default:
                 include 'inc/templates/main-content.php';
-                break;
+              break;
           }
       }
       include 'inc/templates/footer.php';

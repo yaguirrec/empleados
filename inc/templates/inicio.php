@@ -24,6 +24,7 @@
                 <input type="text" class="form-control" aria-label="Sizing example input" id="searchBox" aria-describedby="inputGroup-sizing-default" placeholder="Buscar..." autofocus>
                 <button class="btn btn-success ml-3 exportTable" title="Exportar tabla"><i class="fas fa-file-excel"></i> Exportar tabla</button>
                 <button class="btn btn-info ml-3" id="exportInfo" title="Exportar Base de Datos"><i class="fas fa-database"></i> Exportar Base de Datos </button>
+                <button class="btn btn-primary ml-3 laborales d-none" id="infoLaborales" title="Información Laborales"><i class="fas fa-arrow-alt-circle-down"></i></button>
             </div>
         </div>
     </div>

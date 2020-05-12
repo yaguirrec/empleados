@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V.310320DEV';
+    let version = 'V.110520';
 
     $('#version').html(version);
 
@@ -582,6 +582,81 @@ $(document).ready(function () {
 
     });
 
+    //REPORTE LABORALES
+    $("#infoLaborales").click(function () {
+        var action = 'reporteLaborales';
+        var headers = ["NOMINA", "NOMBRE", "GENERO", "ALTA", "FECHA NACIMIENTO", "CURP", "RFC", "NSS", "SUCURSAL", "DEPARTAMENTO", "TABULADOR", "SALARIO DIARIO", "SALARIO MENSUAL", "CLASIFICACION", "ESTADO CIVIL", "LUGAR NACIMIENTO", "NUMERO IDENTIFICACION", "ESCOLARIDAD", "NOMBRE PADRE", "NOMBRE MADRE", "CP", "DOMICILIO", "ESTADO", "MUNICIPIO", "LOCALIDAD", "INFONAVIT", "NUMERO INFONAVIT", "FONACOT", "NUMERO FONACOT", "CUENTA", "NUMERO CUENTA", "CORREO", "TELEFONO", "CELULAR", "CONTACTO EMERGENCIA", "NUMERO EMERGENCIA"];
+        var data_Table = new FormData();
+        data_Table.append('action', action);
+        var xmlhr = new XMLHttpRequest();
+        xmlhr.open('POST', backendURL, true);
+        xmlhr.onload = function () {
+            if (this.status === 200) {
+                var respuesta = JSON.parse(xmlhr.responseText);
+                
+                if (respuesta.estado === 'OK') {
+                    var informacion = respuesta.informacion;
+
+                    crear_Excel(headers, informacion);
+
+                } else if (respuesta.status === 'error') {
+                    var informacion = respuesta.informacion;
+                }
+            }
+        }
+        xmlhr.send(data_Table);
+    });
+
+        var createXLSLFormatObj_ = [];
+
+        function crear_Excel(encabezados, informacion) {
+            var xlsHeader = encabezados;
+            var xlsRows = informacion;
+
+            createXLSLFormatObj_.push(xlsHeader);
+            $.each(xlsRows, function (index, value) {
+                var innerRowData_ = [],
+                    numeroNomina = value.numero_nomina;
+                $("tbody").append('<tr><td>' + numeroNomina + '</td><td>' + value.nombre_largo + '</td><td>' + value.sexo + '</td><td>' + value.fechaAlta + '</td><td>' + 
+                                value.fechaNacimiento + '</td><td>' + value.CURP + '</td><td>' + value.RFC + '</td><td>' + value.NSS + '</td><td>' + value.Sucursal + '</td><td>' + 
+                                value.Departamento + '</td><td>' + value.tabulador + '</td><td>' + value.salario_diario + '</td><td>' + value.salario_mensual + '</td><td>' + 
+                                value.Clasificacion + '</td><td>' + value.estado_civil + '</td><td>' + value.lugar_nacimiento + '</td><td>' + value.numero_identificacion + '</td><td>' + 
+                                value.escolaridad +'</td><td>' + value.nombre_padre +'</td><td>' + value.nombre_madre +'</td><td>' + value.codigo_postal +'</td><td>' + value.domicilio_completo + '</td><td>' + 
+                                value.estado +'</td><td>' + value.municipio + '</td><td>' + value.localidad + '</td><td>' + value.infonavit + '</td><td>' + value.numero_infonavit + '</td><td>' + 
+                                value.fonacot +'</td><td>' + value.numero_fonacot + '</td><td>' + value.cuenta + '</td><td>' + value.numero_cuenta + '</td><td>' + value.correo + '</td><td>' + 
+                                value.telefono +'</td><td>' + value.celular + '</td><td>' + value.contacto_emergencia_nombre + '</td><td>' + value.contacto_emergencia_numero + '</td></tr>');
+                $.each(value, function (ind, val) {
+                    innerRowData_.push(val);
+                });
+                createXLSLFormatObj_.push(innerRowData_);
+            });
+
+
+            /* File Name */
+            var filename_ = "reporte_laborales_activos.xlsx";
+
+            /* Sheet Name */
+            var ws_name_ = "Empleados Activos";
+
+            // if (typeof console !== 'undefined') console.log(new Date());
+            var wb_ = XLSX.utils.book_new(),
+                ws_ = XLSX.utils.aoa_to_sheet(createXLSLFormatObj_);
+
+            /* Add worksheet to workbook */
+            XLSX.utils.book_append_sheet(wb_, ws_, ws_name_);
+
+            /* Write workbook and Download */
+            // if (typeof console !== 'undefined') console.log(new Date());
+            XLSX.writeFile(wb_, filename_);
+            // if (typeof console !== 'undefined') console.log(new Date());
+            setTimeout(function () {
+                location.reload();
+            }, 2000);
+            
+        }
+
+    
+
     switch (seccionActual) {
         /**CARGAR TABLA EMPLEADOS */
         case 'altasc': case 'bajasc':
@@ -629,6 +704,7 @@ $(document).ready(function () {
                 $('.columna-baja').addClass('d-none');
             } else {
                 $('.columna-baja').removeClass('d-none');
+                $("#infoLaborales").addClass('d-none');
             }
             var dataTable = new FormData();
             dataTable.append('action', action);
@@ -2799,6 +2875,31 @@ $(document).ready(function () {
 
 
             break;
+
+        //NOTIFICACIONES
+        case 'notificaciones':
+            var titulo = 'Notificaciones al empleado';
+            $('.seccionTitulo').text(titulo);
+        break;
+        //IMAGENES DE EMPLEADOS
+        case 'imagenes-empleados':
+            seccionExportar.removeClass('d-none');
+
+            var titulo = 'Imagenes del empleado';
+            $('.seccionTitulo').text(titulo);
+
+            $(".btnimg").on('click', function () {
+                Swal.fire({
+                    title: 'Numero empleado',
+                    text: 'Nombre del empleado',
+                    imageUrl: 'https://unsplash.it/400/200',
+                    imageWidth: 400,
+                    imageHeight: 200,
+                    imageAlt: 'Custom image'
+                  })
+            });
+
+        break
         // CUMPLEAÑOS / ANTIGUEDAD
         case 'fecha1': case 'fecha2':
             var titulo = (seccionActual === 'fecha1' ? 'Fechas de cumpleaños' : 'Antigüedad del personal');

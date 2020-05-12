@@ -33,7 +33,7 @@
       <!-- Nav Item - Pages Collapse Menu -->
       <li class="nav-item rh d-none">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#rh" aria-expanded="true" aria-controls="rh">
-          <i class="fas fa-users-cog"></i>
+          <i class="fas fa-handshake"></i>
           <span>Módulo RRHH</span>
         </a>
         <div id="rh" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -72,21 +72,22 @@
 
       <li class="nav-item dh d-none">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#dh" aria-expanded="true" aria-controls="dh">
-          <i class="fas fa-users-cog"></i>
+          <i class="fas fa-user-tag"></i>
           <span>Módulo DH</span>
         </a>
         <div id="dh" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Opciones de consulta:</h6>
-            <a class="collapse-item" href="index.php?request=fecha2">Antiguedad</a>
-            <a class="collapse-item" href="index.php?request=fecha1">Cumpleañeros</a>
+            <a class="collapse-item" href="index.php?request=fecha2"><i class="far fa-clock"></i> Antiguedad</a>
+            <a class="collapse-item" href="index.php?request=fecha1"><i class="fas fa-birthday-cake"></i> Cumpleañeros</a>
+            <a class="collapse-item d-none" href="index.php?request=notificaciones"><i class="far fa-envelope"></i> Notificaciones</a>
           </div>
         </div>
       </li>
 
       <li class="nav-item transportes d-none">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#transportes" aria-expanded="true" aria-controls="transportes">
-          <i class="fas fa-users-cog"></i>
+          <i class="fas fa-bus"></i>
           <span>Módulo Transportes</span>
         </a>
         <div id="transportes" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -99,7 +100,7 @@
 
       <li class="nav-item nominas d-none">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#nominas" aria-expanded="true" aria-controls="nominas">
-          <i class="fas fa-users-cog"></i>
+          <i class="fas fa-file-invoice"></i>
           <span>Módulo Nóminas</span>
         </a>
         <div id="nominas" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -120,7 +121,7 @@
 
       <li class="nav-item capacitacion d-none">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#capacitacion" aria-expanded="true" aria-controls="capacitacion">
-          <i class="fas fa-fw fa-cog"></i>
+          <i class="fas fa-users"></i>
           <span>Módulo Capacitación</span>
         </a>
         <div id="capacitacion" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -130,6 +131,21 @@
           </div>
         </div>
       </li>
+
+      <li class="nav-item coordinadora d-none">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#coordinadora" aria-expanded="true" aria-controls="coordinadora">
+          <i class="fas fa-pencil-ruler"></i>
+          <span>Módulo Coordinadoras</span>
+        </a>
+        <div id="coordinadora" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Modulos</h6>
+            <a class="collapse-item" href="index.php?request=altasc">Altas</a>
+            <a class="collapse-item" href="index.php?request=bajasc">Bajas</a>
+          </div>
+        </div>
+      </li>
+
       <li class="nav-item administrador d-none">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#administrador" aria-expanded="true" aria-controls="administrador">
           <i class="fas fa-fw fa-cog"></i>
@@ -143,19 +159,7 @@
         </div>
       </li>
 
-      <li class="nav-item coordinadora d-none">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#capacitacion" aria-expanded="true" aria-controls="capacitacion">
-          <i class="fas fa-fw fa-cog"></i>
-          <span>Módulo Coordinadoras</span>
-        </a>
-        <div id="capacitacion" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Modulos</h6>
-            <a class="collapse-item" href="index.php?request=altasc">Altas</a>
-            <a class="collapse-item" href="index.php?request=bajasc">Bajas</a>
-          </div>
-        </div>
-      </li>
+      
 
 
       <!-- Divider -->

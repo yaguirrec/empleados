@@ -1703,3 +1703,47 @@ FROM
     sys.triggers  
 WHERE 
     type = 'TR';
+
+	SELECT te.numero_nomina,te.nombre_largo,pj.em_id03 AS correo_empleado,ts.nombre AS Sucursal,tc.nombre AS Departamento,pj.manager1 nomina_jefe,
+(SELECT nombre_largo from tbempleados WHERE numero_nomina = pj.manager1) nombre_jefe,
+(SELECT em_id03 from PJEMPLOY WHERE employee = pj.manager1) correo_jefe
+FROM PJEMPLOY AS pj
+INNER JOIN tbempleados AS te
+ON te.numero_nomina = REPLACE(pj.employee,' ','')
+INNER JOIN tbcelula AS tc
+ON te.id_celula = tc.id_celula
+INNER JOIN tbsucursal AS ts
+ON te.id_sucursal = ts.id_sucursal
+AND pj.manager1 <> '' AND pj.emp_status IN ('A')
+ORDER BY ts.id_sucursal,tc.id_celula,te.numero_nomina
+
+
+SELECT te.numero_nomina,te.nombre_largo,te.sexo,te.fecha_alta,te.fecha_nacimiento,
+CONCAT(te.curpini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.curpfin) AS CURP,
+CONCAT(te.rfcini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.rfcfin) AS RFC,
+CONCAT(te.nss, td.dv) AS NSS,
+ts.nombre AS Sucursal,tc.nombre AS Departamento,REPLACE(td.tabulador,'|', ' ') AS tabulador,td.salario_diario,td.salario_mensual,
+CASE 
+	WHEN td.clasificacion = 'A' THEN 'Administrativo'
+	WHEN td.clasificacion = 'E' THEN 'Especial'
+	WHEN td.clasificacion = 'AO' THEN 'Administrativo Operativo'
+	WHEN td.clasificacion = 'O' THEN 'Operativo'
+	WHEN td.clasificacion = 'B' THEN 'Becario' END AS Clasificacion,
+CASE 
+	WHEN td.estado_civil = 'C' THEN 'Casado(a)'
+	ELSE 'Soltero(a)' END AS estado_civil,
+td.lugar_nacimiento,td.numero_identificacion,
+CASE 
+	WHEN td.escolaridad = 'B_TECNICO' THEN 'BACHILLERATO TECNICO'
+	ELSE UPPER(td.escolaridad) END AS escolaridad,
+REPLACE(td.nombre_padre,'|', ' ') AS nombre_padre,REPLACE(td.nombre_madre,'|', ' ') AS nombre_madre,td.codigo_postal,td.domicilio_completo,td.estado,td.municipio,td.localidad,
+td.infonavit,td.numero_infonavit,td.fonacot,td.numero_fonacot,td.cuenta,td.numero_cuenta,LOWER(td.correo) AS correo,td.telefono,td.celular,td.contacto_emergencia_nombre,td.contacto_emergencia_numero
+FROM tbempleados AS te
+INNER JOIN tbsucursal as ts
+ON te.id_sucursal = ts.id_sucursal
+INNER JOIN tbdatos_empleados AS td
+ON te.numero_nomina = td.numero_nomina
+INNER JOIN tbcelula AS tc
+ON te.id_celula = tc.id_celula
+AND te.status <> 'B'
+ORDER BY te.fecha_alta DESC

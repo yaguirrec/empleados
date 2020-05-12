@@ -12,10 +12,11 @@ switch ($action){
         $datos = $_POST['datos'];
         $headers  = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-Type: text/html; charset=UTF-8' . "\r\n";
+        // $headers .= 'To: cvalenciano01@mexq.com.mx, sgomez@mexq.com.mx'. "\r\n";
         $headers .= 'To: agomez@mexq.com.mx, stafflaborales@mexq.com.mx, pvaldez@mexq.com.mx' . "\r\n";
         $headers .= 'Cc: '.$cc.'@mexq.com.mx' . "\r\n";
         foreach($datos as $dato){
-            $data .= $dato . '</br>';
+            $data .= '<p>' . $dato . '</p>';
         }
         $contenido = 	'
 						<html>
@@ -49,7 +50,7 @@ switch ($action){
         $headers .= 'To: agomez@mexq.com.mx, stafflaborales@mexq.com.mx, pvaldez@mexq.com.mx' . "\r\n";
         $headers .= 'Cc: '.$cc.'@mexq.com.mx' . "\r\n";
         foreach($datos as $dato){
-            $data .= $dato . '</br>';
+            $data .= '<p>' . $dato . '</p>';
         }
         $contenido = 	'
 						<html>
