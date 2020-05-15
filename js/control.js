@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V.110520';
+    let version = 'V.150520DEV';
 
     $('#version').html(version);
 
@@ -1719,7 +1719,9 @@ $(document).ready(function () {
 
                 if (valueReingreso === '0' || valueReingreso === null) $('#txtReingreso').addClass('text-success'); else $('#txtReingreso').addClass('text-danger');
 
-
+                if(rowInfo.sucursal === 'COR'){
+                    $('.fOperaciones').addClass('d-none');
+                }
 
                 var nomina = rowInfo.numero_nomina,
                     urlFoto = 'assets/files/' + nomina + '/' + nomina + '.jpg',
@@ -2000,6 +2002,7 @@ $(document).ready(function () {
                                 $("#segComision").prop("checked", false);
                             }
                             
+                            $("#segJefe").val(informacion.jefeDirecto);
                             $("#segDaltonismo").val(informacion.daltonismo);
                             $("#segAgudeza").val(informacion.agudeza);
                             $("#segTarjeta").val(informacion.numero_cuenta);
@@ -2081,13 +2084,21 @@ $(document).ready(function () {
 
             });
 
-            
-
             $("#segComision").click(function(event){
                 if ($("#segComision").is(':checked')){
                     $("#segSucursal").prop("disabled", false);
+                    $("#segFechaLlegada").prop("disabled", false);
+                    $("#segChecklist").prop("disabled", false);
+                    $("#segPoliticas").prop("disabled", false);
+                    $("#segReglamento").prop("disabled", false);
+                    $("#segCarta").prop("disabled", false);
                 } else {
                     $("#segSucursal").prop("disabled", true);
+                    $("#segFechaLlegada").prop("disabled", true);
+                    $("#segChecklist").prop("disabled", true);
+                    $("#segPoliticas").prop("disabled", true);
+                    $("#segReglamento").prop("disabled", true);
+                    $("#segCarta").prop("disabled", true);
                 }
             });
 

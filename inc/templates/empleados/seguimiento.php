@@ -4,22 +4,65 @@
     </h3>
     <div class="card-text p-4">
         <div class="row">
-            <div class="col">
+            <div class="col fOperaciones">
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input mt-4" id="segComision">
                     <label class="custom-control-label" for="segComision"><strong>Comisión</strong></label>
                 </div>
             </div>
-            <div class="col">
+
+            <div class="col fOperaciones">
+                <label for="segFechaLlegada">Llegada a Ags*</label>
+                <input type="date" class="form-control" id="segFechaLlegada" disabled="disabled">
+            </div>
+
+            <div class="col fOperaciones">
+                <label for="segChecklist">Fecha checklist (Comisión)</label>
+                <input type="date" class="form-control" id="segChecklist" disabled="disabled">
+            </div>
+
+            <div class="col fOperaciones">
                 <label for="segSucursal">Sucursal</label>
                 <select class="form-control" id="segSucursal" disabled="disabled">
                 </select>
             </div>
-            <div class="col">
+
+            <div class="col fOperaciones">
+                <label for="segPoliticas">Politicas*</label>
+                <select class="form-control" id="segPoliticas" disabled="disabled">
+                    <option value="">Pendiente</option>
+                    <option value="">OK</option>
+                    <option value="">N/A</option>
+                    <option value="">BAJA</option>
+                </select>
+            </div>
+
+            <div class="col fOperaciones">
+                <label for="segReglamento">Reglamento*</label>
+                <select class="form-control" id="segReglamento" disabled="disabled">
+                    <option value="">Pendiente</option>
+                    <option value="">OK</option>
+                    <option value="">N/A</option>
+                    <option value="">BAJA</option>
+                </select>
+            </div>
+
+            <div class="col fOperaciones">
+                <label for="segCarta">Carta responsiva*</label>
+                <select class="form-control" id="segCarta" disabled="disabled">
+                    <option value="">Pendiente</option>
+                    <option value="">OK</option>
+                    <option value="">N/A</option>
+                    <option value="">BAJA</option>
+                </select>
+            </div>
+
+            
+            <div class="col fOperaciones">
                 <label for="segDaltonismo">Daltonismo</label>
                 <input type="text" class="form-control" id="segDaltonismo" placeholder="Daltonismo">
             </div>
-            <div class="col">
+            <div class="col fOperaciones">
                 <label for="segAgudeza">Agudeza Visual</label>
                 <input type="text" class="form-control" id="segAgudeza" placeholder="Agudeza Visual">
             </div>
@@ -37,20 +80,86 @@
                 <label for="segFechacontrato">Entrega de contrato</label>
                 <input type="date" class="form-control" id="segFechacontrato" placeholder="Entrega de contrato">
             </div>
+
+            <div class="col">
+                <label for="segContrato">Contrato*</label>
+                <select class="form-control" id="segContrato">
+                    <option value="">Pendiente</option>
+                    <option value="">OK</option>
+                    <option value="">N/A</option>
+                    <option value="">BAJA</option>
+                </select>
+            </div>
+
+            <div class="col">
+                <label for="segDGP">DGP*</label>
+                <select class="form-control" id="segDGP">
+                    <option value="">Pendiente</option>
+                    <option value="">OK</option>
+                    <option value="">N/A</option>
+                    <option value="">BAJA</option>
+                </select>
+            </div>
+
+            <div class="col fOperaciones">
+                <label for="segJefe">Jefe directo*</label>
+                <input type="text h6" class="form-control" id="segJefe" readonly>
+            </div>
+
             <div class="col">
                 <label for="segGuia">Guia</label>
                 <input type="text" class="form-control" id="segGuia" placeholder="Guia">
             </div>
         </div>
         <div class="row mt-1">
+            
             <div class="col">
-                <label for="segFechaentregapersonal">Entrega de personal</label>
+                <label for="segDisciplica">5 basicos y codigo de disciplina*</label>
+                <select class="form-control" id="segDisciplica">
+                    <option value="">Pendiente</option>
+                    <option value="">OK</option>
+                    <option value="">N/A</option>
+                    <option value="">BAJA</option>
+                </select>
+            </div>
+
+            <div class="col">
+                <label for="segEtica">Codigo de Etica*</label>
+                <select class="form-control" id="segEtica">
+                    <option value="">Pendiente</option>
+                    <option value="">OK</option>
+                    <option value="">N/A</option>
+                    <option value="">BAJA</option>
+                </select>
+            </div>
+
+            <div class="col fOperaciones">
+                <label for="segFechaentregapersonal">Entrega de personal a planta</label>
                 <input type="date" class="form-control" id="segFechaentregapersonal" placeholder="Entrega de personal">
             </div>
+
+            <div class="col">
+                <label for="segFechaentregachecklist">Checklist Laborales</label>
+                <input type="date" class="form-control" id="segFechaentregachecklist">
+            </div>
+
             <div class="col">
                 <label for="segFechafincontrato">Fin de contrato</label>
                 <input type="date" class="form-control" id="segFechafincontrato" placeholder="Fin de contrato" disabled="disabled">
             </div>
+
+            <div class="col">
+                <label for="segEntrega">Entrega a operaciones*</label>
+                <select class="form-control" id="segEntrega">
+                    <option value="">Pendiente</option>
+                    <option value="">No se entrego</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="row">
+            <label for="segComentario">Comentarios</label>
+            <textarea class="form-control" id="segComentario" rows="3">Seguimiento de alta en laborales.</textarea>
         </div>
         <hr>
         <div class="row mt-4">
