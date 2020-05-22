@@ -881,7 +881,6 @@ $(document).ready(function () {
         //SECCION CI
         case 'ci':
             seccionExportar.removeClass('d-none');
-            console.log(nivel_usuario);
             var action = 'listar-ci';
             var titulo = 'Reporte CI';
             $('.seccionTitulo').text(titulo);

@@ -24,8 +24,8 @@
           <th class="text-light" scope="col">Fecha Alta</th>
           <th class="text-light" scope="col">Fecha Nacimiento</th>
           <th class="text-light" scope="col">NSS</th>
-          <th class="text-light" scope="col" class="d-none nominas">RFC</th>
-          <th class="text-light" scope="col" class="d-none nominas">Cuenta</th>
+          <th class="text-light d-none nominas" scope="col">RFC</th>
+          <th class="text-light d-none nominas" scope="col">Cuenta</th>
         </tr>
       </thead>
       <tbody class="text-left" id="dataTable">
