@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V.220520DEV';
+    let version = 'V.220520';
 
     $('#version').html(version);
 
