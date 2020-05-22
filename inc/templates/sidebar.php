@@ -56,6 +56,7 @@
             <a class="collapse-item" href="index.php?request=empleado">Empleados activos</a>
             <a class="collapse-item" href="index.php?request=bajas">Empleados inactivos</a>
             <a class="collapse-item" href="index.php?request=becarios">Becarios</a>
+            <a class="collapse-item" href="index.php?request=ci">CI</a>
             <a class="collapse-item" href="index.php?request=seguimiento">Seguimiento</a>
             <hr class="sidebar-divider">
             <h6 class="collapse-header">Administrar registros:</h6>
@@ -80,7 +81,7 @@
             <h6 class="collapse-header">Opciones de consulta:</h6>
             <a class="collapse-item" href="index.php?request=fecha2"><i class="far fa-clock"></i> Antiguedad</a>
             <a class="collapse-item" href="index.php?request=fecha1"><i class="fas fa-birthday-cake"></i> Cumpleañeros</a>
-            <a class="collapse-item d-none" href="index.php?request=notificaciones"><i class="far fa-envelope"></i> Notificaciones</a>
+            <!-- <a class="collapse-item" href="index.php?request=notificaciones"><i class="far fa-envelope"></i> Notificaciones</a> -->
           </div>
         </div>
       </li>
@@ -108,6 +109,7 @@
             <h6 class="collapse-header">Opciones de consulta:</h6>
             <a class="collapse-item" href="index.php?request=empleado">Empleados activos</a>
             <a class="collapse-item" href="index.php?request=bajas">Empleados inactivos</a>
+            <a class="collapse-item" href="index.php?request=ci">CI</a>
             <hr class="sidebar-divider">
             <h6 class="collapse-header">Administrar registros:</h6>
             <a class="collapse-item" href="index.php?request=altas">Administrar Altas</a>

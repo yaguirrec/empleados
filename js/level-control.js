@@ -46,6 +46,7 @@ $( document ).ready(function() {
         case '2':
             general.removeClass('d-none');
             laborales.removeClass('d-none');
+            nominas.removeClass('d-none');
             laborales.removeAttr('disabled');
             laborales.removeAttr('readonly');
             break;

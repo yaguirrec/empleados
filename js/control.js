@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V.150520DEV';
+    let version = 'V.220520DEV';
 
     $('#version').html(version);
 
@@ -877,6 +877,64 @@ $(document).ready(function () {
                 });
             }
             break;
+
+        //SECCION CI
+        case 'ci':
+            seccionExportar.removeClass('d-none');
+            console.log(nivel_usuario);
+            var action = 'listar-ci';
+            var titulo = 'Reporte CI';
+            $('.seccionTitulo').text(titulo);
+            var dataTable = new FormData();
+            dataTable.append('action', action);
+            dataTable.append('prop', prop);
+            var xmlhr = new XMLHttpRequest();
+            xmlhr.open('POST', backendURL, true);
+            xmlhr.onload = function () {
+                if (this.status === 200) {
+                    var respuesta = JSON.parse(xmlhr.responseText);
+                    // console.log(respuesta);
+                    if (respuesta.estado === 'OK') {
+                        var informacion = respuesta.informacion;
+                        for (var i in informacion) {
+                            tablaCI(informacion[i]);
+                        }
+                    } else if (respuesta.status === 'error') {
+                        var informacion = respuesta.informacion;
+                    }
+                }
+            }
+            xmlhr.send(dataTable);
+
+            function tablaCI(rowInfo) {
+                
+
+                $('#loadingIndicator').addClass('d-none');
+
+                var row = $("<tr class='text-secondary'>");
+
+                $("#dataTable").append(row); //this will append tr element to table... keep its reference for a while since we will add cels into it id_empleado
+                // NUMERO DE EQUIPO
+                row.append($("<td>" + rowInfo.numero_nomina + " </td>"));
+                // NOMINA DEL EMPLEADO
+                row.append($("<td> " + rowInfo.nombre_largo + " </td>"));
+                row.append($("<td> " + rowInfo.Puesto + " </td>"));
+                row.append($("<td> " + rowInfo.Clasificacion + " </td>"));
+                row.append($("<td> " + rowInfo.Sucursal + " </td>"));
+                row.append($("<td> " + rowInfo.Departamento + " </td>"));
+                row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
+                row.append($("<td> " + rowInfo.fecha_nacimiento + " </td>"));
+                row.append($("<td> " + rowInfo.NSS + " </td>"));
+                if (nivel_usuario === '6' || nivel_usuario === '2'){
+                    row.append($("<td> " + rowInfo.RFC + " </td>"));
+                    row.append($("<td> " + rowInfo.numero_cuenta + " </td>"));
+                }
+                
+            }
+            break;
+        //SECCION CI
+        
+
         //SECCION BAJAS POR PUESTO
         case 'bajaPuesto':
             seccionBuscar.removeClass('d-none');
