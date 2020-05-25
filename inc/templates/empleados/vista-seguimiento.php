@@ -20,14 +20,25 @@
           <th scope="col">Area</th>
           <th scope="col">Puesto</th>
           <th scope="col">Comisión</th>
+          <th scope="col">Llegada a Ags</th>
+          <th scope="col">Entrega checklist Comison</th>
           <th scope="col">Sucursal comision</th>
+          <th scope="col">Politicas</th>
+          <th scope="col">Reglamento</th>
+          <th scope="col">Carta Responsiva</th>
           <th scope="col">Daltonismo</th>
           <th scope="col">Agudeza</th>
           <th scope="col">Tarjeta</th>
           <th scope="col">Entrega tarjeta</th>
           <th scope="col">Entrega contrato</th>
+          <th scope="col">Contrato</th>
           <th scope="col">Guia</th>
-          <th scope="col">Entrega personal</th>
+          <th scope="col">5 Básicos y Código de Disciplina</th>
+          <th scope="col">Codigo Etica</th>
+          <th scope="col">Entrega en planta</th>
+          <th scope="col">Checklist Laborales</th>
+          <th scope="col">Entrega operaciones</th>
+          <th scope="col">Fecha entrega operaciones</th>
           <th scope="col">Fin contrato</th>
         </tr>
       </thead>

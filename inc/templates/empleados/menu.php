@@ -37,7 +37,7 @@
   <div class="card-body text-center">
     <h5 class="card-title">Seguimiento</h5>
     <div class="btn-group-vertical">
-      <!-- <button class="btn btn-block btn-lg btn-info" id="btnSeguimiento">Seguimiento</button> -->
+      <button class="btn btn-block btn-lg btn-info" id="btnSeguimiento">Seguimiento</button>
     </div>
   </div>
 </div>

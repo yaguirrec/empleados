@@ -1685,17 +1685,6 @@ AND td.clasificacion IN ('O','AO')
 AND te.id_sucursal = (SELECT id_sucursal FROM tbsucursal WHERE nombre_corto = (SELECT RIGHT(REPLACE(emp_name,' ',''),3) FROM PJEMPLOY WHERE employee = '99991'))
 AND YEAR(te.updated_at) >= YEAR(GETDATE())-1
 
-SELECT MONTH(GETDATE())-12
-
-
-
-SELECT * FROM PJEMPLOY WHERE employee = '19497'
---UPDATE PJEMPLOY SET manager1 = '146C1' WHERE employee = '18655'
-SELECT * FROM tbempleados WHERE numero_nomina = '19497'
-SELECT * FROM tbjefe_empleado WHERE empleado_nomina = '26812'
-SELECT * FROM tbdatos_empleados WHERE numero_nomina = '18655'
-
-
 SELECT  
     name,
     is_instead_of_trigger
@@ -1747,3 +1736,29 @@ INNER JOIN tbcelula AS tc
 ON te.id_celula = tc.id_celula
 AND te.status <> 'B'
 ORDER BY te.fecha_alta DESC
+
+SELECT TOP 100 * FROM tbdatos_empleados where numero_nomina = '26812'
+
+ALTER TABLE tbdatos_empleados
+ADD comision BIT NOT NULL DEFAULT 0,
+llegada_comision DATE NOT NULL DEFAULT '1900-01-01',
+checklist_comision DATE NOT NULL DEFAULT '1900-01-01',
+sucursal_comision INT NOT NULL DEFAULT 0,
+politicas_comision VARCHAR(25) NOT NULL DEFAULT 'N/A',
+reglamento_comision VARCHAR(25) NOT NULL DEFAULT 'N/A',
+carta_comision VARCHAR(25) NOT NULL DEFAULT 'N/A',
+daltonismo VARCHAR(25) NOT NULL DEFAULT 'N/A',
+agudeza VARCHAR(25) NOT NULL DEFAULT 'N/A',
+entrega_tarjeta DATE NOT NULL DEFAULT '1900-01-01',
+entrega_contrato DATE NOT NULL DEFAULT '1900-01-01',
+contrato VARCHAR(25) NOT NULL DEFAULT 'N/A',
+dgp VARCHAR(25) NOT NULL DEFAULT 'N/A',
+guia VARCHAR(25) NOT NULL DEFAULT 'N/A',
+disciplina VARCHAR(25) NOT NULL DEFAULT 'N/A',
+etica VARCHAR(25) NOT NULL DEFAULT 'N/A',
+entrega_planta DATE NOT NULL DEFAULT '1900-01-01',
+checklist_laborales DATE NOT NULL DEFAULT '1900-01-01',
+fin_contrato DATE NOT NULL DEFAULT '1900-01-01',
+entrega_operaciones VARCHAR(25) NOT NULL DEFAULT 'N/A',
+fecha_operaciones DATE NOT NULL DEFAULT '1900-01-01',
+comentario_seguimiento VARCHAR(255) DEFAULT 'N/A';

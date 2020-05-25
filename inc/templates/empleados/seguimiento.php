@@ -30,30 +30,30 @@
             <div class="col fOperaciones">
                 <label for="segPoliticas">Politicas*</label>
                 <select class="form-control" id="segPoliticas" disabled="disabled">
-                    <option value="">Pendiente</option>
-                    <option value="">OK</option>
-                    <option value="">N/A</option>
-                    <option value="">BAJA</option>
+                    <option value="PENDIENTE">Pendiente</option>
+                    <option value="OK">OK</option>
+                    <option value="N/A">N/A</option>
+                    <option value="BAJA">BAJA</option>
                 </select>
             </div>
 
             <div class="col fOperaciones">
                 <label for="segReglamento">Reglamento*</label>
                 <select class="form-control" id="segReglamento" disabled="disabled">
-                    <option value="">Pendiente</option>
-                    <option value="">OK</option>
-                    <option value="">N/A</option>
-                    <option value="">BAJA</option>
+                    <option value="PENDIENTE">Pendiente</option>
+                    <option value="OK">OK</option>
+                    <option value="N/A">N/A</option>
+                    <option value="BAJA">BAJA</option>
                 </select>
             </div>
 
             <div class="col fOperaciones">
                 <label for="segCarta">Carta responsiva*</label>
                 <select class="form-control" id="segCarta" disabled="disabled">
-                    <option value="">Pendiente</option>
-                    <option value="">OK</option>
-                    <option value="">N/A</option>
-                    <option value="">BAJA</option>
+                    <option value="PENDIENTE">Pendiente</option>
+                    <option value="OK">OK</option>
+                    <option value="N/A">N/A</option>
+                    <option value="BAJA">BAJA</option>
                 </select>
             </div>
 
@@ -84,20 +84,20 @@
             <div class="col">
                 <label for="segContrato">Contrato*</label>
                 <select class="form-control" id="segContrato">
-                    <option value="">Pendiente</option>
-                    <option value="">OK</option>
-                    <option value="">N/A</option>
-                    <option value="">BAJA</option>
+                    <option value="PENDIENTE">Pendiente</option>
+                    <option value="OK">OK</option>
+                    <option value="N/A">N/A</option>
+                    <option value="BAJA">BAJA</option>
                 </select>
             </div>
 
             <div class="col">
                 <label for="segDGP">DGP*</label>
                 <select class="form-control" id="segDGP">
-                    <option value="">Pendiente</option>
-                    <option value="">OK</option>
-                    <option value="">N/A</option>
-                    <option value="">BAJA</option>
+                    <option value="PENDIENTE">Pendiente</option>
+                    <option value="OK">OK</option>
+                    <option value="N/A">N/A</option>
+                    <option value="BAJA">BAJA</option>
                 </select>
             </div>
 
@@ -116,20 +116,20 @@
             <div class="col">
                 <label for="segDisciplica">5 basicos y codigo de disciplina*</label>
                 <select class="form-control" id="segDisciplica">
-                    <option value="">Pendiente</option>
-                    <option value="">OK</option>
-                    <option value="">N/A</option>
-                    <option value="">BAJA</option>
+                    <option value="PENDIENTE">Pendiente</option>
+                    <option value="OK">OK</option>
+                    <option value="N/A">N/A</option>
+                    <option value="BAJA">BAJA</option>
                 </select>
             </div>
 
             <div class="col">
                 <label for="segEtica">Codigo de Etica*</label>
                 <select class="form-control" id="segEtica">
-                    <option value="">Pendiente</option>
-                    <option value="">OK</option>
-                    <option value="">N/A</option>
-                    <option value="">BAJA</option>
+                    <option value="PENDIENTE">Pendiente</option>
+                    <option value="OK">OK</option>
+                    <option value="N/A">N/A</option>
+                    <option value="BAJA">BAJA</option>
                 </select>
             </div>
 
@@ -149,11 +149,17 @@
             </div>
 
             <div class="col">
-                <label for="segEntrega">Entrega a operaciones*</label>
-                <select class="form-control" id="segEntrega">
-                    <option value="">Pendiente</option>
-                    <option value="">No se entrego</option>
+                <label for="segEntregaOp">Entrega a operaciones*</label>
+                <select class="form-control" id="segEntregaOp">
+                    <option value="PENDIENTE">Pendiente</option>
+                    <option value="NO">No se entrego</option>
+                    <option value="SI">Entregado</option>
                 </select>
+            </div>
+
+            <div class="col d-none" id="segEntregaFechacol">
+                <label for="segEntregaFecha">Fecha Entrega Operaciones</label>
+                <input type="date" class="form-control" id="segEntregaFecha">
             </div>
 
         </div>

@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V.220520';
+    let version = 'V.DEV250520';
 
     $('#version').html(version);
 
@@ -1780,6 +1780,7 @@ $(document).ready(function () {
                     $('.fOperaciones').addClass('d-none');
                 }
 
+
                 var nomina = rowInfo.numero_nomina,
                     urlFoto = 'assets/files/' + nomina + '/' + nomina + '.jpg',
                     action = 'revisarImagen';
@@ -2043,6 +2044,9 @@ $(document).ready(function () {
                     segSucursales();
                     var listaSUC = new FormData(),
                         action = 'datosSeguimiento';
+                    var cdt = new Date();
+                    var current_year =cdt.getFullYear();
+
                     listaSUC.append('action', action);
                     listaSUC.append('numero_nomina', numero_nomina);
                     var xmlSUC = new XMLHttpRequest();
@@ -2054,11 +2058,44 @@ $(document).ready(function () {
                             // console.log(informacion);
                             if(informacion.comision === 1){
                                 $("#segComision").prop("checked", true);
+                                $("#segFechaLlegada").prop("disabled", false);
+                                $("#segChecklist").prop("disabled", false);
                                 $("#segSucursal").prop("disabled", false);
+                                $("#segPoliticas").prop("disabled", false);
+                                $("#segReglamento").prop("disabled", false);
+                                $("#segCarta").prop("disabled", false);
                             } else {
                                 $("#segComision").prop("checked", false);
                             }
+
+                            $('#segEntregaOp').change(function() {
+                                // console.log($(this).val());
+                                if($(this).val() === 'SI'){
+                                    $('#segEntregaFechacol').removeClass('d-none');
+                                } else {
+                                    $('#segEntregaFechacol').addClass('d-none');
+                                    $('#segEntregaFecha').val(current_year+'-01-01');
+                                }
+                            });
+                
+                
                             
+                            
+                            $("#segFechaLlegada").val(informacion.llegada_comision.date.substr(0, 10));
+                            $("#segChecklist").val(informacion.checklist_comision.date.substr(0, 10));
+                            $("#segPoliticas").val(informacion.politicas_comision);
+                            $("#segReglamento").val(informacion.reglamento_comision);
+                            $("#segCarta").val(informacion.carta_comision);
+                            $("#segContrato").val(informacion.contrato);
+                            $("#segDGP").val(informacion.dgp);
+                            $("#segDisciplica").val(informacion.disciplina);
+                            $("#segEtica").val(informacion.etica);
+                            $("#segFechaentregapersonal").val(informacion.entrega_planta.date.substr(0, 10));
+                            $("#segFechaentregachecklist").val(informacion.checklist_laborales.date.substr(0, 10));
+                            $("#segEntregaOp").val(informacion.entrega_operaciones);
+                            $("#segEntregaFecha").val(informacion.fecha_operaciones.date.substr(0, 10));
+                            $("#segComentario").val(informacion.comentario_seguimiento);
+
                             $("#segJefe").val(informacion.jefeDirecto);
                             $("#segDaltonismo").val(informacion.daltonismo);
                             $("#segAgudeza").val(informacion.agudeza);
@@ -2067,9 +2104,14 @@ $(document).ready(function () {
                             $("#segFechatarjeta").val(informacion.entrega_tarjeta.date.substr(0, 10));
                             $("#segFechacontrato").val(informacion.entrega_contrato.date.substr(0, 10));
                             $("#segGuia").val(informacion.guia);
-                            $("#segFechaentregapersonal").val(informacion.entrega_personal.date.substr(0, 10));
                             setTimeout(function () {
                                 $("#segSucursal").val(informacion.sucursal_comision);
+
+                                if($("#segEntregaOp").val() === 'SI'){
+                                    $('#segEntregaFechacol').removeClass('d-none');
+                                } else {
+                                    $('#segEntregaFechacol').addClass('d-none');
+                                }
                             }, 150);
                         }
                     }
@@ -2082,15 +2124,28 @@ $(document).ready(function () {
                 $("#btnSalvarseguimiento").click(function(event){
                     var action = 'guardarSeguimiento',
                         segComision = 0,
+                        segFechaLlegada = $("#segFechaLlegada").val(),
+                        segChecklist = $("#segChecklist").val(),
                         segSucursal = $("#segSucursal").val(),
+                        segPoliticas = $("#segPoliticas").val(),
+                        segReglamento = $("#segReglamento").val(),
+                        segCarta = $("#segCarta").val(),
                         segDaltonismo = $("#segDaltonismo").val(),
                         segAgudeza = $("#segAgudeza").val(),
                         segTarjeta = $("#segTarjeta").val(),
-                        segFechafincontrato = $("#segFechafincontrato").val(),
                         segFechatarjeta = $("#segFechatarjeta").val(),
                         segFechacontrato = $("#segFechacontrato").val(),
+                        segContrato = $("#segContrato").val(),
+                        segDGP = $("#segDGP").val(),
                         segGuia = $("#segGuia").val(),
-                        segFechaentregapersonal = $("#segFechaentregapersonal").val();
+                        segDisciplica = $("#segDisciplica").val(),
+                        segEtica = $("#segEtica").val(),
+                        segFechaentregapersonal = $("#segFechaentregapersonal").val()
+                        segFechaentregachecklist = $("#segFechaentregachecklist").val()
+                        segFechafincontrato = $("#segFechafincontrato").val(),
+                        segEntregaOp = $("#segEntregaOp").val(),
+                        segEntregaFecha = $("#segEntregaFecha").val(),
+                        segComentario = $("#segComentario").val();
                         
                         if ($('#segComision').is(':checked'))
                             segComision = 1;
@@ -2100,21 +2155,35 @@ $(document).ready(function () {
                             url: backendURL,
                             data: {
                                 action: action,
+                                segFechaLlegada: segFechaLlegada,
+                                segChecklist: segChecklist,
                                 segComision: segComision,
                                 segSucursal: segSucursal,
+                                segPoliticas: segPoliticas,
+                                segReglamento: segReglamento,
+                                segCarta: segCarta,
                                 segDaltonismo: segDaltonismo,
                                 segAgudeza: segAgudeza,
                                 segTarjeta: segTarjeta,
-                                segFechafincontrato: segFechafincontrato,
                                 segFechatarjeta: segFechatarjeta,
                                 segFechacontrato: segFechacontrato,
+                                segContrato: segContrato,
+                                segDGP: segDGP,
                                 segGuia: segGuia,
+                                segDisciplica: segDisciplica,
+                                segEtica: segEtica,
                                 segFechaentregapersonal: segFechaentregapersonal,
+                                segFechaentregachecklist: segFechaentregachecklist,
+                                segFechafincontrato: segFechafincontrato,
+                                segEntregaOp: segEntregaOp,
+                                segEntregaFecha: segEntregaFecha,
+                                segComentario: segComentario,
+                                empleado_activo: empleado_activo,
                                 numero_nomina: numero_nomina
                             }
                         }).done(function (response) {
                             respuesta = JSON.parse(response);
-                            console.log(respuesta);
+                            // console.log(respuesta);
                             let estadoRespuesta = respuesta.estado;
                             if (estadoRespuesta === 'OK') {
                                 Swal.fire({
@@ -2211,14 +2280,25 @@ $(document).ready(function () {
                 row.append($("<td class='text-left'> " + rowInfo.Departamento + " </td>"));
                 row.append($("<td class='text-left'> " + rowInfo.Puesto + " </td>"));
                 row.append($("<td> " + comision + " </td>"));
+                row.append($("<td> " + rowInfo.llegada_comision.date.substr(0, 10) + " </td>"));
+                row.append($("<td> " + rowInfo.checklist_comision.date.substr(0, 10) + " </td>"));
                 row.append($("<td> " + rowInfo.sucursal_comision + " </td>"));
+                row.append($("<td> " + rowInfo.politicas_comision + " </td>"));
+                row.append($("<td> " + rowInfo.reglamento_comision + " </td>"));
+                row.append($("<td> " + rowInfo.carta_comision + " </td>"));
                 row.append($("<td> " + rowInfo.daltonismo + " </td>"));
                 row.append($("<td> " + rowInfo.agudeza + " </td>"));
                 row.append($("<td> " + rowInfo.numero_cuenta + " </td>"));
                 row.append($("<td> " + rowInfo.entrega_tarjeta.date.substr(0, 10) + " </td>"));
                 row.append($("<td> " + rowInfo.entrega_contrato.date.substr(0, 10) + " </td>"));
+                row.append($("<td> " + rowInfo.contrato + " </td>"));
                 row.append($("<td> " + rowInfo.guia + " </td>"));
-                row.append($("<td> " + rowInfo.entrega_personal.date.substr(0, 10) + " </td>"));
+                row.append($("<td> " + rowInfo.disciplina + " </td>"));
+                row.append($("<td> " + rowInfo.etica + " </td>"));
+                row.append($("<td> " + rowInfo.entrega_planta.date.substr(0, 10) + " </td>"));
+                row.append($("<td> " + rowInfo.checklist_laborales.date.substr(0, 10) + " </td>"));
+                row.append($("<td> " + rowInfo.entrega_operaciones + " </td>"));
+                row.append($("<td> " + rowInfo.fecha_operaciones.date.substr(0, 10) + " </td>"));
                 row.append($("<td> " + rowInfo.finContrato.date.substr(0, 10) + " </td>"));
 
                 $(".btnConsulta").unbind().click(function () {
