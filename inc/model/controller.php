@@ -9,7 +9,7 @@
         die();
     }
 
-        include 'connection_.php';   
+        include 'connection.php';   
         $con = connDB();
         $sesion = false;
         $action  = $_POST['action'];
@@ -73,7 +73,7 @@
                             'tipo' => 'error',
                             'mensaje' => 'Usuario y clave incorrectos.',
                             'informacion' => 'Las credenciales ingresadas no son válidas.',
-                            'sesion' => $sesion
+                            'sesion' => $password
                         );
                     }
                 //EMPLEADO NO ACTIVO
@@ -141,6 +141,191 @@
             sqlsrv_close( $con );
 
         break;
+        case 'datosSeguimiento':
+            // die(json_encode($_POST));
+            $numero_nomina = $_POST['numero_nomina'];
+            $query = "SELECT td.numero_nomina,td.comision,td.llegada_comision,td.checklist_comision,td.sucursal_comision,td.politicas_comision,td.reglamento_comision,
+                        td.carta_comision,td.daltonismo,td.agudeza,td.numero_cuenta,td.entrega_tarjeta,td.entrega_contrato,td.contrato,td.dgp,td.guia,td.disciplina,td.etica,td.entrega_planta,
+                        td.checklist_laborales,td.entrega_operaciones,td.fecha_operaciones,td.comentario_seguimiento,te.fecha_alta,DATEADD(DD,30,te.fecha_alta) AS finContrato,
+                        (SELECT TOP 1 fecha_modificacion FROM incidenciasappnomina where empleado = td.numero_nomina
+                        ORDER BY fecha_modificacion DESC) AS primera_incidencia, 
+                        CASE WHEN pj.manager1 = '' THEN (SELECT CONCAT(numero_nomina,' - ',nombre_largo) FROM tbempleados WHERE numero_nomina = pj.manager2) ELSE (SELECT CONCAT(numero_nomina,'|',nombre_largo) FROM tbempleados WHERE numero_nomina = pj.manager1) END AS jefeDirecto
+                        FROM tbdatos_empleados AS td
+                        INNER JOIN tbempleados AS te
+                        ON td.numero_nomina = te.numero_nomina
+                        INNER JOIN PJEMPLOY AS pj
+                        ON te.numero_nomina = pj.employee
+                        AND te.numero_nomina = ?";
+            $params = array($numero_nomina);//Pasar parametros a las consulta ?
+            $stmt = sqlsrv_query( $con, $query, $params);
+
+            $result = array();
+            
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'                
+                );
+            } else {
+                do {
+                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                    $result[] = $row; 
+                    }
+                } while (sqlsrv_next_result($stmt));
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => $result,
+                    'mensaje' => 'Informacion obtenida de la BD de la Lista'                
+                );
+            }
+
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+
+        break;
+        case 'guardarSeguimiento':
+            // die(json_encode($_POST));
+            $numero_nomina = $_POST['numero_nomina'];
+            $segFechaLlegada = $_POST['segFechaLlegada'];
+            $segChecklist = $_POST['segChecklist'];
+            $segComision = $_POST['segComision'];
+            $segSucursal = $_POST['segSucursal'];
+            $segPoliticas = $_POST['segPoliticas'];
+            $segReglamento = $_POST['segReglamento'];
+            $segCarta = $_POST['segCarta'];
+            $segDaltonismo = $_POST['segDaltonismo'];
+            $segAgudeza = $_POST['segAgudeza'];
+            $segTarjeta = $_POST['segTarjeta'];
+            $segFechatarjeta = $_POST['segFechatarjeta'];
+            $segFechacontrato = $_POST['segFechacontrato'];
+            $segContrato = $_POST['segContrato'];
+            $segDGP = $_POST['segDGP'];
+            $segGuia = $_POST['segGuia'];
+            $segDisciplica = $_POST['segDisciplica'];
+            $segEtica = $_POST['segEtica'];
+            $segFechaentregapersonal = $_POST['segFechaentregapersonal'];
+            $segFechaentregachecklist = $_POST['segFechaentregachecklist'];
+            $segFechafincontrato = $_POST['segFechafincontrato'];
+            $segEntregaOp = $_POST['segEntregaOp'];
+            $segEntregaFecha = $_POST['segEntregaFecha'];
+            $segComentario = $_POST['segComentario'];
+            $hoy = date("Y-m-d H:m:s");
+            $empleado_activo = $_POST['empleado_activo'];
+
+            $query = "UPDATE [dbo].[tbdatos_empleados]
+                    SET [comision] = ?
+                    ,[llegada_comision] = ?
+                    ,[checklist_comision] = ?
+                    ,[sucursal_comision] = ?
+                    ,[politicas_comision] = ?
+                    ,[reglamento_comision] = ?
+                    ,[carta_comision] = ?
+                    ,[daltonismo] = ?
+                    ,[agudeza] = ?
+                    ,[numero_cuenta] = ?
+                    ,[entrega_tarjeta] = ?
+                    ,[entrega_contrato] = ?
+                    ,[contrato] = ?
+                    ,[dgp] = ?
+                    ,[guia] = ?
+                    ,[disciplina] = ?
+                    ,[etica] = ?
+                    ,[entrega_planta] = ?
+                    ,[checklist_laborales] = ?
+                    ,[fin_contrato] = ?
+                    ,[entrega_operaciones] = ?
+                    ,[fecha_operaciones] = ?
+                    ,[comentario_seguimiento] = ?
+                    ,[updated_at] = ?
+                    ,[updated_by] = ?
+                        WHERE [numero_nomina] =  ?";
+            $params = array($segComision,$segFechaLlegada,$segChecklist,$segSucursal,$segPoliticas,$segReglamento,$segCarta,$segDaltonismo,$segAgudeza,$segTarjeta,$segFechatarjeta,$segFechacontrato,$segContrato
+                            ,$segDGP,$segGuia,$segDisciplica,$segEtica,$segFechaentregapersonal,$segFechaentregachecklist,$segFechafincontrato,$segEntregaOp,$segEntregaFecha,$segComentario,$hoy,$empleado_activo,$numero_nomina);//Pasar parametros a las consulta ?
+            $stmt = sqlsrv_query( $con, $query, $params);
+
+            $result = array();
+            
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'                
+                );
+            } else {
+                do {
+                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                    $result[] = $row; 
+                    }
+                } while (sqlsrv_next_result($stmt));
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => 'Informacion guardada',
+                    'mensaje' => 'Informacion obtenida de la BD de la Lista'                
+                );
+            }
+
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+
+        break;
+        case 'tabla-seguimiento':
+            // die(json_encode($_POST));
+            $query = "SELECT td.numero_nomina,te.nombre_largo,tc.nombre AS Departamento,tp.nombre AS Puesto,td.comision,td.llegada_comision,td.checklist_comision,
+                        CASE WHEN ts.nombre IS NULL THEN 'LOCAL' ELSE ts.nombre END AS sucursal_comision,td.politicas_comision,td.reglamento_comision,
+                        td.carta_comision,td.agudeza,td.daltonismo,td.numero_cuenta,
+                        td.entrega_tarjeta,td.entrega_contrato,td.contrato,td.dgp,td.guia,
+                        td.disciplina,td.etica,td.entrega_planta,td.checklist_laborales,td.entrega_operaciones,td.fecha_operaciones,td.fin_contrato,te.fecha_alta,DATEADD(DD,30,te.fecha_alta) AS finContrato
+                        FROM tbdatos_empleados AS td
+                        INNER JOIN tbempleados AS te
+                        ON td.numero_nomina = te.numero_nomina
+                        LEFT JOIN tbcelula AS tc
+                        ON tc.id_celula = te.id_celula
+                        LEFT JOIN tbsucursal AS ts
+                        ON ts.id_sucursal = td.sucursal_comision
+                        INNER JOIN tbpuesto AS tp
+                        ON tp.id_puesto = te.id_puesto
+                        AND te.status IN ('A','R')
+                        ORDER BY td.updated_at DESC";
+            
+            $stmt = sqlsrv_query( $con, $query);
+
+            $result = array();
+            
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'                
+                );
+            } else {
+                do {
+                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                    $result[] = $row; 
+                    }
+                } while (sqlsrv_next_result($stmt));
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => $result,
+                    'mensaje' => 'Informacion obtenida de la BD de la Lista'                
+                );
+            }
+
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+        break;
         case 'mostrar-empleado':
             // die(json_encode($_POST));
             $props = $_POST['prop'];
@@ -178,6 +363,105 @@
             sqlsrv_free_stmt( $stmt);
             sqlsrv_close( $con );
         break;
+        case 'empleados-sucursal':
+            $props = $_POST['prop'];
+            $nomina = $_POST['nomina'];
+
+            if ($props == 'activos')
+            {
+                $query = "SELECT te.numero_nomina,UPPER(te.nombre_largo) AS Nombre,   
+                            CASE  
+                            WHEN td.tabulador IS NULL THEN 'NA'  
+                            ELSE REPLACE(td.tabulador,'|','')   
+                            END AS tabulador,  
+                            CASE  
+                            WHEN (SELECT id_puesto FROM tbempleados WHERE numero_nomina = te.numero_nomina) < 1  
+                            THEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)  
+                            ELSE (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)  
+                            END AS Puesto,  
+                            CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,  
+                            CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaBaja,  
+                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,pe.emp_status,  
+                            (SELECT  top 1 estadoempleado FROM [vEmpleadosNM] WHERE codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS = te.numero_nomina) as nominas_status  
+                            ,te.created_at  
+                            FROM tbempleados AS te  
+                            INNER JOIN tbsucursal AS ts  
+                            ON te.id_sucursal = ts.id_sucursal   
+                            INNER JOIN tbcelula AS tc  
+                            ON tc.id_celula = te.id_celula  
+                            INNER JOIN tbarea AS ta  
+                            ON ta.codigo = tc.codigo_area  
+                            INNER JOIN tbdatos_empleados AS td  
+                            ON td.numero_nomina = te.numero_nomina  
+                            INNER JOIN PJEMPLOY AS pe  
+                            ON pe.employee = te.numero_nomina  
+                            WHERE te.status <> 'B'  
+                            AND te.id_sucursal = (SELECT id_sucursal FROM tbsucursal WHERE nombre_corto = (SELECT RIGHT(REPLACE(emp_name,' ',''),3) FROM PJEMPLOY WHERE employee = ?))
+                            ORDER BY te.status ASC, te.updated_at DESC";
+            } 
+            else if ($props == 'bajas')
+            {
+                $query = "SELECT te.numero_nomina,UPPER(te.nombre_largo) AS Nombre,   
+                            CASE  
+                            WHEN td.tabulador IS NULL THEN 'NA'  
+                            ELSE REPLACE(td.tabulador,'|','')   
+                            END AS tabulador,  
+                            CASE  
+                            WHEN (SELECT id_puesto FROM tbempleados WHERE numero_nomina = te.numero_nomina) < 1  
+                            THEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)  
+                            ELSE (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)  
+                            END AS Puesto,  
+                            CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,  
+                            CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaBaja,  
+                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,pe.emp_status,  
+                            (SELECT  top 1 estadoempleado FROM [vEmpleadosNM] WHERE codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS = te.numero_nomina) as nominas_status  
+                            ,te.created_at  
+                            FROM tbempleados AS te  
+                            INNER JOIN tbsucursal AS ts  
+                            ON te.id_sucursal = ts.id_sucursal   
+                            INNER JOIN tbcelula AS tc  
+                            ON tc.id_celula = te.id_celula  
+                            INNER JOIN tbarea AS ta  
+                            ON ta.codigo = tc.codigo_area  
+                            INNER JOIN tbdatos_empleados AS td  
+                            ON td.numero_nomina = te.numero_nomina  
+                            INNER JOIN PJEMPLOY AS pe  
+                            ON pe.employee = te.numero_nomina  
+                            WHERE te.status = 'B'  
+                            AND te.id_sucursal = (SELECT id_sucursal FROM tbsucursal WHERE nombre_corto = (SELECT RIGHT(REPLACE(emp_name,' ',''),3) FROM PJEMPLOY WHERE employee = ?))
+                            ORDER BY te.status ASC, te.updated_at DESC";
+            } 
+            $params = array($nomina);
+            $stmt = sqlsrv_query( $con, $query, $params);
+
+            $result = array();
+            
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'                
+                );
+            } else {
+                do {
+                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                    $result[] = $row; 
+                    }
+                } while (sqlsrv_next_result($stmt));
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => $result,
+                    'mensaje' => 'Informacion obtenida'                
+                );
+            }
+
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+        break;
         case 'lista-empleados':
             $props = $_POST['prop'];
             if ($props == 'activos')
@@ -189,6 +473,63 @@
                 $query = "EXEC sp_listaempleados 'B'";
             } 
 
+            $stmt = sqlsrv_query( $con, $query);
+
+            $result = array();
+            
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'                
+                );
+            } else {
+                do {
+                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                    $result[] = $row; 
+                    }
+                } while (sqlsrv_next_result($stmt));
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => $result,
+                    'mensaje' => 'Informacion obtenida'                
+                );
+            }
+
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+        break;
+        //CONSULTA CI
+        case 'listar-ci':
+            $query = "SELECT en.codigoempleado AS numero_nomina,en.nombrelargo AS nombre_largo,en.numerosegurosocial,ts.nombre AS Sucursal, tc.nombre AS Departamento,tp.nombre AS Puesto,
+                        CONVERT(VARCHAR(10), en.fechaalta, 105) AS fechaAlta,en.numerosegurosocial AS NSS,CONVERT(VARCHAR(10),te.fecha_nacimiento, 105) AS fecha_nacimiento,en.cuentapagoelectronico AS numero_cuenta,
+                        CONCAT(te.rfcini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.rfcfin) AS RFC,
+                        CASE 
+                        WHEN td.clasificacion = 'A' THEN 'Administrativo'
+                        WHEN td.clasificacion = 'E' THEN 'Especial'
+                        WHEN td.clasificacion = 'AO' THEN 'Administrativo Operativo'
+                        WHEN td.clasificacion = 'O' THEN 'Operativo'
+                        WHEN td.clasificacion = 'B' THEN 'Becario' END AS Clasificacion
+                        FROM [empleados_nomipaqCN] AS en
+                        INNER JOIN tbempleados AS te
+                        ON en.codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS = te.numero_nomina
+                        INNER JOIN tbdatos_empleados AS td
+                        ON td.numero_nomina = te.numero_nomina
+                        INNER JOIN PJEMPLOY as pe
+                        ON te.numero_nomina = REPLACE(pe.employee,' ','')
+                        INNER JOIN tbsucursal AS ts
+                        ON te.id_sucursal = ts.id_sucursal
+                        INNER JOIN tbcelula AS tc
+                        ON te.id_celula = tc.id_celula
+                        INNER JOIN tbpuesto AS tp
+                        ON te.id_puesto = tp.id_puesto
+                        AND en.estadoempleado IN ('A','R')
+                        order by td.created_at desc";
+            
             $stmt = sqlsrv_query( $con, $query);
 
             $result = array();
@@ -310,18 +651,20 @@
             $props = $_POST['prop'];
             if ($props == 'activos')
             {
-                $query = "SELECT te.numero_nomina,UPPER(te.nombre_largo) AS Nombre,
+                $query = "SELECT CONCAT('''',te.numero_nomina) AS numero_nomina,UPPER(te.nombre_largo) AS Nombre,
                             CASE
-								WHEN td.tabulador IS NULL THEN 'NA'
-								ELSE REPLACE(td.tabulador,'|','') 
-							END AS tabulador, 
+                                WHEN td.tabulador IS NULL THEN 'NA'
+                                ELSE REPLACE(td.tabulador,'|','') 
+                            END AS tabulador, 
                             CASE
                                 WHEN (SELECT id_puesto FROM tbempleados WHERE numero_nomina = te.numero_nomina) < 1
                                 THEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
                                 ELSE (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
                             END AS Puesto,
                             CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
-                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
+                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,pe.emp_status,    
+                            (SELECT  top 1 estadoempleado FROM [vEmpleadosNM] WHERE codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS = te.numero_nomina) as nominas_status    
+                            ,te.created_at    
                             FROM tbempleados AS te
                             INNER JOIN tbsucursal AS ts
                             ON te.id_sucursal = ts.id_sucursal 
@@ -330,13 +673,15 @@
                             INNER JOIN tbarea AS ta
                             ON ta.codigo = tc.codigo_area
                             INNER JOIN tbdatos_empleados AS td
-							ON td.numero_nomina = te.numero_nomina
+                            ON td.numero_nomina = te.numero_nomina
+                            INNER JOIN PJEMPLOY AS pe    
+                            ON pe.employee = te.numero_nomina 
                             WHERE te.status <> 'B' 
                             ORDER BY te.status ASC, te.created_at DESC";
             } 
             else if ($props == 'bajas')
             {
-                $query = "SELECT te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
+                $query = "SELECT CONCAT('''',te.numero_nomina) AS numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
                             CASE
 								WHEN td.tabulador IS NULL THEN 'NA'
 								ELSE REPLACE(td.tabulador,'|','') 
@@ -348,7 +693,9 @@
                             END AS Puesto,
                             CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
                             CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaBaja,
-                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at
+                            ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,pe.emp_status,    
+                            (SELECT  top 1 estadoempleado FROM [vEmpleadosNM] WHERE codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS = te.numero_nomina) as nominas_status    
+                            ,te.created_at    
                             FROM tbempleados AS te
                             INNER JOIN tbsucursal AS ts
                             ON te.id_sucursal = ts.id_sucursal 
@@ -358,9 +705,73 @@
                             ON ta.codigo = tc.codigo_area
                             INNER JOIN tbdatos_empleados AS td
 							ON td.numero_nomina = te.numero_nomina
+                            INNER JOIN PJEMPLOY AS pe    
+                            ON pe.employee = te.numero_nomina 
                             WHERE te.status = 'B' 
                             ORDER BY te.status ASC, te.created_at DESC";
             } 
+
+            $stmt = sqlsrv_query( $con, $query);
+
+            $result = array();
+            
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'                
+                );
+            } else {
+                do {
+                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                    $result[] = $row; 
+                    }
+                } while (sqlsrv_next_result($stmt));
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => $result,
+                    'mensaje' => 'Informacion obtenida'                
+                );
+            }
+
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+        break;
+        case 'reporteLaborales':
+                $query = "SELECT te.numero_nomina,te.nombre_largo,te.sexo,te.fecha_alta,te.fecha_nacimiento,
+                            CONCAT(te.curpini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.curpfin) AS CURP,
+                            CONCAT(te.rfcini + RIGHT(YEAR(te.fecha_nacimiento),2) , FORMAT(te.fecha_nacimiento,'MM') , CONVERT(CHAR(2),te.fecha_nacimiento,103) , te.rfcfin) AS RFC,
+                            CONCAT(te.nss, td.dv) AS NSS,
+                            ts.nombre AS Sucursal,tc.nombre AS Departamento,REPLACE(td.tabulador,'|', ' ') AS tabulador,td.salario_diario,td.salario_mensual,
+                            CASE 
+                                WHEN td.clasificacion = 'A' THEN 'Administrativo'
+                                WHEN td.clasificacion = 'E' THEN 'Especial'
+                                WHEN td.clasificacion = 'AO' THEN 'Administrativo Operativo'
+                                WHEN td.clasificacion = 'O' THEN 'Operativo'
+                                WHEN td.clasificacion = 'B' THEN 'Becario' END AS Clasificacion,
+                            CASE 
+                                WHEN td.estado_civil = 'C' THEN 'Casado(a)'
+                                ELSE 'Soltero(a)' END AS estado_civil,
+                            td.lugar_nacimiento,td.numero_identificacion,
+                            CASE 
+                                WHEN td.escolaridad = 'B_TECNICO' THEN 'BACHILLERATO TECNICO'
+                                ELSE UPPER(td.escolaridad) END AS escolaridad,
+                            REPLACE(td.nombre_padre,'|', ' ') AS nombre_padre,REPLACE(td.nombre_madre,'|', ' ') AS nombre_madre,td.codigo_postal,td.domicilio_completo,td.estado,td.municipio,td.localidad,
+                            td.infonavit,td.numero_infonavit,td.fonacot,td.numero_fonacot,td.cuenta,td.numero_cuenta,LOWER(td.correo) AS correo,td.telefono,td.celular,td.contacto_emergencia_nombre,td.contacto_emergencia_numero
+                            FROM tbempleados AS te
+                            INNER JOIN tbsucursal as ts
+                            ON te.id_sucursal = ts.id_sucursal
+                            INNER JOIN tbdatos_empleados AS td
+                            ON te.numero_nomina = td.numero_nomina
+                            INNER JOIN tbcelula AS tc
+                            ON te.id_celula = tc.id_celula
+                            AND te.status <> 'B'
+                            ORDER BY te.fecha_alta DESC";
+            
 
             $stmt = sqlsrv_query( $con, $query);
 
@@ -710,7 +1121,7 @@
                             END AS Puesto,
                             CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta, 
                             ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,pe.emp_status,    
-                            (SELECT  top 1 estadoempleado FROM [vEmpleadosNM] WHERE codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS = te.numero_nomina) as nominas_status    
+                            (SELECT  top 1 estadoempleado FROM [empleados_nomipaqCN] WHERE codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS = te.numero_nomina) as nominas_status    
                             ,te.created_at
                             FROM tbempleados AS te
                             INNER JOIN tbsucursal AS ts
@@ -746,7 +1157,7 @@
                             CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
                             CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaBaja,
                             ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,pe.emp_status,    
-                            (SELECT  top 1 estadoempleado FROM [vEmpleadosNM] WHERE codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS = te.numero_nomina) as nominas_status    
+                            (SELECT  top 1 estadoempleado FROM [empleados_nomipaqCN] WHERE codigoempleado COLLATE SQL_Latin1_General_CP1_CI_AS = te.numero_nomina) as nominas_status    
                             ,te.created_at
                             FROM tbempleados AS te
                             INNER JOIN tbsucursal AS ts
@@ -843,6 +1254,197 @@
             sqlsrv_close( $con );
         break;
         //BAJA DEL EMPLEADO
+        // DATOS COORDINADORAS
+        case 'panelCoordinadoras':
+            //die(json_encode($_POST));
+            $param = $_POST['param'];
+            $query = "SELECT COUNT(*) AS cifras FROM tbempleados AS te INNER JOIN tbdatos_empleados AS td ON te.numero_nomina = td.numero_nomina AND td.clasificacion = 'O' AND te.id_sucursal = (SELECT id_sucursal FROM tbsucursal WHERE nombre_corto = (SELECT RIGHT(REPLACE(emp_name,' ',''),3) FROM PJEMPLOY WHERE employee = ?)) AND te.status <> 'B' UNION ALL
+                        SELECT COUNT(*) AS cifras FROM tbempleados AS te INNER JOIN tbdatos_empleados AS td ON te.numero_nomina = td.numero_nomina AND td.clasificacion = 'O' AND te.sexo = 'F' AND te.id_sucursal = (SELECT id_sucursal FROM tbsucursal WHERE nombre_corto = (SELECT RIGHT(REPLACE(emp_name,' ',''),3) FROM PJEMPLOY WHERE employee = ?)) AND te.status <> 'B' UNION ALL
+                        SELECT COUNT(*) AS cifras FROM tbempleados AS te INNER JOIN tbdatos_empleados AS td ON te.numero_nomina = td.numero_nomina AND td.clasificacion = 'O' AND te.sexo = 'M' AND te.id_sucursal = (SELECT id_sucursal FROM tbsucursal WHERE nombre_corto = (SELECT RIGHT(REPLACE(emp_name,' ',''),3) FROM PJEMPLOY WHERE employee = ?)) AND te.status <> 'B' UNION ALL
+                        SELECT COUNT(*) FROM tbcelula WHERE codigo LIKE '%'+(SELECT RIGHT(REPLACE(emp_name,' ',''),3) FROM PJEMPLOY WHERE employee = ?)+'%'";
+                      
+            $params = array($param,$param,$param,$param);
+                        
+            $stmt = sqlsrv_query( $con, $query, $params);
+
+            $result = array();
+            
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'                
+                );
+            } else {
+                do {
+                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                    $result[] = $row; 
+                    }
+                } while (sqlsrv_next_result($stmt));
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => $result,
+                    'mensaje' => 'Informacion obtenida de high'                
+                );
+            }
+
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+            break;
+            
+            case 'movimientos-diariosSUC':
+                //die(json_encode($_POST));
+                $props = $_POST['props'];
+                $param = $_POST['param'];
+                
+                if($props == 'bajasD'){
+                    $query = "SELECT fecha_baja,count(*) AS cantidad 
+                                FROM tbempleados 
+                                WHERE fecha_baja >= getdate() - 50
+                                AND id_sucursal = (SELECT id_sucursal FROM tbsucursal WHERE nombre_corto = (SELECT RIGHT(REPLACE(emp_name,' ',''),3) FROM PJEMPLOY WHERE employee = ?))
+                                GROUP BY fecha_baja";
+                } else {
+                    $query = "SELECT fecha_alta,count(*) AS cantidad 
+                                FROM tbempleados 
+                                WHERE fecha_alta >= getdate() - 50
+                                AND id_sucursal = (SELECT id_sucursal FROM tbsucursal WHERE nombre_corto = (SELECT RIGHT(REPLACE(emp_name,' ',''),3) FROM PJEMPLOY WHERE employee = ?))
+                                GROUP BY fecha_alta";
+                }
+                $params = array($param);
+                $stmt = sqlsrv_query( $con, $query, $params);
+    
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida de empleados'                
+                    );
+                }
+    
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+        break;
+
+    case 'personalPlantaSUC':
+        //die(json_encode($_POST));
+        $param = $_POST['param'];
+        $query = "SELECT tc.nombre,
+                    COUNT(*) AS totalPlanta,
+                    SUM(CASE WHEN td.clasificacion = 'AO' THEN 1 ELSE 0 END) AS totalAdministrativosOperativos,
+                    SUM(CASE WHEN td.clasificacion = 'O' THEN 1 ELSE 0 END) AS totalOperativos
+                    FROM tbempleados AS te
+                    INNER JOIN tbcelula AS tc
+                    ON tc.id_celula = te.id_celula
+                    INNER JOIN tbdatos_empleados AS td
+                    ON td.numero_nomina = te.numero_nomina
+                    AND te.status <> 'B' AND td.clasificacion IN ('O','AO')
+                    AND te.id_sucursal = (SELECT id_sucursal FROM tbsucursal WHERE nombre_corto = (SELECT RIGHT(REPLACE(emp_name,' ',''),3) FROM PJEMPLOY WHERE employee = ?))
+                    GROUP BY tc.id_celula,tc.nombre
+                    ORDER BY tc.nombre";
+                
+        $params = array($param);
+                    
+        $stmt = sqlsrv_query( $con, $query, $params);
+
+        $result = array();
+        
+        if( $stmt === false) {
+            die( print_r( sqlsrv_errors(), true) );
+            $respuesta = array(
+                'estado' => 'NOK',
+                'tipo' => 'error',
+                'informacion' => 'No existe informacion',
+                'mensaje' => 'No hay datos en la BD'                
+            );
+        } else {
+            do {
+                while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                $result[] = $row; 
+                }
+            } while (sqlsrv_next_result($stmt));
+            $respuesta = array(
+                'estado' => 'OK',
+                'tipo' => 'success',
+                'informacion' => $result,
+                'mensaje' => 'Informacion obtenida de high'                
+            );
+        }
+
+        echo json_encode($respuesta);
+        sqlsrv_free_stmt( $stmt);
+        sqlsrv_close( $con );
+        break;
+
+        case 'sucursalAltasBajas':
+            //die(json_encode($_POST));
+            $param = $_POST['param'];
+            $query = "SELECT 
+                    SUM(CASE WHEN te.status <> 'B' THEN 1 ELSE 0 END) AS Activos,
+                    SUM(CASE WHEN te.status = 'B' THEN 1 ELSE 0 END) AS Bajas
+                    FROM tbempleados AS te
+                    INNER JOIN tbcelula AS tc
+                    ON tc.id_celula = te.id_celula
+                    INNER JOIN tbdatos_empleados AS td
+                    ON td.numero_nomina = te.numero_nomina
+                    AND td.clasificacion IN ('O','AO')
+                    AND te.id_sucursal = (SELECT id_sucursal FROM tbsucursal WHERE nombre_corto = (SELECT RIGHT(REPLACE(emp_name,' ',''),3) FROM PJEMPLOY WHERE employee = ?))
+                    AND YEAR(te.updated_at) >= YEAR(GETDATE())-1";
+                    
+            $params = array($param);
+                        
+            $stmt = sqlsrv_query( $con, $query, $params);
+    
+            $result = array();
+            
+            if( $stmt === false) {
+                die( print_r( sqlsrv_errors(), true) );
+                $respuesta = array(
+                    'estado' => 'NOK',
+                    'tipo' => 'error',
+                    'informacion' => 'No existe informacion',
+                    'mensaje' => 'No hay datos en la BD'                
+                );
+            } else {
+                do {
+                    while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                    $result[] = $row; 
+                    }
+                } while (sqlsrv_next_result($stmt));
+                $respuesta = array(
+                    'estado' => 'OK',
+                    'tipo' => 'success',
+                    'informacion' => $result,
+                    'mensaje' => 'Informacion obtenida de high'                
+                );
+            }
+    
+            echo json_encode($respuesta);
+            sqlsrv_free_stmt( $stmt);
+            sqlsrv_close( $con );
+            break;
+
+        // DATOS COORDINADORAS
         case 'highlights':
             // die(json_encode($_POST));
             $query = "SELECT COUNT(*) AS cifras FROM tbempleados AS te INNER JOIN tbdatos_empleados AS td ON te.numero_nomina = td.numero_nomina AND te.status <> 'B' UNION ALL
@@ -1111,7 +1713,57 @@
             sqlsrv_free_stmt( $stmt);
             sqlsrv_close( $con );
             break;
-            case 'lista-direcciones':
+        case 'datos-recientes':
+                // die(json_encode($_POST));
+    
+                $query = "SELECT TOP 50
+                te.numero_nomina,te.nombre_largo,tp.nombre AS Puesto,
+                CASE 
+                    WHEN te.status = 'B' THEN 'Baja - '+ CONVERT(VARCHAR(10), te.fecha_baja, 105)
+                    WHEN te.status = 'A' THEN 'Alta - '+ CONVERT(VARCHAR(10), te.fecha_alta, 105)
+                    WHEN te.status = 'R' THEN 'Reingreso - ' + CONVERT(VARCHAR(10), te.fecha_alta, 105)
+                END AS estadoEmpleado,
+                ts.nombre AS Sucursal,tc.nombre AS Departamento,CONVERT(VARCHAR(11), te.updated_at, 106) AS actualizado
+                FROM tbempleados AS te 
+                INNER JOIN tbcelula AS tc
+                ON TC.id_celula = te.id_celula
+                INNER JOIN tbsucursal AS ts
+                ON ts.id_sucursal = te.id_sucursal
+                INNER JOIN tbpuesto AS tp
+                ON tp.id_puesto = te.id_puesto
+                WHERE te.updated_at <= GETDATE() AND te.updated_at >= GETDATE()-7 ORDER BY te.updated_at DESC;";
+                               
+                $stmt = sqlsrv_query( $con, $query);
+    
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida de surcusales'                
+                    );
+                }
+    
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+                break;
+        case 'lista-direcciones':
                 // die(json_encode($_POST));
                 $query = "SELECT * FROM VW_empleados_direcciones ORDER BY fecha_alta DESC";
                 
@@ -1326,14 +1978,14 @@
                     $query = "SELECT tc.id_celula,tc.codigo,tc.nombre FROM tbcelula AS tc
                                 INNER JOIN tbsucursal AS ts
                                 ON SUBSTRING(tc.codigo,1,5) = SUBSTRING(ts.codigo,1,5)
-                                WHERE SUBSTRING(tc.codigo,1,5) = '99COR'";
+                                WHERE SUBSTRING(tc.codigo,1,5) = '99COR' ORDER BY tc.nombre";
 
                     $stmt = sqlsrv_query( $con, $query);
                     
                 } else {
                     $query = "SELECT tc.id_celula,tc.codigo,tc.nombre FROM tbcelula AS tc
                                 INNER JOIN tbsucursal AS ts
-                                ON SUBSTRING(tc.codigo,1,5) = SUBSTRING(ts.codigo,1,5)";
+                                ON SUBSTRING(tc.codigo,1,5) = SUBSTRING(ts.codigo,1,5) ORDER BY tc.nombre";
                     $params = array($sucursal);
                     $stmt = sqlsrv_query( $con, $query);
                 }
@@ -2088,7 +2740,13 @@
             break;
             case 'obtenerPuestos':
                 // die(json_encode($_POST));
-                $query = "SELECT * FROM tbpuesto ORDER BY updated_at DESC";
+                $query = "SELECT tp.* ,tc.nombre AS departamento
+                            FROM 
+                            tbpuesto AS tp
+                            INNER JOIN tbcelula AS tc
+                            ON tp.id_celula = tc.id_celula
+                            ORDER BY 
+                            updated_at DESC";
                 
                 $stmt = sqlsrv_query( $con, $query);
 
