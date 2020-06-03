@@ -1737,7 +1737,7 @@ ON te.id_celula = tc.id_celula
 AND te.status <> 'B'
 ORDER BY te.fecha_alta DESC
 
-SELECT TOP 100 * FROM tbdatos_empleados where numero_nomina = '26812'
+SELECT TOP 100 * FROM tbdatos_empleados where numero_nomina = '26841'
 
 ALTER TABLE tbdatos_empleados
 ADD comision BIT NOT NULL DEFAULT 0,
@@ -1762,3 +1762,34 @@ fin_contrato DATE NOT NULL DEFAULT '1900-01-01',
 entrega_operaciones VARCHAR(25) NOT NULL DEFAULT 'N/A',
 fecha_operaciones DATE NOT NULL DEFAULT '1900-01-01',
 comentario_seguimiento VARCHAR(255) DEFAULT 'N/A';
+
+
+SELECT td.numero_nomina,td.comision,td.llegada_comision,td.checklist_comision,td.sucursal_comision,td.politicas_comision,td.reglamento_comision,
+td.carta_comision,td.daltonismo,td.agudeza,td.numero_cuenta,td.entrega_tarjeta,td.entrega_contrato,td.contrato,td.dgp,td.guia,td.disciplina,td.etica,td.entrega_planta,
+td.checklist_laborales,td.entrega_operaciones,td.fecha_operaciones,td.comentario_seguimiento,te.fecha_alta,DATEADD(DD,30,te.fecha_alta) AS finContrato,
+(SELECT TOP 1 fecha_modificacion FROM incidenciasappnomina where empleado = td.numero_nomina
+ORDER BY fecha_modificacion DESC) AS primera_incidencia, 
+CASE WHEN pj.manager1 = '' THEN (SELECT CONCAT(numero_nomina,' - ',nombre_largo) FROM tbempleados WHERE numero_nomina = pj.manager2) ELSE (SELECT CONCAT(numero_nomina,'|',nombre_largo) FROM tbempleados WHERE numero_nomina = pj.manager1) END AS jefeDirecto
+FROM tbdatos_empleados AS td
+INNER JOIN tbempleados AS te
+ON td.numero_nomina = te.numero_nomina
+INNER JOIN PJEMPLOY AS pj
+ON te.numero_nomina = pj.employee
+AND te.numero_nomina = '26812'
+
+SELECT TOP 20 td.numero_nomina,te.nombre_largo,tc.nombre AS Departamento,tp.nombre AS Puesto,td.comision,td.llegada_comision,td.checklist_comision,
+CASE WHEN ts.nombre IS NULL THEN 'LOCAL' ELSE ts.nombre END AS sucursal_comision,td.politicas_comision,td.reglamento_comision,
+td.carta_comision,td.agudeza,td.daltonismo,td.numero_cuenta,
+td.entrega_tarjeta,td.entrega_contrato,td.contrato,td.dgp,td.guia,
+td.disciplina,td.etica,td.entrega_planta,td.checklist_laborales,td.entrega_operaciones,td.fecha_operaciones,td.fin_contrato,te.fecha_alta,DATEADD(DD,30,te.fecha_alta) AS finContrato
+FROM tbdatos_empleados AS td
+INNER JOIN tbempleados AS te
+ON td.numero_nomina = te.numero_nomina
+LEFT JOIN tbcelula AS tc
+ON tc.id_celula = te.id_celula
+LEFT JOIN tbsucursal AS ts
+ON ts.id_sucursal = td.sucursal_comision
+INNER JOIN tbpuesto AS tp
+ON tp.id_puesto = te.id_puesto
+AND te.status IN ('A','R')
+ORDER BY td.updated_at DESC
