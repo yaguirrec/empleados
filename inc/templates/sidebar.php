@@ -144,6 +144,7 @@
             <h6 class="collapse-header">Modulos</h6>
             <a class="collapse-item" href="index.php?request=altasc">Altas</a>
             <a class="collapse-item" href="index.php?request=bajasc">Bajas</a>
+            <a class="collapse-item" href="index.php?request=seguimiento">Seguimiento</a>
           </div>
         </div>
       </li>

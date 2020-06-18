@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -16,9 +16,11 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V.030620';
+    let version = 'V.180620DEV';
 
     $('#version').html(version);
+
+    console.log(empleado_activo);
 
     $('#searchBox').keyup(function (event) {
         event.preventDefault();
@@ -658,7 +660,7 @@ $(document).ready(function () {
     
 
     switch (seccionActual) {
-        /**CARGAR TABLA EMPLEADOS */
+        /**CARGAR TABLA EMPLEADOS COORDINADORAS*/
         case 'altasc': case 'bajasc':
             seccionExportar.removeClass('d-none');
             var action = 'empleados-sucursal',
@@ -676,7 +678,7 @@ $(document).ready(function () {
                 data: { action: action, nomina: empleado_activo, prop: prop},
                 success: function (response) {
                     let respuesta = JSON.parse(response);
-                    // seccionExportarconsole.log(respuesta);
+                    // seccionExportar
                     if (respuesta.estado === 'OK') {
                         var datos = respuesta.informacion.length;
                         var informacion = respuesta.informacion;
@@ -1778,6 +1780,8 @@ $(document).ready(function () {
 
                 if(rowInfo.sucursal === 'COR'){
                     $('.fOperaciones').addClass('d-none');
+                    $('#lsegEntregaOp').html('Contrato de confidencialidad');
+                    $('#lsegEntregaFecha').html('Fecha de entrega de Check list Corp. por Staff de Dirección y capacitación');
                 }
 
 
@@ -2239,18 +2243,23 @@ $(document).ready(function () {
         case 'seguimiento':
             seccionExportar.removeClass('d-none');
             var action = 'tabla-seguimiento';
-            var titulo = 'Seguimiento al empleado';
+            var titulo = 'Seguimiento al empleado';  
 
             $(".seccionTitulo").html(titulo);
             
             var dataTable = new FormData();
             dataTable.append('action', action);
+
+            if(empleado_activo.startsWith("999")){
+                dataTable.append('numero_nomina', empleado_activo);
+            }
+
             var xmlhr = new XMLHttpRequest();
             xmlhr.open('POST', backendURL, true);
             xmlhr.onload = function () {
                 if (this.status === 200) {
                     var respuesta = JSON.parse(xmlhr.responseText);
-                    console.log(respuesta);
+                    // console.log(respuesta);
                     if (respuesta.estado === 'OK') {
                         var informacion = respuesta.informacion;
                         for (var i in informacion) {

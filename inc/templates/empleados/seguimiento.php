@@ -149,7 +149,7 @@
             </div>
 
             <div class="col">
-                <label for="segEntregaOp">Entrega a operaciones*</label>
+                <label id="lsegEntregaOp" for="segEntregaOp">Entrega a operaciones*</label>
                 <select class="form-control" id="segEntregaOp">
                     <option value="PENDIENTE">Pendiente</option>
                     <option value="NO">No se entrego</option>
@@ -158,7 +158,7 @@
             </div>
 
             <div class="col d-none" id="segEntregaFechacol">
-                <label for="segEntregaFecha">Fecha Entrega Operaciones</label>
+                <label id="lsegEntregaFecha" for="segEntregaFecha">Fecha Entrega Operaciones</label>
                 <input type="date" class="form-control" id="segEntregaFecha">
             </div>
 

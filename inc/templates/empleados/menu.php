@@ -34,7 +34,7 @@
 </div>
 <div class="card">
   <img src="img/misc/03.jfif" class="card-img-top" height="350" alt="...">
-  <div class="card-body text-center">
+  <div class="card-body text-center laborales d-none">
     <h5 class="card-title">Seguimiento</h5>
     <div class="btn-group-vertical">
       <button class="btn btn-block btn-lg btn-info" id="btnSeguimiento">Seguimiento</button>
