@@ -2290,6 +2290,9 @@ $(document).ready(function () {
                 row.append($("<td class='text-left'> " + rowInfo.nombre_largo + " </td>"));
                 row.append($("<td class='text-left'> " + rowInfo.Departamento + " </td>"));
                 row.append($("<td class='text-left'> " + rowInfo.Puesto + " </td>"));
+                // row.append($("<td class='text-left'> " + rowInfo.status + " </td>"));
+                row.append($("<td class='text-left'> " + rowInfo.fecha_alta.date.substr(0, 10) + " </td>"));
+                // row.append($("<td class='text-left'> " + rowInfo.fecha_baja + " </td>"));
                 row.append($("<td> " + comision + " </td>"));
                 row.append($("<td> " + rowInfo.llegada_comision.date.substr(0, 10) + " </td>"));
                 row.append($("<td> " + rowInfo.checklist_comision.date.substr(0, 10) + " </td>"));
