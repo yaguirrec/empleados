@@ -91,6 +91,9 @@
                 </select>
             </div>
 
+        </div>
+        <div class="row mt-1">
+
             <div class="col">
                 <label for="segDGP">DGP*</label>
                 <select class="form-control" id="segDGP">
@@ -110,6 +113,12 @@
                 <label for="segGuia">Guia</label>
                 <input type="text" class="form-control" id="segGuia" placeholder="Guia">
             </div>
+
+            <div class="col">
+                <label for="segOnboarding">Entrega de On Boarding por Operaciones</label>
+                <input type="date" class="form-control" id="segOnboarding">
+            </div>
+        
         </div>
         <div class="row mt-1">
             
