@@ -111,7 +111,7 @@
 
             <div class="col">
                 <label for="segGuia">Guia</label>
-                <input type="text" class="form-control" id="segGuia" placeholder="Guia">
+                <input type="text" class="form-control" id="segGuia" placeholder="Guia" readonly>
             </div>
 
             <div class="col">

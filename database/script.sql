@@ -1761,6 +1761,7 @@ checklist_laborales DATE NOT NULL DEFAULT '1900-01-01',
 fin_contrato DATE NOT NULL DEFAULT '1900-01-01',
 entrega_operaciones VARCHAR(25) NOT NULL DEFAULT 'N/A',
 fecha_operaciones DATE NOT NULL DEFAULT '1900-01-01',
+fecha_onboarding DATE NOT NULL DEFAULT '1900-01-01',
 comentario_seguimiento VARCHAR(255) DEFAULT 'N/A';
 
 

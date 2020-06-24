@@ -36,11 +36,13 @@
           <th scope="col">Entrega contrato</th>
           <th scope="col">Contrato</th>
           <th scope="col">Guia</th>
+          <th scope="col">On Boarding por Operaciones</th>
           <th scope="col">5 Básicos y Código de Disciplina</th>
           <th scope="col">Codigo Etica</th>
           <th scope="col">Entrega en planta</th>
           <th scope="col">Checklist Laborales</th>
           <th scope="col">Entrega operaciones</th>
+          <th scope="col">Jefe directo</th>
           <th scope="col">Fecha entrega operaciones</th>
           <th scope="col">Fin contrato</th>
         </tr>

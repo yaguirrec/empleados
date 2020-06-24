@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V.230620DEV';
+    let version = 'V.240620DEV';
 
     $('#version').html(version);
 
@@ -2099,7 +2099,7 @@ $(document).ready(function () {
                             $("#segFechaentregapersonal").val(informacion.entrega_planta.date.substr(0, 10));
                             $("#segFechaentregachecklist").val(informacion.checklist_laborales.date.substr(0, 10));
                             $("#segEntregaOp").val(informacion.entrega_operaciones);
-                            $("#segEntregaFecha").val(informacion.fecha_operaciones.date.substr(0, 10));
+                            $("#segEntregaFecha").val(informacion.primera_incidencia.date.substr(0, 10));
                             $("#segComentario").val(informacion.comentario_seguimiento);
 
                             $("#segJefe").val(informacion.jefeDirecto);
@@ -2144,6 +2144,7 @@ $(document).ready(function () {
                         segContrato = $("#segContrato").val(),
                         segDGP = $("#segDGP").val(),
                         segGuia = $("#segGuia").val(),
+                        segOnboarding = $("#segOnboarding").val(),
                         segDisciplica = $("#segDisciplica").val(),
                         segEtica = $("#segEtica").val(),
                         segFechaentregapersonal = $("#segFechaentregapersonal").val()
@@ -2176,6 +2177,7 @@ $(document).ready(function () {
                                 segContrato: segContrato,
                                 segDGP: segDGP,
                                 segGuia: segGuia,
+                                segOnboarding: segOnboarding,
                                 segDisciplica: segDisciplica,
                                 segEtica: segEtica,
                                 segFechaentregapersonal: segFechaentregapersonal,
@@ -2307,12 +2309,14 @@ $(document).ready(function () {
                 row.append($("<td> " + rowInfo.entrega_contrato.date.substr(0, 10) + " </td>"));
                 row.append($("<td> " + rowInfo.contrato + " </td>"));
                 row.append($("<td> " + rowInfo.guia + " </td>"));
+                row.append($("<td> " + rowInfo.fecha_onboarding.date.substr(0, 10) + " </td>"));
                 row.append($("<td> " + rowInfo.disciplina + " </td>"));
                 row.append($("<td> " + rowInfo.etica + " </td>"));
                 row.append($("<td> " + rowInfo.entrega_planta.date.substr(0, 10) + " </td>"));
                 row.append($("<td> " + rowInfo.checklist_laborales.date.substr(0, 10) + " </td>"));
                 row.append($("<td> " + rowInfo.entrega_operaciones + " </td>"));
-                row.append($("<td> " + rowInfo.fecha_operaciones.date.substr(0, 10) + " </td>"));
+                row.append($("<td> " + rowInfo.jefeDirecto + " </td>"));
+                row.append($("<td> " + rowInfo.primera_incidencia + " </td>"));
                 row.append($("<td> " + rowInfo.finContrato.date.substr(0, 10) + " </td>"));
 
                 $(".btnConsulta").unbind().click(function () {
