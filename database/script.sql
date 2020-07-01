@@ -1764,6 +1764,9 @@ fecha_operaciones DATE NOT NULL DEFAULT '1900-01-01',
 fecha_onboarding DATE NOT NULL DEFAULT '1900-01-01',
 comentario_seguimiento VARCHAR(255) DEFAULT 'N/A';
 
+ALTER TABLE tbdatos_empleados
+ADD fecha_onboarding DATE NOT NULL DEFAULT '1900-01-01';
+
 
 SELECT td.numero_nomina,td.comision,td.llegada_comision,td.checklist_comision,td.sucursal_comision,td.politicas_comision,td.reglamento_comision,
 td.carta_comision,td.daltonismo,td.agudeza,td.numero_cuenta,td.entrega_tarjeta,td.entrega_contrato,td.contrato,td.dgp,td.guia,td.disciplina,td.etica,td.entrega_planta,
