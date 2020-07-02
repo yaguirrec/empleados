@@ -12,7 +12,7 @@
             </div>
 
             <div class="col fOperaciones">
-                <label for="segFechaLlegada">Llegada a Ags*</label>
+                <label for="segFechaLlegada">Llegada a Ags</label>
                 <input type="date" class="form-control" id="segFechaLlegada" disabled="disabled">
             </div>
 
@@ -28,7 +28,7 @@
             </div>
 
             <div class="col fOperaciones">
-                <label for="segPoliticas">Politicas*</label>
+                <label for="segPoliticas">Politicas</label>
                 <select class="form-control" id="segPoliticas" disabled="disabled">
                     <option value="PENDIENTE">Pendiente</option>
                     <option value="OK">OK</option>
@@ -38,7 +38,7 @@
             </div>
 
             <div class="col fOperaciones">
-                <label for="segReglamento">Reglamento*</label>
+                <label for="segReglamento">Reglamento</label>
                 <select class="form-control" id="segReglamento" disabled="disabled">
                     <option value="PENDIENTE">Pendiente</option>
                     <option value="OK">OK</option>
@@ -48,7 +48,7 @@
             </div>
 
             <div class="col fOperaciones">
-                <label for="segCarta">Carta responsiva*</label>
+                <label for="segCarta">Carta responsiva</label>
                 <select class="form-control" id="segCarta" disabled="disabled">
                     <option value="PENDIENTE">Pendiente</option>
                     <option value="OK">OK</option>
@@ -82,7 +82,7 @@
             </div>
 
             <div class="col">
-                <label for="segContrato">Contrato*</label>
+                <label for="segContrato">Contrato</label>
                 <select class="form-control" id="segContrato">
                     <option value="PENDIENTE">Pendiente</option>
                     <option value="OK">OK</option>
@@ -95,7 +95,7 @@
         <div class="row mt-1">
 
             <div class="col">
-                <label for="segDGP">DGP*</label>
+                <label for="segDGP">DGP</label>
                 <select class="form-control" id="segDGP">
                     <option value="PENDIENTE">Pendiente</option>
                     <option value="OK">OK</option>
@@ -105,7 +105,7 @@
             </div>
 
             <div class="col fOperaciones">
-                <label for="segJefe">Jefe directo*</label>
+                <label for="segJefe">Jefe directo</label>
                 <input type="text h6" class="form-control" id="segJefe" readonly>
             </div>
 
@@ -123,7 +123,7 @@
         <div class="row mt-1">
             
             <div class="col">
-                <label for="segDisciplica">5 basicos y codigo de disciplina*</label>
+                <label for="segDisciplica">5 basicos y codigo de disciplina</label>
                 <select class="form-control" id="segDisciplica">
                     <option value="PENDIENTE">Pendiente</option>
                     <option value="OK">OK</option>
@@ -133,7 +133,7 @@
             </div>
 
             <div class="col">
-                <label for="segEtica">Codigo de Etica*</label>
+                <label for="segEtica">Codigos</label>
                 <select class="form-control" id="segEtica">
                     <option value="PENDIENTE">Pendiente</option>
                     <option value="OK">OK</option>
@@ -148,7 +148,7 @@
             </div>
 
             <div class="col">
-                <label for="segFechaentregachecklist">Checklist Laborales</label>
+                <label for="segFechaentregachecklist" id="lsegFechaentregachecklist">Entrega de On Boarding a Laborales</label>
                 <input type="date" class="form-control" id="segFechaentregachecklist">
             </div>
 
@@ -158,11 +158,12 @@
             </div>
 
             <div class="col">
-                <label id="lsegEntregaOp" for="segEntregaOp">Entrega a operaciones*</label>
+                <label id="lsegEntregaOp" for="segEntregaOp">Entrega a operaciones</label>
                 <select class="form-control" id="segEntregaOp">
                     <option value="PENDIENTE">Pendiente</option>
-                    <option value="NO">No se entrego</option>
-                    <option value="SI">Entregado</option>
+                    <option value="OK">OK</option>
+                    <option value="N/A">N/A</option>
+                    <option value="BAJA">BAJA</option>
                 </select>
             </div>
 

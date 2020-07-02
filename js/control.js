@@ -1782,6 +1782,7 @@ $(document).ready(function () {
                     $('.fOperaciones').addClass('d-none');
                     $('#lsegEntregaOp').html('Contrato de confidencialidad');
                     $('#lsegEntregaFecha').html('Fecha de entrega de Check list Corp. por Staff de Dirección y capacitación');
+                    $('#lsegFechaentregachecklist').html('SDC');
                 }
 
 
@@ -2076,7 +2077,7 @@ $(document).ready(function () {
 
                             $('#segEntregaOp').change(function() {
                                 // console.log($(this).val());
-                                if($(this).val() === 'SI'){
+                                if($(this).val() === 'OK'){
                                     $('#segEntregaFechacol').removeClass('d-none');
                                 } else {
                                     $('#segEntregaFechacol').addClass('d-none');
