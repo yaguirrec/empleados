@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V.240620';
+    let version = 'V.070720';
 
     $('#version').html(version);
 
@@ -1782,7 +1782,7 @@ $(document).ready(function () {
                     $('.fOperaciones').addClass('d-none');
                     $('#lsegEntregaOp').html('Contrato de confidencialidad');
                     $('#lsegEntregaFecha').html('Fecha de entrega de Check list Corp. por Staff de Dirección y capacitación');
-                    $('#lsegFechaentregachecklist').html('SDC');
+                    $('#lsegOnboarding').html('SDC');
                 }
 
 
@@ -4326,7 +4326,113 @@ $(document).ready(function () {
 
 
 
-            break;
+        break;
+        // GESTION DE CLASIFICACION DE BAJAS
+        case 'gestionar-codigos':
+        $('.seccionTitulo').html('Gestionar Clasificación de Bajas');
+        var seccionClasificacion = $('.seccionClasificacion'),
+            seccionMotivos = $('.seccionMotivos'),
+            seccionExplicacion = $('.seccionExplicacion'),
+            btnRegresarMOT = $('#btnRegresarMOT'),
+            btnRegresarEXP = $('#btnRegresarEXP');
+
+        btnRegresarMOT.click(function(){
+            seccionClasificacion.removeClass('d-none');
+            seccionMotivos.addClass('d-none');
+        })
+
+        btnRegresarEXP.click(function(){
+            seccionMotivos.removeClass('d-none');
+            seccionExplicacion.addClass('d-none');
+        })
+
+        let tablaMotivosBaja = (bajaCLA) => {
+
+            $.ajax({
+                type: 'POST',
+                url: backendURL,
+                data: { action: 'claBajas', param: 'motivo', key: bajaCLA },
+                success: function (response) {
+                    let respuesta = JSON.parse(response);
+                    let reg = respuesta.informacion;
+                    // console.log(reg);
+                    for (var i in reg) {
+                        $('#tableMOTBajas').append
+                            (
+                                "<tr><td class='trCode'>" + reg[i].codigo + " </td>" +
+                                "<td>" + reg[i].descripcion + "</td>" +
+                                "<td>" + reg[i].created_at.date.substr(0, 10) + " </td>" +
+                                "<td>" + reg[i].created_by + " </td>" +
+                                "<td>" + reg[i].updated_at.date.substr(0, 10) + " </td>" +
+                                "<td>" + reg[i].updated_by + " </td>" +
+                                "<td><a class='btn btn-sm btn-primary text-white updateMOTB' data-codigo='" + reg[i].codigo + "' role='button'>Editar <i class='fas fa-pen-square'></i></a></td></tr>");
+                    }
+
+                    $(".updateMOTB").click(function () {
+                        $('#tableMOTBajas').empty();
+                        seccionMotivos.addClass('d-none');
+                        seccionExplicacion.removeClass('d-none');
+                        // $("html, body").animate({ scrollTop: 0 }, 500);
+                        let bajaMOT = $((this)).data('codigo');
+                        // bajaCLA = bajaCLA.substr(0, 3);
+                        // tablaMotivosBaja(bajaCLA);
+                    });
+                }
+            });
+        }
+        
+
+        $.ajax({
+            type: 'POST',
+            url: backendURL,
+            data: { action: 'claBajas', param: 'clasificacion' },
+            success: function (response) {
+                let respuesta = JSON.parse(response);
+                let reg = respuesta.informacion;
+                // console.log(reg);
+                for (var i in reg) {
+                    $('#tableCLABajas').append
+                        (
+                            "<tr><td class='trCode'>" + reg[i].codigo + " </td>" +
+                            "<td>" + reg[i].descripcion + "</td>" +
+                            "<td>" + reg[i].created_at.date.substr(0, 10) + " </td>" +
+                            "<td>" + reg[i].created_by + " </td>" +
+                            "<td>" + reg[i].updated_at.date.substr(0, 10) + " </td>" +
+                            "<td>" + reg[i].updated_by + " </td>" +
+                            "<td><a class='btn btn-sm btn-primary text-white updateCLAB' data-codigo='" + reg[i].codigo + "' role='button'>Editar <i class='fas fa-pen-square'></i></a></td></tr>");
+                }
+
+                $(".updateCLAB").click(function () {
+                    $('#tableMOTBajas').empty();
+                    seccionClasificacion.addClass('d-none');
+                    seccionMotivos.removeClass('d-none');
+                    // $("html, body").animate({ scrollTop: 0 }, 500);
+                    let bajaCLA = $((this)).data('codigo');
+                    bajaCLA = bajaCLA.substr(0, 3);
+                    console.log(bajaCLA);
+                    tablaMotivosBaja(bajaCLA);
+                    // btnNuevo.addClass('d-none');
+                    // btnActualizarPuesto.removeClass('d-none');
+                    // panelNuevo.removeClass('d-none');
+                    // setTimeout(function () {
+                    //     $("#txttPuesto").val(id_nivel).attr('selected', true);
+                    // }, 150);
+                    // $('#txtnPuesto').val(nombre);
+                    // setTimeout(function () {
+                    //     if (departamento === 0)
+                    //         $("#txtnDepartamento").val(5).attr('selected', true);
+                    //     else
+                    //         $("#txtnDepartamento").val(departamento).attr('selected', true);
+                    // }, 150);
+                    // $('#txtdPuesto').val(descripcion);
+                    // $('#txtCodigoPuesto').val(codigo);
+                });
+
+                
+            }
+        });
+
+        break;
         default:
             console.log('Seccion ' + seccionActual);
             cleanLocal();

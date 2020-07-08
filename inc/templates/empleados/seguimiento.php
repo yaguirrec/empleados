@@ -115,7 +115,7 @@
             </div>
 
             <div class="col">
-                <label for="segOnboarding">Entrega de On Boarding por Operaciones</label>
+                <label for="segOnboarding" id="lsegOnboarding">Entrega de On Boarding por Operaciones</label>
                 <input type="date" class="form-control" id="segOnboarding">
             </div>
         

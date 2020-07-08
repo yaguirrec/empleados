@@ -32,24 +32,27 @@
           {
               case 'empleado': case'bajas': case'altasc': case 'bajasc':
                 include 'inc/templates/empleados/vista.php';
-                break;
+              break;
               case'bajaPuesto':
                 include 'inc/templates/bajas/baja-puesto.php';
               break;
               case 'alta-empleado':
                 include 'inc/templates/empleados/alta-empleado.php';
-                break;
+              break;
               case 'ci':
                   include 'inc/templates/empleados/ci.php';
-                  break;
+              break;
               case 'becarios':
                 include 'inc/templates/empleados/vista.php';
-                break;
+              break;
               case 'modificar-empleado':
                 include 'inc/templates/empleados/modificar.php';
               break;
               case 'empleadoBaja':
                   include 'inc/templates/empleados/baja-empleado.php';
+              break;
+              case 'gestionar-codigos':
+                include 'inc/templates/modulos/gestion_codigos.php';
               break;
               case 'reingreso-empleado':
                   include 'inc/templates/empleados/reingreso.php';
