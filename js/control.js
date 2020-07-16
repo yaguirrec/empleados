@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V.070720';
+    let version = 'V.150720DEV';
 
     $('#version').html(version);
 
@@ -4333,18 +4333,77 @@ $(document).ready(function () {
         var seccionClasificacion = $('.seccionClasificacion'),
             seccionMotivos = $('.seccionMotivos'),
             seccionExplicacion = $('.seccionExplicacion'),
-            btnRegresarMOT = $('#btnRegresarMOT'),
-            btnRegresarEXP = $('#btnRegresarEXP');
+            btnRegresarMOT = $('.btnRegresarMOT'),
+            btnNuevoRegistro = $('.btn-nuevo-registro');
 
         btnRegresarMOT.click(function(){
             seccionClasificacion.removeClass('d-none');
             seccionMotivos.addClass('d-none');
+            seccionExplicacion.addClass('d-none');
+            $('#tableEXPBajas').empty();
+            $('#tableMOTBajas').empty();
         })
 
-        btnRegresarEXP.click(function(){
-            seccionMotivos.removeClass('d-none');
-            seccionExplicacion.addClass('d-none');
-        })
+        let tablaExplicacionBajas = (bajaMOT) => {
+            $.ajax({
+                type: 'POST',
+                url: backendURL,
+                data: { action: 'claBajas', param: 'explicacion', key: bajaMOT },
+                success: function (response) {
+                    let respuesta = JSON.parse(response);
+                    let reg = respuesta.informacion;
+                    for (var i in reg) {
+                        $('#tableEXPBajas').append
+                            (
+                                "<tr><td class='trCode' data-codigob='" + reg[i].codigo + "' data-descripcionb='" + reg[i].descripcion + "'>" + reg[i].codigo + " </td>" +
+                                "<td>" + reg[i].descripcion + "</td>" +
+                                "<td>" + reg[i].created_at.date.substr(0, 10) + " </td>" +
+                                "<td>" + reg[i].created_by + " </td>" +
+                                "<td>" + reg[i].updated_at.date.substr(0, 10) + " </td>" +
+                                "<td>" + reg[i].updated_by + " </td></tr>");
+                    }
+
+                    $(".updateEXPB").click(function () {
+                        $('#tableEXPBajas').empty();
+                        let bajaMOT = $((this)).data('codigo');
+                        tablaExplicacionBajas(bajaMOT);
+                    });
+
+                    $(".trCode").unbind().click(function () {
+                        var codigo_baja_actualizar = $((this)).data('codigob'),
+                            descripcion_baja_actualizar = $((this)).data('descripcionb');
+                        actualizartablaBajas(codigo_baja_actualizar,descripcion_baja_actualizar);
+                    });
+
+                }
+            });
+        }   
+        
+        btnNuevoRegistro.click(async function () {
+            const { value: nuevo_registro } = await Swal.fire({
+                title: 'Nuevo registro',
+                input: 'textarea',
+                // inputValue: '',
+                inputPlaceholder: 'Nuevo registro'
+              })
+              
+              if (nuevo_registro) {
+                Swal.fire(`Nuevo registro: ${nuevo_registro}`)
+              }
+        });
+    
+        async function actualizartablaBajas (cba,dba) {
+            const { value: actualizar_registro } = await Swal.fire({
+                title: 'Actualizar registro',
+                input: 'textarea',
+                inputValue: dba,
+                inputPlaceholder: 'Actualizar registro'
+              })
+              
+              if (actualizar_registro) {
+                Swal.fire(`Registro actualizado: ${actualizar_registro}`)
+              }
+        }
 
         let tablaMotivosBaja = (bajaCLA) => {
 
@@ -4355,11 +4414,10 @@ $(document).ready(function () {
                 success: function (response) {
                     let respuesta = JSON.parse(response);
                     let reg = respuesta.informacion;
-                    // console.log(reg);
                     for (var i in reg) {
                         $('#tableMOTBajas').append
                             (
-                                "<tr><td class='trCode'>" + reg[i].codigo + " </td>" +
+                                "<tr><td class='trCode' data-codigob='" + reg[i].codigo + "' data-descripcionb='" + reg[i].descripcion + "'>" + reg[i].codigo + " </td>" +
                                 "<td>" + reg[i].descripcion + "</td>" +
                                 "<td>" + reg[i].created_at.date.substr(0, 10) + " </td>" +
                                 "<td>" + reg[i].created_by + " </td>" +
@@ -4372,11 +4430,17 @@ $(document).ready(function () {
                         $('#tableMOTBajas').empty();
                         seccionMotivos.addClass('d-none');
                         seccionExplicacion.removeClass('d-none');
-                        // $("html, body").animate({ scrollTop: 0 }, 500);
                         let bajaMOT = $((this)).data('codigo');
-                        // bajaCLA = bajaCLA.substr(0, 3);
-                        // tablaMotivosBaja(bajaCLA);
+                        bajaMOT = bajaMOT.substr(6, 2);
+                        tablaExplicacionBajas(bajaMOT);
                     });
+
+                    $(".trCode").unbind().click(function () {
+                        var codigo_baja_actualizar = $((this)).data('codigob'),
+                            descripcion_baja_actualizar = $((this)).data('descripcionb');
+                        actualizartablaBajas(codigo_baja_actualizar,descripcion_baja_actualizar);
+                    });
+
                 }
             });
         }
@@ -4389,11 +4453,10 @@ $(document).ready(function () {
             success: function (response) {
                 let respuesta = JSON.parse(response);
                 let reg = respuesta.informacion;
-                // console.log(reg);
                 for (var i in reg) {
                     $('#tableCLABajas').append
                         (
-                            "<tr><td class='trCode'>" + reg[i].codigo + " </td>" +
+                            "<tr><td class='trCode' data-codigob='" + reg[i].codigo + "' data-descripcionb='" + reg[i].descripcion + "'>" + reg[i].codigo + " </td>" +
                             "<td>" + reg[i].descripcion + "</td>" +
                             "<td>" + reg[i].created_at.date.substr(0, 10) + " </td>" +
                             "<td>" + reg[i].created_by + " </td>" +
@@ -4406,28 +4469,16 @@ $(document).ready(function () {
                     $('#tableMOTBajas').empty();
                     seccionClasificacion.addClass('d-none');
                     seccionMotivos.removeClass('d-none');
-                    // $("html, body").animate({ scrollTop: 0 }, 500);
                     let bajaCLA = $((this)).data('codigo');
                     bajaCLA = bajaCLA.substr(0, 3);
-                    console.log(bajaCLA);
                     tablaMotivosBaja(bajaCLA);
-                    // btnNuevo.addClass('d-none');
-                    // btnActualizarPuesto.removeClass('d-none');
-                    // panelNuevo.removeClass('d-none');
-                    // setTimeout(function () {
-                    //     $("#txttPuesto").val(id_nivel).attr('selected', true);
-                    // }, 150);
-                    // $('#txtnPuesto').val(nombre);
-                    // setTimeout(function () {
-                    //     if (departamento === 0)
-                    //         $("#txtnDepartamento").val(5).attr('selected', true);
-                    //     else
-                    //         $("#txtnDepartamento").val(departamento).attr('selected', true);
-                    // }, 150);
-                    // $('#txtdPuesto').val(descripcion);
-                    // $('#txtCodigoPuesto').val(codigo);
                 });
 
+                $(".trCode").unbind().click(function () {
+                    var codigo_baja_actualizar = $((this)).data('codigob'),
+                        descripcion_baja_actualizar = $((this)).data('descripcionb');
+                    actualizartablaBajas(codigo_baja_actualizar,descripcion_baja_actualizar);
+                });
                 
             }
         });

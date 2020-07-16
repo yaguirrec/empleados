@@ -4,7 +4,7 @@
     </div>
 
     <div class="seccionClasificacion">
-        <button class="btn btn-success btn-lg m-4" id="btnNCLA"><i class="fas fa-briefcase"></i> Nueva clasificacion</button>
+        <button class="btn btn-success btn-lg m-4 btn-nuevo-registro" id="btnNCLA"><i class="fas fa-briefcase"></i> Nueva clasificacion</button>
 
         <div class="table-responsive tablaClasificacion">
             <table class="table table-sm table-bordered table-hover bg-gray-200 text-uppercase" cellspacing="4">
@@ -36,7 +36,7 @@
             <h2 class="m-0 font-weight-bold text-secondary text-center text-uppercase">Motivos de Bajas</h2>
         </div>
 
-        <button class="btn btn-success btn-lg m-4" id="btnNMOT"><i class="fas fa-briefcase"></i> Nuevo motivo</button>
+        <button class="btn btn-success btn-lg m-4 btn-nuevo-registro" id="btnNMOT"><i class="fas fa-briefcase"></i> Nuevo motivo</button>
 
         <div class="table-responsive tablaMotivos">
             <table class="table table-sm table-bordered table-hover bg-gray-200 text-uppercase" cellspacing="4">
@@ -60,7 +60,7 @@
             No hay información disponible.
             </div>
             <div>
-                <button class="btn btn-warning btn-block btn-sm" id="btnRegresarMOT">Regresar</button>
+                <button class="btn btn-warning btn-block btn-sm btnRegresarMOT">Regresar</button>
             </div>
         </div>
     </div>
@@ -71,7 +71,7 @@
             <h2 class="m-0 font-weight-bold text-secondary text-center text-uppercase">Explicacion de Bajas</h2>
         </div>
 
-        <button class="btn btn-success btn-lg m-4" id="btnNEXP"><i class="fas fa-briefcase"></i> Nueva Explicacion</button>
+        <button class="btn btn-success btn-lg m-4 btn-nuevo-registro" id="btnNEXP"><i class="fas fa-briefcase"></i> Nueva Explicacion</button>
 
         <div class="table-responsive tablaMotivos">
             <table class="table table-sm table-bordered table-hover bg-gray-200 text-uppercase" cellspacing="4">
@@ -84,7 +84,7 @@
                     <th scope="col">Creado por</th>
                     <th scope="col">Fecha actualizado</th>
                     <th scope="col">Actualizado por</th>
-                    <th scope="col">Acción</th>
+                    <!-- <th scope="col">Acción</th> -->
                     </tr>
                 </thead>
                 <tbody id="tableEXPBajas">
@@ -95,7 +95,7 @@
             No hay información disponible.
             </div>
             <div>
-                <button class="btn btn-warning btn-block btn-sm" id="btnRegresarEXP">Regresar</button>
+                <button class="btn btn-warning btn-block btn-sm btnRegresarMOT">Regresar</button>
             </div>
         </div>
     </div>

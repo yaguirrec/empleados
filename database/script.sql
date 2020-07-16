@@ -409,6 +409,38 @@ CREATE TABLE [dbo].[tbcodigos](
 ) ON [PRIMARY]
 GO
 
+/**CREAR TABLA TABULADORES**/
+USE [MEXQAPPTEMP]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbtabuladores]( 
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[categoria] [varchar](10) NOT NULL,
+	[sd] [float],
+	[sdi] [float],
+	[sueldo] [float],
+	[p_asistencia] [float],
+	[p_puntualidad] [float],
+	[despensa] [float],
+	[f_ahorro] [float],
+	[percepciones] [float],
+	[imss] [float],
+	[ispt] [float],
+	[sueldo_neto] [float],
+	[activo] [int] DEFAULT 1,
+	[created_at] [datetime],
+	[created_by] [char](10) DEFAULT '00001',
+	[updated_at] [datetime] default GETDATE(),
+	[updated_by] [char](10) DEFAULT '00001'
+) ON [PRIMARY]
+GO
+
+select * from [tbtabuladores]
+select * from tbestado
+
 INSERT INTO tbemp_permisos (numero_nomina,created_at,emp_proy) VALUES ('22720',GETDATE(),2)
 SELECT * FROM tbemp_permisos ORDER BY numero_nomina
 --UPDATE tbemp_permisos SET emp_proy = 1 WHERE numero_nomina = '22720'
@@ -1214,157 +1246,7 @@ EXEC insertEmployeeData '88888','HERNANDEZ IBARRA GABRIELA','gabriela','hernande
 						'g@gmail.com','9128574','4493216547','Juana Ibarra','4498754631',0;
 
 /**insert empleados en PJEMPLOY / TBEMPLEADOS / TBEMPLEADOS_DATOS**/
-ALTER PROCEDURE insertEmployeeData(
-								@nnomina varchar(10), 
-								@jnomina varchar(5),
-								@nlargo varchar(85), 
-								@nombre varchar(35), 
-								@apaterno varchar(35),
-								@amaterno varchar(35),
-								@sexo varchar(5),
-								@curpi varchar(25),
-								@curpf varchar(25),
-								@rfcini varchar(25),
-								@rfcfin varchar(25),
-								@nss varchar(25),
-								@fechan DATE,
-								@fechaa DATE,
-								@fechab DATE,
-								@status varchar(2),
-								@comentario text,
-								@ids INT,
-								@ida INT,
-								@idc INT,
-								@idp INT,
-								@clasificacion varchar(8)
-							   ,@salarioDiario varchar(25)
-							   ,@salarioMensual varchar(25)
-							   ,@nomina  varchar(1)
-							   ,@registro_patronal  varchar(10)
-							   ,@lote  varchar(15)
-							   ,@dv  varchar(3)
-							   ,@lugar_nacimiento  varchar(45)
-							   ,@identificacion  varchar(15)
-							   ,@numero_identificacion  varchar(65)
-							   ,@estado_civil  varchar(5)
-							   ,@escolaridad  varchar(25)
-							   ,@constancia  varchar(25)
-							   ,@nombre_padre  varchar(65)
-							   ,@nombre_madre  varchar(65)
-							   ,@calle  varchar(65)
-							   ,@numero_interior  varchar(10)
-							   ,@numero_exterior  varchar(10)
-							   ,@fraccionamiento  varchar(65)
-							   ,@domicilio_completo  varchar(65)
-							   ,@codigo_postal  varchar(5)
-							   ,@estado  varchar(55)
-							   ,@municipio  varchar(55)
-							   ,@localidad  varchar(55)
-							   ,@infonavit  varchar(2)
-							   ,@numero_infonavit  varchar(35)
-							   ,@fonacot  varchar(2)
-							   ,@numero_fonacot  varchar(35)
-							   ,@cuenta  varchar(2)
-							   ,@numero_cuenta  varchar(35)
-							   ,@correo  varchar(55)
-							   ,@telefono  varchar(25)
-							   ,@celular  varchar(25)
-							   ,@contacto_emergencia_nombre  varchar(40)
-							   ,@contacto_emergencia_numero  varchar(15)
-							   ,@posicion int
-							   ,@nominaControl varchar(5)
-							   )
-
-AS
-BEGIN TRY
-     BEGIN TRANSACTION
-		/*ALTA EN TABLA TBEMPLEADOS PARA MANEJO DE PERFILES*/
-           INSERT INTO [tbempleados]
-                            ([numero_nomina]
-                            ,[nombre_largo]
-                            ,[nombre]
-                            ,[apellido_paterno]
-                            ,[apellido_materno]
-                            ,[sexo]
-                            ,[curpini]
-                            ,[curpfin]
-                            ,[rfcini]
-                            ,[rfcfin]
-                            ,[nss]
-                            ,[fecha_nacimiento]
-                            ,[fecha_alta]
-                            ,[fecha_baja]
-                            ,[status]
-                            ,[id_sucursal]
-                            ,[id_area]
-                            ,[id_celula]
-                            ,[id_puesto]
-                            ,[created_at]
-							,[created_by])
-                            VALUES
-                            (@nnomina,UPPER(@nlargo),UPPER(@nombre),UPPER(@apaterno),UPPER(@amaterno),UPPER(@sexo),UPPER(@curpi),UPPER(@curpf),UPPER(@rfcini),UPPER(@rfcfin),@nss,@fechan,@fechaa,@fechab,@status,@ids,@ida,@idc,@idp,GETDATE(),@nominaControl);
-           /*ALTA EN TABLA TBDATOS_EMPLEADOS PARA CONTROL DE INFORMACION DEL EMPLEADO*/
-		   INSERT INTO [tbdatos_empleados]
-										(	[numero_nomina],
-											[clasificacion],
-											[salario_diario],
-											[salario_mensual],
-											[nomina],
-											[registro_patronal],
-											[lote],
-											[dv],
-											[lugar_nacimiento],
-											[identificacion],
-											[numero_identificacion],
-											[estado_civil],
-											[escolaridad],
-											[constancia],
-											[nombre_padre],
-											[nombre_madre],
-											[calle],
-											[numero_exterior],
-											[numero_interior],
-											[fraccionamiento],
-											[domicilio_completo],
-											[codigo_postal],
-											[estado],
-											[municipio],
-											[localidad],
-											[infonavit],
-											[numero_infonavit],
-											[fonacot],
-											[numero_fonacot],
-											[cuenta],
-											[numero_cuenta],
-											[correo],
-											[telefono],
-											[celular],
-											[contacto_emergencia_nombre],
-											[contacto_emergencia_numero],
-											[posicion],
-											[comentarios],
-											[created_at],
-											[created_by]
-										)
-										VALUES
-										(@nnomina,@clasificacion,@salarioDiario,@salarioMensual,@nomina,@registro_patronal,@lote,@dv,UPPER(@lugar_nacimiento),@identificacion,@numero_identificacion,@estado_civil,@escolaridad,@constancia,
-										UPPER(@nombre_padre),UPPER(@nombre_madre),UPPER(@calle),@numero_exterior,@numero_interior,@fraccionamiento,UPPER(@domicilio_completo),@codigo_postal,@estado,@municipio,@localidad,@infonavit,@numero_infonavit,
-										@fonacot,@numero_fonacot,@cuenta,@numero_cuenta,UPPER(@correo),@telefono,@celular,UPPER(@contacto_emergencia_nombre),@contacto_emergencia_numero,@posicion,@comentario,GETDATE(),@nominaControl);
-										/*ALTA EN TABLA PJEMPLOY PARA CONTROL EN ERP*/
-										INSERT INTO [PJEMPLOY] ([BaseCuryId], [CpnyId], [crtd_datetime], [crtd_prog], [crtd_user], [CuryId], [CuryRateType], [date_hired], [date_terminated], [employee], [emp_name], [emp_status], [emp_type_cd], [em_id01], [em_id02], [em_id03], [em_id04], [em_id05], [em_id06], [em_id07], [em_id08], [em_id09], [em_id10], [em_id11], [em_id12], [em_id13], [em_id14], [em_id15], [em_id16], [em_id17], [em_id18], [em_id19], [em_id20], [em_id21], [em_id22], [em_id23], [em_id24], [em_id25], [exp_approval_max], [gl_subacct], [lupd_datetime], [lupd_prog], [lupd_user], [manager1], [manager2], [MSPData], [MSPInterface], [MSPRes_UID], [MSPType], [noteid], [placeholder], [stdday], [Stdweek], [Subcontractor], [user1], [user2], [user3], [user4], [user_id])
-										VALUES
-										(N'    ', N'0010      ', CAST(GETDATE() AS SmallDateTime), N'PAEMP   ', N'WEBSYS', N'    ', N'      ', CAST(@fechaa AS SmallDateTime), CAST(N'1900-01-01T00:00:00' AS SmallDateTime), @nnomina, UPPER(@nlargo), N'A', N'', N'                              ', N'                              ', N'                                                  ', N'                ', N'    ', 0, 0, CAST(N'1900-01-01T00:00:00' AS SmallDateTime), CAST(N'1900-01-01T00:00:00' AS SmallDateTime), 0, N'                              ', N'                              ', N'                    ', N'                    ', N'          ', N'          ', N'    ', 0, CAST(N'1900-01-01T00:00:00' AS SmallDateTime), 0, N'          ', N'          ', N'          ', N'          ', N'          ', 0, N'01                      ', CAST(GETDATE() AS SmallDateTime), N'WEBEMP   ', N'WEBADMIN  ', N'          ', N'          ', N'                                                  ', N' ', 0, N' ', 0, N' ', 8, 40, N' ', N'                              ', N'                              ', 0, 0, N'                                                  ');
-										/*ALTA EN TABLA PJEMPPJT PARA CAPTURA DE REPORTES*/
-										INSERT [dbo].[PJEMPPJT] 
-										([crtd_datetime], [crtd_prog], [crtd_user], [employee], [ep_id01], [ep_id02], [ep_id03], [ep_id04], [ep_id05], [ep_id06], [ep_id07], [ep_id08], [ep_id09], [ep_id10], [effect_date], [labor_class_cd], [labor_rate], [lupd_datetime], [lupd_prog], [lupd_user], [noteid], [project], [user1], [user2], [user3], [user4]) 
-										VALUES (CAST(GETDATE() AS SmallDateTime), N'TMEPJ   ', N'WEBSYS  ', @nnomina, N'                              ', N'                              ', N'                ', N'                ', N'HR  ', 0, 0, CAST(N'1900-01-01T00:00:00' AS SmallDateTime), CAST(N'1900-01-01T00:00:00' AS SmallDateTime), 0, CAST(@fechaa AS SmallDateTime), N'MO  ', 1, CAST(GETDATE() AS SmallDateTime), N'TMEPJ   ', N'WEBSYS  ', 0, N'na              ', N'                              ', N'                              ', 0, 0)
-										INSERT tbjefe_empleado ([empleado_nomina],[jefe_nomina],[created_by])
-										VALUES (@nnomina,@jnomina,@nominaControl)
-     COMMIT
- END TRY
- BEGIN CATCH
-  ROLLBACK
- END CATCH
+sp_helptext 'insertEmployeeData'
 
  /***
 MODIFICAR DATOS DEL EMPLEADO
@@ -1797,3 +1679,17 @@ INNER JOIN tbpuesto AS tp
 ON tp.id_puesto = te.id_puesto
 AND te.status IN ('A','R')
 ORDER BY td.updated_at DESC
+
+--ACTUALIZAR PLANTA DEL EMPLEADO
+UPDATE empleados
+SET 
+id_celula = dbo.TRIM(plantas.id_celula) 
+FROM tbempleados AS empleados
+INNER JOIN (SELECT ba.#,tc.id_celula
+FROM  Bjas_Automaticas ba
+INNER JOIN tbcelula AS tc
+ON ba.Planta = tc.nombre
+WHERE ba.fecha_modificacion BETWEEN GETDATE()-1 AND GETDATE()
+GROUP BY ba.#,tc.id_celula) AS plantas
+ON empleados.numero_nomina = plantas.#
+AND empleados.id_celula <> plantas.id_celula AND empleados.status <> 'B'
