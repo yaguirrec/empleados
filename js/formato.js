@@ -84,8 +84,8 @@ if (check) {
             $('#estado').html(informacion.estado);
             $('#numeroInfonavit').html(informacion.numero_infonavit);
             $('#numeroFonacot').html(informacion.numero_fonacot);
-            $('#telefonoCelular').html(informacion.telefono);
-            $('#telefonoCasa').html(informacion.celular);
+            $('#telefonoCelular').html(informacion.celular);
+            $('#telefonoCasa').html(informacion.telefono);
             $('#numeroCuenta').html(informacion.numero_cuenta);
 
             $("#empFoto").attr("src","assets/files/" + informacion.numero_nomina + "/" + informacion.numero_nomina + ".jpg");
