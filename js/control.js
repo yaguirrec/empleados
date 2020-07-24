@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -4482,6 +4482,200 @@ $(document).ready(function () {
                 
             }
         });
+
+        break;
+        // GESTION DE CLASIFICACION DE BAJAS
+        case 'gestionar-tabuladores':
+        $('.seccionTitulo').html('Gestionar Tabuladores');
+        var seccionTabuladores = $('.seccionTabuladores'),
+            agregarTabulador = $('.agregarTabulador'),
+            editarTabulador = $('.editarTabulador'),
+            btnnvoTab = $('#btnnvoTab'),
+            btnguardarTAB = $('.btnguardarTAB'),
+            btnactualizarTAB = $('.btnactualizarTAB'),
+            btnregresarTAB = $('.btnregresarTAB');
+
+        btnregresarTAB.click(function(){
+            seccionTabuladores.removeClass('d-none');
+            agregarTabulador.addClass('d-none');
+            editarTabulador.addClass('d-none');
+        })
+
+        btnguardarTAB.click(function(){
+            seccionTabuladores.removeClass('d-none');
+            agregarTabulador.addClass('d-none');
+            editarTabulador.addClass('d-none');
+        })
+
+        btnactualizarTAB.click(function(){
+            seccionTabuladores.removeClass('d-none');
+            agregarTabulador.addClass('d-none');
+            editarTabulador.addClass('d-none');
+        })
+
+        btnnvoTab.click(function(){
+            seccionTabuladores.addClass('d-none');
+            agregarTabulador.removeClass('d-none');
+            editarTabulador.addClass('d-none');
+        })
+
+        let tablaTabuladores = () => {
+            $.ajax({
+                type: 'POST',
+                url: backendURL,
+                data: { action: 'tablaTabuladores' },
+                success: function (response) {
+                    let respuesta = JSON.parse(response);
+                    let reg = respuesta.informacion;
+                    for (var i in reg) {
+                        $('#tableTabulador').append
+                            (
+                                "<tr><td class='trCode'>" + reg[i].id + " </td>" +
+                                "<td>" + reg[i].categoria + "</td>" +
+                                "<td>" + reg[i].sd + "</td>" +
+                                "<td>" + reg[i].sdi + "</td>" +
+                                "<td>" + reg[i].sueldo + "</td>" +
+                                "<td>" + reg[i].p_asistencia + "</td>" +
+                                "<td>" + reg[i].p_puntualidad + "</td>" +
+                                "<td>" + reg[i].despensa + "</td>" +
+                                "<td>" + reg[i].f_ahorro + "</td>" +
+                                "<td>" + reg[i].percepciones + "</td>" +
+                                "<td>" + reg[i].imss + "</td>" +
+                                "<td>" + reg[i].ispt + "</td>" +
+                                "<td>" + reg[i].sueldo_neto + "</td>" +
+                                "<td>" + reg[i].created_at.date.substr(0, 10) + " </td>" +
+                                "<td>" + reg[i].created_by + " </td>" +
+                                "<td>" + reg[i].updated_at.date.substr(0, 10) + " </td>" +
+                                "<td>" + reg[i].updated_by + " </td>" +
+                                "<td><a class='btn btn-sm btn-info text-white updateTAB' data-id='" + reg[i].id + "' role='button'>Editar <i class='fas fa-pen-square'></i></a></td></tr>");
+                    }
+
+                    $(".updateTAB").click(function(){
+                        seccionTabuladores.addClass('d-none');
+                        agregarTabulador.addClass('d-none');
+                        editarTabulador.removeClass('d-none');
+                    })
+
+                    // $(".updateEXPB").click(function () {
+                    //     $('#tableEXPBajas').empty();
+                    //     let bajaMOT = $((this)).data('codigo');
+                    //     tablaExplicacionBajas(bajaMOT);
+                    // });
+
+                    // $(".trCode").unbind().click(function () {
+                    //     var codigo_baja_actualizar = $((this)).data('codigob'),
+                    //         descripcion_baja_actualizar = $((this)).data('descripcionb');
+                    //     actualizartablaBajas(codigo_baja_actualizar,descripcion_baja_actualizar);
+                    // });
+
+                }
+            });
+        }   
+        tablaTabuladores();
+         
+        // btnNuevoRegistro.click(async function () {
+        //     const { value: nuevo_registro } = await Swal.fire({
+        //         title: 'Nuevo registro',
+        //         input: 'textarea',
+        //         // inputValue: '',
+        //         inputPlaceholder: 'Nuevo registro'
+        //       })
+              
+        //       if (nuevo_registro) {
+        //         Swal.fire(`Nuevo registro: ${nuevo_registro}`)
+        //       }
+        // });
+    
+        // async function actualizartablaBajas (cba,dba) {
+        //     const { value: actualizar_registro } = await Swal.fire({
+        //         title: 'Actualizar registro',
+        //         input: 'textarea',
+        //         inputValue: dba,
+        //         inputPlaceholder: 'Actualizar registro'
+        //       })
+              
+        //       if (actualizar_registro) {
+        //         Swal.fire(`Registro actualizado: ${actualizar_registro}`)
+        //       }
+        // }
+
+        // let tablaMotivosBaja = (bajaCLA) => {
+
+        //     $.ajax({
+        //         type: 'POST',
+        //         url: backendURL,
+        //         data: { action: 'claBajas', param: 'motivo', key: bajaCLA },
+        //         success: function (response) {
+        //             let respuesta = JSON.parse(response);
+        //             let reg = respuesta.informacion;
+        //             for (var i in reg) {
+        //                 $('#tableMOTBajas').append
+        //                     (
+        //                         "<tr><td class='trCode' data-codigob='" + reg[i].codigo + "' data-descripcionb='" + reg[i].descripcion + "'>" + reg[i].codigo + " </td>" +
+        //                         "<td>" + reg[i].descripcion + "</td>" +
+        //                         "<td>" + reg[i].created_at.date.substr(0, 10) + " </td>" +
+        //                         "<td>" + reg[i].created_by + " </td>" +
+        //                         "<td>" + reg[i].updated_at.date.substr(0, 10) + " </td>" +
+        //                         "<td>" + reg[i].updated_by + " </td>" +
+        //                         "<td><a class='btn btn-sm btn-primary text-white updateMOTB' data-codigo='" + reg[i].codigo + "' role='button'>Editar <i class='fas fa-pen-square'></i></a></td></tr>");
+        //             }
+
+        //             $(".updateMOTB").click(function () {
+        //                 $('#tableMOTBajas').empty();
+        //                 seccionMotivos.addClass('d-none');
+        //                 seccionExplicacion.removeClass('d-none');
+        //                 let bajaMOT = $((this)).data('codigo');
+        //                 bajaMOT = bajaMOT.substr(6, 2);
+        //                 tablaExplicacionBajas(bajaMOT);
+        //             });
+
+        //             $(".trCode").unbind().click(function () {
+        //                 var codigo_baja_actualizar = $((this)).data('codigob'),
+        //                     descripcion_baja_actualizar = $((this)).data('descripcionb');
+        //                 actualizartablaBajas(codigo_baja_actualizar,descripcion_baja_actualizar);
+        //             });
+
+        //         }
+        //     });
+        // }
+        
+
+        // $.ajax({
+        //     type: 'POST',
+        //     url: backendURL,
+        //     data: { action: 'claBajas', param: 'clasificacion' },
+        //     success: function (response) {
+        //         let respuesta = JSON.parse(response);
+        //         let reg = respuesta.informacion;
+        //         for (var i in reg) {
+        //             $('#tableCLABajas').append
+        //                 (
+        //                     "<tr><td class='trCode' data-codigob='" + reg[i].codigo + "' data-descripcionb='" + reg[i].descripcion + "'>" + reg[i].codigo + " </td>" +
+        //                     "<td>" + reg[i].descripcion + "</td>" +
+        //                     "<td>" + reg[i].created_at.date.substr(0, 10) + " </td>" +
+        //                     "<td>" + reg[i].created_by + " </td>" +
+        //                     "<td>" + reg[i].updated_at.date.substr(0, 10) + " </td>" +
+        //                     "<td>" + reg[i].updated_by + " </td>" +
+        //                     "<td><a class='btn btn-sm btn-primary text-white updateCLAB' data-codigo='" + reg[i].codigo + "' role='button'>Editar <i class='fas fa-pen-square'></i></a></td></tr>");
+        //         }
+
+        //         $(".updateCLAB").click(function () {
+        //             $('#tableMOTBajas').empty();
+        //             seccionClasificacion.addClass('d-none');
+        //             seccionMotivos.removeClass('d-none');
+        //             let bajaCLA = $((this)).data('codigo');
+        //             bajaCLA = bajaCLA.substr(0, 3);
+        //             tablaMotivosBaja(bajaCLA);
+        //         });
+
+        //         $(".trCode").unbind().click(function () {
+        //             var codigo_baja_actualizar = $((this)).data('codigob'),
+        //                 descripcion_baja_actualizar = $((this)).data('descripcionb');
+        //             actualizartablaBajas(codigo_baja_actualizar,descripcion_baja_actualizar);
+        //         });
+                
+        //     }
+        // });
 
         break;
         default:
