@@ -67,9 +67,9 @@
             <h6 class="collapse-header">Administrar Bajas</h6>
             <a class="collapse-item" href="index.php?request=bajaPuesto">Bajas cambio puesto</a>
             <a class="collapse-item" href="index.php?request=administrarBajas">Administrar Bajas</a>
-            <h6 class="collapse-header">Administrar</h6>
+            <!-- <h6 class="collapse-header">Administrar</h6>
             <a class="collapse-item" href="index.php?request=gestionar-codigos">Clasificacion de Bajas</a>
-            <a class="collapse-item" href="index.php?request=gestionar-tabuladores">Tabuladores</a>
+            <a class="collapse-item" href="index.php?request=gestionar-tabuladores">Tabuladores</a> -->
           </div>
         </div>
       </li>

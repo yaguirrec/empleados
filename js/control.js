@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -2097,10 +2097,10 @@ $(document).ready(function () {
                             $("#segDGP").val(informacion.dgp);
                             $("#segDisciplica").val(informacion.disciplina);
                             $("#segEtica").val(informacion.etica);
-                            $("#segFechaentregapersonal").val(informacion.entrega_planta.date.substr(0, 10));
+                            $("#segFechaentregapersonal").val(informacion.primera_incidencia.date.substr(0, 10));
                             $("#segFechaentregachecklist").val(informacion.checklist_laborales.date.substr(0, 10));
                             $("#segEntregaOp").val(informacion.entrega_operaciones);
-                            $("#segEntregaFecha").val(informacion.primera_incidencia.date.substr(0, 10));
+                            $("#segEntregaFecha").val(informacion.entrega_planta.date.substr(0, 10));
                             $("#segComentario").val(informacion.comentario_seguimiento);
 
                             $("#segJefe").val(informacion.jefeDirecto);
@@ -2293,9 +2293,9 @@ $(document).ready(function () {
                 row.append($("<td class='text-left'> " + rowInfo.nombre_largo + " </td>"));
                 row.append($("<td class='text-left'> " + rowInfo.Departamento + " </td>"));
                 row.append($("<td class='text-left'> " + rowInfo.Puesto + " </td>"));
-                // row.append($("<td class='text-left'> " + rowInfo.status + " </td>"));
+                row.append($("<td class='text-left'> " + rowInfo.status + " </td>"));
                 row.append($("<td class='text-left'> " + rowInfo.fecha_alta.date.substr(0, 10) + " </td>"));
-                // row.append($("<td class='text-left'> " + rowInfo.fecha_baja + " </td>"));
+                row.append($("<td class='text-left'> " + rowInfo.fecha_baja + " </td>"));
                 row.append($("<td> " + comision + " </td>"));
                 row.append($("<td> " + rowInfo.llegada_comision.date.substr(0, 10) + " </td>"));
                 row.append($("<td> " + rowInfo.checklist_comision.date.substr(0, 10) + " </td>"));
@@ -2313,11 +2313,11 @@ $(document).ready(function () {
                 row.append($("<td> " + rowInfo.fecha_onboarding.date.substr(0, 10) + " </td>"));
                 row.append($("<td> " + rowInfo.disciplina + " </td>"));
                 row.append($("<td> " + rowInfo.etica + " </td>"));
-                row.append($("<td> " + rowInfo.entrega_planta.date.substr(0, 10) + " </td>"));
-                row.append($("<td> " + rowInfo.checklist_laborales.date.substr(0, 10) + " </td>"));
+                row.append($("<td> " + rowInfo.primera_incidencia + " </td>"));
+                row.append($("<td> " + rowInfo.checklist_laborales + " </td>"));
                 row.append($("<td> " + rowInfo.entrega_operaciones + " </td>"));
                 row.append($("<td> " + rowInfo.jefeDirecto + " </td>"));
-                row.append($("<td> " + rowInfo.primera_incidencia + " </td>"));
+                row.append($("<td> " + rowInfo.entrega_planta.date.substr(0, 10) + " </td>"));
                 row.append($("<td> " + rowInfo.finContrato.date.substr(0, 10) + " </td>"));
 
                 $(".btnConsulta").unbind().click(function () {
