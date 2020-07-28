@@ -1693,3 +1693,55 @@ WHERE ba.fecha_modificacion BETWEEN GETDATE()-1 AND GETDATE()
 GROUP BY ba.#,tc.id_celula) AS plantas
 ON empleados.numero_nomina = plantas.#
 AND empleados.id_celula <> plantas.id_celula AND empleados.status <> 'B'
+
+ALTER PROCEDURE insertar_clasificacion_bajas 
+(
+	@tipoCLA varchar(4),
+	@descripcion varchar(45),
+	@claveCLA varchar(3),
+	@preCodigo varchar(10),
+	@nominaControl varchar(5)
+) 
+AS
+BEGIN TRY
+     BEGIN TRANSACTION
+	IF (@tipoCLA = 'nCLA')
+		BEGIN
+			SET @preCodigo = CONCAT('00',(SELECT MAX(CAST(SUBSTRING(codigo,3,1)+1 AS INT)) FROM tbcodigos WHERE codigo LIKE '%CLAB'),'CLAB');
+			INSERT INTO tbcodigos
+				(codigo,descripcion,created_at,created_by,updated_by)
+				VALUES
+				(@preCodigo,@descripcion,GETDATE(),@nominaControl,@nominaControl);
+		END
+	ELSE IF (@tipoCLA = 'nMOT')
+		BEGIN
+			SET @preCodigo = CONCAT(@claveCLA,'MOT',(SELECT MAX(CAST(SUBSTRING(codigo,7,3)+1 AS INT)) FROM tbcodigos WHERE codigo LIKE '%MOT%'));
+			INSERT INTO tbcodigos
+				(codigo,descripcion,created_at,created_by,updated_by)
+				VALUES
+				(@preCodigo,@descripcion,GETDATE(),@nominaControl,@nominaControl);
+		END
+	ELSE IF (@tipoCLA = 'nEXP')
+		BEGIN
+			IF(LEN(@claveCLA) = 1)
+				BEGIN 
+					SET @preCodigo = CONCAT('00',@claveCLA,'EXP',(SELECT MAX(CAST(SUBSTRING(codigo,7,3)+1 AS INT)) FROM tbcodigos WHERE codigo LIKE '%EXP%'));
+					INSERT INTO tbcodigos
+						(codigo,descripcion,created_at,created_by,updated_by)
+						VALUES
+						(@preCodigo,@descripcion,GETDATE(),@nominaControl,@nominaControl);
+				END 
+			ELSE
+				BEGIN	
+					SET @preCodigo = CONCAT('0',@claveCLA,'EXP',(SELECT MAX(CAST(SUBSTRING(codigo,7,3)+1 AS INT)) FROM tbcodigos WHERE codigo LIKE '%EXP%'));
+					INSERT INTO tbcodigos
+						(codigo,descripcion,created_at,created_by,updated_by)
+						VALUES
+						(@preCodigo,@descripcion,GETDATE(),@nominaControl,@nominaControl);
+				END
+		END
+     COMMIT
+ END TRY
+ BEGIN CATCH
+  ROLLBACK
+ END CATCH

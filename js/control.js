@@ -716,7 +716,7 @@ $(document).ready(function () {
             xmlhr.onload = function () {
                 if (this.status === 200) {
                     var respuesta = JSON.parse(xmlhr.responseText);
-                    // console.log(respuesta);
+                    console.log(respuesta);
                     if (respuesta.estado === 'OK') {
                         var informacion = respuesta.informacion;
                         for (var i in informacion) {
@@ -4334,7 +4334,8 @@ $(document).ready(function () {
             seccionMotivos = $('.seccionMotivos'),
             seccionExplicacion = $('.seccionExplicacion'),
             btnRegresarMOT = $('.btnRegresarMOT'),
-            btnNuevoRegistro = $('.btn-nuevo-registro');
+            btnNuevoRegistro = $('.btn-nuevo-registro'),
+            claveCOD = $('#claveCOD');
 
         btnRegresarMOT.click(function(){
             seccionClasificacion.removeClass('d-none');
@@ -4342,25 +4343,38 @@ $(document).ready(function () {
             seccionExplicacion.addClass('d-none');
             $('#tableEXPBajas').empty();
             $('#tableMOTBajas').empty();
+            claveCOD.val('');
         })
 
         let tablaExplicacionBajas = (bajaMOT) => {
             $.ajax({
                 type: 'POST',
                 url: backendURL,
-                data: { action: 'claBajas', param: 'explicacion', key: bajaMOT },
+                data: { action: 'regCLABAJ', param: 'explicacion', key: bajaMOT },
                 success: function (response) {
                     let respuesta = JSON.parse(response);
                     let reg = respuesta.informacion;
                     for (var i in reg) {
+                        var idCode = 'tdCode',
+                            claREG = '',
+                            claiREG = 'fas fa-toggle-on',
+                            statusREG = reg[i].created_at.date.substr(0, 10);
+                        if(reg[i].counter === 0){
+                            idCode = 'trCode';
+                        }
+                        if(statusREG === '1900-01-01'){
+                            claREG = 'alert alert-warning';
+                            claiREG = 'fas fa-toggle-off';
+                        }
                         $('#tableEXPBajas').append
                             (
-                                "<tr><td class='trCode' data-codigob='" + reg[i].codigo + "' data-descripcionb='" + reg[i].descripcion + "'>" + reg[i].codigo + " </td>" +
-                                "<td>" + reg[i].descripcion + "</td>" +
+                                "<tr class='"+claREG+"'><td class='" + idCode + "' data-codigob='" + reg[i].codigo + "' data-descripcionb='" + reg[i].descripcion + "'>" + reg[i].codigo + " </td>" +
+                                "<td>" + reg[i].descripcion + "<span class='badge badge-pill badge-info ml-4'>" + reg[i].counter + "</td>" +
                                 "<td>" + reg[i].created_at.date.substr(0, 10) + " </td>" +
                                 "<td>" + reg[i].created_by + " </td>" +
                                 "<td>" + reg[i].updated_at.date.substr(0, 10) + " </td>" +
-                                "<td>" + reg[i].updated_by + " </td></tr>");
+                                "<td>" + reg[i].updated_by + " </td>"+
+                                "<td><a class='btn btn-sm btn-outline-info changestatusCLAB ml-2' data-statusb='" + reg[i].created_at.date.substr(0, 10) + "' data-codigob='" + reg[i].codigo + "' role='button'><i class='"+ claiREG +"'></i></a></td></tr>");
                     }
 
                     $(".updateEXPB").click(function () {
@@ -4375,20 +4389,45 @@ $(document).ready(function () {
                         actualizartablaBajas(codigo_baja_actualizar,descripcion_baja_actualizar);
                     });
 
+                    $(".tdCode").unbind().click(function () {
+                        Swal.fire('Registro ya asignado, no es posible eliminar y/o actualizar.')
+                    });
+
+                    $(".changestatusCLAB").unbind().click(function () {
+                        var codigo_baja_actualizar = $((this)).data('codigob'),
+                            status_baja_actualizar = $((this)).data('statusb');
+                        if(status_baja_actualizar === '1900-01-01'){
+                            status_baja_actualizar = 0;
+                        } else {
+                            status_baja_actualizar = 1;
+                        }
+                        cambiartablaBajas(codigo_baja_actualizar,status_baja_actualizar);
+                    });
+
                 }
             });
         }   
         
         btnNuevoRegistro.click(async function () {
+            var nuevoTipo = $((this)).data('tipomov');
             const { value: nuevo_registro } = await Swal.fire({
                 title: 'Nuevo registro',
                 input: 'textarea',
-                // inputValue: '',
                 inputPlaceholder: 'Nuevo registro'
               })
               
               if (nuevo_registro) {
-                Swal.fire(`Nuevo registro: ${nuevo_registro}`)
+                // Swal.fire(`Nuevo registro: ${famCOD}`)
+                $.ajax({
+                    type: 'POST',
+                    url: backendURL,
+                    data: { action: 'nuevoCODBAJ', descripcion: nuevo_registro, key: nuevoTipo, relacionKEY: claveCOD.val(), nominaControl: empleado_activo },
+                    success: function (response) {
+                        let respuesta = JSON.parse(response);
+                        // console.log(respuesta);
+                        location.reload();
+                    }
+                });
               }
         });
     
@@ -4401,8 +4440,55 @@ $(document).ready(function () {
               })
               
               if (actualizar_registro) {
-                Swal.fire(`Registro actualizado: ${actualizar_registro}`)
+                // Swal.fire(`Registro actualizado: ${actualizar_registro}`)
+                $.ajax({
+                    type: 'POST',
+                    url: backendURL,
+                    data: { action: 'actualizarREGBAJ', descripcion: actualizar_registro, key: cba, nominaControl: empleado_activo },
+                    success: function (response) {
+                        let respuesta = JSON.parse(response);
+                        console.log(respuesta);
+                        location.reload();
+                    }
+                });
               }
+        }
+
+        async function cambiartablaBajas (cba,sba) {
+            const { value: cambiar_registro } = await Swal.fire({
+                title: 'Estado del registro',
+                input: 'checkbox',
+                inputValue: sba,
+                inputPlaceholder:
+                    'Cambiar estado del registro',
+                confirmButtonText:
+                    'Continuar<i class="fa fa-arrow-right"></i>',
+                inputValidator: (result) => {
+                    if(!result){
+                        $.ajax({
+                            type: 'POST',
+                            url: backendURL,
+                            data: { action: 'cambiarREGBAJ', mov: 0, key: cba, nominaControl: empleado_activo },
+                            success: function (response) {
+                                let respuesta = JSON.parse(response);
+                                // console.log(respuesta);
+                                location.reload();
+                            }
+                        });
+                    } else {
+                        $.ajax({
+                            type: 'POST',
+                            url: backendURL,
+                            data: { action: 'cambiarREGBAJ', mov: 1, key: cba, nominaControl: empleado_activo },
+                            success: function (response) {
+                                let respuesta = JSON.parse(response);
+                                // console.log(respuesta);
+                                location.reload();
+                            }
+                        });
+                    }
+                }
+                })
         }
 
         let tablaMotivosBaja = (bajaCLA) => {
@@ -4410,20 +4496,32 @@ $(document).ready(function () {
             $.ajax({
                 type: 'POST',
                 url: backendURL,
-                data: { action: 'claBajas', param: 'motivo', key: bajaCLA },
+                data: { action: 'regCLABAJ', param: 'motivo', key: bajaCLA },
                 success: function (response) {
                     let respuesta = JSON.parse(response);
                     let reg = respuesta.informacion;
                     for (var i in reg) {
+                        var idCode = 'tdCode',
+                            claREG = '',
+                            claiREG = 'fas fa-toggle-on',
+                            statusREG = reg[i].created_at.date.substr(0, 10);
+                        if(reg[i].counter === 0){
+                            idCode = 'trCode';
+                        }
+                        if(statusREG === '1900-01-01'){
+                            claREG = 'alert alert-warning';
+                            claiREG = 'fas fa-toggle-off';
+                        }
                         $('#tableMOTBajas').append
                             (
-                                "<tr><td class='trCode' data-codigob='" + reg[i].codigo + "' data-descripcionb='" + reg[i].descripcion + "'>" + reg[i].codigo + " </td>" +
-                                "<td>" + reg[i].descripcion + "</td>" +
+                                "<tr class='"+claREG+"'><td class='" + idCode + "' data-codigob='" + reg[i].codigo + "' data-descripcionb='" + reg[i].descripcion + "'>" + reg[i].codigo + " </td>" +
+                                "<td>" + reg[i].descripcion + "<span class='badge badge-pill badge-info ml-4'>" + reg[i].counter + "</td>" +
                                 "<td>" + reg[i].created_at.date.substr(0, 10) + " </td>" +
                                 "<td>" + reg[i].created_by + " </td>" +
                                 "<td>" + reg[i].updated_at.date.substr(0, 10) + " </td>" +
                                 "<td>" + reg[i].updated_by + " </td>" +
-                                "<td><a class='btn btn-sm btn-primary text-white updateMOTB' data-codigo='" + reg[i].codigo + "' role='button'>Editar <i class='fas fa-pen-square'></i></a></td></tr>");
+                                "<td><a class='btn btn-sm btn-primary text-white updateMOTB' data-codigo='" + reg[i].codigo + "' role='button'>Editar <i class='fas fa-pen-square'></i></a>"+
+                                "<a class='btn btn-sm btn-outline-info changestatusCLAB ml-2' data-statusb='" + reg[i].created_at.date.substr(0, 10) + "' data-codigob='" + reg[i].codigo + "' role='button'><i class='"+ claiREG +"'></i></a></td></tr>");
                     }
 
                     $(".updateMOTB").click(function () {
@@ -4433,12 +4531,28 @@ $(document).ready(function () {
                         let bajaMOT = $((this)).data('codigo');
                         bajaMOT = bajaMOT.substr(6, 2);
                         tablaExplicacionBajas(bajaMOT);
+                        claveCOD.val(bajaMOT);
                     });
 
                     $(".trCode").unbind().click(function () {
                         var codigo_baja_actualizar = $((this)).data('codigob'),
                             descripcion_baja_actualizar = $((this)).data('descripcionb');
                         actualizartablaBajas(codigo_baja_actualizar,descripcion_baja_actualizar);
+                    });
+
+                    $(".tdCode").unbind().click(function () {
+                        Swal.fire('Registro ya asignado, no es posible eliminar y/o actualizar.')
+                    });
+
+                    $(".changestatusCLAB").unbind().click(function () {
+                        var codigo_baja_actualizar = $((this)).data('codigob'),
+                            status_baja_actualizar = $((this)).data('statusb');
+                        if(status_baja_actualizar === '1900-01-01'){
+                            status_baja_actualizar = 0;
+                        } else {
+                            status_baja_actualizar = 1;
+                        }
+                        cambiartablaBajas(codigo_baja_actualizar,status_baja_actualizar);
                     });
 
                 }
@@ -4449,20 +4563,32 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: backendURL,
-            data: { action: 'claBajas', param: 'clasificacion' },
+            data: { action: 'regCLABAJ', param: 'clasificacion' },
             success: function (response) {
                 let respuesta = JSON.parse(response);
                 let reg = respuesta.informacion;
                 for (var i in reg) {
+                    var idCode = 'tdCode',
+                        claREG = '',
+                        claiREG = 'fas fa-toggle-on',
+                        statusREG = reg[i].created_at.date.substr(0, 10);
+                        if(reg[i].counter === 0){
+                            idCode = 'trCode';
+                        }
+                        if(statusREG === '1900-01-01'){
+                            claREG = 'alert alert-warning';
+                            claiREG = 'fas fa-toggle-off';
+                        }
                     $('#tableCLABajas').append
                         (
-                            "<tr><td class='trCode' data-codigob='" + reg[i].codigo + "' data-descripcionb='" + reg[i].descripcion + "'>" + reg[i].codigo + " </td>" +
-                            "<td>" + reg[i].descripcion + "</td>" +
+                            "<tr class='"+claREG+"'><td class='" + idCode + "' data-codigob='" + reg[i].codigo + "' data-descripcionb='" + reg[i].descripcion + "'>" + reg[i].codigo + " </td>" +
+                            "<td>" + reg[i].descripcion + "<span class='badge badge-pill badge-info ml-4'>" + reg[i].counter + "</span></td>" +
                             "<td>" + reg[i].created_at.date.substr(0, 10) + " </td>" +
                             "<td>" + reg[i].created_by + " </td>" +
                             "<td>" + reg[i].updated_at.date.substr(0, 10) + " </td>" +
                             "<td>" + reg[i].updated_by + " </td>" +
-                            "<td><a class='btn btn-sm btn-primary text-white updateCLAB' data-codigo='" + reg[i].codigo + "' role='button'>Editar <i class='fas fa-pen-square'></i></a></td></tr>");
+                            "<td><a class='btn btn-sm btn-primary text-white updateCLAB' data-codigo='" + reg[i].codigo + "' role='button'>Editar <i class='fas fa-pen-square'></i></a>"+
+                            "<a class='btn btn-sm btn-outline-info changestatusCLAB ml-2' data-statusb='" + reg[i].created_at.date.substr(0, 10) + "' data-codigob='" + reg[i].codigo + "' role='button'><i class='"+ claiREG +"'></i></a></td></tr>");
                 }
 
                 $(".updateCLAB").click(function () {
@@ -4472,12 +4598,28 @@ $(document).ready(function () {
                     let bajaCLA = $((this)).data('codigo');
                     bajaCLA = bajaCLA.substr(0, 3);
                     tablaMotivosBaja(bajaCLA);
+                    claveCOD.val(bajaCLA);
                 });
 
                 $(".trCode").unbind().click(function () {
                     var codigo_baja_actualizar = $((this)).data('codigob'),
                         descripcion_baja_actualizar = $((this)).data('descripcionb');
                     actualizartablaBajas(codigo_baja_actualizar,descripcion_baja_actualizar);
+                });
+
+                $(".tdCode").unbind().click(function () {
+                    Swal.fire('Registro ya asignado, no es posible eliminar y/o actualizar.')
+                });
+
+                $(".changestatusCLAB").unbind().click(function () {
+                    var codigo_baja_actualizar = $((this)).data('codigob'),
+                        status_baja_actualizar = $((this)).data('statusb');
+                    if(status_baja_actualizar === '1900-01-01'){
+                        status_baja_actualizar = 0;
+                    } else {
+                        status_baja_actualizar = 1;
+                    }
+                    cambiartablaBajas(codigo_baja_actualizar,status_baja_actualizar);
                 });
                 
             }

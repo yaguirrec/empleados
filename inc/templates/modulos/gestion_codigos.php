@@ -2,9 +2,9 @@
     <div class="card-header py-3">
         <h2 class="m-0 font-weight-bold text-secondary text-center text-uppercase seccionTitulo"></h2>
     </div>
-
+    <input type="hidden" id="claveCOD">
     <div class="seccionClasificacion">
-        <button class="btn btn-success btn-lg m-4 btn-nuevo-registro" id="btnNCLA"><i class="fas fa-briefcase"></i> Nueva clasificacion</button>
+        <button class="btn btn-success btn-lg m-4 btn-nuevo-registro" data-tipomov="nCLA"><i class="fas fa-briefcase"></i> Nueva clasificacion</button>
 
         <div class="table-responsive tablaClasificacion">
             <table class="table table-sm table-bordered table-hover bg-gray-200 text-uppercase" cellspacing="4">
@@ -36,7 +36,7 @@
             <h2 class="m-0 font-weight-bold text-secondary text-center text-uppercase">Motivos de Bajas</h2>
         </div>
 
-        <button class="btn btn-success btn-lg m-4 btn-nuevo-registro" id="btnNMOT"><i class="fas fa-briefcase"></i> Nuevo motivo</button>
+        <button class="btn btn-success btn-lg m-4 btn-nuevo-registro" data-tipomov="nMOT"><i class="fas fa-briefcase"></i> Nuevo motivo</button>
 
         <div class="table-responsive tablaMotivos">
             <table class="table table-sm table-bordered table-hover bg-gray-200 text-uppercase" cellspacing="4">
@@ -71,7 +71,7 @@
             <h2 class="m-0 font-weight-bold text-secondary text-center text-uppercase">Explicacion de Bajas</h2>
         </div>
 
-        <button class="btn btn-success btn-lg m-4 btn-nuevo-registro" id="btnNEXP"><i class="fas fa-briefcase"></i> Nueva Explicacion</button>
+        <button class="btn btn-success btn-lg m-4 btn-nuevo-registro" data-tipomov="nEXP"><i class="fas fa-briefcase"></i> Nueva Explicacion</button>
 
         <div class="table-responsive tablaMotivos">
             <table class="table table-sm table-bordered table-hover bg-gray-200 text-uppercase" cellspacing="4">
@@ -84,7 +84,7 @@
                     <th scope="col">Creado por</th>
                     <th scope="col">Fecha actualizado</th>
                     <th scope="col">Actualizado por</th>
-                    <!-- <th scope="col">Acción</th> -->
+                    <th scope="col">Acción</th>
                     </tr>
                 </thead>
                 <tbody id="tableEXPBajas">
