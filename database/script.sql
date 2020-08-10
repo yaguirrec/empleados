@@ -169,6 +169,50 @@ CREATE TABLE [dbo].[tbdatos_empleados](
 ) ON [PRIMARY]
 GO
 
+
+/*CREAR TABLA ENCUESTA SALIDA*/
+USE [MEXQAPPTEMP]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbencuesta_salida](
+	[id_encuesta] [int] IDENTITY(1,1) NOT NULL,
+	[numero_nomina] [varchar](10) NOT NULL,
+	[respuesta_1] [varchar](50) DEFAULT '',
+	[sub_respuesta_1] [varchar](100) DEFAULT '',
+	[respuesta_2_1] [varchar](5) DEFAULT '',
+	[respuesta_2_2] [varchar](5) DEFAULT '',
+	[respuesta_2_3] [varchar](5) DEFAULT '',
+	[respuesta_2_4] [varchar](5) DEFAULT '',
+	[respuesta_2_5] [varchar](5) DEFAULT '',
+	[respuesta_2_6] [varchar](5) DEFAULT '',
+	[respuesta_2_7] [varchar](5) DEFAULT '',
+	[respuesta_2_8] [varchar](5) DEFAULT '',
+	[respuesta_2_9] [varchar](5) DEFAULT '',
+	[respuesta_2_10] [varchar](5) DEFAULT '',
+	[respuesta_2_11] [varchar](5) DEFAULT '',
+	[respuesta_3] [varchar](50) DEFAULT '',
+	[respuesta_4] [varchar](50) DEFAULT '',
+	[respuesta_5] [varchar](5) DEFAULT '',
+	[respuesta_6] [varchar](50) DEFAULT '',
+	[respuesta_7] [varchar](2) DEFAULT '',
+	[respuesta_7_1] [varchar](35) DEFAULT '',
+	[respuesta_8] [varchar](2) DEFAULT '',
+	[respuesta_8_1] [varchar](35) DEFAULT '',
+	[respuesta_9] [varchar](20) DEFAULT '',
+	[respuesta_10] [varchar](2) DEFAULT '',
+	[respuesta_10_1] [varchar](20) DEFAULT '',
+	[created_at] [datetime] DEFAULT GETDATE(),
+	[created_by] [char](10) DEFAULT '00000',
+	[updated_at] [datetime] DEFAULT GETDATE(),
+	[updated_by] [char](10) DEFAULT '00000'
+) ON [PRIMARY]
+GO
+
+SELECT * FROM [tbencuesta_salida]
+
 ALTER TABLE tbdatos_empleados ADD
 [comision] [int] DEFAULT 0,
 [sucursal_comision] [int] DEFAULT 0,
@@ -370,7 +414,7 @@ ALTER TABLE tbprivilegios_emp
 ADD [panel_dh] [int] DEFAULT 0;
 */
 
-INSERT INTO tbprivilegios_emp (tipo,descripcion,created_at) VALUES ('Laborales Supervisor','Acceso al departamento de laborales como supervisor',GETDATE())
+INSERT INTO tbprivilegios_emp (tipo,descripcion,created_at) VALUES ('RH generales','Acceso al departamento de Rh para asuntos generales no administrativos',GETDATE())
 SELECT * FROM tbprivilegios_emp
 
 /*CREAR TABLA RELACION EMPLEADOS-PERMISOS*/
@@ -441,10 +485,18 @@ GO
 select * from [tbtabuladores]
 select * from tbestado
 
-INSERT INTO tbemp_permisos (numero_nomina,created_at,emp_proy) VALUES ('22720',GETDATE(),2)
+INSERT INTO tbemp_permisos (numero_nomina,created_at,emp_proy) VALUES ('P1001',GETDATE(),9)
 SELECT * FROM tbemp_permisos ORDER BY numero_nomina
 --UPDATE tbemp_permisos SET emp_proy = 1 WHERE numero_nomina = '22720'
-SELECT * FROM P1ACCESOWEB WHERE employee = '19905'
+SELECT * FROM P1ACCESOWEB WHERE employee = 'P1001'
+SELECT * FROM PJEMPLOY WHERE employee = 'P1001'
+UPDATE P1ACCESOWEB SET password = '6bfcc4026b5f162799a6dc8305c09db9c1674ac616bd5c7422a45fbb6d0816ac163047c47a1f426f4f4c6b5b5042c671eabc4fdc7310fd5b183eef59dc274604' WHERE employee = 'P1001'
+
+EXEC datos_empleado_acceso @NUMERO_NOMINA = 'P1001'
+
+select top 10 * from tbdatos_empleados where nombre like '%rodrigo%'
+insert into tbempleados (numero_nomina,nombre_largo,)
+
 
 SELECT * FROM [dbo].[departamentos_nomipaq]
 SELECT * FROM [dbo].[puestos_nomipaq] where idpuesto = '520'

@@ -1,5 +1,5 @@
 $( document ).ready(function() {
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
 eventListener();
 
 function eventListener()
@@ -41,7 +41,7 @@ function checkIN (e)
             xhr.onload = function(){
                 if(this.status === 200 && this.readyState === 4) {
                     var respuesta = JSON.parse(xhr.responseText);
-                    // console.log(respuesta);
+                    console.log(respuesta);
                     // Si la respuesta es correcta
                     if(respuesta.estado === 'OK') 
                     {

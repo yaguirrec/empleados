@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -16,11 +16,11 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V.150720DEV';
+    let version = 'V.100820DEV';
 
     $('#version').html(version);
 
-    console.log(empleado_activo);
+    // console.log(empleado_activo);
 
     $('#searchBox').keyup(function (event) {
         event.preventDefault();
@@ -4778,7 +4778,7 @@ $(document).ready(function () {
         //             });
 
         //         }
-        //     });
+        //     });.
         // }
         
 
@@ -4819,6 +4819,266 @@ $(document).ready(function () {
         //     }
         // });
 
+        break;
+         // ENCUESTA DE SALIDA
+         case 'encuesta_salida':
+            seccionExportar.removeClass('d-none');
+            $('.seccionTitulo').html('Encuesta de salida');
+            $.ajax({
+                type: 'POST',
+                url: backendURL,
+                data: { action: 'encuestaSalida' },
+                success: function (response) {
+                    let respuesta = JSON.parse(response);
+                    let reg = respuesta.informacion;
+                    for (var i in reg) {
+                        $('#sheetTable').append
+                            (
+                                "<tr><td>" + reg[i].numero_nomina + " </td>" +
+                                "<td>" + reg[i].nombre_largo + "</td>" +
+                                "<td>" + reg[i].Departamento + "</td>" +
+                                "<td>" + reg[i].Puesto + "</td>" +
+                                "<td>" + reg[i].status + "</td>" +
+                                "<td>" + reg[i].fecha_baja + "</td>" +
+                                "<td>" + reg[i].Jefe + "</td>" +
+                                "<td>" + reg[i].telefono + "</td>" +
+                                "<td>" + reg[i].respuesta_1 + "</td>" +
+                                "<td>" + reg[i].sub_respuesta_1 + "</td>" +
+                                "<td>" + reg[i].respuesta_2_1 + "</td>" +
+                                "<td>" + reg[i].respuesta_2_2 + "</td>" +
+                                "<td>" + reg[i].respuesta_2_3 + "</td>" +
+                                "<td>" + reg[i].respuesta_2_4 + "</td>" +
+                                "<td>" + reg[i].respuesta_2_5 + "</td>" +
+                                "<td>" + reg[i].respuesta_2_6 + "</td>" +
+                                "<td>" + reg[i].respuesta_2_7 + "</td>" +
+                                "<td>" + reg[i].respuesta_2_8 + "</td>" +
+                                "<td>" + reg[i].respuesta_2_9 + "</td>" +
+                                "<td>" + reg[i].respuesta_2_10 + "</td>" +
+                                "<td>" + reg[i].respuesta_2_11 + "</td>" +
+                                "<td>" + reg[i].respuesta_3 + "</td>" +
+                                "<td>" + reg[i].respuesta_4 + "</td>" +
+                                "<td>" + reg[i].respuesta_5 + "</td>" +
+                                "<td>" + reg[i].respuesta_6 + "</td>" +
+                                "<td>" + reg[i].respuesta_7 + "</td>" +
+                                "<td>" + reg[i].respuesta_7_1 + "</td>" +
+                                "<td>" + reg[i].respuesta_8 + "</td>" +
+                                "<td>" + reg[i].respuesta_8_1 + "</td>" +
+                                "<td>" + reg[i].respuesta_9 + "</td>" +
+                                "<td>" + reg[i].respuesta_10 + "</td>" +
+                                "<td>" + reg[i].respuesta_10_1 + "</td>" +
+                                "<td>" + reg[i].created_at.date.substr(0, 10) + " </td></tr>");
+                    }
+
+                }
+            });
+         break;
+         case 'encuesta':
+            $('.seccionTitulo').html('Encuesta de salida');
+            var btnESalida = $('#btn-nomina-esalida'),
+                btnguardarENC = $('.btnguardarENC'),
+                contenido_encuesta = $('.contenido_encuesta');
+            
+            btnESalida.click(function () {
+                var nomina_encuestado = $('#numero_nomina').val();
+                
+                $.ajax({
+                type: 'POST',
+                url: backendURL,
+                data: { action: 'buscarEncuestado', nomina_encuestado: nomina_encuestado },
+                success: function (response) {
+                    let respuesta = JSON.parse(response);
+                    // console.log(respuesta);
+                    if(respuesta.informacion.length > 0){
+                        $('#txtNombre').html(respuesta.informacion[0].nombre_largo);
+                        $('#txtPuesto').html(respuesta.informacion[0].Puesto);
+                        $('#txtCelula').html(respuesta.informacion[0].Departamento);
+                        $('#txtJefe').html(respuesta.informacion[0].Jefe);
+                        $('#txtEstado').html(respuesta.informacion[0].status);
+
+                        $('#exampleRadios1').prop( "checked", false );
+                        contenido_encuesta.removeClass('d-none');
+                    } else {
+                        contenido_encuesta.addClass('d-none');
+                        $('#txtNombre').html('');
+                        $('#txtPuesto').html('');
+                        $('#txtCelula').html('');
+                        $('#txtJefe').html('');
+                        $('#txtEstado').html('');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Empleado no encontrado',
+                            text: 'Favor de verificar el numero de nomina',
+                            footer: '<p>Si necesita asistencia no dude en preguntar</p>'
+                          })
+                    }
+                    
+                }
+        });
+                
+            });
+
+
+            $('#exampleRadios1').click(function () {
+                $('.opc_1_preg_1').removeClass('d-none');
+                $('.opc_2_preg_1').addClass('d-none');
+                $('.opc_3_preg_1').addClass('d-none');
+                $('.opc_4_preg_1').addClass('d-none');
+                $('.opc_5_preg_1').addClass('d-none');
+                $('.opc_6_preg_1').addClass('d-none');
+            });
+
+            $('#exampleRadios2').click(function () {
+                $('.opc_1_preg_1').addClass('d-none');
+                $('.opc_2_preg_1').removeClass('d-none');
+                $('.opc_3_preg_1').addClass('d-none');
+                $('.opc_4_preg_1').addClass('d-none');
+                $('.opc_5_preg_1').addClass('d-none');
+                $('.opc_6_preg_1').addClass('d-none');
+            });
+
+            $('#exampleRadios3').click(function () {
+                $('.opc_1_preg_1').addClass('d-none');
+                $('.opc_2_preg_1').addClass('d-none');
+                $('.opc_3_preg_1').removeClass('d-none');
+                $('.opc_4_preg_1').addClass('d-none');
+                $('.opc_5_preg_1').addClass('d-none');
+                $('.opc_6_preg_1').addClass('d-none');
+            });
+
+            $('#exampleRadios4').click(function () {
+                $('.opc_1_preg_1').addClass('d-none');
+                $('.opc_2_preg_1').addClass('d-none');
+                $('.opc_3_preg_1').addClass('d-none');
+                $('.opc_4_preg_1').removeClass('d-none');
+                $('.opc_5_preg_1').addClass('d-none');
+                $('.opc_6_preg_1').addClass('d-none');
+            });
+
+            $('#exampleRadios5').click(function () {
+                $('.opc_1_preg_1').addClass('d-none');
+                $('.opc_2_preg_1').addClass('d-none');
+                $('.opc_3_preg_1').addClass('d-none');
+                $('.opc_4_preg_1').addClass('d-none');
+                $('.opc_5_preg_1').removeClass('d-none');
+                $('.opc_6_preg_1').addClass('d-none');
+            });
+            
+            $('#exampleRadios6').click(function () {
+                $('.opc_1_preg_1').addClass('d-none');
+                $('.opc_2_preg_1').addClass('d-none');
+                $('.opc_3_preg_1').addClass('d-none');
+                $('.opc_4_preg_1').addClass('d-none');
+                $('.opc_5_preg_1').addClass('d-none');
+                $('.opc_6_preg_1').removeClass('d-none');
+            });
+
+            $('#p7opc1').click(function () {
+                $('.opc_1_preg_7').removeClass('d-none');
+            });
+
+            $('#p7opc2').click(function () {
+                $('.opc_1_preg_7').addClass('d-none');
+            });
+
+            btnguardarENC.click(function () {
+                var nomina_encuestado = $('#numero_nomina').val(),
+                    R1 = $('input[name=r_pregunta_1]:checked').val(),
+                    SR1 = '',
+                    R2_1 = $('#pregunta2_r1').val(),
+                    R2_2 = $('#pregunta2_r2').val(),
+                    R2_3 = $('#pregunta2_r3').val(),
+                    R2_4 = $('#pregunta2_r4').val(),
+                    R2_5 = $('#pregunta2_r5').val(),
+                    R2_6 = $('#pregunta2_r6').val(),
+                    R2_7 = $('#pregunta2_r7').val(),
+                    R2_8 = $('#pregunta2_r8').val(),
+                    R2_9 = $('#pregunta2_r9').val(),
+                    R2_10 = $('#pregunta2_r10').val(),
+                    R2_11 = $('#pregunta2_r11').val(),
+                    R3 = $('#r_pregunta_3').val(),
+                    R4 = $('#r_pregunta_4').val(),
+                    R5 = $('input[name=r_pregunta_5]:checked').val(),
+                    R6 = $('#r_pregunta_6').val(),
+                    R7 = $('input[name=r_pregunta_7]:checked').val(),
+                    SR7 = $('#sr_pregunta_7').val(),
+                    R8 = $('input[name=r_pregunta_8]:checked').val(),
+                    SR8 = $('#sr_pregunta_8').val(),
+                    R9 = $('#r_pregunta_9').val(),
+                    R10 = $('input[name=r_pregunta_10]:checked').val(),
+                    SR10 = $('#sr_pregunta_10').val(),
+                    enc_telefono = $('#r_telefono').val();
+
+                if(R1 !== 'Otro'){
+                    SR1 = $('input[name=sr_pregunta_1]:checked').val();
+                } else {
+                    SR1 = $('#sr_pregunta_1').val();
+                }
+
+                if(enc_telefono === ''){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Ingresar número de telfono',
+                        text: 'Favor de ingresar número de telfono',
+                        footer: '<p>Si necesita asistencia no dude en preguntar</p>'
+                      })
+                    $('#r_telefono').css("border", "1px solid red");
+                    $('#r_telefono').focus();
+                } else {
+
+                    $.ajax({
+                        type: 'POST',
+                        url: backendURL,
+                        data: { action: 'guardarEncuesta', 
+                                R1: R1, 
+                                SR1: SR1, 
+                                R2_1: R2_1, 
+                                R2_2: R2_2, 
+                                R2_3: R2_3, 
+                                R2_4: R2_4, 
+                                R2_5: R2_5, 
+                                R2_6: R2_6, 
+                                R2_7: R2_7, 
+                                R2_8: R2_8, 
+                                R2_9: R2_9, 
+                                R2_10: R2_10, 
+                                R2_11: R2_11, 
+                                R3: R3, 
+                                R4: R4, 
+                                R5: R5, 
+                                R6: R6, 
+                                R7: R7, 
+                                SR7: SR7, 
+                                R8: R8, 
+                                SR8: SR8, 
+                                R9: R9, 
+                                R10: R10, 
+                                SR10: SR10,
+                                enc_telefono: enc_telefono,
+                                nomina_encuestado: nomina_encuestado
+                            },
+                        success: function (response) {
+                            let respuesta = JSON.parse(response);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Gracias por responder',
+                                text: 'Encuesta realizada con exito',
+                                footer: '<p>.</p>'
+                              })
+                            
+                            setTimeout(function () {
+                                location.reload();
+                            }, 3500);
+                            
+                        }
+                    });
+                }
+
+
+                
+            });
+
+
+            
         break;
         default:
             console.log('Seccion ' + seccionActual);

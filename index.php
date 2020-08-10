@@ -57,6 +57,12 @@
               case 'gestionar-tabuladores':
                 include 'inc/templates/modulos/gestion_tabuladores.php';
               break;
+              case 'encuesta':
+                include 'inc/templates/modulos/encuesta_salida.php';
+              break;
+              case 'encuesta_salida':
+                include 'inc/templates/modulos/encuesta_vista.php';
+              break;
               case 'reingreso-empleado':
                   include 'inc/templates/empleados/reingreso.php';
               break;

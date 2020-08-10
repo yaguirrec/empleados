@@ -26,6 +26,7 @@ $( document ).ready(function() {
         administrador = $(".administrador"),
         dashboard = $(".dashboard"),
         transportes = $(".transportes"),
+        rh_generales = $(".rh_generales"),
         general = $(".nav-item"),
         dh = $(".dh"),
         laborales = $(".laborales"),
@@ -87,6 +88,14 @@ $( document ).ready(function() {
             // laborales.removeAttr('readonly');
             // gafetes.removeClass('d-none');
             break;
+        case '9':
+                seccionLateral.removeClass('d-none');
+                seccionPanel.removeClass('d-none');
+                rh_generales.removeClass('d-none');
+                // laborales.removeAttr('disabled');
+                // laborales.removeAttr('readonly');
+                // gafetes.removeClass('d-none');
+                break;
         case '99':
             coordinadora.removeClass('d-none');
             dashboard.addClass('d-none');

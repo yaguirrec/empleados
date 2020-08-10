@@ -58,6 +58,7 @@
             <a class="collapse-item" href="index.php?request=becarios">Becarios</a>
             <a class="collapse-item" href="index.php?request=ci">CI</a>
             <a class="collapse-item" href="index.php?request=seguimiento">Seguimiento</a>
+            <a class="collapse-item" href="index.php?request=encuesta_salida">Encuestas de salida</a>
             <hr class="sidebar-divider">
             <h6 class="collapse-header">Administrar registros:</h6>
             <a class="collapse-item" href="index.php?request=alta-empleado">Alta de empleado</a>
@@ -67,9 +68,9 @@
             <h6 class="collapse-header">Administrar Bajas</h6>
             <a class="collapse-item" href="index.php?request=bajaPuesto">Bajas cambio puesto</a>
             <a class="collapse-item" href="index.php?request=administrarBajas">Administrar Bajas</a>
-            <!-- <h6 class="collapse-header">Administrar</h6>
+            <h6 class="collapse-header">Administrar</h6>
             <a class="collapse-item" href="index.php?request=gestionar-codigos">Clasificacion de Bajas</a>
-            <a class="collapse-item" href="index.php?request=gestionar-tabuladores">Tabuladores</a> -->
+            <a class="collapse-item" href="index.php?request=gestionar-tabuladores">Tabuladores</a>
           </div>
         </div>
       </li>
@@ -98,6 +99,19 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Opciones de consulta:</h6>
             <a class="collapse-item" href="index.php?request=direcciones">Transportes</a>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-item rh_generales d-none">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#rh_generales" aria-expanded="true" aria-controls="rh_generales">
+        <i class="fas fa-user-circle"></i>
+          <span>RH General</span>
+        </a>
+        <div id="rh_generales" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Opciones:</h6>
+            <a class="collapse-item" href="index.php?request=encuesta"><i class="fas fa-file-alt"></i> Encuesta de salida</a>
           </div>
         </div>
       </li>
