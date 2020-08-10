@@ -2380,9 +2380,10 @@ $(document).ready(function () {
                         var respuesta = JSON.parse(xmlBCla.responseText);
                         if (respuesta.estado === 'OK') {
                             var informacion = respuesta.informacion;
+                            console.log(informacion);
                             var s = '<option value="" selected>Seleccionar Clasificacion</option>';
                             for (var i in informacion) {
-                                s += '<option value="' + informacion[i].codigo + '">' + informacion[i].descripcion + '</option>';
+                                s += '<option value="' + informacion[i].codigo + '">' + informacion[i].descripcion.toUpperCase() + '</option>';
                             }
                             $('#txtClasificacion').html(s);
                         } else if (respuesta.status === 'error') {
@@ -2409,7 +2410,7 @@ $(document).ready(function () {
                             var informacion = respuesta.informacion;
                             var s = '<option value="" selected>Seleccionar Motivo</option>';
                             for (var i in informacion) {
-                                s += '<option value="' + informacion[i].codigo + '">' + informacion[i].descripcion + '</option>';
+                                s += '<option value="' + informacion[i].codigo + '">' + informacion[i].descripcion.toUpperCase() + '</option>';
                             }
                             $('#txtMotivo').html(s);
                         } else if (respuesta.status === 'error') {
@@ -2436,7 +2437,7 @@ $(document).ready(function () {
                             var informacion = respuesta.informacion;
                             var s = '<option value="" selected>Seleccionar Explicacion de la baja</option>';
                             for (var i in informacion) {
-                                s += '<option value="' + informacion[i].codigo + '">' + informacion[i].descripcion + '</option>';
+                                s += '<option value="' + informacion[i].codigo + '">' + informacion[i].descripcion.toUpperCase() + '</option>';
                             }
                             $('#txtExplicacion').html(s);
                         } else if (respuesta.status === 'error') {
@@ -4582,7 +4583,7 @@ $(document).ready(function () {
                     $('#tableCLABajas').append
                         (
                             "<tr class='"+claREG+"'><td class='" + idCode + "' data-codigob='" + reg[i].codigo + "' data-descripcionb='" + reg[i].descripcion + "'>" + reg[i].codigo + " </td>" +
-                            "<td>" + reg[i].descripcion + "<span class='badge badge-pill badge-info ml-4'>" + reg[i].counter + "</span></td>" +
+                            "<td>" + reg[i].descripcion.toUpperCase() + "<span class='badge badge-pill badge-info ml-4'>" + reg[i].counter + "</span></td>" +
                             "<td>" + reg[i].created_at.date.substr(0, 10) + " </td>" +
                             "<td>" + reg[i].created_by + " </td>" +
                             "<td>" + reg[i].updated_at.date.substr(0, 10) + " </td>" +
