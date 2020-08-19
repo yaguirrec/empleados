@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V.100820DEV';
+    let version = 'V.100820';
 
     $('#version').html(version);
 
@@ -4564,10 +4564,11 @@ $(document).ready(function () {
         $.ajax({
             type: 'POST',
             url: backendURL,
-            data: { action: 'regCLABAJ', param: 'clasificacion' },
+            data: { action: 'regCLABAJ', param: 'clasificacion'},
             success: function (response) {
                 let respuesta = JSON.parse(response);
                 let reg = respuesta.informacion;
+                console.log(respuesta);
                 for (var i in reg) {
                     var idCode = 'tdCode',
                         claREG = '',

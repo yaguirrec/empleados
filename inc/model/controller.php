@@ -9,7 +9,7 @@
         die();
     }
 
-        include 'connection_.php';   
+        include 'connection.php';   
         $con = connDB();
         $sesion = false;
         $action  = $_POST['action'];
@@ -95,7 +95,7 @@
                 $respuesta = array(
                     'estado' => 'NOK',
                     'tipo' => 'error',
-                    'informacion' => 'Usuario y clave incorrectos.',
+                    'informacion' => 'Usuario no existe en la base de datos.',
                     'mensaje' => 'Las credenciales ingresadas no son válidas.',
                     'sesion' => $sesion
                     
@@ -451,7 +451,7 @@
             } 
             else if ($props == 'bajas')
             {
-                $query = "SELECT te.numero_nomina,UPPER(te.nombre_largo) AS Nombre,   
+                $query = "SELECT TOP 700 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre,   
                             CASE  
                             WHEN td.tabulador IS NULL THEN 'NA'  
                             ELSE REPLACE(td.tabulador,'|','')   
@@ -1265,13 +1265,13 @@
             $param = $_POST['param'];
             $key = $_POST['key'];
             if($param == 'clasificacion')
-                $query = "SELECT codigo,descripcion,(SELECT COUNT(*) FROM tbestado WHERE SUBSTRING(descripcion,1,7) = codigo) AS counter,* FROM tbcodigos WHERE codigo LIKE '%CLAB' AND created_at > '1900-01-01 00:00:00' ORDER BY id_codigo ASC";
+                $query = "SELECT codigo,UPPER(descripcion) AS descripcion,(SELECT COUNT(*) FROM tbestado WHERE SUBSTRING(descripcion,1,7) = codigo) AS counter,* FROM tbcodigos WHERE codigo LIKE '%CLAB' AND created_at > '1900-01-01 00:00:00' ORDER BY id_codigo ASC";
             else if($param == 'motivo')
-                $query = "SELECT codigo,descripcion,(SELECT COUNT(*) FROM tbestado WHERE LTRIM(RTRIM(PARSENAME(REPLACE(descripcion, '|', '.'), 3))) = codigo)AS counter,* FROM tbcodigos WHERE codigo LIKE '".$key."MOT%' AND codigo NOT LIKE '%CLAB' AND created_at > '1900-01-01 00:00:00' ORDER BY id_codigo ASC";
+                $query = "SELECT codigo,UPPER(descripcion) AS descripcion,(SELECT COUNT(*) FROM tbestado WHERE LTRIM(RTRIM(PARSENAME(REPLACE(descripcion, '|', '.'), 3))) = codigo)AS counter,* FROM tbcodigos WHERE codigo LIKE '".$key."MOT%' AND codigo NOT LIKE '%CLAB' AND created_at > '1900-01-01 00:00:00' ORDER BY id_codigo ASC";
             else if($param == 'explicacion' && strlen($key) == 2)
-                $query = "SELECT codigo,descripcion,(SELECT COUNT(*) FROM tbestado WHERE LTRIM(RTRIM(PARSENAME(REPLACE(descripcion, '|', '.'), 2))) = codigo)AS counter,* FROM tbcodigos WHERE codigo LIKE '0%".$key."EXP%' AND codigo NOT LIKE '%CLAB' AND created_at > '1900-01-01 00:00:00' ORDER BY id_codigo ASC";
+                $query = "SELECT codigo,UPPER(descripcion) AS descripcion,(SELECT COUNT(*) FROM tbestado WHERE LTRIM(RTRIM(PARSENAME(REPLACE(descripcion, '|', '.'), 2))) = codigo)AS counter,* FROM tbcodigos WHERE codigo LIKE '0%".$key."EXP%' AND codigo NOT LIKE '%CLAB' AND created_at > '1900-01-01 00:00:00' ORDER BY id_codigo ASC";
             else if($param == 'explicacion' && strlen($key) == 1)
-                $query = "SELECT codigo,descripcion,(SELECT COUNT(*) FROM tbestado WHERE LTRIM(RTRIM(PARSENAME(REPLACE(descripcion, '|', '.'), 2))) = codigo)AS counter,* FROM tbcodigos WHERE codigo LIKE '00%".$key."EXP%' AND codigo NOT LIKE '%CLAB' AND created_at > '1900-01-01 00:00:00' ORDER BY id_codigo ASC";
+                $query = "SELECT codigo,UPPER(descripcion) AS descripcion,(SELECT COUNT(*) FROM tbestado WHERE LTRIM(RTRIM(PARSENAME(REPLACE(descripcion, '|', '.'), 2))) = codigo)AS counter,* FROM tbcodigos WHERE codigo LIKE '00%".$key."EXP%' AND codigo NOT LIKE '%CLAB' AND created_at > '1900-01-01 00:00:00' ORDER BY id_codigo ASC";
                 
             $stmt = sqlsrv_query( $con, $query);
 
@@ -1304,17 +1304,17 @@
             sqlsrv_close( $con );
         break;
         case 'regCLABAJ':
-            // die(json_encode($_POST));
+            die(json_encode($_POST));
             $param = $_POST['param'];
             $key = $_POST['key'];
             if($param == 'clasificacion')
-                $query = "SELECT codigo,descripcion,(SELECT COUNT(*) FROM tbestado WHERE SUBSTRING(descripcion,1,7) = codigo) AS counter,* FROM tbcodigos WHERE codigo LIKE '%CLAB' ORDER BY id_codigo ASC";
+                $query = "SELECT codigo,UPPER(descripcion) AS descripcion,(SELECT COUNT(*) FROM tbestado WHERE SUBSTRING(descripcion,1,7) = codigo) AS counter,* FROM tbcodigos WHERE codigo LIKE '%CLAB' ORDER BY id_codigo ASC";
             else if($param == 'motivo')
-                $query = "SELECT codigo,descripcion,(SELECT COUNT(*) FROM tbestado WHERE LTRIM(RTRIM(PARSENAME(REPLACE(descripcion, '|', '.'), 3))) = codigo)AS counter,* FROM tbcodigos WHERE codigo LIKE '".$key."MOT%' AND codigo NOT LIKE '%CLAB' ORDER BY id_codigo ASC";
+                $query = "SELECT codigo,UPPER(descripcion) AS descripcion,(SELECT COUNT(*) FROM tbestado WHERE LTRIM(RTRIM(PARSENAME(REPLACE(descripcion, '|', '.'), 3))) = codigo)AS counter,* FROM tbcodigos WHERE codigo LIKE '".$key."MOT%' AND codigo NOT LIKE '%CLAB' ORDER BY id_codigo ASC";
             else if($param == 'explicacion' && strlen($key) == 2)
-                $query = "SELECT codigo,descripcion,(SELECT COUNT(*) FROM tbestado WHERE LTRIM(RTRIM(PARSENAME(REPLACE(descripcion, '|', '.'), 2))) = codigo)AS counter,* FROM tbcodigos WHERE codigo LIKE '0%".$key."EXP%' AND codigo NOT LIKE '%CLAB' ORDER BY id_codigo ASC";
+                $query = "SELECT codigo,UPPER(descripcion) AS descripcion,(SELECT COUNT(*) FROM tbestado WHERE LTRIM(RTRIM(PARSENAME(REPLACE(descripcion, '|', '.'), 2))) = codigo)AS counter,* FROM tbcodigos WHERE codigo LIKE '0%".$key."EXP%' AND codigo NOT LIKE '%CLAB' ORDER BY id_codigo ASC";
             else if($param == 'explicacion' && strlen($key) == 1)
-                $query = "SELECT codigo,descripcion,(SELECT COUNT(*) FROM tbestado WHERE LTRIM(RTRIM(PARSENAME(REPLACE(descripcion, '|', '.'), 2))) = codigo)AS counter,* FROM tbcodigos WHERE codigo LIKE '00%".$key."EXP%' AND codigo NOT LIKE '%CLAB' ORDER BY id_codigo ASC";
+                $query = "SELECT codigo,UPPER(descripcion) AS descripcion,(SELECT COUNT(*) FROM tbestado WHERE LTRIM(RTRIM(PARSENAME(REPLACE(descripcion, '|', '.'), 2))) = codigo)AS counter,* FROM tbcodigos WHERE codigo LIKE '00%".$key."EXP%' AND codigo NOT LIKE '%CLAB' ORDER BY id_codigo ASC";
                 
             $stmt = sqlsrv_query( $con, $query);
 
@@ -3296,6 +3296,192 @@
                 $query = "SELECT * FROM tbtabuladores";
                     
                 $stmt = sqlsrv_query( $con, $query);
+    
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }
+    
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
+            case 'encuestaSalida':
+                // die(json_encode($_POST));
+                $nomina_encuestado = $_POST['nomina_encuestado'];
+                $query = "SELECT te.numero_nomina,te.nombre_largo,tc.nombre AS Departamento,tp.nombre AS Puesto,te.status,CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fecha_baja,
+                            (SELECT nombre_largo FROM tbempleados WHERE numero_nomina = (SELECT manager1 FROM PJEMPLOY WHERE employee = te.numero_nomina)) AS Jefe,td.telefono,tes.*
+                            FROM tbencuesta_salida AS tes
+                            INNER JOIN tbempleados AS te
+                            ON tes.numero_nomina = te.numero_nomina
+                            INNER JOIN tbcelula AS tc
+                            ON te.id_celula = tc.id_celula
+                            INNER JOIN tbpuesto AS tp
+                            ON te.id_puesto = tp.id_puesto
+                            INNER JOIN tbdatos_empleados AS td
+                            ON te.numero_nomina = td.numero_nomina";
+
+                $stmt = sqlsrv_query( $con, $query);
+    
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }
+    
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
+            case 'buscarEncuestado':
+                // die(json_encode($_POST));
+                $nomina_encuestado = $_POST['nomina_encuestado'];
+                $query = "SELECT te.numero_nomina,te.nombre_largo,tc.nombre AS Departamento,tp.nombre AS Puesto,te.status,
+                        (SELECT nombre_largo FROM tbempleados WHERE numero_nomina = (SELECT manager1 FROM PJEMPLOY WHERE employee = te.numero_nomina)) AS Jefe
+                        FROM tbempleados AS te
+                        INNER JOIN tbcelula AS tc
+                        ON te.id_celula = tc.id_celula
+                        INNER JOIN tbpuesto AS tp
+                        ON te.id_puesto = tp.id_puesto
+                        WHERE te.numero_nomina = ?";
+
+                $params = array($nomina_encuestado);
+                    
+                $stmt = sqlsrv_query( $con, $query, $params);
+    
+                $result = array();
+                
+                if( $stmt === false) {
+                    die( print_r( sqlsrv_errors(), true) );
+                    $respuesta = array(
+                        'estado' => 'NOK',
+                        'tipo' => 'error',
+                        'informacion' => 'No existe informacion',
+                        'mensaje' => 'No hay datos en la BD'                
+                    );
+                } else {
+                    do {
+                        while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)){
+                        $result[] = $row; 
+                        }
+                    } while (sqlsrv_next_result($stmt));
+                    $respuesta = array(
+                        'estado' => 'OK',
+                        'tipo' => 'success',
+                        'informacion' => $result,
+                        'mensaje' => 'Informacion obtenida'                
+                    );
+                }
+    
+                echo json_encode($respuesta);
+                sqlsrv_free_stmt( $stmt);
+                sqlsrv_close( $con );
+            break;
+            case 'guardarEncuesta':
+                // die(json_encode($_POST));
+                $nomina_encuestado = $_POST['nomina_encuestado'];
+                $R1 = $_POST['R1'];
+                $SR1 = $_POST['SR1'];
+                $R2_1 = $_POST['R2_1'];
+                $R2_2 = $_POST['R2_2'];
+                $R2_3 = $_POST['R2_3'];
+                $R2_4 = $_POST['R2_4'];
+                $R2_5 = $_POST['R2_5'];
+                $R2_6 = $_POST['R2_6'];
+                $R2_7 = $_POST['R2_7'];
+                $R2_8 = $_POST['R2_8'];
+                $R2_9 = $_POST['R2_9'];
+                $R2_10 = $_POST['R2_10'];
+                $R2_11 = $_POST['R2_11'];
+                $R3 = $_POST['R3'];
+                $R4 = $_POST['R4'];
+                $R5 = $_POST['R5'];
+                $R6 = $_POST['R6'];
+                $R7 = $_POST['R7'];
+                $SR7 = $_POST['SR7'];
+                $R8 = $_POST['R8'];
+                $SR8 = $_POST['SR8'];
+                $R9 = $_POST['R9'];
+                $R10 = $_POST['R10'];
+                $SR10 = $_POST['SR10'];
+                $enc_telefono = $_POST['enc_telefono'];
+
+                $insert = "INSERT INTO [tbencuesta_salida] (
+                                    [numero_nomina]
+                                    ,[respuesta_1]
+                                    ,[sub_respuesta_1]
+                                    ,[respuesta_2_1]
+                                    ,[respuesta_2_2]
+                                    ,[respuesta_2_3]
+                                    ,[respuesta_2_4]
+                                    ,[respuesta_2_5]
+                                    ,[respuesta_2_6]
+                                    ,[respuesta_2_7]
+                                    ,[respuesta_2_8]
+                                    ,[respuesta_2_9]
+                                    ,[respuesta_2_10]
+                                    ,[respuesta_2_11]
+                                    ,[respuesta_3]
+                                    ,[respuesta_4]
+                                    ,[respuesta_5]
+                                    ,[respuesta_6]
+                                    ,[respuesta_7]
+                                    ,[respuesta_7_1]
+                                    ,[respuesta_8]
+                                    ,[respuesta_8_1]
+                                    ,[respuesta_9]
+                                    ,[respuesta_10]
+                                    ,[respuesta_10_1]
+                                    ,[created_by]
+                                    ,[updated_by])
+                                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    
+                $params = array($nomina_encuestado,$R1,$SR1,$R2_1,$R2_2,$R2_3,$R2_4,$R2_5,$R2_6,$R2_7,$R2_8,$R2_9,$R2_10,$R2_11,$R3,$R4,$R5,$R6,$R7,$SR7,$R8,$SR8,$R9,$R10,$SR10,$nomina_encuestado,$nomina_encuestado);
+            
+                $stmt = sqlsrv_query( $con, $insert, $params);
+
+                $insert2 = 'UPDATE tbdatos_empleados SET telefono = ? WHERE numero_nomina = ?';
+
+                $param = array($enc_telefono,$nomina_encuestado);
+
+                $stmt = sqlsrv_query( $con, $insert2, $param);
     
                 $result = array();
                 

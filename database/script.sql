@@ -8,14 +8,15 @@ END
 GO
 
 /**CREAR TABLA EMPLEADOS**/
-USE [MEXQAPPPR]
+USE [MEXQAPPTEMP]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[tbempleados]( 
-	[id_empleado] [int] IDENTITY(1,1) NOT NULL,
+CREATE TABLE [dbo].[tbhistorial]( 
+	[id_historial] [int] IDENTITY(1,1) NOT NULL,
+	[tipo_movimiento] [varchar](25) NOT NULL,
 	[numero_nomina] [varchar](10) NOT NULL,
 	[nombre_largo] [varchar](50) DEFAULT '',
 	[nombre] [varchar](50) DEFAULT '',
@@ -38,12 +39,14 @@ CREATE TABLE [dbo].[tbempleados](
 	[area_temp] [varchar](12) DEFAULT '',
 	[departamento_temp] [varchar](10) DEFAULT '',
 	[puesto_temp] [varchar](10) DEFAULT '',
-	[created_at] [datetime],
+	[created_at] [datetime] DEFAULT GETDATE(),
 	[created_by] [char](10) DEFAULT '00001',
-	[updated_at] [datetime] default GETDATE(),
+	[updated_at] [datetime] DEFAULT GETDATE(),
 	[updated_by] [char](10) DEFAULT '00001'
 ) ON [PRIMARY]
 GO
+
+
 
 /*CREAR TABLA SUCURSALES*/
 USE [MEXQAPPPR]
@@ -224,8 +227,6 @@ ALTER TABLE tbdatos_empleados ADD
 [entrega_personal] [date],
 [fin_contrato] [date]
 
-UPDATE tbdatos_empleados SET [entrega_tarjeta] = '1900-01-01',[entrega_contrato] = '1900-01-01',[entrega_personal] = '1900-01-01',[fin_contrato] = '1900-01-01'
-
 SELECT td.numero_nomina,te.nombre_largo,tc.nombre AS Departamento,tp.nombre AS Puesto,td.comision,td.sucursal_comision,td.daltonismo,td.agudeza,td.numero_cuenta,td.entrega_tarjeta,td.entrega_contrato,td.guia,
 td.entrega_personal,td.fin_contrato,te.fecha_alta,DATEADD(DD,30,te.fecha_alta) AS finContrato
 FROM tbdatos_empleados AS td
@@ -237,11 +238,6 @@ INNER JOIN tbpuesto AS tp
 ON tp.id_puesto = te.id_puesto
 AND te.status IN ('A','R')
 ORDER BY td.updated_at DESC
-
-UPDATE tbdatos_empleados SET [comision] = ,[sucursal_comision] = ,[daltonismo] ] =,[agudeza] =,[entrega_tarjeta] =,[entrega_contrato] =,[guia] =,[entrega_personal] =,[fin_contrato] =, WHERE [numero_nomina] =
-
-select DATEADD(DD,30,GETDATE())
-
 
 /*TRIGGER INSERTAR NUEVAS SUCURSALES / CELULAS*/
 ALTER TRIGGER nuevaSucursal
@@ -416,6 +412,12 @@ ADD [panel_dh] [int] DEFAULT 0;
 
 INSERT INTO tbprivilegios_emp (tipo,descripcion,created_at) VALUES ('RH generales','Acceso al departamento de Rh para asuntos generales no administrativos',GETDATE())
 SELECT * FROM tbprivilegios_emp
+
+Update tbprivilegios_emp set tipo  = 'Laborales Administrador' where id = 8
+
+SELECT * FROM [tbemp_permisos]
+
+
 
 /*CREAR TABLA RELACION EMPLEADOS-PERMISOS*/
 USE [MEXQApppr]
@@ -1797,3 +1799,92 @@ BEGIN TRY
  BEGIN CATCH
   ROLLBACK
  END CATCH
+
+USE [MEXQAPPTEMP]
+GO
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tbempleado_historial]( 
+	[id_historial] [int] IDENTITY(1,1) NOT NULL,
+	[created_at] [datetime] NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	[created_by] [char](10) DEFAULT '00001',
+	[updated_at] [datetime] NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	[updated_by] [char](10) DEFAULT '00001',
+	[tipo_movimiento] [varchar](25) NOT NULL,
+	[numero_nomina] [varchar](10) NOT NULL,
+	[nombre_largo] [varchar](50) DEFAULT '',
+	[fecha_alta] [date],
+	[fecha_baja] [date],
+	[status] [varchar] (1),
+	[id_sucursal] [int] DEFAULT 0,
+	[id_area] [int] DEFAULT 0,
+	[id_celula] [int] DEFAULT 0,
+	[id_puesto] [int] DEFAULT 0
+) ON [PRIMARY]
+GO
+
+SELECT * FROM [tbempleado_historial]
+
+--TRUNCATE TABLE [tbempleado_historial]
+
+ALTER TRIGGER historial_empleados ON dbo.tbempleados
+AFTER UPDATE 
+AS
+DECLARE @n_nomina varchar(5), @n_largo varchar(85),@f_alta date, @f_baja date,@st varchar(1),@id_suc int,@id_area int,@id_cel int,@id_puesto int,@up_by varchar(10);
+SELECT @n_nomina = i.numero_nomina FROM inserted i; 
+SELECT @n_largo = i.nombre_largo FROM inserted i;
+SELECT @f_alta = i.fecha_alta FROM deleted i;
+SELECT @f_baja = i.fecha_baja FROM deleted i;
+SELECT @st = i.status FROM deleted i;
+SELECT @id_suc = i.id_sucursal FROM deleted i;
+SELECT @id_area = i.id_area FROM deleted i;
+SELECT @id_cel = i.id_celula FROM deleted i;
+SELECT @id_puesto = i.id_puesto FROM deleted i;
+SELECT @id_puesto = i.id_puesto FROM deleted i;
+SELECT @up_by = i.updated_by FROM deleted i;
+ 
+IF UPDATE(status)
+BEGIN
+	INSERT INTO [tbempleado_historial](tipo_movimiento,numero_nomina,nombre_largo,fecha_alta,fecha_baja,status,id_sucursal,id_area,id_celula,id_puesto,updated_at,updated_by)
+	VALUES('ESTADO', @n_nomina, @n_largo,@f_alta,@f_baja,@st,@id_suc,@id_area,@id_cel,@id_puesto,GETDATE(),@up_by);
+END
+ 
+IF UPDATE(id_sucursal)
+BEGIN
+	INSERT INTO [tbempleado_historial](tipo_movimiento,numero_nomina,nombre_largo,fecha_alta,fecha_baja,status,id_sucursal,id_area,id_celula,id_puesto,updated_at,updated_by)
+	VALUES('SUCURSAL', @n_nomina, @n_largo,@f_alta,@f_baja,@st,@id_suc,@id_area,@id_cel,@id_puesto,GETDATE(),@up_by);
+END
+ 
+IF UPDATE(id_celula)
+BEGIN
+    INSERT INTO [tbempleado_historial](tipo_movimiento,numero_nomina,nombre_largo,fecha_alta,fecha_baja,status,id_sucursal,id_area,id_celula,id_puesto,updated_at,updated_by)
+	VALUES('CELULA', @n_nomina, @n_largo,@f_alta,@f_baja,@st,@id_suc,@id_area,@id_cel,@id_puesto,GETDATE(),@up_by);
+END
+ 
+IF UPDATE(id_puesto)
+BEGIN
+    INSERT INTO [tbempleado_historial](tipo_movimiento,numero_nomina,nombre_largo,fecha_alta,fecha_baja,status,id_sucursal,id_area,id_celula,id_puesto,updated_at,updated_by)
+	VALUES('PUESTO', @n_nomina, @n_largo,@f_alta,@f_baja,@st,@id_suc,@id_area,@id_cel,@id_puesto,GETDATE(),@up_by);
+END
+GO
+
+SELECT numero_nomina,'ACTUAL' AS tipo_movimiento,nombre_largo,fecha_alta,fecha_baja,status,id_sucursal,id_area,id_celula,id_puesto,updated_at,updated_by,'b' FROM tbempleados 
+WHERE EXISTS (
+    SELECT * 
+      FROM [tbempleado_historial] 
+     WHERE tbempleados.numero_nomina = [tbempleado_historial].numero_nomina
+)
+UNION ALL
+SELECT numero_nomina,tipo_movimiento,nombre_largo,fecha_alta,fecha_baja,status,id_sucursal,id_area,id_celula,id_puesto,updated_at,updated_by,
+(SELECT descripcion FROM tbestado WHERE numero_nomina = [tbempleado_historial].numero_nomina) AS BAja
+FROM [tbempleado_historial]
+ORDER BY tbempleados.numero_nomina,tipo_movimiento,tbempleados.updated_at DESC
+
+
+SELECT * FROM [tbempleado_historial] order by created_at DESC
+select * from tbempleados where numero_nomina = '02144'
+UPDATE tbempleados SET status = 'B',fecha_baja = '2020-02-21', updated_by = '08444' WHERE numero_nomina = '21629'
+
+SELECT * FROM tbestado
