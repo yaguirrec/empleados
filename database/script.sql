@@ -413,7 +413,7 @@ ADD [panel_dh] [int] DEFAULT 0;
 INSERT INTO tbprivilegios_emp (tipo,descripcion,created_at) VALUES ('RH generales','Acceso al departamento de Rh para asuntos generales no administrativos',GETDATE())
 SELECT * FROM tbprivilegios_emp
 
-Update tbprivilegios_emp set tipo  = 'Laborales Administrador' where id = 8
+Update tbprivilegios_emp set tipo  = 'Laborales Supervisor' where id = 8
 
 SELECT * FROM [tbemp_permisos]
 
@@ -1870,7 +1870,24 @@ BEGIN
 END
 GO
 
-SELECT numero_nomina,'ACTUAL' AS tipo_movimiento,nombre_largo,fecha_alta,fecha_baja,status,id_sucursal,id_area,id_celula,id_puesto,updated_at,updated_by,'b' FROM tbempleados 
+SELECT numero_nomina,'ACTUAL' AS tipo_movimiento,nombre_largo,fecha_alta,fecha_baja,status,id_sucursal,id_area,id_celula,id_puesto,updated_at,updated_by,
+CASE 
+	WHEN status = 'B' 
+	THEN (SELECT (SELECT descripcion FROM tbcodigos WHERE codigo = (LTRIM(RTRIM(PARSENAME(REPLACE(tbestado.descripcion, '|', '.'), 4))))) FROM tbestado WHERE tbestado.numero_nomina = tbempleados.numero_nomina AND fecha = fecha_baja) ELSE '' 
+END AS clasificacionBaja,
+CASE 
+	WHEN status = 'B' 
+	THEN (SELECT (SELECT descripcion FROM tbcodigos WHERE codigo = (LTRIM(RTRIM(PARSENAME(REPLACE(tbestado.descripcion, '|', '.'), 3))))) FROM tbestado WHERE tbestado.numero_nomina = tbempleados.numero_nomina AND fecha = fecha_baja) ELSE '' 
+END AS motivonBaja,
+CASE 
+	WHEN status = 'B' 
+	THEN (SELECT (SELECT descripcion FROM tbcodigos WHERE codigo = (LTRIM(RTRIM(PARSENAME(REPLACE(tbestado.descripcion, '|', '.'), 2))))) FROM tbestado WHERE tbestado.numero_nomina = tbempleados.numero_nomina AND fecha = fecha_baja) ELSE '' 
+END AS expnBaja,
+CASE 
+	WHEN status = 'B' 
+	THEN (SELECT (SELECT descripcion FROM tbcodigos WHERE codigo = (LTRIM(RTRIM(PARSENAME(REPLACE(tbestado.descripcion, '|', '.'), 1))))) FROM tbestado WHERE tbestado.numero_nomina = tbempleados.numero_nomina AND fecha = fecha_baja) ELSE '' 
+END AS reingreso
+FROM tbempleados 
 WHERE EXISTS (
     SELECT * 
       FROM [tbempleado_historial] 
@@ -1878,13 +1895,54 @@ WHERE EXISTS (
 )
 UNION ALL
 SELECT numero_nomina,tipo_movimiento,nombre_largo,fecha_alta,fecha_baja,status,id_sucursal,id_area,id_celula,id_puesto,updated_at,updated_by,
-(SELECT descripcion FROM tbestado WHERE numero_nomina = [tbempleado_historial].numero_nomina) AS BAja
+CASE 
+	WHEN status = 'B' AND tipo_movimiento = 'ESTADO' 
+	THEN (SELECT (SELECT descripcion FROM tbcodigos WHERE codigo = (LTRIM(RTRIM(PARSENAME(REPLACE(tbestado.descripcion, '|', '.'), 4))))) FROM tbestado WHERE tbestado.numero_nomina = [tbempleado_historial].numero_nomina AND fecha = fecha_baja) ELSE '' 
+END AS clasificacionBaja,
+CASE 
+	WHEN status = 'B' AND tipo_movimiento = 'ESTADO' 
+	THEN (SELECT (SELECT descripcion FROM tbcodigos WHERE codigo = (LTRIM(RTRIM(PARSENAME(REPLACE(tbestado.descripcion, '|', '.'), 3))))) FROM tbestado WHERE tbestado.numero_nomina = [tbempleado_historial].numero_nomina AND fecha = fecha_baja) ELSE '' 
+END AS motivonBaja,
+CASE 
+	WHEN status = 'B' AND tipo_movimiento = 'ESTADO' 
+	THEN (SELECT (SELECT descripcion FROM tbcodigos WHERE codigo = (LTRIM(RTRIM(PARSENAME(REPLACE(tbestado.descripcion, '|', '.'), 2))))) FROM tbestado WHERE tbestado.numero_nomina = [tbempleado_historial].numero_nomina AND fecha = fecha_baja) ELSE '' 
+END AS expnBaja,
+CASE 
+	WHEN status = 'B' AND tipo_movimiento = 'ESTADO' 
+	THEN (SELECT (SELECT descripcion FROM tbcodigos WHERE codigo = (LTRIM(RTRIM(PARSENAME(REPLACE(tbestado.descripcion, '|', '.'), 1))))) FROM tbestado WHERE tbestado.numero_nomina = [tbempleado_historial].numero_nomina AND fecha = fecha_baja) ELSE '' 
+END AS reingreso
 FROM [tbempleado_historial]
-ORDER BY tbempleados.numero_nomina,tipo_movimiento,tbempleados.updated_at DESC
+ORDER BY tbempleados.updated_at DESC,tbempleados.numero_nomina,tipo_movimiento
 
-
-SELECT * FROM [tbempleado_historial] order by created_at DESC
-select * from tbempleados where numero_nomina = '02144'
-UPDATE tbempleados SET status = 'B',fecha_baja = '2020-02-21', updated_by = '08444' WHERE numero_nomina = '21629'
-
-SELECT * FROM tbestado
+/**insert empleados en PJEMPLOY / TBEMPLEADOS / TBEMPLEADOS_DATOIS**/
+ALTER PROCEDURE firedEmployee(
+								@numeroNomina varchar(5), 
+								@descripcion varchar(45), 
+								@comentario text, 
+								@fechaBaja DATE,
+								@nominaControl varchar(5)
+								)
+AS
+BEGIN TRY
+     BEGIN TRANSACTION
+	/*ALTA EN TABLA TBESTADO*/
+	--IF (NOT EXISTS(SELECT * FROM [tbestado] WHERE [numero_nomina] = @numeroNomina))
+	--BEGIN
+		INSERT INTO [tbestado]
+                    ([numero_nomina],[estado],[descripcion],[comentario],[fecha],[created_at],[created_by])
+                    VALUES
+                    (@numeroNomina,0,@descripcion,@comentario,@fechaBaja,GETDATE(),@nominaControl);
+	--END
+	--ELSE
+	--BEGIN
+		--UPDATE [tbestado] SET [descripcion] = @descripcion, [comentario] = @comentario, [updated_at] = GETDATE(), [updated_by] = @nominaControl WHERE [numero_nomina] = @numeroNomina
+	--END
+    /*ACTUALIZAR BAJA TBEMPLEADOS*/
+	UPDATE [tbempleados] SET [status] = 'B',[fecha_baja] = @fechaBaja, [updated_at] = GETDATE(), [updated_by] = @nominaControl WHERE [numero_nomina] = @numeroNomina
+	/*ACTUALIZAR BAJA PJEMPLOY PARA CONTROL EN ERP*/
+	UPDATE [PJEMPLOY] SET [date_terminated] = @fechaBaja, emp_status = 'I', [lupd_datetime] = GETDATE(), [lupd_user] = 'WEBSYS' WHERE employee = @numeroNomina
+     COMMIT
+ END TRY
+ BEGIN CATCH
+  ROLLBACK
+ END CATCH

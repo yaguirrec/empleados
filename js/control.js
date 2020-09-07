@@ -2076,7 +2076,7 @@ $(document).ready(function () {
                             }
 
                             $('#segEntregaOp').change(function() {
-                                // console.log($(this).val());
+                                console.log($(this).val());
                                 if($(this).val() === 'OK'){
                                     $('#segEntregaFechacol').removeClass('d-none');
                                 } else {
@@ -2097,8 +2097,8 @@ $(document).ready(function () {
                             $("#segDGP").val(informacion.dgp);
                             $("#segDisciplica").val(informacion.disciplina);
                             $("#segEtica").val(informacion.etica);
-                            $("#segFechaentregapersonal").val(informacion.primera_incidencia.date.substr(0, 10));
-                            $("#segFechaentregachecklist").val(informacion.checklist_laborales.date.substr(0, 10));
+                            $("#segFechaentregapersonal").val(informacion.primera_incidencia);
+                            $("#segFechaentregachecklist").val(informacion.checklist_laborales);
                             $("#segEntregaOp").val(informacion.entrega_operaciones);
                             $("#segEntregaFecha").val(informacion.entrega_planta.date.substr(0, 10));
                             $("#segComentario").val(informacion.comentario_seguimiento);
