@@ -1835,7 +1835,7 @@ $(document).ready(function () {
                 $('#txtCorreo').html('<strong> Email: </strong>' + rowInfo.correo);
 
                 $('#txtAltaAcuse').html('<strong> Acuse Alta: </strong> <a href="assets/attached/Acuses/' + rowInfo.lote_acuse + '.zip" target="_blank">' + rowInfo.lote_acuse + '</a>');
-                $('#txtAltaProcesada').html('<strong> Procesada Alta: </strong> <a href="assets/attached/Acuses/' + rowInfo.lote + '.zip" target="_blank">' + rowInfo.lote + '</a>');
+                $('#txtAltaProcesada').html('<strong> Procesada Alta: </strong> <a href="assets/attached/Procesadas/' + rowInfo.lote + '.zip" target="_blank">' + rowInfo.lote + '</a>');
 
                 if (statusEmpleadoR === 'B') {
                     $('#txtBajaAcuse').html('<strong> Acuse Baja: </strong> <a href="assets/attached/Acuses/' + rowInfo.baja_acuse + '.zip" target="_blank">' + rowInfo.baja_acuse + '</a>');
@@ -4869,6 +4869,38 @@ $(document).ready(function () {
                                 "<td>" + reg[i].respuesta_10 + "</td>" +
                                 "<td>" + reg[i].respuesta_10_1 + "</td>" +
                                 "<td>" + reg[i].created_at.date.substr(0, 10) + " </td></tr>");
+                    }
+
+                }
+            });
+         break;
+         case 'historial-empleados':
+            $('.seccionTitulo').html('Historial de empleados');
+            seccionExportar.removeClass('d-none');
+            $.ajax({
+                type: 'POST',
+                url: backendURL,
+                data: { action: 'historialEmpleado' },
+                success: function (response) {
+                    let respuesta = JSON.parse(response);
+                    let reg = respuesta.informacion;
+                    for (var i in reg) {
+                        $('#dataTable').append
+                            (
+                                "<tr><td>" + reg[i].numero_nomina + " </td>" +
+                                "<td>" + reg[i].tipo_movimiento + "</td>" +
+                                "<td>" + reg[i].nombre_largo + "</td>" +
+                                "<td>" + reg[i].fecha_alta.date.substr(0, 10) + "</td>" +
+                                "<td>" + reg[i].fecha_baja.date.substr(0, 10) + "</td>" +
+                                "<td>" + reg[i].status + "</td>" +
+                                "<td>" + reg[i].Sucursal + "</td>" +
+                                "<td>" + reg[i].Celula + "</td>" +
+                                "<td>" + reg[i].Puesto + "</td>" +
+                                "<td>" + reg[i].clasificacionBaja + "</td>" +
+                                "<td>" + reg[i].motivonBaja + "</td>" +
+                                "<td>" + reg[i].expnBaja + "</td>" +
+                                "<td>" + reg[i].updated_at.date.substr(0, 10) + "</td>" +
+                                "<td>" + reg[i].updated_by + "</td></tr>");
                     }
 
                 }

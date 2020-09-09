@@ -58,6 +58,7 @@
             <a class="collapse-item" href="index.php?request=becarios">Becarios</a>
             <a class="collapse-item" href="index.php?request=ci">CI</a>
             <a class="collapse-item" href="index.php?request=seguimiento">Seguimiento</a>
+            <a class="collapse-item" href="index.php?request=historial-empleados">Historial de empleado</a>
             <!-- <a class="collapse-item" href="index.php?request=encuesta_salida">Encuestas de salida</a> -->
             <hr class="sidebar-divider">
             <h6 class="collapse-header">Administrar registros:</h6>

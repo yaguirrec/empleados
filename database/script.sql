@@ -1870,7 +1870,9 @@ BEGIN
 END
 GO
 
-SELECT numero_nomina,'ACTUAL' AS tipo_movimiento,nombre_largo,fecha_alta,fecha_baja,status,id_sucursal,id_area,id_celula,id_puesto,updated_at,updated_by,
+SELECT numero_nomina,'ACTUAL' AS tipo_movimiento,nombre_largo,fecha_alta,fecha_baja,status,(SELECT nombre FROM tbsucursal WHERE id_sucursal = tbempleados.id_sucursal) AS Sucursal,id_area,
+(SELECT nombre FROM tbcelula WHERE id_celula = tbempleados.id_celula) AS Celula,
+(SELECT nombre FROM tbpuesto WHERE id_puesto = tbempleados.id_puesto) AS Puesto,updated_at,updated_by,
 CASE 
 	WHEN status = 'B' 
 	THEN (SELECT (SELECT descripcion FROM tbcodigos WHERE codigo = (LTRIM(RTRIM(PARSENAME(REPLACE(tbestado.descripcion, '|', '.'), 4))))) FROM tbestado WHERE tbestado.numero_nomina = tbempleados.numero_nomina AND fecha = fecha_baja) ELSE '' 
@@ -1894,7 +1896,9 @@ WHERE EXISTS (
      WHERE tbempleados.numero_nomina = [tbempleado_historial].numero_nomina
 )
 UNION ALL
-SELECT numero_nomina,tipo_movimiento,nombre_largo,fecha_alta,fecha_baja,status,id_sucursal,id_area,id_celula,id_puesto,updated_at,updated_by,
+SELECT numero_nomina,tipo_movimiento,nombre_largo,fecha_alta,fecha_baja,status,(SELECT nombre FROM tbsucursal WHERE id_sucursal = [tbempleado_historial].id_sucursal),id_area,
+(SELECT nombre FROM tbcelula WHERE id_celula = [tbempleado_historial].id_celula) AS Celula,
+(SELECT nombre FROM tbpuesto WHERE id_puesto = [tbempleado_historial].id_puesto) AS Puesto,updated_at,updated_by,
 CASE 
 	WHEN status = 'B' AND tipo_movimiento = 'ESTADO' 
 	THEN (SELECT (SELECT descripcion FROM tbcodigos WHERE codigo = (LTRIM(RTRIM(PARSENAME(REPLACE(tbestado.descripcion, '|', '.'), 4))))) FROM tbestado WHERE tbestado.numero_nomina = [tbempleado_historial].numero_nomina AND fecha = fecha_baja) ELSE '' 
@@ -1914,7 +1918,7 @@ END AS reingreso
 FROM [tbempleado_historial]
 ORDER BY tbempleados.updated_at DESC,tbempleados.numero_nomina,tipo_movimiento
 
-/**insert empleados en PJEMPLOY / TBEMPLEADOS / TBEMPLEADOS_DATOIS**/
+/**insert empleados en PJEMPLOY / TBEMPLEADOS / TBEMPLEADOS_DATOS**/
 ALTER PROCEDURE firedEmployee(
 								@numeroNomina varchar(5), 
 								@descripcion varchar(45), 

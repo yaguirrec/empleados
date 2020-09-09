@@ -54,6 +54,9 @@
               case 'gestionar-codigos':
                 include 'inc/templates/modulos/gestion_codigos.php';
               break;
+              case 'historial-empleados':
+                include 'inc/templates/modulos/historial_empleados.php';
+              break;
               case 'gestionar-tabuladores':
                 include 'inc/templates/modulos/gestion_tabuladores.php';
               break;
