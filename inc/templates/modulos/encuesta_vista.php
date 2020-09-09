@@ -22,7 +22,7 @@
             <th scope="col">Ambiente Laboral</th>
             <th scope="col">Trato de Jefe directo</th>
             <th scope="col">Tiempo de respuesta a requerimientos (dudas de pago, solicitud de cartas, etc.)</th>
-            <th scope="col">Equipo de protección Personal</th>
+            <th scope="col">Equipo de protección Personal / Uniforme</th>
             <th scope="col">Condiciones en área del trabajo</th>
             <th scope="col">Trato del personal Administrativo</th>
             <th scope="col">Plan de Desarrollo (Capacitación)</th>

@@ -306,7 +306,7 @@
                 </td>
                 </tr>
                 <tr>
-                <th scope="row">Equipo de protección Personal</th>
+                <th scope="row">Equipo de protección Personal / Uniforme</th>
                 <td>
                     <div class="form-group">
                         <select class="form-control" id="pregunta2_r5">
@@ -371,6 +371,7 @@
                         <option value="regular">Regular</option>
                         <option value="malo">Malo</option>
                         <option value="muy malo">Muy malo</option>
+                        <option value="na">NA</option>
                         </select>
                     </div>
                 </td>
@@ -385,6 +386,7 @@
                         <option value="regular">Regular</option>
                         <option value="malo">Malo</option>
                         <option value="muy malo">Muy malo</option>
+                        <option value="na">NA</option>
                         </select>
                     </div>
                 </td>

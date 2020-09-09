@@ -59,7 +59,7 @@
             <a class="collapse-item" href="index.php?request=ci">CI</a>
             <a class="collapse-item" href="index.php?request=seguimiento">Seguimiento</a>
             <a class="collapse-item" href="index.php?request=historial-empleados">Historial de empleado</a>
-            <!-- <a class="collapse-item" href="index.php?request=encuesta_salida">Encuestas de salida</a> -->
+            <a class="collapse-item" href="index.php?request=encuesta_salida">Encuestas de salida</a>
             <hr class="sidebar-divider">
             <h6 class="collapse-header">Administrar registros:</h6>
             <a class="collapse-item" href="index.php?request=alta-empleado">Alta de empleado</a>
@@ -104,7 +104,7 @@
         </div>
       </li>
 
-      <!-- <li class="nav-item rh_generales d-none">
+      <li class="nav-item rh_generales d-none">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#rh_generales" aria-expanded="true" aria-controls="rh_generales">
         <i class="fas fa-user-circle"></i>
           <span>RH General</span>
@@ -115,7 +115,7 @@
             <a class="collapse-item" href="index.php?request=encuesta"><i class="fas fa-file-alt"></i> Encuesta de salida</a>
           </div>
         </div>
-      </li> -->
+      </li>
 
       <li class="nav-item nominas d-none">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#nominas" aria-expanded="true" aria-controls="nominas">
