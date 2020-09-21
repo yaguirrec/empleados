@@ -39,8 +39,8 @@
         <div id="rh" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Opciones de consulta:</h6>
-            <a class="collapse-item" href="index.php?request=empleado">Empleados activos</a>
-            <a class="collapse-item" href="index.php?request=bajas">Empleados inactivos</a>
+            <a class="collapse-item" href="index.php?request=empleado"><i class="fas fa-users"></i> Empleados activos</a>
+            <a class="collapse-item" href="index.php?request=bajas"><i class="fas fa-user-alt-slash"></i> Empleados inactivos</a>
           </div>
         </div>
       </li>
@@ -53,24 +53,24 @@
         <div id="laborales" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Opciones de consulta:</h6>
-            <a class="collapse-item" href="index.php?request=empleado">Empleados activos</a>
-            <a class="collapse-item" href="index.php?request=bajas">Empleados inactivos</a>
-            <a class="collapse-item" href="index.php?request=becarios">Becarios</a>
-            <a class="collapse-item" href="index.php?request=ci">CI</a>
-            <a class="collapse-item" href="index.php?request=seguimiento">Seguimiento</a>
-            <a class="collapse-item" href="index.php?request=historial-empleados">Historial de empleado</a>
-            <a class="collapse-item" href="index.php?request=encuesta_salida">Encuestas de salida</a>
+            <a class="collapse-item" href="index.php?request=empleado"><i class="fas fa-users"></i> Empleados activos</a>
+            <a class="collapse-item" href="index.php?request=bajas"><i class="fas fa-user-alt-slash"></i> Empleados inactivos</a>
+            <a class="collapse-item" href="index.php?request=becarios"><i class="fas fa-user-graduate"></i> Becarios</a>
+            <a class="collapse-item" href="index.php?request=ci"><i class="fas fa-align-justify"></i> CI</a>
+            <a class="collapse-item" href="index.php?request=seguimiento"><i class="fas fa-user-tag"></i> Seguimiento</a>
+            <a class="collapse-item" href="index.php?request=historial-empleados"><i class="fas fa-user-clock"></i> Historial de empleado</a>
+            <!-- <a class="collapse-item" href="index.php?request=encuesta_salida">Encuestas de salida</a> -->
             <hr class="sidebar-divider">
             <h6 class="collapse-header">Administrar registros:</h6>
-            <a class="collapse-item" href="index.php?request=alta-empleado">Alta de empleado</a>
-            <a class="collapse-item" href="index.php?request=altas">Administrar Altas</a>
-            <a class="collapse-item" href="index.php?request=semanales">Altas Semanales</a>
+            <a class="collapse-item" href="index.php?request=alta-empleado"><i class="fas fa-user-plus"></i> Alta de empleado</a>
+            <a class="collapse-item" href="index.php?request=altas"><i class="fas fa-user-cog"></i> Administrar Altas</a>
+            <a class="collapse-item" href="index.php?request=semanales"><i class="fas fa-user-check"></i> Altas Semanales</a>
             <hr class="sidebar-divider">
             <h6 class="collapse-header">Administrar Bajas</h6>
-            <a class="collapse-item" href="index.php?request=bajaPuesto">Bajas cambio puesto</a>
-            <a class="collapse-item" href="index.php?request=administrarBajas">Administrar Bajas</a>
+            <a class="collapse-item" href="index.php?request=bajaPuesto"><i class="fas fa-user-minus"></i> Bajas cambio puesto</a>
+            <a class="collapse-item" href="index.php?request=administrarBajas"><i class="fas fa-user-times"></i> Administrar Bajas</a>
             <h6 class="collapse-header laborales_supervisor d-none">Administrar</h6>
-            <a class="collapse-item laborales_supervisor d-none" href="index.php?request=gestionar-codigos">Clasificacion de Bajas</a>
+            <a class="collapse-item laborales_supervisor d-none" href="index.php?request=gestionar-codigos"><i class="fas fa-dice"></i> Clasificacion de Bajas</a>
             <!-- <a class="collapse-item" href="index.php?request=gestionar-tabuladores">Tabuladores</a> -->
           </div>
         </div>
@@ -99,7 +99,7 @@
         <div id="transportes" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Opciones de consulta:</h6>
-            <a class="collapse-item" href="index.php?request=direcciones">Transportes</a>
+            <a class="collapse-item" href="index.php?request=direcciones"><i class="fas fa-align-justify"></i> Transportes</a>
           </div>
         </div>
       </li>
@@ -125,16 +125,16 @@
         <div id="nominas" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Opciones de consulta:</h6>
-            <a class="collapse-item" href="index.php?request=empleado">Empleados activos</a>
-            <a class="collapse-item" href="index.php?request=bajas">Empleados inactivos</a>
-            <a class="collapse-item" href="index.php?request=ci">CI</a>
+            <a class="collapse-item" href="index.php?request=empleado"><i class="fas fa-users"></i> Empleados activos</a>
+            <a class="collapse-item" href="index.php?request=bajas"><i class="fas fa-user-alt-slash"></i> Empleados inactivos</a>
+            <a class="collapse-item" href="index.php?request=ci"><i class="fas fa-align-justify"></i> CI</a>
             <hr class="sidebar-divider">
             <h6 class="collapse-header">Administrar registros:</h6>
-            <a class="collapse-item" href="index.php?request=altas">Administrar Altas</a>
-            <a class="collapse-item" href="index.php?request=semanales">Altas Semanales</a>
+            <a class="collapse-item" href="index.php?request=altas"><i class="fas fa-user-cog"></i> Administrar Altas</a>
+            <a class="collapse-item" href="index.php?request=semanales"><i class="fas fa-user-check"></i> Altas Semanales</a>
             <h6 class="collapse-header">Administrar Bajas</h6>
-            <a class="collapse-item" href="index.php?request=bajaPuesto">Bajas cambio puesto</a>
-            <a class="collapse-item" href="index.php?request=administrarBajas">Administrar Bajas</a>
+            <a class="collapse-item" href="index.php?request=bajaPuesto"><i class="fas fa-user-minus"></i> Bajas cambio puesto</a>
+            <a class="collapse-item" href="index.php?request=administrarBajas"><i class="fas fa-user-times"></i> Administrar Bajas</a>
           </div>
         </div>
       </li>
@@ -147,7 +147,7 @@
         <div id="capacitacion" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Modulos</h6>
-            <a class="collapse-item" href="index.php?request=puestos">Puestos</a>
+            <a class="collapse-item" href="index.php?request=puestos"><i class="fas fa-users-cog"></i> Puestos</a>
           </div>
         </div>
       </li>
@@ -160,9 +160,9 @@
         <div id="coordinadora" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Modulos</h6>
-            <a class="collapse-item" href="index.php?request=altasc">Altas</a>
-            <a class="collapse-item" href="index.php?request=bajasc">Bajas</a>
-            <a class="collapse-item" href="index.php?request=seguimiento">Seguimiento</a>
+            <a class="collapse-item" href="index.php?request=altasc"><i class="fas fa-users"></i> Altas</a>
+            <a class="collapse-item" href="index.php?request=bajasc"><i class="fas fa-user-alt-slash"></i> Bajas</a>
+            <a class="collapse-item" href="index.php?request=seguimiento"><i class="fas fa-user-tag"></i> Seguimiento</a>
           </div>
         </div>
       </li>
@@ -175,7 +175,7 @@
         <div id="administrador" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Modulos</h6>
-            <a class="collapse-item" href="index.php?request=administrar">Administrar</a>
+            <a class="collapse-item" href="index.php?request=administrar"><i class="fas fa-cogs"></i> Administrar</a>
           </div>
         </div>
       </li>

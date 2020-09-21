@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -1973,7 +1973,7 @@ $(document).ready(function () {
                                 data: {
                                     action: action,
                                     nominaEmpleado: codigoEmpleado,
-                                    razonBaja: razonBaja,
+                                    razonBaja: razonBaja+'|0|0|1',
                                     comentariosBaja: comentariosBaja,
                                     fechaBaja: fecha_Baja,
                                     empleadoControl: empleado_activo
@@ -2643,6 +2643,29 @@ $(document).ready(function () {
 
                     sucursalTabulador();
 
+                    //Validar el puesto ingresado
+                    $('#txtPuesto').focusout(function () {
+                        var pto = $('#txtPuesto').val();
+                        // console.log(pto);
+                        if(pto < 1)
+                        {
+                            Swal.fire({
+                                position: 'center',
+                                type: 'warning',
+                                title: 'Favor de verificar el puesto nuevamente',
+                                showConfirmButton: false,
+                                timer: 2500
+                            })
+                        
+                            $('#txtPuesto').addClass('btn-outline-danger');
+
+                            setTimeout(function () {
+                                $('#txtPuesto').removeClass('btn-outline-danger');
+                            }, 3500);
+
+                        }
+                    });
+
                     $("#txtNomina").val(datos.numero_nomina);
                     $("#txtTipo").val(datos.status);
                     $("#txtLote").val(datos.lote);
@@ -3147,6 +3170,30 @@ $(document).ready(function () {
                 listarFraccionamientos(cp);
             });
 
+            //Validar el puesto ingresado
+            $('#txtPuesto').focusout(function () {
+                var pto = $('#txtPuesto').val();
+                // console.log(pto);
+                if(pto < 1)
+                {
+                    Swal.fire({
+                        position: 'center',
+                        type: 'warning',
+                        title: 'Favor de verificar el puesto nuevamente',
+                        showConfirmButton: false,
+                        timer: 2500
+                    })
+                
+                    $('#txtPuesto').addClass('btn-outline-danger');
+
+                    setTimeout(function () {
+                        $('#txtPuesto').removeClass('btn-outline-danger');
+                    }, 3500);
+
+                }
+            });
+            
+
             btnReingresarEmpleado.click(function (e) {
                 e.preventDefault();
                 nomina = $('#txtNomina').val(),
@@ -3213,7 +3260,7 @@ $(document).ready(function () {
                     nombre.trim() === '' || aPaterno.trim() === '' ||
                     aMaterno.trim() === '' || id.trim() === '' || nPadre.trim() === '' ||
                     nMadre.trim() === '' || calle.trim() === '' ||
-                    numE.trim() === '' ||
+                    numE.trim() === '' || puesto < 1 ||
                     cp.trim() === '' || nInfonavit.trim() === '' ||
                     nFonacot.trim() === '' || cuenta.trim() === '' ||
                     correo.trim() === '' || telefono.trim() === '' ||
@@ -3688,6 +3735,29 @@ $(document).ready(function () {
                 } else {
                     $("#txtCuenta").removeAttr('disabled', 'disabled');
                     $("#txtCuenta").val('');
+                }
+            });
+
+            //Validar el puesto ingresado
+            $('#txtPuesto').focusout(function () {
+                var pto = $('#txtPuesto').val();
+                // console.log(pto);
+                if(pto < 1)
+                {
+                    Swal.fire({
+                        position: 'center',
+                        type: 'warning',
+                        title: 'Favor de verificar el puesto nuevamente',
+                        showConfirmButton: false,
+                        timer: 2500
+                    })
+                
+                    $('#txtPuesto').addClass('btn-outline-danger');
+
+                    setTimeout(function () {
+                        $('#txtPuesto').removeClass('btn-outline-danger');
+                    }, 3500);
+
                 }
             });
 
