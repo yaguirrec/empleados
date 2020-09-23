@@ -59,7 +59,7 @@
             <a class="collapse-item" href="index.php?request=ci"><i class="fas fa-align-justify"></i> CI</a>
             <a class="collapse-item" href="index.php?request=seguimiento"><i class="fas fa-user-tag"></i> Seguimiento</a>
             <a class="collapse-item" href="index.php?request=historial-empleados"><i class="fas fa-user-clock"></i> Historial de empleado</a>
-            <!-- <a class="collapse-item" href="index.php?request=encuesta_salida">Encuestas de salida</a> -->
+            <a class="collapse-item" href="index.php?request=encuesta_salida"><i class="fas fa-tasks"></i> Encuestas de salida</a>
             <hr class="sidebar-divider">
             <h6 class="collapse-header">Administrar registros:</h6>
             <a class="collapse-item" href="index.php?request=alta-empleado"><i class="fas fa-user-plus"></i> Alta de empleado</a>
@@ -71,7 +71,7 @@
             <a class="collapse-item" href="index.php?request=administrarBajas"><i class="fas fa-user-times"></i> Administrar Bajas</a>
             <h6 class="collapse-header laborales_supervisor d-none">Administrar</h6>
             <a class="collapse-item laborales_supervisor d-none" href="index.php?request=gestionar-codigos"><i class="fas fa-dice"></i> Clasificacion de Bajas</a>
-            <!-- <a class="collapse-item" href="index.php?request=gestionar-tabuladores">Tabuladores</a> -->
+            <a class="collapse-item" href="index.php?request=gestionar-tabuladores"><i class="fas fa-poll-h"></i> Tabuladores</a>
           </div>
         </div>
       </li>
