@@ -18,7 +18,7 @@ if (check) {
         if(informacionCantidad > 0){
             let informacion = respuesta.informacion[0];
             let empStatus = informacion.status,
-                empCambioPuesto = informacion.cambio_puesto,
+                // empCambioPuesto = informacion.cambio_puesto,
                 empClasificacion = informacion.clasificacion,
                 tipoNominaEmpleado = informacion.nomina,
                 registroPatronal = informacion.registro_patronal,
@@ -96,15 +96,20 @@ if (check) {
             else
                 $('#empGenero').html('Masculino');
 
-            if(empCambioPuesto === 1)
-            {
-                $('#empTipo').css('left','240');
-            } else {
-                if (empStatus === 'A')
-                    $('#empTipo').css('left','90');
-                else
-                    $('#empTipo').css('left','145');
-            }
+            // if(empCambioPuesto === 1)
+            // {
+            //     $('#empTipo').css('left','240');
+            // } else {
+            //     if (empStatus === 'A')
+            //         $('#empTipo').css('left','90');
+            //     else
+            //         $('#empTipo').css('left','145');
+            // }
+
+            if (empStatus === 'A')
+                $('#empTipo').css('left','90');
+            else
+                $('#empTipo').css('left','145');
             
             
             if (empClasificacion === 'O')
@@ -117,14 +122,14 @@ if (check) {
                 $('#formatoTipo').css('left','535');
 
             if (tipoNominaEmpleado === 'S')
-                $('#tipoNomina').css('left','548');
+                $('#tipoNomina').css('left','440');
             else
-                $('#tipoNomina').css('left','642');
+                $('#tipoNomina').css('left','495');
 
             if (registroPatronal === 'SAC')
-                $('#empRegistro').css('left','640');
+                $('#empRegistro').css('left','575');
             else
-                $('#empRegistro').css('left','698');
+                $('#empRegistro').css('left','630');
             
             if (empEstadoCivil === 'S')
                 $('#empCivil').html('Soltero(a)');
