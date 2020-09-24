@@ -71,7 +71,7 @@
             <a class="collapse-item" href="index.php?request=administrarBajas"><i class="fas fa-user-times"></i> Administrar Bajas</a>
             <h6 class="collapse-header laborales_supervisor d-none">Administrar</h6>
             <a class="collapse-item laborales_supervisor d-none" href="index.php?request=gestionar-codigos"><i class="fas fa-dice"></i> Clasificacion de Bajas</a>
-            <a class="collapse-item" href="index.php?request=gestionar-tabuladores"><i class="fas fa-poll-h"></i> Tabuladores</a>
+            <!-- <a class="collapse-item" href="index.php?request=gestionar-tabuladores"><i class="fas fa-poll-h"></i> Tabuladores</a> -->
           </div>
         </div>
       </li>
