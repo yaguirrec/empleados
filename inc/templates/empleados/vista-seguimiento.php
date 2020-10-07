@@ -19,6 +19,7 @@
           <th scope="col">Empleado</th>
           <th scope="col">Area</th>
           <th scope="col">Puesto</th>
+          <th scope="col">Sucursal</th>
           <th scope="col">Estado</th>
           <th scope="col">Fecha Alta</th>
           <th scope="col">Fecha Baja</th>
