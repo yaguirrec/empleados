@@ -465,19 +465,20 @@ GO
 CREATE TABLE [dbo].[tbtabuladores]( 
 	[id] [int] IDENTITY(1,1) NOT NULL,
 	[categoria] [varchar](10) NOT NULL,
-	[sd] [float],
-	[sdi] [float],
-	[sueldo] [float],
-	[p_asistencia] [float],
-	[p_puntualidad] [float],
-	[despensa] [float],
-	[f_ahorro] [float],
-	[percepciones] [float],
-	[imss] [float],
-	[ispt] [float],
-	[sueldo_neto] [float],
+	[nivel] [varchar](20) NOT NULL,
+	[sucursal] [int],
+	[sd] [varchar](10),
+	[base] [varchar](10),
+	[fa] [varchar](10),
+	[ap] [varchar](10),
+	[be] [varchar](10),
+	[bv] [varchar](10),
+	[bp] [varchar](10),
+	[total] [varchar](10),
+	[costo] [varchar](10),
+	[mensual] [varchar](10),
 	[activo] [int] DEFAULT 1,
-	[created_at] [datetime],
+	[created_at] [datetime] default GETDATE(),
 	[created_by] [char](10) DEFAULT '00001',
 	[updated_at] [datetime] default GETDATE(),
 	[updated_by] [char](10) DEFAULT '00001'
@@ -485,6 +486,8 @@ CREATE TABLE [dbo].[tbtabuladores](
 GO
 
 select * from [tbtabuladores]
+--TRUNCATE TABLE [tbtabuladores]
+--drop table [tbtabuladores]
 select * from tbestado
 
 INSERT INTO tbemp_permisos (numero_nomina,created_at,emp_proy) VALUES ('P1001',GETDATE(),9)

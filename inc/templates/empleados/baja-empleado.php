@@ -6,6 +6,7 @@
             <div class="col-sm"><p id="txtNombre"></p></div>
             <div class="col-sm"><p id="txtSucursal"></p></div>
             <div class="col-sm"><p id="txtAlta"></p></div>
+            <div class="col-sm"><p id="txtJefe"></p></div>
         </div>
 
         <form>

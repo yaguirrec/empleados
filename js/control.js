@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -663,6 +663,8 @@ $(document).ready(function () {
         /**CARGAR TABLA EMPLEADOS COORDINADORAS*/
         case 'altasc': case 'bajasc':
             seccionExportar.removeClass('d-none');
+            $('.columna-primer-jefe').addClass('d-none');
+            $('.columna-actual-jefe').addClass('d-none');
             var action = 'empleados-sucursal',
                 prop = (seccionActual === 'altasc' ? 'activos' : 'bajas');
                 var titulo = (seccionActual === 'altasc' ? 'Empleados activos' : 'Empleados inactivos');
@@ -704,8 +706,10 @@ $(document).ready(function () {
             $('.seccionTitulo').text(titulo);
             if (seccionActual === 'empleado') {
                 $('.columna-baja').addClass('d-none');
+                $('.columna-primer-jefe').addClass('d-none');
             } else {
                 $('.columna-baja').removeClass('d-none');
+                $('.columna-primer-jefe').removeClass('d-none');
                 $("#infoLaborales").addClass('d-none');
             }
             var dataTable = new FormData();
@@ -769,7 +773,9 @@ $(document).ready(function () {
                 row.append($("<td class='text-left'> " + rowInfo.tabulador + " </td>"));
                 row.append($("<td class='text-left'> " + rowInfo.Puesto + " </td>"));
                 row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
+                row.append($("<td> " + rowInfo.jefeActual + " </td>"));
                 if (stEW === 'B') {
+                    row.append($("<td> " + rowInfo.primerJefe + " </td>"));
                     row.append($("<td> " + rowInfo.fechaBaja + " </td>"));
                 }
                 row.append($("<td> " + rowInfo.Sucursal + " </td>"));
@@ -2366,6 +2372,7 @@ $(document).ready(function () {
                 $('#txtNombre').html('Nombres: ' + rowInfo.nombre_largo);
                 $('#txtSucursal').html('Sucursal: ' + rowInfo.sucursal);
                 $('#txtAlta').html('Fecha Alta: ' + rowInfo.fechaAlta);
+                $('#txtJefe').html('Jefe: ' + rowInfo.jefeActual);
             }
 
             let clasificacionBajas = () => {
