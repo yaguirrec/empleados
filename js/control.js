@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V1011201';
+    let version = 'DEV041220';
 
     $('#version').html(version);
 
@@ -468,7 +468,7 @@ $(document).ready(function () {
                 var respuesta = JSON.parse(xmlJefe.responseText);
                 if (respuesta.estado === 'OK') {
                     var informacion = respuesta.informacion;
-                    var s = '<option value="-1">Seleccionar jefe directo</option>';
+                    var s = '<option value="-1">Seleccionar al jefe</option>';
                     for (var i in informacion) {
                         s += '<option class="text-uppercase" value="' + informacion[i].numero_nomina + '">' + informacion[i].numero_nomina + ' - ' + informacion[i].nombre_largo + '</option>';
                     }
@@ -2674,6 +2674,29 @@ $(document).ready(function () {
                         }
                     });
 
+                    //Validar el jefe ingresado
+                    $('#txtJefe').focusout(function () {
+                        var vJefe = $('#txtJefe').val();
+                        // console.log(pto);
+                        if(vJefe < 1)
+                        {
+                            Swal.fire({
+                                position: 'center',
+                                type: 'warning',
+                                title: 'Favor de verificar el jefe nuevamente',
+                                showConfirmButton: false,
+                                timer: 2500
+                            })
+                        
+                            $('#txtJefe').addClass('btn-outline-danger');
+
+                            setTimeout(function () {
+                                $('#txtJefe').removeClass('btn-outline-danger');
+                            }, 3500);
+
+                        }
+                    });
+
                     $("#txtNomina").val(datos.numero_nomina);
                     $("#txtTipo").val(datos.status);
                     $("#txtLote").val(datos.lote);
@@ -2829,8 +2852,9 @@ $(document).ready(function () {
                 domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
                 if
                     (
+                    jefenomina.trim() === '-1' ||
                     salarioDiario.trim() === '' || celula.trim() === '' ||
-                    registro.trim() === '' || puesto.trim() === '' ||
+                    registro.trim() === '' || puesto.trim() === '-1' ||
                     nombre.trim() === '' || aPaterno.trim() === '' ||
                     aMaterno.trim() === '' || id.trim() === '' || nPadre.trim() === '' ||
                     nMadre.trim() === '' || calle.trim() === '' ||
@@ -3200,6 +3224,29 @@ $(document).ready(function () {
 
                 }
             });
+
+            //Validar el jefe ingresado
+            $('#txtJefe').focusout(function () {
+                var vJefe = $('#txtJefe').val();
+                // console.log(pto);
+                if(vJefe < 1)
+                {
+                    Swal.fire({
+                        position: 'center',
+                        type: 'warning',
+                        title: 'Favor de verificar el jefe nuevamente',
+                        showConfirmButton: false,
+                        timer: 2500
+                    })
+                
+                    $('#txtJefe').addClass('btn-outline-danger');
+
+                    setTimeout(function () {
+                        $('#txtJefe').removeClass('btn-outline-danger');
+                    }, 3500);
+
+                }
+            });
             
 
             btnReingresarEmpleado.click(function (e) {
@@ -3263,8 +3310,9 @@ $(document).ready(function () {
                 domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
                 if
                     (
+                    jefenomina.trim() === '-1' ||
                     salarioDiario.trim() === '' || celula.trim() === '' ||
-                    registro.trim() === '' || puesto.trim() === '' ||
+                    registro.trim() === '' || puesto.trim() === '-1' ||
                     nombre.trim() === '' || aPaterno.trim() === '' ||
                     aMaterno.trim() === '' || id.trim() === '' || nPadre.trim() === '' ||
                     nMadre.trim() === '' || calle.trim() === '' ||
@@ -3769,6 +3817,29 @@ $(document).ready(function () {
                 }
             });
 
+            //Validar el jefe ingresado
+            $('#txtJefe').focusout(function () {
+                var vJefe = $('#txtJefe').val();
+                // console.log(pto);
+                if(vJefe < 1)
+                {
+                    Swal.fire({
+                        position: 'center',
+                        type: 'warning',
+                        title: 'Favor de verificar el jefe nuevamente',
+                        showConfirmButton: false,
+                        timer: 2500
+                    })
+                
+                    $('#txtJefe').addClass('btn-outline-danger');
+
+                    setTimeout(function () {
+                        $('#txtJefe').removeClass('btn-outline-danger');
+                    }, 3500);
+
+                }
+            });
+
             // DESHABILITAR CAMPOS
             function lockFields() {
                 if ($("#txtGenerp").val().trim() === 0) $("#txtGenero").attr('disabled', 'disabled');
@@ -3853,8 +3924,9 @@ $(document).ready(function () {
                 }
                 else if
                     (
+                    jefenomina.trim() === '-1' ||
                     salarioDiario.trim() === '' || celula.trim() === '' ||
-                    registro.trim() === '' || puesto.trim() === '' ||
+                    registro.trim() === '' || puesto.trim() === '-1' ||
                     nombre.trim() === '' || aPaterno.trim() === '' ||
                     aMaterno.trim() === '' || rfc.trim() === '' ||
                     nss.trim() === '' || dv.trim() === '' ||
