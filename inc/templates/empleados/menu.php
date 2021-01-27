@@ -15,7 +15,10 @@
     </form>
   </div>
   <div class="card-footer">
-    <button class="btn btn-block btn-sm btn-success" id="btnGafete">Generar <i class="far fa-id-card"></i></button>
+    <div class="d-grid gap-2 d-md-block text-center">
+      <button class="btn btn-lg btn-primary" id="btnGuardarImagen">Guardar Imagen  <i class="fas fa-file-upload"></i></button>
+      <button class="btn btn-lg btn-success" id="btnGafete">Generar Gafete <i class="far fa-id-card"></i></button>
+    </div>
   </div>
 </div>
 <div class="card laborales d-none">

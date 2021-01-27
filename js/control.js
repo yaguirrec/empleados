@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V041220';
+    let version = 'DEV270120201';
 
     $('#version').html(version);
 
@@ -1885,18 +1885,52 @@ $(document).ready(function () {
                 });
             }
 
-
-
-
-            var archivoImagen = $("#txtFoto")[0].files.length;
-            $("#txtFoto").on('click', function () {
-                if (archivoImagen === 0) {
-                    $("#btnGafete").prop('disabled', false);
+            //BOTON GUARDAR IMAGEN
+            $("#btnGuardarImagen").click(function () {
+                if (jQuery('#txtFoto').val() == '') {
+                    Swal.fire({
+                        position: 'center',
+                        type: 'error',
+                        title: 'Ninguna imagen ha sido seleccionada!',
+                        showConfirmButton: false,
+                        timer: 2500
+                    })
                 } else {
-                    $("#btnGafete").prop('disabled', true);
-                }
-            });
+                    var numero_nomina = $('#txtNomina').html(),
+                        invoiceAttach = document.getElementById('txtFoto'),
+                        empFoto = invoiceAttach.files[0],
+                        action = 'guardarFoto';
 
+
+                    var datosGafete = new FormData();
+                    datosGafete.append('empNomina', numero_nomina);
+                    datosGafete.append('empFoto', empFoto);
+                    datosGafete.append('action', action);
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('POST', localBackend + 'control.php', true);
+                    xhr.send(datosGafete);
+                    xhr.onload = function () {
+                        if (this.status === 200) {
+                            var respuesta = JSON.parse(xhr.responseText);
+                        } else {
+                            var respuesta = JSON.parse(xhr.responseText);
+                        }
+                    }
+
+                    Swal.fire({
+                        position: 'center',
+                        type: 'success',
+                        title: 'Imagen guardada exitosamente',
+                        showConfirmButton: false,
+                        timer: 4500
+                    })
+
+                    setTimeout(function () {
+                        location.reload();
+                    }, 4800);
+                }
+                
+            });
 
             //GENERAR GAFETE
             $("#btnGafete").click(function () {
