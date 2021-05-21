@@ -507,17 +507,29 @@ SELECT * FROM [dbo].[departamentos_nomipaq]
 SELECT * FROM [dbo].[puestos_nomipaq] where idpuesto = '520'
 
 /**SINONIMOS PARA TRABAJAR CON TABLAS **/
+CREATE SYNONYM [dbo].[empleados_nomipaqCN]
+FOR
+[192.168.2.204\COMPAC].[ct2017_CALIDAD_DE].[dbo].[nom10001]
+
+CREATE SYNONYM [dbo].[departamentos_nomipaqCN]
+FOR
+[192.168.2.204\COMPAC].[ct2017_CALIDAD_DE].[dbo].[nom10003]
+
+CREATE SYNONYM [dbo].[puestos_nomipaqCN]
+FOR
+[192.168.2.204\COMPAC].[ct2017_CALIDAD_DE].[dbo].[nom10006]
+
 CREATE SYNONYM [dbo].[empleados_nomipaq]
 FOR
-[192.168.2.203\COMPAC].[ct2017_SERVICIOS_].[dbo].[nom10001]
+[192.168.2.204\COMPAC].[ct2017_SERVICIOS_].[dbo].[nom10001]
 
 CREATE SYNONYM [dbo].[departamentos_nomipaq]
 FOR
-[192.168.2.203\COMPAC].[ct2017_SERVICIOS_].[dbo].[nom10003]
+[192.168.2.204\COMPAC].[ct2017_SERVICIOS_].[dbo].[nom10003]
 
 CREATE SYNONYM [dbo].[puestos_nomipaq]
 FOR
-[192.168.2.203\COMPAC].[ct2017_SERVICIOS_].[dbo].[nom10006]
+[192.168.2.204\COMPAC].[ct2017_SERVICIOS_].[dbo].[nom10006]
 
 SELECT te.numero_nomina,te.nombre_largo,te.nombre,te.apellido_paterno,te.apellido_materno,te.status,te.fecha_alta,te.fecha_baja,te.fecha_nacimiento,
                         ts.nombre,ta.id_area,ta.codigo,ta.nombre,tc.id_celula,tc.codigo,tc.nombre,
@@ -734,7 +746,7 @@ SELECT TOP 5 direccion, * FROM [vDatosEmpleados] WHERE direccion <> ''
 SELECT TOP 5 substring(direccion,CHARINDEX('#',direccion)-1,250) AS CALLE, * FROM [vDatosEmpleados] WHERE direccion <> ''
 
 SELECT * FROM [empleados_nomipaq]
-SELECT * FROM [192.168.2.203\COMPAC].[ct2017_CALIDAD_DE].[dbo].[nom10001]
+SELECT * FROM [192.168.2.204\COMPAC].[ct2017_CALIDAD_DE].[dbo].[nom10001]
 
 /** PROCEDIMIENTO PARA INSERTAR NUEVOS EMPLEADOS*/
 --ANTIGUO
@@ -1285,7 +1297,8 @@ SELECT * FROM tbempleados WHERE numero_nomina = '26700'
 SELECT * FROM PJEMPLOY WHERE employee ='26719'
 SELECT * FROM PJEMPPJT WHERE employee ='26719'
 
-SELECT * FROM tbdatos_empleados
+SELECT * FROM tbdatos_empleados WHERE numero_nomina = '26847'
+SELECT * FROM tbempleados WHERE numero_nomina = '26847'
 
 /*
 DELETE FROM tbempleados WHERE numero_nomina = '77777'

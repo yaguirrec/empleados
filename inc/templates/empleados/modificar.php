@@ -90,7 +90,17 @@
                         <label for="txtTabSucursal">Sucursal Tabulador</label>
                         <select class="form-control" id="txtTabSucursal"></select>
                     </div>
-                    <div class="form-group col-md-8">
+                    <div class="form-group col-md-2">
+                        <label for="txtTabNivel">Nivel Tabulador</label>
+                        <select class="form-control" id="txtTabNivel">
+                        <option value="" selected>Seleccione una opción</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
                         <label for="txtJefe">Jefe directo</label>
                         <select class="form-control text-uppercase" id="txtJefe">
                         </select>

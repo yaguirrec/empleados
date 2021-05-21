@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V270120211';
+    let version = 'DEV210520211';
 
     $('#version').html(version);
 
@@ -354,6 +354,7 @@ $(document).ready(function () {
                     $("#txtLocalidad").val(datos.localidad);
                     $("#txtTabClave").val(vTabulador[0]);
                     $("#txtTabSucursal").val(vTabulador[1]);
+                    $("#txtTabNivel").val(vTabulador[2]);
                 }, 280);
 
                 setTimeout(function () {
@@ -1817,7 +1818,7 @@ $(document).ready(function () {
                 $('#txtEstadoCivil').html('<strong> Estado Civil: </strong>' + labelEstadoCivil);
                 $('#txtEducacion').html('<strong> Escolaridad: </strong>' + labelEscolaridad);
 
-                $('#txtTabulador').html('<strong> Tabulador: </strong>' + vTabulador[0] + vTabulador[1]);
+                $('#txtTabulador').html('<strong> Tabulador: </strong>' + vTabulador[0] + vTabulador[1] + ' ' + vTabulador[2]);
                 $('#txtID').html('<strong> Identificacion: </strong>' + rowInfo.identificacion);
                 $('#txtIDN').html('<strong> Numero Identificacion: </strong>' + rowInfo.numero_identificacion);
 
@@ -2799,6 +2800,7 @@ $(document).ready(function () {
                         $("#txtLocalidad").val(datos.localidad);
                         $("#txtTabClave").val(vTabulador[0]);
                         $("#txtTabSucursal").val(vTabulador[1]);
+                        $("#txtTabNivel").val(vTabulador[2]);
                     }, 280);
 
                     setTimeout(function () {
@@ -2830,7 +2832,7 @@ $(document).ready(function () {
                 e.preventDefault();
                 let nomina = $('#txtNomina').val(),
                     jefenomina = $('#txtJefe').val(),
-                    claveTabulador = `${$('#txtTabClave').val()}|${$('#txtTabSucursal').val()}`,
+                    claveTabulador = `${$('#txtTabClave').val()}|${$('#txtTabSucursal').val()}|${$('#txtTabNivel').val()}`,
                     tipoNomina = $('#txtTipoNomina').val(),
                     tipo = $('#txtTipo').val(),
                     lote = $("#txtLote").val(),
@@ -2981,7 +2983,8 @@ $(document).ready(function () {
                                 })
                                     .then(resultado => {
                                         if (resultado.value) {
-                                            location.reload();
+                                            //location.reload();
+                                            window.history.back();
                                             // window.location.href = 'index.php?request=empleado';
                                         }
                                     })
@@ -3287,7 +3290,7 @@ $(document).ready(function () {
                 e.preventDefault();
                 nomina = $('#txtNomina').val(),
                     jefenomina = $('#txtJefe').val(),
-                    claveTabulador = `${$('#txtTabClave').val()}|${$('#txtTabSucursal').val()}`,
+                    claveTabulador = `${$('#txtTabClave').val()}|${$('#txtTabSucursal').val()}|${$('#txtTabNivel').val()}`,
                     tipoNomina = $('#txtTipoNomina').val(),
                     tipo = $('#txtTipo').val(),
                     lote = $("#txtLote").val(),
@@ -3886,7 +3889,7 @@ $(document).ready(function () {
                 e.preventDefault();
                 let nomina = $('#txtNomina').val(),
                     jefenomina = txtJefe.val(),
-                    claveTabulador = `${$('#txtTabClave').val()}|${$('#txtTabSucursal').val()}`,
+                    claveTabulador = `${$('#txtTabClave').val()}|${$('#txtTabSucursal').val()}|${$('#txtTabNivel').val()}`,
                     tipoNomina = $('#txtTipoNomina').val(),
                     tipo = $('#txtTipo').val(),
                     sucursal = $('#txtSucursal').val(),
@@ -3940,7 +3943,7 @@ $(document).ready(function () {
                 rfcfin = rfc.substr(10, 3);
                 domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
                 //VALIDAR SI EL TABULADOR ES MANDATORIO
-                if ($('#txtTabSucursal').val() === '' && $('#txtTabClave').val().trim() === '') {
+                if ($('#txtTabNivel').val() === '' && $('#txtTabSucursal').val() === '' && $('#txtTabClave').val().trim() === '') {
                     if (tipoNomina.trim() === 'S' && (clasificacion === 'O' || clasificacion === 'AO')) {
                         Swal.fire({
                             position: 'center',
@@ -3949,8 +3952,10 @@ $(document).ready(function () {
                             showConfirmButton: false,
                             timer: 3500
                         });
+                        $('#txtTabNivel').css("border", "1px solid red");
                         $('#txtTabSucursal').css("border", "1px solid red");
                         $('#txtTabSucursal').focus();
+                        $('#txtTabNivel').css("border", "1px solid red");
                         $('#txtTabClave').css("border", "1px solid red");
                         $('#txtTabClave').focus();
                         $("html, body").animate({ scrollTop: 0 }, 500);
