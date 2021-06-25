@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V250520211';
+    let version = 'V250620211';
 
     $('#version').html(version);
 
@@ -672,8 +672,10 @@ $(document).ready(function () {
                 $('.seccionTitulo').text(titulo);
                 if (seccionActual === 'altasc') {
                     $('.columna-baja').addClass('d-none');
+                    $('.columna-primer-jefe').addClass('d-none');
                 } else {
                     $('.columna-baja').removeClass('d-none');
+                    $('.columna-primer-jefe').removeClass('d-none');
                 }
             $.ajax({
                 type: 'POST',
