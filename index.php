@@ -43,7 +43,7 @@
                   include 'inc/templates/empleados/ci.php';
               break;
               case 'becarios':
-                include 'inc/templates/empleados/vista.php';
+                include 'inc/templates/empleados/vista-practicantes.php';
               break;
               case 'modificar-empleado':
                 include 'inc/templates/empleados/modificar.php';

@@ -13,22 +13,16 @@
   <div class="table-responsive">
     <table class="table table-sm table-bordered table-hover bg-gray-200 text-center text-uppercase" cellspacing="4">
       
-      <thead class="font-weight-bold table-success">
+      <thead class="font-weight-bold alert-success">
         <tr>
           <th scope="col">Nómina</th>
           <th scope="col">Nombres</th>
-          <th scope="col">Tabulador</th>
           <th scope="col">Puesto</th>
           <th scope="col">Fecha Alta</th>
-          <th scope="col" class="columna-jefe-actual">Jefe</th>
-          <th scope="col" class="columna-primer-jefe">Primer Jefe</th>
-          <th scope="col" class="columna-baja">Fecha Baja</th>
+          <th scope="col">Fecha Baja</th>
           <th scope="col">Sucursal</th>
           <th scope="col">Area</th>
-          <th scope="col">WEB</th>
-          <th scope="col">ERP</th>
-          <th scope="col">NOMIPAQ</th>
-          <!-- <th scope="col">Acciones</th> -->
+          <th scope="col">Status</th>
         </tr>
       </thead>
       <tbody id="dataTable">

@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V250620211';
+    let version = 'V1008211';
 
     $('#version').html(version);
 
@@ -845,7 +845,7 @@ $(document).ready(function () {
                 $('#loadingIndicator').addClass('d-none');
 
                 if (st === 'B') {
-                    estado = "alert-secondary";
+                    estado = "alert-dark";
                     status = 'Baja';
                 }
                 if (st === 'R') {
@@ -863,14 +863,16 @@ $(document).ready(function () {
                 row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
                 if (st === 'B') {
                     row.append($("<td> " + rowInfo.fechaBaja + " </td>"));
+                } else {
+                    row.append($("<td> NA </td>"));
                 }
                 row.append($("<td> " + rowInfo.Sucursal + " </td>"));
                 row.append($("<td> " + rowInfo.Celula + " </td>"));
-                row.append($("<td> " + status + " </td>"));
+                row.append($("<td> " + status + " </td></tr>"));
                 // COLUMNA ACCION
-                row.append($("<td class='text-center'>"
+                /*row.append($("<td class='text-center'>"
                     + "<a class='btn btnConsulta text-white btn-facebook btn-circle btn-sm' data-id='" + rowInfo.numero_nomina + "' role='button' title='Ver información'><i class='fas fa-info'></i></a>"
-                    + "</td>"));
+                    + "</td>"));*/
 
                 $(".btnConsulta").unbind().click(function () {
                     var employeeID = $((this)).data('id'),
