@@ -17,6 +17,7 @@
                 <th scope="col">Sucursal</th>
                 <th scope="col">Departamento</th>
                 <th scope="col">Puesto</th>
+                <th scope="col">Jefe Directo</th>
                 <th scope="col">Clasificacion baja</th>
                 <th scope="col">Motivo baja</th>
                 <th scope="col">Explicacion Baja</th>

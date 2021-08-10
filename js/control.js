@@ -5089,6 +5089,7 @@ $(document).ready(function () {
                                 "<td>" + reg[i].Sucursal + "</td>" +
                                 "<td>" + reg[i].Celula + "</td>" +
                                 "<td>" + reg[i].Puesto + "</td>" +
+                                "<td>" + reg[i].jefeDirecto + "</td>" +
                                 "<td>" + reg[i].clasificacionBaja + "</td>" +
                                 "<td>" + reg[i].motivonBaja + "</td>" +
                                 "<td>" + reg[i].expnBaja + "</td>" +
