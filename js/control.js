@@ -16,7 +16,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V1008211';
+    let version = 'V1608211';
 
     $('#version').html(version);
 
@@ -4130,6 +4130,25 @@ $(document).ready(function () {
                             campo += '<option value="' + puestoTipo[i].id_puesto + '">' + puestoTipo[i].nivel + ' - ' + puestoTipo[i].nombre + '</option>';
                         }
                         txtPuestoL.html(campo);
+                    }
+                });
+            }
+
+            let llenarDepartamento = () => {
+                let action = 'obtenerDepartamento';
+                $.ajax({
+                    type: 'POST',
+                    url: backendURL,
+                    data: { action: action },
+                    success: function (response) {
+                        let respuesta = JSON.parse(response);
+                        console.log(respuesta);
+                        let nDepartamento = respuesta.informacion,
+                            campo = '';
+                        for (var i in nDepartamento) {
+                            campo += '<option value="' + nDepartamento[i].id_celula + '">' + nDepartamento[i].codigo + ' - ' + nDepartamento[i].nombre + '</option>';
+                        }
+                        txtCelulaL.html(campo);
                     }
                 });
             }
