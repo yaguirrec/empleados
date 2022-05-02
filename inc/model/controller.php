@@ -614,11 +614,12 @@
             $props = $_POST['prop'];
             
             $query = "SELECT TOP 500 te.numero_nomina,UPPER(te.nombre_largo) AS Nombre, 
-                        CASE
-                            WHEN (SELECT id_puesto FROM tbempleados WHERE numero_nomina = te.numero_nomina) < 1
-                        THEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)
-                        ELSE (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto)
-                        END AS Puesto,
+                        (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto) As Puesto,
+                        /*CASE    
+                        WHEN (SELECT id_puesto FROM tbempleados WHERE numero_nomina = te.numero_nomina) < 1
+                        THEN (SELECT descripcion FROM PUESTOS_NOMINAS WHERE idpuesto = te.puesto_temp)    
+                        ELSE (SELECT nombre FROM tbpuesto WHERE id_puesto = te.id_puesto) 
+                        END AS Puesto,*/
                         CONVERT(VARCHAR(10), te.fecha_alta, 105) AS fechaAlta,
                         CONVERT(VARCHAR(10), te.fecha_baja, 105) AS fechaBaja,
                         ts.nombre AS 'Sucursal',ta.nombre AS 'Departamento',tc.nombre as 'Celula',te.status,te.created_at

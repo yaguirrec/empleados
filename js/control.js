@@ -8,15 +8,15 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
-    let url_dev = 'http://localhost/';
+    let url_dev = 'http://localhost:8080/';
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V1608211';
+    let version = 'DEV2904221';
 
     $('#version').html(version);
 
@@ -1937,11 +1937,12 @@ $(document).ready(function () {
                 
             });
 
-            //GENERAR GAFETE
-            $("#btnGafete").click(function () {
+            //GENERAR GAFETE QOBRO
+            $(".btnGafete").click(function () {
                 var numero_nomina = $('#txtNomina').html(),
                     invoiceAttach = document.getElementById('txtFoto'),
                     empFoto = invoiceAttach.files[0],
+                    btnID = event.srcElement.id;
                     action = 'guardarFoto';
 
 
@@ -1959,10 +1960,18 @@ $(document).ready(function () {
                         var respuesta = JSON.parse(xhr.responseText);
                     }
                 }
-
-                var url = url_final + "empleados/gafete.php?emp=" + numero_nomina,
+                if(btnID == 'btnGafeteQ'){
+                    var url = url_final + "empleados/gafete.php?emp=" + numero_nomina,
                     newTab = window.open(url, '_blank');
-                newTab.focus();
+                    newTab.focus();
+                } else if(btnID == 'btnGafeteM'){
+                    var url = url_final + "empleados/gafeteM.php?emp=" + numero_nomina,
+                    newTab = window.open(url, '_blank');
+                    newTab.focus();
+                }
+                // var url = url_dev + "empleados/gafete.php?emp=" + numero_nomina + "&gftid=" + btnID,
+                //     newTab = window.open(url, '_blank');
+                // newTab.focus();
             });
 
             //MODIFICAR DATOS DEL EMPLEADO

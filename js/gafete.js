@@ -1,10 +1,11 @@
 //IMPORTAR URL DEL BACKEND
-let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
 //VARIABLE QUE GUARADARA LOS PARAMETROS DE LA URL
 let searchParams = new URLSearchParams(window.location.search);
 let check = searchParams.has('emp'); // SI ALGUN PARAMETRO ES IGUAL A emp LA VARIABLE SERA true
 let botonImprimir = $('#btnPrint');
 let seccionBotonImprimir = $('.seccionBotonImprimir');
+const uppercaseWords = str => str.replace(/^(.)|\s+(.)/g, c => c.toUpperCase());
 
 
 if (check) {
@@ -26,7 +27,7 @@ if (check) {
             imss = `${imss.substr(0, 4)}-${imss.substr(4, 2)}-${imss.substr(6, 4)}-${$.trim(informacion.dv)}`;
             telefonoEmergencia = `${telefonoEmergencia.substr(0, 3)} - ${telefonoEmergencia.substr(3, 3)} - ${telefonoEmergencia.substr(6, 4)}`;
             $("#empFoto").attr("src","assets/files/" + nomina + "/" + nomina + ".jpg");
-            $("#empNombre").html(informacion.nombre_largo);
+            $("#empNombre").html(uppercaseWords(informacion.nuevo_nombre));
             $("#empNumero").html(nomina);
             $("#empPuesto").html(informacion.puesto);
             $("#empAlta").html('Ingreso: ' + fechaAlta);
@@ -34,7 +35,7 @@ if (check) {
             $("#empEmergencia").html(telefonoEmergencia);
             $("#empDireccion").html(`Calle ${informacion.calle} #${informacion.numero_exterior}  <br/> Fracc. ${informacion.fraccionamiento} <br/> C.P. ${informacion.codigo_postal} ${informacion.estado}`);
             // $("#empNomina").attr("src",url);
-            JsBarcode("#empNomina", nomina,{lineColor: "#052467", font: "arial",displayValue: false});
+            //JsBarcode("#empNomina", nomina,{lineColor: "#052467", font: "arial",displayValue: false});
         } else {
             // window.close();
             let timerInterval

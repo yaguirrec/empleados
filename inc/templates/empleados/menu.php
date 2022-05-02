@@ -12,12 +12,17 @@
           El empleado aun no cuenta con procesada de alta.
         </div>
       </div>
+      <div class="d-grid gap-2 d-md-block text-center">
+      <button class="btn btn-md btn-primary" id="btnGuardarImagen">Guardar Imagen  <i class="fas fa-file-upload"></i></button>
+    </div>
     </form>
   </div>
   <div class="card-footer">
     <div class="d-grid gap-2 d-md-block text-center">
-      <button class="btn btn-lg btn-primary" id="btnGuardarImagen">Guardar Imagen  <i class="fas fa-file-upload"></i></button>
-      <button class="btn btn-lg btn-success" id="btnGafete">Generar Gafete <i class="far fa-id-card"></i></button>
+      <h4 class="card-title">Gafetes</h4>
+      <button class="btn btn-md btn-info btnGafete" id="btnGafeteQ">QOBRO <i class="fas fa-id-badge"></i></button>
+      <button class="btn btn-md btn-success btnGafete" id="btnGafeteM">MEXQ <i class="far fa-id-badge"></i></button>
+      <!-- <button class="btn btn-md btn-secondary" id="btnGafeteP">Premium <i class="far fa-id-badge"></i></button> -->
     </div>
   </div>
 </div>
