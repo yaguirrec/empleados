@@ -1960,6 +1960,7 @@ $(document).ready(function () {
                         var respuesta = JSON.parse(xhr.responseText);
                     }
                 }
+                //Generar 2 gafetes
                 if(btnID == 'btnGafeteQ'){
                     var url = url_final + "empleados/gafete.php?emp=" + numero_nomina,
                     newTab = window.open(url, '_blank');
