@@ -17,7 +17,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'DEV2904221';
+    let version = 'V1005221';
 
     $('#version').html(version);
 
@@ -1892,7 +1892,8 @@ $(document).ready(function () {
             }
 
             //BOTON GUARDAR IMAGEN
-            $("#btnGuardarImagen").click(function () {
+            $("#btnGuardarImagen").click(function (e) {
+                e.preventDefault();
                 if (jQuery('#txtFoto').val() == '') {
                     Swal.fire({
                         position: 'center',
@@ -1963,11 +1964,11 @@ $(document).ready(function () {
                 }
                 //Generar 2 gafetes
                 if(btnID == 'btnGafeteQ'){
-                    var url = url_test + "empleados/gafete.php?emp=" + numero_nomina,
+                    var url = url_final + "empleados/gafete.php?emp=" + numero_nomina,
                     newTab = window.open(url, '_blank');
                     newTab.focus();
                 } else if(btnID == 'btnGafeteM'){
-                    var url = url_test + "empleados/gafeteM.php?emp=" + numero_nomina,
+                    var url = url_final + "empleados/gafeteM.php?emp=" + numero_nomina,
                     newTab = window.open(url, '_blank');
                     newTab.focus();
                 }

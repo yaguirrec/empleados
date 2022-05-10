@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="d-grid gap-2 d-md-block text-center">
-      <button class="btn btn-md btn-primary" id="btnGuardarImagen">Guardar Imagen  <i class="fas fa-file-upload"></i></button>
+      <button class="btn btn-md btn-primary" type='button' id="btnGuardarImagen">Guardar Imagen  <i class="fas fa-file-upload"></i></button>
     </div>
     </form>
   </div>
