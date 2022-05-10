@@ -12,6 +12,7 @@ $(document).ready(function () {
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
+    let url_test = 'http://mexq.mx/dev/';
     let url_dev = 'http://localhost:8080/';
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
@@ -1962,11 +1963,11 @@ $(document).ready(function () {
                 }
                 //Generar 2 gafetes
                 if(btnID == 'btnGafeteQ'){
-                    var url = url_final + "empleados/gafete.php?emp=" + numero_nomina,
+                    var url = url_test + "empleados/gafete.php?emp=" + numero_nomina,
                     newTab = window.open(url, '_blank');
                     newTab.focus();
                 } else if(btnID == 'btnGafeteM'){
-                    var url = url_final + "empleados/gafeteM.php?emp=" + numero_nomina,
+                    var url = url_test + "empleados/gafeteM.php?emp=" + numero_nomina,
                     newTab = window.open(url, '_blank');
                     newTab.focus();
                 }
