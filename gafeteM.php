@@ -45,8 +45,8 @@ font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;}
     left:0.15cm; 
     font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
     width: 5.4cm; 
-    top:7cm;
-    color: ##16152a;
+    top:6.58cm;
+    color: #16152a;
     font-size: 16px;
     z-index: 3;" 
     id="empNombre">
@@ -60,7 +60,7 @@ font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;}
     left:0.15cm; 
     width: 5.4cm; 
     font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
-    top: 7.5cm;
+    top: 7.8cm;
     z-index: 4; 
     font-size:14px;
     color:#3cb371;" id="empPuesto">

@@ -7,7 +7,6 @@ let botonImprimir = $('#btnPrint');
 let seccionBotonImprimir = $('.seccionBotonImprimir');
 const uppercaseWords = str => str.replace(/^(.)|\s+(.)/g, c => c.toUpperCase());
 
-
 if (check) {
     let param = searchParams.get('emp'), //GUARDAR EL VALOR DE PARAMETRO
         action = 'datos-gafete';
@@ -19,7 +18,10 @@ if (check) {
         let respuesta = JSON.parse(response);
         let informacionCantidad = respuesta.informacion.length;
         if(informacionCantidad > 0){
+            console.log(respuesta);
             let informacion = respuesta.informacion[0];
+            let apellido = informacion.apellido_paterno;
+            let nombre = informacion.nombre;
             let nomina = $.trim(informacion.numero_nomina);
             let fechaAlta = (informacion.fecha_alta.date).substr(0, 10);
             let imss = $.trim(informacion.nss);
@@ -27,7 +29,7 @@ if (check) {
             imss = `${imss.substr(0, 4)}-${imss.substr(4, 2)}-${imss.substr(6, 4)}-${$.trim(informacion.dv)}`;
             telefonoEmergencia = `${telefonoEmergencia.substr(0, 3)} - ${telefonoEmergencia.substr(3, 3)} - ${telefonoEmergencia.substr(6, 4)}`;
             $("#empFoto").attr("src","assets/files/" + nomina + "/" + nomina + ".jpg");
-            $("#empNombre").html(uppercaseWords(informacion.nuevo_nombre));
+            $("#empNombre").html(nombre + ' ' + apellido);
             $("#empNumero").html(nomina);
             $("#empPuesto").html(informacion.puesto);
             $("#empAlta").html('Ingreso: ' + fechaAlta);
