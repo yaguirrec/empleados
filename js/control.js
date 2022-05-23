@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -17,7 +17,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'DEV1905221';
+    let version = 'V1905221';
 
     $('#version').html(version);
 
@@ -1964,11 +1964,11 @@ $(document).ready(function () {
                 }
                 //Generar 2 gafetes
                 if(btnID == 'btnGafeteQ'){
-                    var url = url_test + "empleados/gafete.php?emp=" + numero_nomina,
+                    var url = url_final + "empleados/gafete.php?emp=" + numero_nomina,
                     newTab = window.open(url, '_blank');
                     newTab.focus();
                 } else if(btnID == 'btnGafeteM'){
-                    var url = url_test + "empleados/gafeteM.php?emp=" + numero_nomina,
+                    var url = url_final + "empleados/gafeteM.php?emp=" + numero_nomina,
                     newTab = window.open(url, '_blank');
                     newTab.focus();
                 }
