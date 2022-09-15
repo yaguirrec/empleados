@@ -1,5 +1,5 @@
 //IMPORTAR URL DEL BACKEND
-let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
 //VARIABLE QUE GUARADARA LOS PARAMETROS DE LA URL
 let searchParams = new URLSearchParams(window.location.search);
 let check = searchParams.has('emp'); // SI ALGUN PARAMETRO ES IGUAL A emp LA VARIABLE SERA true
@@ -36,8 +36,8 @@ if (check) {
             $("#empNS").html(imss);
             $("#empEmergencia").html(telefonoEmergencia);
             $("#empDireccion").html(`Calle ${informacion.calle} #${informacion.numero_exterior}  <br/> Fracc. ${informacion.fraccionamiento} <br/> C.P. ${informacion.codigo_postal} ${informacion.estado}`);
-            // $("#empNomina").attr("src",url);
-            //JsBarcode("#empNomina", nomina,{lineColor: "#052467", font: "arial",displayValue: false});
+            //$("#empNomina").attr("src",url);
+            JsBarcode("#empNomina", nomina,{lineColor: "#052467", font: "arial",displayValue: false});
         } else {
             // window.close();
             let timerInterval

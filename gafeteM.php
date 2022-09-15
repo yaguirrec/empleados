@@ -132,8 +132,8 @@ font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;}
     position: absolute; 
     text-align: center;
     width: 3.6cm; 
-    top:10.70cm;
-    font-size: 8.7px;
+    top:11.55cm;
+    font-size: 8.3px;
     font-family: 'Century Gothic', CenturyGothic, AppleGothic;
     z-index: 9;
     left: 1.2cm;
@@ -150,10 +150,10 @@ font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;}
     -webkit-transform:rotate(180deg);
     position: absolute; 
     text-align: center;
-    left: .25cm;
+    left: 1cm;
     width: 4cm; 
-    top:10.24cm;
-    font-size: 8px;
+    top:10.28cm;
+    font-size: 9px;
     font-family: 'Century Gothic', CenturyGothic, AppleGothic;
     z-index: 9;
     color:#919496 ;" id="empNumero">
@@ -162,22 +162,22 @@ font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;}
 
 
 
-    <!-- <center>
+   <center>
     <img
     style="transform:rotate(180deg);
     -ms-transform:rotate(180deg); /* IE 9 */
     -webkit-transform:rotate(180deg);
     position: absolute;
     text-align: center;
-    width: 4.5cm;
+    width: 4cm;
     font-family: 'Century Gothic', CenturyGothic, AppleGothic, sans-serif;
-    height: .8cm; 
-    top:10.35cm;
+    height: 1cm; 
+    top:10.55cm;
     z-index: 10;
-    left: 0.7cm;" 
+    left:1cm;" 
     alt='MEXQ' id="empNomina"/>
     <svg id="barcode"></svg>
-    </center> -->
+    </center>
 
     </div>
     <br>
