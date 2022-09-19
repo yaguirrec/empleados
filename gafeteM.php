@@ -177,6 +177,7 @@ font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;}
     left:1cm;" 
     alt='MEXQ' id="empNomina"/>
     <svg id="barcode"></svg>
+    <!-- Numero nomina en codigo de barras -->
     </center>
 
     </div>
