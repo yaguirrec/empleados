@@ -20,6 +20,7 @@
           <th scope="col">Tabulador</th>
           <th scope="col">Puesto</th>
           <th scope="col">Fecha Alta</th>
+          <th scope="col">Reclutado</th>
           <th scope="col" class="columna-jefe-actual">Jefe</th>
           <th scope="col" class="columna-primer-jefe">Primer Jefe</th>
           <th scope="col" class="columna-baja">Fecha Baja</th>

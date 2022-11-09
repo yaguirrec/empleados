@@ -8,7 +8,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -17,7 +17,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V1909221';
+    let version = 'V0911221_DEV';
 
     $('#version').html(version);
 
@@ -31,7 +31,7 @@ $(document).ready(function () {
             var txtBuscado = this.value,
                 prop = (seccionActual === 'empleado' ? 'activos' : 'bajas');
             action = 'buscar-texto';
-            // console.log(txtBuscado);
+            //console.log(txtBuscado);
             $('#dataTable').empty();
             var consulta_parametros = new FormData();
             consulta_parametros.append('txtBuscado', txtBuscado);
@@ -42,7 +42,7 @@ $(document).ready(function () {
             xmlhr.onload = function () {
                 if (this.status === 200) {
                     var respuesta = JSON.parse(xmlhr.responseText);
-                    // console.log(respuesta);
+                    //console.log(respuesta);
                     if (respuesta.estado === 'OK') {
                         var informacion = respuesta.informacion,
                             datos = respuesta.informacion.length;
@@ -149,6 +149,15 @@ $(document).ready(function () {
             }
         }
         xmlhr.send(cerrar_sesion);
+    }
+
+    let modalCargaInformacion = (icono, mensaje, tiempo) =>{
+        Swal.fire({
+            title: mensaje,
+            type: icono,
+            showConfirmButton: false,
+            timer: tiempo
+          })
     }
 
     let obtenerDatosEmpleados = () => {
@@ -483,6 +492,36 @@ $(document).ready(function () {
         xmlJefe.send(listaJefe);
     }
 
+    /**
+     * FECHA 07-NOVIEMBRE-2022
+     * LLAMAR A LOS EMPLEADOS DE RECULTAMIENTO PARA LOS CAMPOS Reclutadora / Recomendado 
+     * 
+    */
+    let listaReclutamiento = (prop) => {
+        var listaEmpleadosR = new FormData(),
+            action = 'lista-empleados';
+        listaEmpleadosR.append('action',action);
+        listaEmpleadosR.append('prop', prop);
+        var xmlEmpleadoR = new XMLHttpRequest();
+        xmlEmpleadoR.open('POST', backendURL, true);
+        xmlEmpleadoR.onload = function () {
+            if(this.status === 200){
+                var respuesta = JSON.parse(xmlEmpleadoR.responseText);
+                if(respuesta.estado === 'OK'){
+                    var informacion = respuesta.informacion;
+                    var s = '<option value="-1">Seleccionar empleado</option>';
+                    for(var i in informacion){
+                        s += '<option class="text-uppercase" value="' + informacion[i].numero_nomina + ' - ' + informacion[i].Nombre + '">' + informacion[i].numero_nomina + ' - ' + informacion[i].Nombre + '</option>';
+                    }
+                    $('#txtReclutador').html(s);
+                } else if(respuesta.estado === 'error'){
+                    var informacion = respuesta.informacion;
+                }
+            }
+        }
+        xmlEmpleadoR.send(listaEmpleadosR);
+    }
+
 
     let listarFraccionamientos = (cp) => {
         if (cp.length === 5) {
@@ -741,6 +780,7 @@ $(document).ready(function () {
                 var stEW = rowInfo.status,
                     stERP = rowInfo.emp_status,
                     stNOM = rowInfo.nominas_status,
+                    reclutador = rowInfo.nombre_reclutador,
                     vEW = 'fas fa-check',
                     vERP = 'fas fa-check',
                     vNOM = 'fas fa-check',
@@ -751,12 +791,15 @@ $(document).ready(function () {
 
                 $('#loadingIndicator').addClass('d-none');
 
+                if (!reclutador) {reclutador = ''; reclutador = 'NA'}
+
                 if (stEW === 'B') {classEW = 'alert-danger'; vEW = 'fas fa-times';}
                 if (stEW === null) {classEW = 'alert-danger'; vEW = 'fas fa-times';}
                 if (stERP === 'I') {classERP = 'alert-danger'; vERP = 'fas fa-times';}
                 if (stERP === null) {classERP = 'alert-danger'; vERP = 'fas fa-times';}
                 if (stNOM === 'B') {classNOM = 'alert-danger'; vNOM = 'fas fa-times';}
                 if (stNOM === null) {classNOM = 'alert-danger'; vNOM = 'fas fa-times';}
+
                 
                 if (stEW === 'B') {
                     estado = "alert-secondary";
@@ -777,6 +820,7 @@ $(document).ready(function () {
                 row.append($("<td class='text-left'> " + rowInfo.tabulador + " </td>"));
                 row.append($("<td class='text-left'> " + rowInfo.Puesto + " </td>"));
                 row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
+                row.append($("<td> " + reclutador + " </td>"));
                 row.append($("<td> " + rowInfo.jefeActual + " </td>"));
                 if (stEW === 'B') {
                     row.append($("<td> " + rowInfo.primerJefe + " </td>"));
@@ -1674,6 +1718,7 @@ $(document).ready(function () {
                 row.append($("<td>" + rowInfo.fechaNacimiento.date.substr(0, 10) + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.lugar_nacimiento + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.sexo + " </td>"));
+                row.append($("<td>" + rowInfo.nombre_reclutador + " </td>"));
                 row.append($("<td>" + rowInfo.RFC + " </td>"));
                 row.append($("<td>" + rowInfo.CURP + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.nss + " </td>"));
@@ -2748,6 +2793,57 @@ $(document).ready(function () {
                         }
                     });
 
+                    /**
+                     * 
+                     * FECHA 07-NOVIEMBRE-22
+                     * LLENAR CAMPO RECLUTADORA (ALTA EMPLEADO) 
+                     * Validar campo "Reclutado por" para mostrar el campo a capturar
+                     */
+                    $("#txtReclutado").change(function (e){
+                        var reclutado_por = $('#txtReclutado').val(),
+                            campoOL = $('.campoOutL'),
+                            campoRP = $('.campoRecluatdo');
+                        if(reclutado_por === 'reclutador' || reclutado_por === 'recomendo'){
+                            campoRP.removeClass('d-none');
+                            campoOL.addClass('d-none');
+                            listaReclutamiento('activos');
+                            modalCargaInformacion('info', 'Cargando lista de empleados...', 8000);
+                        } else if (reclutado_por === 'outsourcing' || reclutado_por === 'lider_moral'){
+                            campoRP.addClass('d-none');
+                            campoOL.removeClass('d-none');
+                        } else {
+                            campoRP.addClass('d-none');
+                            campoOL.addClass('d-none');
+                        }
+                    });
+
+                    if(datos.reclutado_por){
+                        $("#txtReclutado").val(datos.reclutado_por);
+
+                            var campoOL = $('.campoOutL'),
+                                campoRP = $('.campoRecluatdo');
+
+                            if(datos.reclutado_por === 'reclutador' || datos.reclutado_por === 'recomendo'){
+                                campoRP.removeClass('d-none');
+                                campoOL.addClass('d-none');
+                                listaReclutamiento('activos');
+                                setTimeout(function () {
+                                    listaReclutamiento('activos');
+                                }, 500);
+
+                                setTimeout(function () {
+                                    $("#txtReclutador").val(datos.nombre_reclutador).prop('selected', true);
+                                }, 9000);
+                            } else if (datos.reclutado_por === 'outsourcing' || datos.reclutado_por === 'lider_moral'){
+                                campoRP.addClass('d-none');
+                                campoOL.removeClass('d-none');
+                                $("#txtout_lm").val(datos.nombre_reclutador);
+                            }
+                    } else {
+                        campoRP.addClass('d-none');
+                        campoOL.addClass('d-none');
+                    }
+
                     $("#txtNomina").val(datos.numero_nomina);
                     $("#txtTipo").val(datos.status);
                     $("#txtLote").val(datos.lote);
@@ -2848,6 +2944,9 @@ $(document).ready(function () {
                 e.preventDefault();
                 let nomina = $('#txtNomina').val(),
                     jefenomina = $('#txtJefe').val(),
+                    reclutado_por = $('#txtReclutado').val(),
+                    reclutador = '',
+                    control_reclutador = '',
                     claveTabulador = `${$('#txtTabClave').val()}|${$('#txtTabSucursal').val()}|${$('#txtTabNivel').val()}`,
                     tipoNomina = $('#txtTipoNomina').val(),
                     tipo = $('#txtTipo').val(),
@@ -2902,6 +3001,17 @@ $(document).ready(function () {
                     rfcini = rfc.substr(0, 4),
                     rfcfin = rfc.substr(10, 3);
                 domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
+
+                if(reclutado_por !== ''){
+                    if(reclutado_por === 'reclutador' || reclutado_por === 'recomendo'){
+                        reclutador = $('#txtReclutador').val();
+                        control_reclutador = 'valor_ingresado';
+                    } else if (reclutado_por === 'outsourcing' || reclutado_por === 'lider_moral'){
+                        reclutador = $('#txtout_lm').val();
+                        control_reclutador = 'valor_ingresado';
+                    }
+                }
+                
                 if
                     (
                     jefenomina.trim() === '-1' ||
@@ -2915,7 +3025,7 @@ $(document).ready(function () {
                     nFonacot.trim() === '' || cuenta.trim() === '' ||
                     correo.trim() === '' || telefono.trim() === '' ||
                     celular.trim() === '' || contacto.trim() === '' ||
-                    nContacto.trim() === ''
+                    nContacto.trim() === '' || control_reclutador.trim() === ''
                 ) {
                     Swal.fire({
                         position: 'center',
@@ -2934,6 +3044,8 @@ $(document).ready(function () {
                             action: 'modificarEmpleado',
                             nomina: nomina,
                             jefenomina: jefenomina,
+                            reclutado_por: reclutado_por,
+                            reclutador: reclutador,
                             claveTabulador: claveTabulador,
                             tipoNomina: tipoNomina,
                             empleado_status: tipo,
@@ -3762,6 +3874,30 @@ $(document).ready(function () {
                 xmlP.send(listaP);
             });
 
+            /**
+             * 
+             * FECHA 07-NOVIEMBRE-22
+             * LLENAR CAMPO RECLUTADORA (ALTA EMPLEADO) 
+             * Validar campo "Reclutado por" para mostrar el campo a capturar
+             */
+            $("#txtReclutado").change(function (e){
+                var reclutado_por = $('#txtReclutado').val(),
+                    campoOL = $('.campoOutL'),
+                    campoRP = $('.campoRecluatdo');
+                if(reclutado_por === 'reclutador' || reclutado_por === 'recomendo'){
+                    campoRP.removeClass('d-none');
+                    campoOL.addClass('d-none');
+                    listaReclutamiento('activos');
+                    modalCargaInformacion('success', 'Cargando lista de empleados...', 8000);
+                } else if (reclutado_por === 'outsourcing' || reclutado_por === 'lider_moral'){
+                    campoRP.addClass('d-none');
+                    campoOL.removeClass('d-none');
+                } else {
+                    campoRP.addClass('d-none');
+                    campoOL.addClass('d-none');
+                }
+            });
+            
 
             //LLENAR JEFE DIRECTO POR NIVEL DE PUESTO SELECCIONADO
             $("#txtClasificacion").focusout(function () {
@@ -3905,6 +4041,9 @@ $(document).ready(function () {
                 e.preventDefault();
                 let nomina = $('#txtNomina').val(),
                     jefenomina = txtJefe.val(),
+                    reclutado_por = $('#txtReclutado').val(),
+                    reclutador = '',
+                    control_reclutador = '',
                     claveTabulador = `${$('#txtTabClave').val()}|${$('#txtTabSucursal').val()}|${$('#txtTabNivel').val()}`,
                     tipoNomina = $('#txtTipoNomina').val(),
                     tipo = $('#txtTipo').val(),
@@ -3958,6 +4097,17 @@ $(document).ready(function () {
                 rfcini = rfc.substr(0, 4);
                 rfcfin = rfc.substr(10, 3);
                 domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
+
+                if(reclutado_por !== ''){
+                    if(reclutado_por === 'reclutador' || reclutado_por === 'recomendo'){
+                        reclutador = $('#txtReclutador').val();
+                        control_reclutador = 'valor_ingresado';
+                    } else if (reclutado_por === 'outsourcing' || reclutado_por === 'lider_moral'){
+                        reclutador = $('#txtout_lm').val();
+                        control_reclutador = 'valor_ingresado';
+                    }
+                }
+
                 //VALIDAR SI EL TABULADOR ES MANDATORIO
                 if ($('#txtTabNivel').val() === '' && $('#txtTabSucursal').val() === '' && $('#txtTabClave').val().trim() === '') {
                     if (tipoNomina.trim() === 'S' && (clasificacion === 'O' || clasificacion === 'AO')) {
@@ -3992,7 +4142,7 @@ $(document).ready(function () {
                     nFonacot.trim() === '' || cuenta.trim() === '' ||
                     correo.trim() === '' || telefono.trim() === '' ||
                     celular.trim() === '' || contacto.trim() === '' ||
-                    nContacto.trim() === ''
+                    nContacto.trim() === '' || control_reclutador.trim() === ''
                 ) {
                     Swal.fire({
                         position: 'center',
@@ -4011,6 +4161,8 @@ $(document).ready(function () {
                             action: 'guardarEmpleado',
                             nomina: nomina,
                             jefenomina: jefenomina,
+                            reclutado_por: reclutado_por,
+                            reclutador: reclutador,
                             claveTabulador: claveTabulador,
                             tipoNomina: tipoNomina,
                             tipo: tipo,
