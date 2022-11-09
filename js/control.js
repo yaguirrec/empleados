@@ -2839,10 +2839,9 @@ $(document).ready(function () {
                                 campoOL.removeClass('d-none');
                                 $("#txtout_lm").val(datos.nombre_reclutador);
                             }
-                    } else {
-                        campoRP.addClass('d-none');
-                        campoOL.addClass('d-none');
                     }
+
+                    
 
                     $("#txtNomina").val(datos.numero_nomina);
                     $("#txtTipo").val(datos.status);
