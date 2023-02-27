@@ -1,6 +1,7 @@
 //GENERAL
 $(document).ready(function () {
 
+    //[altasSemanales]
     // VALUE OF THE ACTUAL SECTION
     let searchParams = new URLSearchParams(window.location.search)
     let seccionActual = searchParams.get('request');
@@ -8,7 +9,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller_.php';
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
@@ -17,7 +18,7 @@ $(document).ready(function () {
     let nivel_usuario = document.querySelector('#nivel_usuario').value;
     let empleado_activo = document.querySelector('#empleado_activo').value;
 
-    let version = 'V191122';
+    let version = 'DEV240223';
 
     $('#version').html(version);
 
@@ -155,8 +156,9 @@ $(document).ready(function () {
         Swal.fire({
             title: mensaje,
             type: icono,
+            timer: tiempo,
+            // timerProgressBar: true,
             showConfirmButton: false,
-            timer: tiempo
           })
     }
 
@@ -300,6 +302,30 @@ $(document).ready(function () {
                 let nombrePadre = nombreCompletoPadre.split('|');
                 let nombreMadre = nombreCompletoMadre.split('|');
 
+                if(datos.reclutado_por){
+                    $("#txtReclutado").val(datos.reclutado_por);
+    
+                        var campoOL = $('.campoOutL'),
+                            campoRP = $('.campoRecluatdo');
+    
+                        if(datos.reclutado_por === 'reclutador' || datos.reclutado_por === 'recomendo'){
+                            campoRP.removeClass('d-none');
+                            campoOL.addClass('d-none');
+                            listaReclutamiento('activos');
+                            // setTimeout(function () {
+                            //     listaReclutamiento('activos');
+                            // }, 500);
+    
+                            setTimeout(function () {
+                                $("#txtReclutador").val(datos.nombre_reclutador).prop('selected', true);
+                            }, 11000);
+                        } else if (datos.reclutado_por === 'outsourcing' || datos.reclutado_por === 'lider_moral'){
+                            campoRP.addClass('d-none');
+                            campoOL.removeClass('d-none');
+                            $("#txtout_lm").val(datos.nombre_reclutador);
+                        }
+                }
+
                 $("#txtNomina").val(datos.numero_nomina);
                 $("#txtTipo").val(datos.status);
                 $("#txtLote").val(datos.lote);
@@ -311,7 +337,7 @@ $(document).ready(function () {
                 $("#txtfechaAlta").val((datos.fecha_alta.date).substr(0, 10));
                 $("#txtRegistro").val(datos.registro_patronal);
                 listarPuestos(datos.id_celula, datos.clasificacion);
-                listarJefes(datos.id_puesto, datos.id_celula);
+                listarJefes(datos.clasificacion);
                 $("#txtComentario").val(datos.comentarios);
                 $("#txtNombre").val(datos.nombre);
                 $("#txtPaterno").val(datos.apellido_paterno);
@@ -1718,6 +1744,7 @@ $(document).ready(function () {
                 row.append($("<td>" + rowInfo.fechaNacimiento.date.substr(0, 10) + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.lugar_nacimiento + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.sexo + " </td>"));
+                row.append($("<td>" + rowInfo.reclutado_por + " </td>"));
                 row.append($("<td>" + rowInfo.nombre_reclutador + " </td>"));
                 row.append($("<td>" + rowInfo.RFC + " </td>"));
                 row.append($("<td>" + rowInfo.CURP + " </td>"));
@@ -1847,7 +1874,7 @@ $(document).ready(function () {
                     urlFoto = 'assets/files/' + nomina + '/' + nomina + '.jpg',
                     action = 'revisarImagen';
                 $("#empImagen").attr('src', urlFoto);
-                $('#txtTitulo').html('DATOS GENERALES DEL EMPLEADO <strong>' + rowInfo.numero_nomina + '</strong>');
+                $('#txtTitulo').html('DATOS GENERALES DEL EMPLEADO: <strong>' + rowInfo.numero_nomina + '</strong>');
                 $('#txtNomina').html(rowInfo.numero_nomina);
                 $('#txtNombre').text(rowInfo.nombre_largo);
                 $('#txtPuesto').text(rowInfo.puesto);
@@ -2796,7 +2823,7 @@ $(document).ready(function () {
                     /**
                      * 
                      * FECHA 07-NOVIEMBRE-22
-                     * LLENAR CAMPO RECLUTADORA (ALTA EMPLEADO) 
+                     * LLENAR CAMPO RECLUTADORA (MODIFICAR EMPLEADO) 
                      * Validar campo "Reclutado por" para mostrar el campo a capturar
                      */
                     $("#txtReclutado").change(function (e){
@@ -2807,7 +2834,7 @@ $(document).ready(function () {
                             campoRP.removeClass('d-none');
                             campoOL.addClass('d-none');
                             listaReclutamiento('activos');
-                            modalCargaInformacion('info', 'Cargando lista de empleados...', 8000);
+                            modalCargaInformacion('info', 'Cargando lista de empleados...', 10000);
                         } else if (reclutado_por === 'outsourcing' || reclutado_por === 'lider_moral'){
                             campoRP.addClass('d-none');
                             campoOL.removeClass('d-none');
@@ -2827,13 +2854,13 @@ $(document).ready(function () {
                                 campoRP.removeClass('d-none');
                                 campoOL.addClass('d-none');
                                 listaReclutamiento('activos');
-                                setTimeout(function () {
-                                    listaReclutamiento('activos');
-                                }, 500);
+                                // setTimeout(function () {
+                                //     listaReclutamiento('activos');
+                                // }, 500);
 
                                 setTimeout(function () {
                                     $("#txtReclutador").val(datos.nombre_reclutador).prop('selected', true);
-                                }, 9000);
+                                }, 11000);
                             } else if (datos.reclutado_por === 'outsourcing' || datos.reclutado_por === 'lider_moral'){
                                 campoRP.addClass('d-none');
                                 campoOL.removeClass('d-none');
@@ -3351,7 +3378,7 @@ $(document).ready(function () {
             }
 
             break;
-        //REINGREO DE EMPLEADO
+        //REINGRESO DE EMPLEADO
         case 'reingreso-empleado':
             let btnReingresarEmpleado = $('#btnReingresarEmpleado');
             var codigoEmpleado = localStorage.getItem('codigoEmpleado');
@@ -3411,13 +3438,39 @@ $(document).ready(function () {
 
                 }
             });
-            
+
+            /**
+                 * 
+                 * FECHA 18-FEBRERO-23
+                 * LLENAR CAMPO RECLUTADORA (REINGRESO EMPLEADO) 
+                 * Validar campo "Reclutado por" para mostrar el campo a capturar
+                 */
+            $("#txtReclutado").change(function (e){
+                var reclutado_por = $('#txtReclutado').val(),
+                    campoOL = $('.campoOutL'),
+                    campoRP = $('.campoRecluatdo');
+                if(reclutado_por === 'reclutador' || reclutado_por === 'recomendo'){
+                    campoRP.removeClass('d-none');
+                    campoOL.addClass('d-none');
+                    listaReclutamiento('activos');
+                    modalCargaInformacion('info', 'Cargando lista de empleados...', 8000);
+                } else if (reclutado_por === 'outsourcing' || reclutado_por === 'lider_moral'){
+                    campoRP.addClass('d-none');
+                    campoOL.removeClass('d-none');
+                } else {
+                    campoRP.addClass('d-none');
+                    campoOL.addClass('d-none');
+                }
+            });            
 
             btnReingresarEmpleado.click(function (e) {
                 e.preventDefault();
-                nomina = $('#txtNomina').val(),
+                let nomina = $('#txtNomina').val(),
                     jefenomina = $('#txtJefe').val(),
                     claveTabulador = `${$('#txtTabClave').val()}|${$('#txtTabSucursal').val()}|${$('#txtTabNivel').val()}`,
+                    reclutado_por = $('#txtReclutado').val(),
+                    reclutador = '',
+                    control_reclutador = '',
                     tipoNomina = $('#txtTipoNomina').val(),
                     tipo = $('#txtTipo').val(),
                     lote = $("#txtLote").val(),
@@ -3470,8 +3523,19 @@ $(document).ready(function () {
                     curpini = curp.substr(0, 4),
                     curpfin = curp.substr(10, 8),
                     rfcini = rfc.substr(0, 4),
-                    rfcfin = rfc.substr(10, 3);
+                    rfcfin = rfc.substr(10, 3),
                 domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
+
+                if(reclutado_por !== ''){
+                    if(reclutado_por === 'reclutador' || reclutado_por === 'recomendo'){
+                        reclutador = $('#txtReclutador').val();
+                        control_reclutador = 'valor_ingresado';
+                    } else if (reclutado_por === 'outsourcing' || reclutado_por === 'lider_moral'){
+                        reclutador = $('#txtout_lm').val();
+                        control_reclutador = 'valor_ingresado';
+                    }
+                }
+
                 if
                     (
                     jefenomina.trim() === '-1' ||
@@ -3485,7 +3549,7 @@ $(document).ready(function () {
                     nFonacot.trim() === '' || cuenta.trim() === '' ||
                     correo.trim() === '' || telefono.trim() === '' ||
                     celular.trim() === '' || contacto.trim() === '' ||
-                    nContacto.trim() === ''
+                    nContacto.trim() === '' || control_reclutador.trim() === ''
                 ) {
                     Swal.fire({
                         position: 'center',
@@ -3504,6 +3568,8 @@ $(document).ready(function () {
                             action: 'modificarEmpleado',
                             nomina: nomina,
                             jefenomina: jefenomina,
+                            reclutado_por: reclutado_por,
+                            reclutador: reclutador,
                             claveTabulador: claveTabulador,
                             tipoNomina: tipoNomina,
                             empleado_status: tipo,
@@ -3914,12 +3980,12 @@ $(document).ready(function () {
 
             //VALIDAR CODIGO TABULADOR
             $('#txtTabClave').focusout(function (e) {
-                if (parseInt($("#txtTabClave").val()) > 100) {
+                if (parseInt($("#txtTabClave").val()) > 1000) {
                     Swal.fire({
                         position: 'center',
                         type: 'warning',
                         tittle: 'Error',
-                        text: 'EL codigo del tabulador debe ser menor a 100',
+                        text: 'El codigo del tabulador debe ser menor a 1000',
                         showConfirmButton: false,
                         timer: 1000
                     });
@@ -4218,6 +4284,7 @@ $(document).ready(function () {
                         },
                         success: function (response) {
                             var respuesta = JSON.parse(response);
+                            console.log(respuesta);
                             if (respuesta.estado === 'OK') {
                                 Swal.fire({
                                     title: 'Correcto',

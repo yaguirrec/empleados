@@ -60,6 +60,7 @@
                     <th scope="col">Fecha Nacimiento</th>
                     <th scope="col" class="d-none">Lugar Nacimiento</th>
                     <th scope="col" class="d-none">Sexo</th>
+                    <th scope="col">Clasificacion reclutado</th>
                     <th scope="col">Reclutado</th>
                     <th scope="col">RFC</th>
                     <th scope="col">CURP</th>

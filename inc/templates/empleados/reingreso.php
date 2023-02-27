@@ -100,7 +100,29 @@
                         <option value="D">D</option>
                         </select>
                     </div>
-                    <div class="form-group col-md-6">
+
+                    <div class="form-group col-md-2">
+                        <label for="txtReclutado">Reclutador por</label>
+                        <select class="form-control text-uppercase" id="txtReclutado">
+                        <option value="" selected>Seleccione una opción</option>
+                        <option value="reclutador">Reclutador(a)</option>
+                        <option value="recomendo">Recomendo</option>
+                        <option value="outsourcing">Outsourcing</option>
+                        <option value="lider_moral">Lider Moral</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <div class="form-group campoOutL  d-none">
+                        <label for="txtout_lm">Nombre</label>
+                        <input type="text" class="form-control" id="txtout_lm" placeholder="Ingrese Outsourcing / Lider moral...">
+                        </div>
+                        <div class="form-group campoRecluatdo d-none">
+                        <label for="txtReclutador">Reclutado por</label>
+                        <select class="form-control text-uppercase" id="txtReclutador">
+                        </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
                         <label for="txtJefe">Jefe directo</label>
                         <select class="form-control text-uppercase" id="txtJefe">
                         </select>
