@@ -1,5 +1,5 @@
 //IMPORTAR URL DEL BACKEND
-let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+let backendURL = 'https://mex-q.com/web_serv/empService/controller.php';
 //VARIABLE QUE GUARADARA LOS PARAMETROS DE LA URL
 let searchParams = new URLSearchParams(window.location.search);
 let check = searchParams.has('emp'); // SI ALGUN PARAMETRO ES IGUAL A emp LA VARIABLE SERA true
