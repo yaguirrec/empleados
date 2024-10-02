@@ -35,7 +35,7 @@ function checkIN (e)
             var xhr = new XMLHttpRequest();
             
             // abrir la conexión.
-            xhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xhr.open('POST', 'https://mex-q.com/web_serv/empService/controller.php', true);
             
             // retorno de datos
             xhr.onload = function(){
