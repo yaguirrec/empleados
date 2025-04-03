@@ -19,7 +19,7 @@ $( document ).ready(function() {
         consulta_parametros.append('prop', prop);
         consulta_parametros.append('action', action);
         var xmlhr = new XMLHttpRequest();
-        xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+        xmlhr.open('POST', 'http://187.189.66.23:8090/web_serv/empService/controller.php', true);
             xmlhr.onload = function()
             {
             if (this.status === 200) {
@@ -134,7 +134,7 @@ $( document ).ready(function() {
             dataTable.append('action', action);
             dataTable.append('prop', prop);
             var xmlhr = new XMLHttpRequest();
-            xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlhr.open('POST', 'http://187.189.66.23:8090/web_serv/empService/controller.php', true);
             xmlhr.onload = function(){
                 if (this.status === 200) {
                 var respuesta = JSON.parse(xmlhr.responseText);
@@ -211,7 +211,7 @@ $( document ).ready(function() {
             dataEmp.append('action', action);
             dataEmp.append('prop', codigoEmpleado);
             var xmlhr = new XMLHttpRequest();
-            xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlhr.open('POST', 'http://187.189.66.23:8090/web_serv/empService/controller.php', true);
             xmlhr.onload = function(){
                 if (this.status === 200) {
                 var respuesta = JSON.parse(xmlhr.responseText);
@@ -250,7 +250,7 @@ $( document ).ready(function() {
             var dataEmp = new FormData();
             dataEmp.append('action', action);
             var xmlhr = new XMLHttpRequest();
-            xmlhr.open('POST', 'http://187.188.159.205:8090/web_serv/empService/controller.php', true);
+            xmlhr.open('POST', 'http://187.189.66.23:8090/web_serv/empService/controller.php', true);
             xmlhr.onload = function(){
                 if (this.status === 200) {
                 var respuesta = JSON.parse(xmlhr.responseText);

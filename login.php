@@ -1,7 +1,8 @@
 <?php
-  session_start();
-  include 'inc/templates/header.php';
+session_start();
+include 'inc/templates/header.php';
 ?>
+
 <body class="bg-gradient-primary">
 
   <div class="container card-login">
@@ -35,7 +36,7 @@
                   </form>
                   <hr>
                   <div class="text-center">
-                    <a class="small" href="http://187.188.159.205:8090/Mexqintra/RH/inicio/index.php">Olvidaste tu clave?</a>
+                    <a class="small" href="http://187.189.66.23:8090/Mexqintra/RH/inicio/index.php">Olvidaste tu clave?</a>
                   </div>
                 </div>
               </div>
@@ -51,5 +52,5 @@
 </body>
 
 <?php
-  include 'inc/templates/footer.php';
+include 'inc/templates/footer.php';
 ?>

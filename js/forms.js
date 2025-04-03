@@ -1,5 +1,5 @@
 $( document ).ready(function() {
-    let backendURL = 'http://187.188.159.205:8090/web_serv/empService/controller.php';
+    let backendURL = 'http://187.189.66.23:8090/web_serv/empService/controller.php';
 eventListener();
 
 function eventListener()
