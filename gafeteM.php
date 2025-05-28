@@ -1,3 +1,4 @@
+<?php include 'env.php' ?>
 <style>
 /* This text is in Century Gothic */
 @import url('https://www.fontify.me/wf/3afcc221e9439cbe0309799cece16dee');
@@ -191,4 +192,7 @@ font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/barcodes/JsBarcode.code128.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+<script type="text/javascript">
+    const serverurl = '<?php echo serverurl; ?>';
+</script>
 <script src="js/gafete.js"></script>

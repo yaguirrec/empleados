@@ -4,8 +4,7 @@ $(document).ready(function() {
   let seccionActual = searchParams.get("request");
   let empleado_activo = document.querySelector('#empleado_activo').value;
   let nivel_usuario = document.querySelector('#nivel_usuario').value;
-  let backendURL =
-    "http://187.189.66.23:8090/web_serv/empService/controller.php";
+  let backendURL = `${serverurl}controller.php`;
   var meses = [],
     activosSUC = [],
     bajasSUC = [],

@@ -36,7 +36,7 @@ include 'inc/templates/header.php';
                   </form>
                   <hr>
                   <div class="text-center">
-                    <a class="small" href="http://187.189.66.23:8090/Mexqintra/RH/inicio/index.php">Olvidaste tu clave?</a>
+                    <a class="small" href="https://mex-q.com/Mexqintra/RH/inicio/index.php">Olvidaste tu clave?</a>
                   </div>
                 </div>
               </div>
