@@ -1,5 +1,5 @@
 $( document ).ready(function() {
-    let backendURL = 'https://mex-q.com/web_serv/empService/controller.php';
+let backendURL = `${serverurl}controller.php`;
 eventListener();
 
 function eventListener()
