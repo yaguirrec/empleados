@@ -1,3 +1,4 @@
+<?php include 'env.php' ?>
 </body>
 
 
@@ -20,6 +21,9 @@
 <script type="text/javascript" src="//unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 
 <!-- LOCAL JS -->
+ <script type="text/javascript">
+    const serverurl = '<?php echo serverurl; ?>';
+</script>
 <script src="js/chart.js"></script>           
 <script src="js/control.js"></script>
 
@@ -27,6 +31,9 @@
         if ($controlInicio == "login.php")
         {
             ?>
+            <script type="text/javascript">
+                const serverurl = '<?php echo serverurl; ?>';
+            </script>
             <script src="js/forms.js"></script>
             <?php
         } else {

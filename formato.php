@@ -1,3 +1,4 @@
+<?php include 'env.php' ?>
 <link rel="stylesheet" href="css/formato.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 <body class="container">
@@ -59,5 +60,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/barcodes/JsBarcode.code128.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script type="text/javascript">
+        const serverurl = '<?php echo serverurl; ?>';
+    </script>
     <script src="js/formato.js"></script>
 </body>

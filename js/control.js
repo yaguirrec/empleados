@@ -9,7 +9,7 @@ $(document).ready(function () {
     let seccionEnvioAltas = $('.seccionEnvioAltas');
     let seccionAcuseAltas = $('.seccionAcuseAltas');
     let seccionExportar = $('.seccionExportar');
-    let backendURL = 'https://mex-q.com/web_serv/empService/controller.php';
+    let backendURL = `${serverurl}controller.php`;
     let localBackend = 'inc/model/';
     let senderLocal = 'inc/model/sender.php';
     let url_final = 'http://mexq.mx/';
