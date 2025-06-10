@@ -30,7 +30,7 @@ $(document).ready(function () {
         if (code == 13) event.preventDefault();
         if (code == 32 || code == 13 || code == 188 || code == 186) {
             var txtBuscado = this.value,
-                prop = (seccionActual === 'empleado' ? 'activos' : 'bajas');
+                prop = (seccionActual === 'empleado' ? 'activos' : seccionActual === 'becarios' ? 'activos' : 'bajas');
             action = 'buscar-texto';
             //console.log(txtBuscado);
             $('#dataTable').empty();
@@ -38,6 +38,9 @@ $(document).ready(function () {
             consulta_parametros.append('txtBuscado', txtBuscado);
             consulta_parametros.append('prop', prop);
             consulta_parametros.append('action', action);
+            if (seccionActual === 'becarios') {
+                consulta_parametros.append('becario', true);
+            }
             var xmlhr = new XMLHttpRequest();
             xmlhr.open('POST', backendURL, true);
             xmlhr.onload = function () {
@@ -51,9 +54,12 @@ $(document).ready(function () {
                             $('#alertaM').removeClass('d-none');
                         } else {
                             for (var i in informacion) {
-                                tablaEmpleados(informacion[i]);
+                                if (seccionActual === 'becarios') {
+                                    tablaBecarios(informacion[i]);
+                                } else {
+                                    tablaEmpleados(informacion[i]);
+                                }
                                 $('#alertaM').addClass('d-none');
-                                // $('#avisoR').hide();
                             }
                         }
 
