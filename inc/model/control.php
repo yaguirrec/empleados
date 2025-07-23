@@ -1,4 +1,5 @@
 <?php 
+include 'bucket-service.php';
 session_start();
 $action = $_POST['action'];
 
@@ -19,23 +20,19 @@ switch($action)
             session_commit();
             break;
         case 'guardarFoto':
-            // die(json_encode($_POST));
-            $empNomina = $_POST['empNomina'];
-            
             if(isset($_FILES["empFoto"]["name"])){
-                $respuesta = array(
-                    'estado' => 'OK'
-                );
-                $directorio = '../../assets/files/'.$empNomina;
-                $targetDir = $directorio."/";       
-                if(!file_exists($directorio))
-                {
-                    mkdir($directorio, 0777,true);
+                $employeePayroll = $_POST['empNomina'];
+                $employeePhoto = $_FILES["empFoto"]["tmp_name"];
+                $bucketService = new BucketService();
+                if ($bucketService->saveImage($employeePhoto, $employeePayroll)) {
+                    $respuesta = array(
+                        'estado' => 'OK'
+                    );
+                } else {
+                    $respuesta = array(
+                        'estado' => 'NOK'
+                    );
                 }
-                $temp = explode(".", $_FILES["empFoto"]["name"]);
-                $newfilename = $empNomina . '.jpg';
-                
-                move_uploaded_file($_FILES["empFoto"]["tmp_name"], $targetDir . $newfilename);
             } else {
                 $respuesta = array(
                     'estado' => 'NOK'
@@ -43,19 +40,21 @@ switch($action)
             }
         break;
         case 'revisarImagen':
-            // die(json_encode($_POST));
             $ruta = '../../assets/files/';
             $empNomina = $_POST['nomina'];
             $respuesta = array(
                 'estado' => 1
             );
-
-            if (!file_exists($ruta.$empNomina.'/'.$empNomina.'.jpg')) {   
+            $bucketService = new BucketService();
+            if ($bucketService->checkIfFileExists(AWS_FACE_RECOGNITION_BUCKET_NAME, "$empNomina.jpg")) {
+                $respuesta = array(
+                    'estado' => 1
+                );
+            } else {
                 $respuesta = array(
                     'estado' => 0
-                );                        
+                ); 
             }
-                
             echo json_encode($respuesta);
         break;
         case 'envioAcuse':
@@ -63,19 +62,20 @@ switch($action)
             $nombreAdjuntoAcuse = $_POST['nombreAdjuntoAcuse'];
             
             if(isset($_FILES["adjuntoAcuse"]["name"])){
-                $respuesta = array(
-                    'estado' => 'OK'
-                );
-                $directorio = '../../assets/attached/Acuses';
-                $targetDir = $directorio."/";       
-                if(!file_exists($directorio))
-                {
-                    mkdir($directorio, 0777,true);
-                }
                 $temp = explode(".", $_FILES["adjuntoAcuse"]["name"]);
-                $newfilename = $nombreAdjuntoAcuse . '.' . end($temp);
+                $newFileName = $nombreAdjuntoAcuse . '.' . end($temp);
                 
-                move_uploaded_file($_FILES["adjuntoAcuse"]["tmp_name"], $targetDir . $newfilename);
+                $employeeFile = $_FILES["adjuntoAcuse"]["tmp_name"];
+                $bucketService = new BucketService();
+                if ($bucketService->saveEmployeeFile($employeeFile, "Acuses/$newFileName")) {
+                    $respuesta = array(
+                        'estado' => 'OK'
+                    );
+                } else {
+                    $respuesta = array(
+                        'estado' => 'NOK'
+                    );
+                }
             } else {
                 $respuesta = array(
                     'estado' => 'NOK'
@@ -87,19 +87,20 @@ switch($action)
             $nombreAdjuntoProcesada = $_POST['nombreAdjuntoProcesada'];
             
             if(isset($_FILES["adjuntoProcesada"]["name"])){
-                $respuesta = array(
-                    'estado' => 'OK'
-                );
-                $directorio = '../../assets/attached/Procesadas';
-                $targetDir = $directorio."/";       
-                if(!file_exists($directorio))
-                {
-                    mkdir($directorio, 0777,true);
-                }
                 $temp = explode(".", $_FILES["adjuntoProcesada"]["name"]);
-                $newfilename = $nombreAdjuntoProcesada . '.' . end($temp);
+                $newFileName = $nombreAdjuntoProcesada . '.' . end($temp);
                 
-                move_uploaded_file($_FILES["adjuntoProcesada"]["tmp_name"], $targetDir . $newfilename);
+                $employeeFile = $_FILES["adjuntoProcesada"]["tmp_name"];
+                $bucketService = new BucketService();
+                if ($bucketService->saveEmployeeFile($employeeFile, "Procesadas/$newFileName")) {
+                    $respuesta = array(
+                        'estado' => 'OK'
+                    );
+                } else {
+                    $respuesta = array(
+                        'estado' => 'NOK'
+                    );
+                }
             } else {
                 $respuesta = array(
                     'estado' => 'NOK'
@@ -108,22 +109,24 @@ switch($action)
         break;
         case 'envioAcuseBaja':
             // die(json_encode($_POST));
+            //
             $nombreAdjuntoAcuse = $_POST['nombreAdjuntoAcuse'];
             
             if(isset($_FILES["adjuntoAcuse"]["name"])){
-                $respuesta = array(
-                    'estado' => 'OK'
-                );
-                $directorio = '../../assets/attached/Bajas/Acuses';
-                $targetDir = $directorio."/";       
-                if(!file_exists($directorio))
-                {
-                    mkdir($directorio, 0777,true);
-                }
                 $temp = explode(".", $_FILES["adjuntoAcuse"]["name"]);
-                $newfilename = $nombreAdjuntoAcuse . '.' . end($temp);
+                $newFileName = $nombreAdjuntoAcuse . '.' . end($temp); 
                 
-                move_uploaded_file($_FILES["adjuntoAcuse"]["tmp_name"], $targetDir . $newfilename);
+                $employeeFile = $_FILES["adjuntoAcuse"]["tmp_name"];
+                $bucketService = new BucketService();
+                if ($bucketService->saveEmployeeFile($employeeFile, "Bajas/Acuses/$newFileName")) {
+                    $respuesta = array(
+                        'estado' => 'OK'
+                    );
+                } else {
+                    $respuesta = array(
+                        'estado' => 'NOK'
+                    );
+                }
             } else {
                 $respuesta = array(
                     'estado' => 'NOK'
@@ -135,19 +138,20 @@ switch($action)
             $nombreAdjuntoProcesada = $_POST['nombreAdjuntoProcesada'];
             
             if(isset($_FILES["adjuntoProcesada"]["name"])){
-                $respuesta = array(
-                    'estado' => 'OK'
-                );
-                $directorio = '../../assets/attached/Bajas/Procesadas';
-                $targetDir = $directorio."/";       
-                if(!file_exists($directorio))
-                {
-                    mkdir($directorio, 0777,true);
-                }
                 $temp = explode(".", $_FILES["adjuntoProcesada"]["name"]);
-                $newfilename = $nombreAdjuntoProcesada . '.' . end($temp);
+                $newFileName = $nombreAdjuntoProcesada . '.' . end($temp);
                 
-                move_uploaded_file($_FILES["adjuntoProcesada"]["tmp_name"], $targetDir . $newfilename);
+                $employeeFile = $_FILES["adjuntoProcesada"]["tmp_name"];
+                $bucketService = new BucketService();
+                if ($bucketService->saveEmployeeFile($employeeFile, "Bajas/Procesadas/$newFileName")) {
+                    $respuesta = array(
+                        'estado' => 'OK'
+                    );
+                } else {
+                    $respuesta = array(
+                        'estado' => 'NOK'
+                    );
+                }
             } else {
                 $respuesta = array(
                     'estado' => 'NOK'

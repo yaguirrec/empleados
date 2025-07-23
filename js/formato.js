@@ -12,7 +12,7 @@ if (check) {
         type: 'POST',
         url: backendURL, 
         data: { action: action, nomina : param }
-    }).done(function(response){
+    }).done(async function(response){
         let respuesta = JSON.parse(response);
         let informacionCantidad = respuesta.informacion.length;
         if(informacionCantidad > 0){
@@ -89,7 +89,10 @@ if (check) {
             $('#telefonoCasa').html(informacion.telefono);
             $('#numeroCuenta').html(informacion.numero_cuenta);
 
-            $("#empFoto").attr("src","assets/files/" + informacion.numero_nomina + "/" + informacion.numero_nomina + ".jpg");
+            let urlImagenEmpleado = await getImageUrl(informacion.numero_nomina)
+            console.log(urlImagenEmpleado)
+
+            $("#empFoto").attr("src", urlImagenEmpleado);
 
             if (empGenero === 'F')
                 $('#empGenero').html('Femenino');
@@ -236,4 +239,18 @@ if (check) {
 } else {
     // SI NO EXISTE UN  PARAMETRO CIERRA LA PESTAÑA
     window.close();
+}
+
+async function getImageUrl(payroll_number) {
+    let url = ''
+    await $.ajax({
+        type: 'POST',
+        url: localBackend + 'employee-image-service.php',
+        data: { payroll_number: payroll_number },
+        success: function (response) {
+            let data = JSON.parse(response);
+            url = data.url;
+        }
+    });
+    return url;
 }
