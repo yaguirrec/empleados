@@ -39,7 +39,7 @@ if (check) {
             console.log(informacion);
 
             if(informacion.tabulador === undefined || informacion.tabulador === null){
-                tabulador = '000|XXX'
+                tabulador = '000|XXX|X'
             }else{
                 tabulador = informacion.tabulador
             }
@@ -59,7 +59,15 @@ if (check) {
             $('#empNombre').html(informacion.nombreEmpleado);
             $('#empApellidoPaterno').html(informacion.apellidoPaterno);
             $('#empApellidoMaterno').html(informacion.apellidoMaterno);
-            $('#empTabulador').html(vTabulador[0]+vTabulador[1]);
+
+            let tabText = `${vTabulador[0]}${vTabulador[1]}${vTabulador[2]}`;
+            $('#empTabulador').html(tabText);
+            if (tabText.length >= 7) {
+                $('#empTabulador').css('font-size', '70%');
+            } else {
+                $('#empTabulador').css('font-size', '100%');
+            }
+
             $('#empPuesto').html(informacion.puesto);
             $('#empCategoria').html(`$${informacion.salario_diario}`);
             $('#empRFC').html(informacion.RFC);
