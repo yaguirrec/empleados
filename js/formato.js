@@ -63,9 +63,8 @@ if (check) {
             let tabText = `${vTabulador[0]}${vTabulador[1]}${vTabulador[2]}`;
             $('#empTabulador').html(tabText);
             if (tabText.length >= 7) {
-                $('#empTabulador').css('font-size', '70%');
-            } else {
-                $('#empTabulador').css('font-size', '100%');
+                $('#empTabulador').css('font-size', '65%');
+                $('#empTabulador').css('top', '245');
             }
 
             $('#empPuesto').html(informacion.puesto);
