@@ -548,37 +548,40 @@ $(document).ready(function () {
         xmlEmpleadoR.send(listaEmpleadosR);
     }
 
-
     let listarFraccionamientos = (cp) => {
-        if (cp.length === 5) {
-            $.ajax({
-                type: "GET",
-                url: "http://mexq.mx/devweb/webServices/cpmx/control.php?param=" + cp,
-                success: function (data) {
-                    let datos = JSON.parse(data),
-                    s = '';
-                    for (var i in datos) {
-                        $("#txtEdo").val(datos[i].estado);
-                        $("#txtMunicipio").val(datos[i].municipio);
-                        $("#txtLocalidad").val(datos[i].ciudad);
-                        s += '<option class="text-uppercase" value="' + datos[i].asentamiento.toUpperCase() + '">' + datos[i].asentamiento.toUpperCase() + '</option>';
-                    }
-                    $("#txtFraccionamiento").html(s);
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR.status);
-                }
-            });
-        } else {
-            Swal.fire({
-                position: 'center',
-                type: 'warning',
-                title: 'EL CP debe tener 5 digitos',
-                showConfirmButton: false,
-                timer: 1000
-            })
-        }
+    if (cp.length === 5) {
+        $.ajax({
+            type: "GET",
+            url: `https://api.copomex.com/query/info_cp/${cp}?type=simplified&token=e5ecaba1-8182-4a09-80fd-dbd5781e7e3d`,
+            success: function (data) {
+                if (!data.error && data.response && data.response.asentamiento) {
+                    let responseData = data.response; 
+                    
+                    $("#txtEdo").val(responseData.estado);
+                    $("#txtMunicipio").val(responseData.municipio);
+                    $("#txtLocalidad").val(responseData.ciudad);
+                    
+                    const options = responseData.asentamiento.map(colonia => {
+                        const nombreColonia = colonia.toUpperCase();
+                        return `<option class="text-uppercase" value="${nombreColonia}">${nombreColonia}</option>`;
+                    });
+                    $("#txtFraccionamiento").html(options.join(''));
+                } 
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR.status);
+            }
+        });
+    } else {
+        Swal.fire({
+            position: 'center',
+            type: 'warning',
+            title: 'EL CP debe tener 5 dígitos',
+            showConfirmButton: false,
+            timer: 1000
+        });
     }
+};
 
     $("#exportInfo").click(function () {
         var action = 'json-empleados';
