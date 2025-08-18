@@ -377,6 +377,113 @@
                 </div>
             </div>
 
+<div class="bg-gradient-success p-5 text-white text-center rounded-right mt-5">
+    <h2>Beneficiarios</h2>
+    <h4 class="mt-3">Beneficiario 1</h4>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="beneficiario1_nombre">Nombre completo</label>
+            <input type="text" class="form-control" id="beneficiario1_nombre" name="beneficiario1_nombre" required>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="beneficiario1_telefono">Teléfono</label>
+            <input type="text" class="form-control" id="beneficiario1_telefono" name="beneficiario1_telefono" maxlength="10" placeholder="4499128686" required>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="beneficiario1_calle">Calle</label>
+            <input type="text" class="form-control" id="beneficiario1_calle" name="beneficiario1_calle" required>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="beneficiario1_numExt">Número exterior</label>
+            <input type="text" class="form-control" id="beneficiario1_numExt" name="beneficiario1_numExt">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="beneficiario1_numInt">Número interior</label>
+            <input type="text" class="form-control" id="beneficiario1_numInt" name="beneficiario1_numInt">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="beneficiario1_cp">CP</label>
+            <input type="text" class="form-control" id="beneficiario1_cp" maxlength="5" name="beneficiario1_cp" required>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="beneficiario1_estado">Estado</label>
+            <input type="text" class="form-control" id="beneficiario1_estado" name="beneficiario1_estado">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="beneficiario1_municipio">Municipio</label>
+            <input type="text" class="form-control" id="beneficiario1_municipio" name="beneficiario1_municipio">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="beneficiario1_localidad">Localidad</label>
+            <input type="text" class="form-control" id="beneficiario1_localidad" name="beneficiario1_localidad">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-8">
+            <label for="beneficiario1_colonia">Colonia / Fraccionamiento</label>
+            <select class="form-control" id="beneficiario1_colonia"></select>
+        </div>
+    </div>
+
+    <div id="beneficiario2Container">
+        <h4 class="mt-4">Beneficiario 2</h4>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="beneficiario2_nombre">Nombre completo</label>
+                <input type="text" class="form-control" id="beneficiario2_nombre" name="beneficiario2_nombre" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="beneficiario2_telefono">Teléfono</label>
+                <input type="text" class="form-control" id="beneficiario2_telefono" name="beneficiario2_telefono" maxlength="10" placeholder="4499128686" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="beneficiario2_calle">Calle</label>
+                <input type="text" class="form-control" id="beneficiario2_calle" name="beneficiario2_calle" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="beneficiario2_numExt">Número exterior</label>
+                <input type="text" class="form-control" id="beneficiario2_numExt" name="beneficiario2_numExt">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="beneficiario2_numInt">Número interior</label>
+                <input type="text" class="form-control" id="beneficiario2_numInt" name="beneficiario2_numInt">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="beneficiario2_cp">CP</label>
+                <input type="text" class="form-control" id="beneficiario2_cp" maxlength="5" name="beneficiario2_cp" required>
+            </div>
+        </div>
+    
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="beneficiario2_estado">Estado</label>
+                <input type="text" class="form-control" id="beneficiario2_estado" name="beneficiario2_estado">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="beneficiario2_municipio">Municipio</label>
+                <input type="text" class="form-control" id="beneficiario2_municipio" name="beneficiario2_municipio">
+            </div>  
+            <div class="form-group col-md-4">
+                <label for="beneficiario2_localidad">Localidad</label>
+                <input type="text" class="form-control" id="beneficiario2_localidad" name="beneficiario2_localidad">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-8">
+                <label for="beneficiario2_colonia">Colonia / Fraccionamiento</label>
+                <select class="form-control" id="beneficiario2_colonia"></select>
+            </div>
+        </div>
+    </div>
+</div>
             <hr>
             <button type="submit" class="btn btn-primary btn-block" id="btnModificarEmpleado">ENVIAR CAMBIOS <i class="far fa-save"></i></button>
             <a href="javascript:history.back();" class="btn btn-danger btn-block px-5">CANCELAR <i class="fas fa-times"></i></a>

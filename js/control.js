@@ -552,7 +552,7 @@ $(document).ready(function () {
     if (cp.length === 5) {
         $.ajax({
             type: "GET",
-            url: `https://api.copomex.com/query/info_cp/${cp}?type=simplified&token=e5ecaba1-8182-4a09-80fd-dbd5781e7e3d`,
+            url: `https://api.copomex.com/query/info_cp/${cp}?type=simplified&token=prueba`,
             success: function (data) {
                 if (!data.error && data.response && data.response.asentamiento) {
                     let responseData = data.response; 
@@ -582,6 +582,83 @@ $(document).ready(function () {
         });
     }
 };
+
+    let llenarBeneficiarios1 = (cp) => {
+    if (cp.length === 5) {
+        $.ajax({
+            type: "GET",
+            url: `https://api.copomex.com/query/info_cp/09810?type=simplified&token=pruebas`,
+            success: function (data) {
+                if (!data.error && data.response && data.response.asentamiento) {
+                    let responseData = data.response;
+                    
+                    $("#beneficiario1_estado").val(responseData.estado);
+                    $("#beneficiario1_municipio").val(responseData.municipio);
+                    $("#beneficiario1_localidad").val(responseData.ciudad);
+                    
+                    const options = responseData.asentamiento.map(colonia => {
+                        const nombreColonia = colonia.toUpperCase();
+                        return `<option class="text-uppercase" value="${nombreColonia}">${nombreColonia}</option>`;
+                    });
+                    $("#beneficiario1_colonia").html(options.join(''));
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('Error al obtener datos del CP:', textStatus);
+            }
+        });
+    } else {
+        Swal.fire({
+            position: 'center',
+            type: 'warning',
+            title: 'El CP debe tener 5 dígitos',
+            showConfirmButton: false,
+            timer: 1000
+        });
+    }
+};
+
+let llenarBeneficiarios2 = (cp) => {
+    if (cp.length === 5) {
+        $.ajax({
+            type: "GET",
+            url: `https://api.copomex.com/query/info_cp/${cp}?type=simplified&token=prueba`,
+            success: function (data) {
+                if (!data.error && data.response && data.response.asentamiento) {
+                    let responseData = data.response;
+
+                    $("#beneficiario2_estado").val(responseData.estado);
+                    $("#beneficiario2_municipio").val(responseData.municipio);
+                    $("#beneficiario2_localidad").val(responseData.ciudad);
+
+                    const options = responseData.asentamiento.map(colonia => {
+                        const nombreColonia = colonia.toUpperCase();
+                        return `<option class="text-uppercase" value="${nombreColonia}">${nombreColonia}</option>`;
+                    });
+                    $("#beneficiario2_colonia").html(options.join(''));
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('Error al obtener datos del CP:', textStatus);
+            }
+        });
+    } else {
+        Swal.fire({
+            position: 'center',
+            type: 'warning',
+            title: 'El CP debe tener 5 dígitos',
+            showConfirmButton: false,
+            timer: 1000
+        });
+    }
+};
+$('#beneficiario1_cp').on('blur', function() {
+    llenarBeneficiarios1($(this).val());
+});
+
+$('#beneficiario2_cp').on('blur', function() {
+    llenarBeneficiarios2($(this).val());
+});
 
     $("#exportInfo").click(function () {
         var action = 'json-empleados';
