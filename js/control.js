@@ -1159,7 +1159,9 @@ $(document).ready(function () {
                 }
                 xmlhr.send(dataTable);
 
-                function tablaAltas(rowInfo) {
+                async function tablaAltas(rowInfo) {
+                    let urlAcuse = await getFileUrl(rowInfo.lote_acuse, 'Acuses')
+                    let urlProcesada = await getFileUrl(rowInfo.lote, 'Procesadas')
                     var row = $("<tr>"),
                         acuse = rowInfo.lote_acuse,
                         procesada = rowInfo.lote;
@@ -1185,8 +1187,8 @@ $(document).ready(function () {
                     row.append($("<td> " + rowInfo.fechaAlta + " </td>"));
                     row.append($("<td> " + rowInfo.registro_patronal + " </td>"));
                     row.append($("<td> " + rowInfo.registro_patronal + ' ' + rowInfo.tipo_nomina + " </td>"));
-                    row.append($("<td><a href='assets/attached/Acuses/" + rowInfo.lote_acuse + ".zip' target='_blank'>" + acuse + "</a></td>"));
-                    row.append($("<td><a href='assets/attached/Procesadas/" + rowInfo.lote + ".zip' target='_blank'>" + procesada + "</a></td>"));
+                    row.append($("<td><a href='" + urlAcuse + "' target='_blank'>" + acuse + "</a></td>"));
+                    row.append($("<td><a href='" + urlProcesada + "' target='_blank'>" + procesada + "</a></td>"));
                 }
             }
 
@@ -1387,7 +1389,9 @@ $(document).ready(function () {
                 }
                 xmlhr.send(dataTable);
 
-                function tablaBajas(rowInfo) {
+                async function tablaBajas(rowInfo) {
+                    let urlBajaAcuse = await getFileUrl(rowInfo.baja_acuse, 'Bajas/Acuses')
+                    let urlBajaProcesada = await getFileUrl(rowInfo.baja_procesada, 'Bajas/Procesadas')
                     var row = $("<tr>"),
                         motivoBaja = rowInfo.bajaMotivo,
                         acuse = rowInfo.baja_acuse,
@@ -1419,8 +1423,8 @@ $(document).ready(function () {
                     row.append($("<td> " + rowInfo.registro_patronal + " </td>"));
                     row.append($("<td> " + rowInfo.registro_patronal + ' ' + rowInfo.tipo_nomina + " </td>"));
                     row.append($("<td> " + motivoBaja + " </td>"));
-                    row.append($("<td><a href='assets/attached/Bajas/Acuses/" + rowInfo.baja_acuse + ".zip' target='_blank'>" + acuse + "</a></td>"));
-                    row.append($("<td><a href='assets/attached/Bajas/Procesadas/" + rowInfo.baja_procesada + ".zip' target='_blank'>" + procesada + "</a></td>"));
+                    row.append($("<td><a href='" + urlBajaAcuse + "' target='_blank'>" + acuse + "</a></td>"));
+                    row.append($("<td><a href='" + urlBajaProcesada + "' target='_blank'>" + procesada + "</a></td>"));
                 }
             }
 
@@ -1805,7 +1809,7 @@ $(document).ready(function () {
             }
             xmlhr.send(dataEmp);
 
-            function imprimirEmpleado(rowInfo) {
+            async function imprimirEmpleado(rowInfo) {
                 let statusEmpleadoR = rowInfo.status,
                     labelSt = '',
                     labelClasificacion = rowInfo.clasificacion,
@@ -1869,9 +1873,15 @@ $(document).ready(function () {
                     $('#lsegOnboarding').html('SDC');
                 }
 
+                let urlImagenEmpleado = await getImageUrl(rowInfo.numero_nomina)
+                let urlAcuse = await getFileUrl(rowInfo.lote_acuse, 'Acuses')
+                let urlProcesada = await getFileUrl(rowInfo.lote, 'Procesadas')
+                console.log(urlAcuse)
 
                 var nomina = rowInfo.numero_nomina,
-                    urlFoto = 'assets/files/' + nomina + '/' + nomina + '.jpg',
+                    urlFoto = urlImagenEmpleado,
+                    urlAcuseFile = urlAcuse,
+                    urlProcesadaFile = urlProcesada,
                     action = 'revisarImagen';
                 $("#empImagen").attr('src', urlFoto);
                 $('#txtTitulo').html('DATOS GENERALES DEL EMPLEADO: <strong>' + rowInfo.numero_nomina + '</strong>');
@@ -1918,12 +1928,14 @@ $(document).ready(function () {
                 $('#txtCelular').html('<strong> Celular: </strong>' + rowInfo.celular);
                 $('#txtCorreo').html('<strong> Email: </strong>' + rowInfo.correo);
 
-                $('#txtAltaAcuse').html('<strong> Acuse Alta: </strong> <a href="assets/attached/Acuses/' + rowInfo.lote_acuse + '.zip" target="_blank">' + rowInfo.lote_acuse + '</a>');
-                $('#txtAltaProcesada').html('<strong> Procesada Alta: </strong> <a href="assets/attached/Procesadas/' + rowInfo.lote + '.zip" target="_blank">' + rowInfo.lote + '</a>');
+                $('#txtAltaAcuse').html('<strong> Acuse Alta: </strong> <a href="'+urlAcuseFile+'" target="_blank">' + rowInfo.lote_acuse + '</a>');
+                $('#txtAltaProcesada').html('<strong> Procesada Alta: </strong> <a href="'+urlProcesadaFile+'" target="_blank">' + rowInfo.lote + '</a>');
 
                 if (statusEmpleadoR === 'B') {
-                    $('#txtBajaAcuse').html('<strong> Acuse Baja: </strong> <a href="assets/attached/Acuses/' + rowInfo.baja_acuse + '.zip" target="_blank">' + rowInfo.baja_acuse + '</a>');
-                    $('#txtBajaProcesada').html('<strong> Acuse Baja: </strong> <a href="assets/attached/Acuses/' + rowInfo.baja_procesada + '.zip" target="_blank">' + rowInfo.baja_procesada + '</a>');
+                    let urlBajaAcuse = await getFileUrl(rowInfo.baja_acuse, 'Bajas/Acuses')
+                    let urlBajaProcesada = await getFileUrl(rowInfo.baja_procesada, 'Bajas/Procesadas')
+                    $('#txtBajaAcuse').html('<strong> Acuse Baja: </strong> <a href="' + urlBajaAcuse + '" target="_blank">' + rowInfo.baja_acuse + '</a>');
+                    $('#txtBajaProcesada').html('<strong> Procesada Baja: </strong> <a href="' + urlBajaProcesada + '" target="_blank">' + rowInfo.baja_procesada + '</a>');
                     $('#txtseccionBaja').html('<strong> INFORMACION DE LA BAJA DEL EMPLEADO </strong>');
                     $('#txtReingreso').html('<strong> ' + labelReingreso + ' </strong>');
                     $('#txtclasificacionBaja').html('<strong> Clasificacion: </strong>' + rowInfo.bajaClasficacion);
@@ -1948,7 +1960,7 @@ $(document).ready(function () {
                     type: 'POST',
                     url: localBackend + 'control.php',
                     data: { action: action, nomina: nomina },
-                    success: function (response) {
+                    success: async function (response) {
                         var respuesta = JSON.parse(response);
                         if (respuesta.estado === 0) {
                             $("#empImagen").attr('src', 'img/gafete/no-image.png');
@@ -2694,7 +2706,8 @@ $(document).ready(function () {
             }
             xmlhr.send(dataEmp);
 
-            function mostrarEmpleado(rowInfo) {
+            async function mostrarEmpleado(rowInfo) {
+                let urlImagenEmpleado = await getImageUrl(rowInfo.numero_nomina)
                 let estadoEmpleadoR = rowInfo.status;
                 if (estadoEmpleadoR.substr(0, 1) === 'B') {
                     estadoEmpleado.addClass('text-danger');
@@ -2704,7 +2717,7 @@ $(document).ready(function () {
                     estadoEmpleado.addClass('text-success');
                 }
                 var nomina = rowInfo.numero_nomina,
-                    urlFoto = 'assets/files/' + nomina + '/' + nomina + '.jpg',
+                    urlFoto = urlImagenEmpleado,
                     action = 'revisarImagen';
                 $("#empImagen").attr('src', urlFoto);
                 $('#txtNomina').text(rowInfo.numero_nomina);
@@ -2720,7 +2733,7 @@ $(document).ready(function () {
                     type: 'POST',
                     url: localBackend + 'control.php',
                     data: { action: action, nomina: nomina },
-                    success: function (response) {
+                    success: async function (response) {
                         var respuesta = JSON.parse(response);
                         if (respuesta.estado === 0) {
                             $("#empImagen").attr('src', 'img/gafete/no-image.png');
@@ -5565,6 +5578,34 @@ $(document).ready(function () {
 
     function cleanLocal() {
         localStorage.clear();
+    }
+
+    async function getImageUrl(payroll_number) {
+        let url = ''
+        await $.ajax({
+            type: 'POST',
+            url: localBackend + 'employee-image-service.php',
+            data: { payroll_number: payroll_number },
+            success: function (response) {
+                let data = JSON.parse(response);
+                url = data.url;
+            }
+        });
+        return url;
+    }
+
+    async function getFileUrl(fileName, fileFolder) {
+        let url = ''
+        await $.ajax({
+            type: 'POST',
+            url: localBackend + 'employee-file-service.php',
+            data: { fileName: fileName, fileFolder: fileFolder },
+            success: function (response) {
+                let data = JSON.parse(response);
+                url = data.url;
+            }
+        });
+        return url;
     }
 
 });

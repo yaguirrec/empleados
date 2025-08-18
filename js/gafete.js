@@ -14,7 +14,7 @@ if (check) {
         type: 'POST',
         url: backendURL, 
         data: { action: action, nomina : param }
-    }).done(function(response){
+    }).done(async function(response){
         let respuesta = JSON.parse(response);
         let informacionCantidad = respuesta.informacion.length;
         if(informacionCantidad > 0){
@@ -28,7 +28,11 @@ if (check) {
             let telefonoEmergencia = informacion.contacto_emergencia_numero;
             imss = `${imss.substr(0, 4)}-${imss.substr(4, 2)}-${imss.substr(6, 4)}-${$.trim(informacion.dv)}`;
             telefonoEmergencia = `${telefonoEmergencia.substr(0, 3)} - ${telefonoEmergencia.substr(3, 3)} - ${telefonoEmergencia.substr(6, 4)}`;
-            $("#empFoto").attr("src","assets/files/" + nomina + "/" + nomina + ".jpg");
+            
+            let urlImagenEmpleado = await getImageUrl(nomina)
+            console.log(urlImagenEmpleado)
+            
+            $("#empFoto").attr("src", urlImagenEmpleado);
             $("#empNombre").html(nombre + ' ' + apellido);
             $("#empNumero").html(nomina);
             $("#empPuesto").html(informacion.puesto);
@@ -80,3 +84,17 @@ botonImprimir.on('click',function(){
     botonImprimir.addClass('d-none');
     window.print();
 });
+
+async function getImageUrl(payroll_number) {
+    let url = ''
+    await $.ajax({
+        type: 'POST',
+        url: localBackend + 'employee-image-service.php',
+        data: { payroll_number: payroll_number },
+        success: function (response) {
+            let data = JSON.parse(response);
+            url = data.url;
+        }
+    });
+    return url;
+}
