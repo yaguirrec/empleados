@@ -87,6 +87,12 @@
                     <th scope="col" class="d-none">Correo</th>
                     <th scope="col" class="d-none">Celular</th>
                     <th scope="col" class="d-none">Telefono</th>
+                    <th scope="col" class="d-none">Nombre beneficiario 1</th>
+                    <th scope="col" class="d-none">Teléfono beneficiario 1</th>
+                    <th scope="col" class="d-none">Domicilio beneficiario 1</th>
+                    <th scope="col" class="d-none">Nombre beneficiario 2</th>
+                    <th scope="col" class="d-none">Teléfono beneficiario 2</th>
+                    <th scope="col" class="d-none">Domicilio beneficiario 2</th>
                 </tr>
             </thead>
             <tbody id="dataTable">

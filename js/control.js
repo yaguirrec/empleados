@@ -1855,6 +1855,13 @@ $('#beneficiario2_cp').on('blur', function() {
                 row.append($("<td class='d-none'>" + rowInfo.correo + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.celular + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.telefono + " </td>"));
+                row.append($("<td>" + rowInfo.nombre_beneficiario1  + " </td>"));
+                row.append($("<td>" + rowInfo.telefono_beneficiario1 + " </td>"));
+                row.append($("<td>" + rowInfo.domicilio_beneficiario1 + " </td>"));
+                row.append($("<td>" + rowInfo.nombre_beneficiario2 + " </td>"));
+                row.append($("<td>" + rowInfo.telefono_beneficiario2 + " </td>"));
+                row.append($("<td>" + rowInfo.domicilio_beneficiario2 + " </td>"));
+
             }
 
             break;
