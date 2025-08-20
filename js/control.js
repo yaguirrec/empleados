@@ -379,6 +379,26 @@ $(document).ready(function () {
                 $("#txtCelular").val(datos.celular);
                 $("#txtContacto").val(datos.contacto_emergencia_nombre);
                 $("#txtNcontacto").val(datos.contacto_emergencia_numero);
+                $("#txtNombreB1").val(datos.nombre_beneficiario1);
+                $("#txtTelefonoB1").val(datos.telefono_beneficiario1);
+                $("#txtCalleB1").val(datos.calle_b1);
+                $("#txtNumeroExteriorB1").val(datos.numero_exterior_b1);
+                $("#txtNumeroInteriorB1").val(datos.numero_interior_b1);
+                $("#txtFraccionamientoB1").val(datos.fraccionamiento_b1);
+                $("#txtCodigoPostalB1").val(datos.codigo_postal_b1);
+                $("#txtMunicipioB1").val(datos.municipio_b1);
+                $("#txtEstadoB1").val(datos.estado_b1);
+                $("#txtLocalidadB1").val(datos.localidad_b1);
+                $("#txtNombreB2").val(datos.nombre_beneficiario2);
+                $("#txtTelefonoB2").val(datos.telefono_beneficiario2);
+                $("#txtCalleB2").val(datos.calle_b2);
+                $("#txtNumeroExteriorB2").val(datos.numero_exterior_b2);
+                $("#txtNumeroInteriorB2").val(datos.numero_interior_b2);
+                $("#txtFraccionamientoB2").val(datos.fraccionamiento_b2);
+                $("#txtCodigoPostalB2").val(datos.codigo_postal_b2);
+                $("#txtMunicipioB2").val(datos.municipio_b2);
+                $("#txtEstadoB2").val(datos.estado_b2);
+                $("#txtLocalidadB2").val(datos.localidad_b2);
 
                 setTimeout(function () {
                     $("#txtSucursal").val(datos.id_sucursal);
@@ -1855,6 +1875,12 @@ $('#beneficiario2_cp').on('blur', function() {
                 row.append($("<td class='d-none'>" + rowInfo.correo + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.celular + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.telefono + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.nombre_beneficiario1  + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.telefono_beneficiario1 + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.domicilio_beneficiario1 + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.nombre_beneficiario2 + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.telefono_beneficiario2 + " </td>"));
+                row.append($("<td class='d-none'>" + rowInfo.domicilio_beneficiario2 + " </td>"));
             }
 
             break;
@@ -3019,6 +3045,26 @@ $('#beneficiario2_cp').on('blur', function() {
                     $("#txtCelular").val(datos.celular);
                     $("#txtContacto").val(datos.contacto_emergencia_nombre);
                     $("#txtNcontacto").val(datos.contacto_emergencia_numero);
+                    $("#txtNombreB1").val(datos.nombre_beneficiario1);
+                    $("#txtTelefonoB1").val(datos.telefono_beneficiario1);
+                    $("#txtCalleB1").val(datos.calle_b1);
+                    $("#txtNumeroExteriorB1").val(datos.numero_exterior_b1);
+                    $("#txtNumeroInteriorB1").val(datos.numero_interior_b1);
+                    $("#txtFraccionamientoB1").val(datos.fraccionamiento_b1);
+                    $("#txtCodigoPostalB1").val(datos.codigo_postal_b1);
+                    $("#txtMunicipioB1").val(datos.municipio_b1);
+                    $("#txtEstadoB1").val(datos.estado_b1);
+                    $("#txtLocalidadB1").val(datos.localidad_b1);
+                    $("#txtNombreB2").val(datos.nombre_beneficiario2);
+                    $("#txtTelefonoB2").val(datos.telefono_beneficiario2);
+                    $("#txtCalleB2").val(datos.calle_b2);
+                    $("#txtNumeroExteriorB2").val(datos.numero_exterior_b2);
+                    $("#txtNumeroInteriorB2").val(datos.numero_interior_b2);
+                    $("#txtFraccionamientoB2").val(datos.fraccionamiento_b2);
+                    $("#txtCodigoPostalB2").val(datos.codigo_postal_b2);
+                    $("#txtMunicipioB2").val(datos.municipio_b2);
+                    $("#txtEstadoB2").val(datos.estado_b2);
+                    $("#txtLocalidadB2").val(datos.localidad_b2);
 
                     setTimeout(function () {
                         $("#txtSucursal").val(datos.id_sucursal);
