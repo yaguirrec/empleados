@@ -476,6 +476,6 @@
     </div>
 </div>
       <hr>
-      <button type="submit" class="btn btn-primary btn-block" id="btnGuardarEmpleado1">GUARDAR <i class="far fa-save"></i></button>
+      <button type="submit" class="btn btn-primary btn-block" id="btnGuardarEmpleado">GUARDAR <i class="far fa-save"></i></button>
       <br>
 </form>
