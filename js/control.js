@@ -612,15 +612,15 @@ $(document).ready(function () {
                 if (!data.error && data.response && data.response.asentamiento) {
                     let responseData = data.response;
                     
-                    $("#beneficiario1_estado").val(responseData.estado);
-                    $("#beneficiario1_municipio").val(responseData.municipio);
-                    $("#beneficiario1_localidad").val(responseData.ciudad);
+                    $("#txtEstadoB1").val(responseData.estado);
+                    $("#txtMunicipioB1").val(responseData.municipio);
+                    $("#txtLocalidadB1").val(responseData.ciudad);
                     
                     const options = responseData.asentamiento.map(colonia => {
                         const nombreColonia = colonia.toUpperCase();
                         return `<option class="text-uppercase" value="${nombreColonia}">${nombreColonia}</option>`;
                     });
-                    $("#beneficiario1_colonia").html(options.join(''));
+                    $("#txtFraccionamientoB1").html(options.join(''));
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -647,15 +647,15 @@ let llenarBeneficiarios2 = (cp) => {
                 if (!data.error && data.response && data.response.asentamiento) {
                     let responseData = data.response;
 
-                    $("#beneficiario2_estado").val(responseData.estado);
-                    $("#beneficiario2_municipio").val(responseData.municipio);
-                    $("#beneficiario2_localidad").val(responseData.ciudad);
+                    $("#txtEstadoB2").val(responseData.estado);
+                    $("#txtMunicipioB2").val(responseData.municipio);
+                    $("#txtLocalidadB2").val(responseData.ciudad);
 
                     const options = responseData.asentamiento.map(colonia => {
                         const nombreColonia = colonia.toUpperCase();
                         return `<option class="text-uppercase" value="${nombreColonia}">${nombreColonia}</option>`;
                     });
-                    $("#beneficiario2_colonia").html(options.join(''));
+                    $("#txtFraccionamientoB2").html(options.join(''));
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -672,11 +672,11 @@ let llenarBeneficiarios2 = (cp) => {
         });
     }
 };
-$('#beneficiario1_cp').on('blur', function() {
+$('#txtCodigoPostalB1').on('blur', function() {
     llenarBeneficiarios1($(this).val());
 });
 
-$('#beneficiario2_cp').on('blur', function() {
+$('#txtCodigoPostalB2').on('blur', function() {
     llenarBeneficiarios2($(this).val());
 });
 
@@ -3162,26 +3162,26 @@ $('#beneficiario2_cp').on('blur', function() {
                     contacto = $('#txtContacto').val(),
                     nContacto = $('#txtNcontacto').val(),
                     //Datos de beneficiarios
-                    beneficiario1_nombre = $('#beneficiario1_nombre').val(),
-                    beneficiario1_telefono = $('#beneficiario1_telefono').val(),
-                    beneficiario1_calle = $('#beneficiario1_calle').val(),
-                    beneficiario1_numExt = $('#beneficiario1_numExt').val(),
-                    beneficiario1_numInt = $('#beneficiario1_numInt').val(),
-                    beneficiario1_cp = $('#beneficiario1_cp').val(),
-                    beneficiario1_estado = $('#beneficiario1_estado').val(),
-                    beneficiario1_municipio = $('#beneficiario1_municipio').val(),
-                    beneficiario1_localidad = $('#beneficiario1_localidad').val(),
-                    beneficiario1_colonia = $('#beneficiario1_colonia').val(),
-                    beneficiario2_nombre = $('#beneficiario2_nombre').val(),
-                    beneficiario2_telefono = $('#beneficiario2_telefono').val(),
-                    beneficiario2_calle = $('#beneficiario2_calle').val(),
-                    beneficiario2_numExt = $('#beneficiario2_numExt').val(),
-                    beneficiario2_numInt = $('#beneficiario2_numInt').val(),
-                    beneficiario2_cp = $('#beneficiario2_cp').val(),
-                    beneficiario2_estado = $('#beneficiario2_estado').val(),
-                    beneficiario2_municipio = $('#beneficiario2_municipio').val(),
-                    beneficiario2_localidad = $('#beneficiario2_localidad').val(),
-                    beneficiario2_colonia = $('#beneficiario2_colonia').val(),
+                    NombreB1 = $('#txtNombreB1').val(),
+                    TelefonoB1 = $('#txtTelefonoB1').val(),
+                    CalleB1 = $('#txtCalleB1').val(),
+                    NumeroExteriorB1 = $('#txtNumeroExteriorB1').val(),
+                    NumeroInteriorB1 = $('#txtNumeroInteriorB1').val(),
+                    CodigoPostalB1 = $('#txtCodigoPostalB1').val(),
+                    EstadoB1 = $('#txtEstadoB1').val(),
+                    MunicipioB1 = $('#txtMunicipioB1').val(),
+                    LocalidadB1 = $('#txtLocalidadB1').val(),
+                    FraccionamientoB1 = $('#txtFraccionamientoB1').val(),
+                    NombreB2 = $('#txtNombreB2').val(),
+                    TelefonoB2 = $('#txtTelefonoB2').val(),
+                    CalleB2 = $('#txtCalleB2').val(),
+                    NumeroExteriorB2 = $('#txtNumeroExteriorB2').val(),
+                    NumeroInteriorB2 = $('#txtNumeroInteriorB2').val(),
+                    CodigoPostalB2 = $('#txtCodigoPostalB2').val(),
+                    EstadoB2 = $('#txtEstadoB2').val(),
+                    MunicipioB2 = $('#txtMunicipioB2').val(),
+                    LocalidadB2 = $('#txtLocalidadB2').val(),
+                    FraccionamientoB2 = $('#txtFraccionamientoB2').val(),
                     curpini = curp.substr(0, 4),
                     curpfin = curp.substr(10, 8),
                     rfcini = rfc.substr(0, 4),
@@ -3287,26 +3287,26 @@ $('#beneficiario2_cp').on('blur', function() {
                             nContacto: nContacto,
                             empleado_activo: empleado_activo,
                             empleado_activo: empleado_activo,
-                            beneficiario1_nombre: beneficiario1_nombre,
-                            beneficiario1_telefono: beneficiario1_telefono,
-                            beneficiario1_calle: beneficiario1_calle,
-                            beneficiario1_numExt: beneficiario1_numExt,
-                            beneficiario1_numInt: beneficiario1_numInt,
-                            beneficiario1_cp: beneficiario1_cp,
-                            beneficiario1_estado: beneficiario1_estado,
-                            beneficiario1_municipio: beneficiario1_municipio,
-                            beneficiario1_localidad: beneficiario1_localidad,
-                            beneficiario1_colonia: beneficiario1_colonia,
-                            beneficiario2_nombre: beneficiario2_nombre,
-                            beneficiario2_telefono: beneficiario2_telefono,
-                            beneficiario2_calle: beneficiario2_calle,
-                            beneficiario2_numExt: beneficiario2_numExt,
-                            beneficiario2_numInt: beneficiario2_numInt,
-                            beneficiario2_cp: beneficiario2_cp,
-                            beneficiario2_estado: beneficiario2_estado,
-                            beneficiario2_municipio: beneficiario2_municipio,
-                            beneficiario2_localidad: beneficiario2_localidad,
-                            beneficiario2_colonia: beneficiario2_colonia
+                            txtNombreB1: NombreB1,
+                            txtTelefonoB1: TelefonoB1,
+                            txtCalleB1: CalleB1,
+                            txtNumeroExteriorB1: NumeroExteriorB1,
+                            txtNumeroInteriorB1: NumeroInteriorB1,
+                            txtFraccionamientoB1: FraccionamientoB1,
+                            txtCodigoPostalB1: CodigoPostalB1,
+                            txtEstadoB1: EstadoB1,
+                            txtMunicipioB1: MunicipioB1,
+                            txtLocalidadB1: LocalidadB1,
+                            txtNombreB2: NombreB2,
+                            txtTelefonoB2: TelefonoB2,
+                            txtCalleB2: CalleB2,
+                            txtNumeroExteriorB2: NumeroExteriorB2,
+                            txtNumeroInteriorB2: NumeroInteriorB2,
+                            txtFraccionamientoB2: FraccionamientoB2,
+                            txtCodigoPostalB2: CodigoPostalB2,
+                            txtEstadoB2: EstadoB2,
+                            txtMunicipioB2: MunicipioB2,
+                            txtLocalidadB2: LocalidadB2,
                         },
                         success: function (response) {
                             var respuesta = JSON.parse(response);
@@ -3701,27 +3701,28 @@ $('#beneficiario2_cp').on('blur', function() {
                     celular = $('#txtCelular').val(),
                     contacto = $('#txtContacto').val(),
                     nContacto = $('#txtNcontacto').val(),
-                    //Datos beneficiarios
-                    beneficiario1_nombre = $('#beneficiario1_nombre').val(),
-                    beneficiario1_telefono = $('#beneficiario1_telefono').val(),
-                    beneficiario1_calle = $('#beneficiario1_calle').val(),
-                    beneficiario1_numExt = $('#beneficiario1_numExt').val(),
-                    beneficiario1_numInt = $('#beneficiario1_numInt').val(),
-                    beneficiario1_cp = $('#beneficiario1_cp').val(),
-                    beneficiario1_estado = $('#beneficiario1_estado').val(),
-                    beneficiario1_municipio = $('#beneficiario1_municipio').val(),
-                    beneficiario1_localidad = $('#beneficiario1_localidad').val(),
-                    beneficiario1_colonia = $('#beneficiario1_colonia').val(),
-                    beneficiario2_nombre = $('#beneficiario2_nombre').val(),
-                    beneficiario2_telefono = $('#beneficiario2_telefono').val(),
-                    beneficiario2_calle = $('#beneficiario2_calle').val(),
-                    beneficiario2_numExt = $('#beneficiario2_numExt').val(),
-                    beneficiario2_numInt = $('#beneficiario2_numInt').val(),
-                    beneficiario2_cp = $('#beneficiario2_cp').val(),
-                    beneficiario2_estado = $('#beneficiario2_estado').val(),
-                    beneficiario2_municipio = $('#beneficiario2_municipio').val(),
-                    beneficiario2_localidad = $('#beneficiario2_localidad').val(),
-                    beneficiario2_colonia = $('#beneficiario2_colonia').val(),
+                    //Datos de beneficiarios
+                    NombreB1 = $('#txtNombreB1').val(),
+                    TelefonoB1 = $('#txtTelefonoB1').val(),
+                    CalleB1 = $('#txtCalleB1').val(),
+                    NumeroExteriorB1 = $('#txtNumeroExteriorB1').val(),
+                    NumeroInteriorB1 = $('#txtNumeroInteriorB1').val(),
+                    CodigoPostalB1 = $('#txtCodigoPostalB1').val(),
+                    EstadoB1 = $('#txtEstadoB1').val(),
+                    MunicipioB1 = $('#txtMunicipioB1').val(),
+                    LocalidadB1 = $('#txtLocalidadB1').val(),
+                    FraccionamientoB1 = $('#txtFraccionamientoB1').val(),
+                    NombreB2 = $('#txtNombreB2').val(),
+                    TelefonoB2 = $('#txtTelefonoB2').val(),
+                    CalleB2 = $('#txtCalleB2').val(),
+                    NumeroExteriorB2 = $('#txtNumeroExteriorB2').val(),
+                    NumeroInteriorB2 = $('#txtNumeroInteriorB2').val(),
+                    CodigoPostalB2 = $('#txtCodigoPostalB2').val(),
+                    EstadoB2 = $('#txtEstadoB2').val(),
+                    MunicipioB2 = $('#txtMunicipioB2').val(),
+                    LocalidadB2 = $('#txtLocalidadB2').val(),
+                    FraccionamientoB2 = $('#txtFraccionamientoB2').val(),
+
                     curpini = curp.substr(0, 4),
                     curpfin = curp.substr(10, 8),
                     rfcini = rfc.substr(0, 4),
@@ -3826,26 +3827,26 @@ $('#beneficiario2_cp').on('blur', function() {
                             contacto: contacto,
                             nContacto: nContacto,
                             empleado_activo: empleado_activo,
-                            beneficiario1_nombre: beneficiario1_nombre,
-                            beneficiario1_telefono: beneficiario1_telefono,
-                            beneficiario1_calle: beneficiario1_calle,
-                            beneficiario1_numExt: beneficiario1_numExt,
-                            beneficiario1_numInt: beneficiario1_numInt,
-                            beneficiario1_cp: beneficiario1_cp,
-                            beneficiario1_estado: beneficiario1_estado,
-                            beneficiario1_municipio: beneficiario1_municipio,
-                            beneficiario1_localidad: beneficiario1_localidad,
-                            beneficiario1_colonia: beneficiario1_colonia,
-                            beneficiario2_nombre: beneficiario2_nombre,
-                            beneficiario2_telefono: beneficiario2_telefono,
-                            beneficiario2_calle: beneficiario2_calle,
-                            beneficiario2_numExt: beneficiario2_numExt,
-                            beneficiario2_numInt: beneficiario2_numInt,
-                            beneficiario2_cp: beneficiario2_cp,
-                            beneficiario2_estado: beneficiario2_estado,
-                            beneficiario2_municipio: beneficiario2_municipio,
-                            beneficiario2_localidad: beneficiario2_localidad,
-                            beneficiario2_colonia: beneficiario2_colonia
+                            txtNombreB1: NombreB1,
+                            txtTelefonoB1: TelefonoB1,
+                            txtCalleB1: CalleB1,
+                            txtNumeroExteriorB1: NumeroExteriorB1,
+                            txtNumeroInteriorB1: NumeroInteriorB1,
+                            txtFraccionamientoB1: FraccionamientoB1,
+                            txtCodigoPostalB1: CodigoPostalB1,
+                            txtEstadoB1: EstadoB1,
+                            txtMunicipioB1: MunicipioB1,
+                            txtLocalidadB1: LocalidadB1,
+                            txtNombreB2: NombreB2,
+                            txtTelefonoB2: TelefonoB2,
+                            txtCalleB2: CalleB2,
+                            txtNumeroExteriorB2: NumeroExteriorB2,
+                            txtNumeroInteriorB2: NumeroInteriorB2,
+                            txtFraccionamientoB2: FraccionamientoB2,
+                            txtCodigoPostalB2: CodigoPostalB2,
+                            txtEstadoB2: EstadoB2,
+                            txtMunicipioB2: MunicipioB2,
+                            txtLocalidadB2: LocalidadB2,
                         },
                         success: function (response) {
                             var respuesta = JSON.parse(response);
@@ -4380,26 +4381,27 @@ $('#beneficiario2_cp').on('blur', function() {
                     contacto = $('#txtContacto').val(),
                     nContacto = $('#txtNcontacto').val(),
                     //Datos de beneficiarios
-                    beneficiario1_nombre = $('#beneficiario1_nombre').val(),
-                    beneficiario1_telefono = $('#beneficiario1_telefono').val(),
-                    beneficiario1_calle = $('#beneficiario1_calle').val(),
-                    beneficiario1_numExt = $('#beneficiario1_numExt').val(),
-                    beneficiario1_numInt = $('#beneficiario1_numInt').val(),
-                    beneficiario1_cp = $('#beneficiario1_cp').val(),
-                    beneficiario1_estado = $('#beneficiario1_estado').val(),
-                    beneficiario1_municipio = $('#beneficiario1_municipio').val(),
-                    beneficiario1_localidad = $('#beneficiario1_localidad').val(),
-                    beneficiario1_colonia = $('#beneficiario1_colonia').val(),
-                    beneficiario2_nombre = $('#beneficiario2_nombre').val(),
-                    beneficiario2_telefono = $('#beneficiario2_telefono').val(),
-                    beneficiario2_calle = $('#beneficiario2_calle').val(),
-                    beneficiario2_numExt = $('#beneficiario2_numExt').val(),
-                    beneficiario2_numInt = $('#beneficiario2_numInt').val(),
-                    beneficiario2_cp = $('#beneficiario2_cp').val(),
-                    beneficiario2_estado = $('#beneficiario2_estado').val(),
-                    beneficiario2_municipio = $('#beneficiario2_municipio').val(),
-                    beneficiario2_localidad = $('#beneficiario2_localidad').val(),
-                    beneficiario2_colonia = $('#beneficiario2_colonia').val(),
+                    NombreB1 = $('#txtNombreB1').val(),
+                    TelefonoB1 = $('#txtTelefonoB1').val(),
+                    CalleB1 = $('#txtCalleB1').val(),
+                    NumeroExteriorB1 = $('#txtNumeroExteriorB1').val(),
+                    NumeroInteriorB1 = $('#txtNumeroInteriorB1').val(),
+                    CodigoPostalB1 = $('#txtCodigoPostalB1').val(),
+                    EstadoB1 = $('#txtEstadoB1').val(),
+                    MunicipioB1 = $('#txtMunicipioB1').val(),
+                    LocalidadB1 = $('#txtLocalidadB1').val(),
+                    FraccionamientoB1 = $('#txtFraccionamientoB1').val(),
+                    NombreB2 = $('#txtNombreB2').val(),
+                    TelefonoB2 = $('#txtTelefonoB2').val(),
+                    CalleB2 = $('#txtCalleB2').val(),
+                    NumeroExteriorB2 = $('#txtNumeroExteriorB2').val(),
+                    NumeroInteriorB2 = $('#txtNumeroInteriorB2').val(),
+                    CodigoPostalB2 = $('#txtCodigoPostalB2').val(),
+                    EstadoB2 = $('#txtEstadoB2').val(),
+                    MunicipioB2 = $('#txtMunicipioB2').val(),
+                    LocalidadB2 = $('#txtLocalidadB2').val(),
+                    FraccionamientoB2 = $('#txtFraccionamientoB2').val(),
+
                     curpini = curp.substr(0, 4),
                     curpfin = curp.substr(10, 8);
                 rfcini = rfc.substr(0, 4);
@@ -4524,26 +4526,26 @@ $('#beneficiario2_cp').on('blur', function() {
                             contacto: contacto,
                             nContacto: nContacto,
                             empleado_activo: empleado_activo,
-                            beneficiario1_nombre: beneficiario1_nombre,
-                            beneficiario1_telefono: beneficiario1_telefono,
-                            beneficiario1_calle: beneficiario1_calle,
-                            beneficiario1_numExt: beneficiario1_numExt,
-                            beneficiario1_numInt: beneficiario1_numInt,
-                            beneficiario1_cp: beneficiario1_cp,
-                            beneficiario1_estado: beneficiario1_estado,
-                            beneficiario1_municipio: beneficiario1_municipio,
-                            beneficiario1_localidad: beneficiario1_localidad,
-                            beneficiario1_colonia: beneficiario1_colonia,
-                            beneficiario2_nombre: beneficiario2_nombre,
-                            beneficiario2_telefono: beneficiario2_telefono,
-                            beneficiario2_calle: beneficiario2_calle,
-                            beneficiario2_numExt: beneficiario2_numExt,
-                            beneficiario2_numInt: beneficiario2_numInt,
-                            beneficiario2_cp: beneficiario2_cp,
-                            beneficiario2_estado: beneficiario2_estado,
-                            beneficiario2_municipio: beneficiario2_municipio,
-                            beneficiario2_localidad: beneficiario2_localidad,
-                            beneficiario2_colonia: beneficiario2_colonia
+                            txtNombreB1: NombreB1,
+                            txtTelefonoB1: TelefonoB1,
+                            txtCalleB1: CalleB1,
+                            txtNumeroExteriorB1: NumeroExteriorB1,
+                            txtNumeroInteriorB1: NumeroInteriorB1,
+                            txtFraccionamientoB1: FraccionamientoB1,
+                            txtCodigoPostalB1: CodigoPostalB1,
+                            txtEstadoB1: EstadoB1,
+                            txtMunicipioB1: MunicipioB1,
+                            txtLocalidadB1: LocalidadB1,
+                            txtNombreB2: NombreB2,
+                            txtTelefonoB2: TelefonoB2,
+                            txtCalleB2: CalleB2,
+                            txtNumeroExteriorB2: NumeroExteriorB2,
+                            txtNumeroInteriorB2: NumeroInteriorB2,
+                            txtFraccionamientoB2: FraccionamientoB2,
+                            txtCodigoPostalB2: CodigoPostalB2,
+                            txtEstadoB2: EstadoB2,
+                            txtMunicipioB2: MunicipioB2,
+                            txtLocalidadB2: LocalidadB2,
                         },
                         success: function (response) {
                             var respuesta = JSON.parse(response);

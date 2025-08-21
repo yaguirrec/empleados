@@ -383,52 +383,52 @@
     <h4 class="mt-3">Beneficiario 1</h4>
     <div class="form-row">
         <div class="form-group col-md-4">
-            <label for="beneficiario1_nombre">Nombre completo</label>
-            <input type="text" class="form-control" id="beneficiario1_nombre" name="beneficiario1_nombre" required>
+            <label for="txtNombreB1">Nombre completo</label>
+            <input type="text" class="form-control" id="txtNombreB1" name="txtNombreB1" required>
         </div>
         <div class="form-group col-md-4">
-            <label for="beneficiario1_telefono">Teléfono</label>
-            <input type="text" class="form-control" id="beneficiario1_telefono" name="beneficiario1_telefono" maxlength="10" placeholder="4499128686" required>
+            <label for="txtTelefonoB1">Teléfono</label>
+            <input type="text" class="form-control" id="txtTelefonoB1" name="txtTelefonoB1" maxlength="10" required>
         </div>
         <div class="form-group col-md-4">
-            <label for="beneficiario1_calle">Calle</label>
-            <input type="text" class="form-control" id="beneficiario1_calle" name="beneficiario1_calle" required>
+            <label for="txtCalleB1">Calle</label>
+            <input type="text" class="form-control" id="txtCalleB1" name="txtCalleB1" required>
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-4">
-            <label for="beneficiario1_numExt">Número exterior</label>
-            <input type="text" class="form-control" id="beneficiario1_numExt" name="beneficiario1_numExt">
+            <label for="txtNumeroExteriorB1">Número exterior</label>
+            <input type="text" class="form-control" id="txtNumeroExteriorB1" name="txtNumeroExteriorB1">
         </div>
         <div class="form-group col-md-4">
-            <label for="beneficiario1_numInt">Número interior</label>
-            <input type="text" class="form-control" id="beneficiario1_numInt" name="beneficiario1_numInt">
+            <label for="txtNumeroInteriorB1">Número interior</label>
+            <input type="text" class="form-control" id="txtNumeroInteriorB1" name="txtNumeroInteriorB1">
         </div>
         <div class="form-group col-md-4">
-            <label for="beneficiario1_cp">CP</label>
-            <input type="text" class="form-control" id="beneficiario1_cp" maxlength="5" name="beneficiario1_cp" required>
+            <label for="txtCodigoPostalB1">CP</label>
+            <input type="text" class="form-control" id="txtCodigoPostalB1" maxlength="5" name="txtCodigoPostalB1" required>
         </div>
     </div>
 
     <div class="form-row">
         <div class="form-group col-md-4">
-            <label for="beneficiario1_estado">Estado</label>
-            <input type="text" class="form-control" id="beneficiario1_estado" name="beneficiario1_estado">
+            <label for="txtEstadoB1">Estado</label>
+            <input type="text" class="form-control" id="txtEstadoB1" name="txtEstadoB1">
         </div>
         <div class="form-group col-md-4">
-            <label for="beneficiario1_municipio">Municipio</label>
-            <input type="text" class="form-control" id="beneficiario1_municipio" name="beneficiario1_municipio">
+            <label for="txtMunicipioB1">Municipio</label>
+            <input type="text" class="form-control" id="txtMunicipioB1" name="txtMunicipioB1">
         </div>
         <div class="form-group col-md-4">
-            <label for="beneficiario1_localidad">Localidad</label>
-            <input type="text" class="form-control" id="beneficiario1_localidad" name="beneficiario1_localidad">
+            <label for="txtLocalidadB1">Localidad</label>
+            <input type="text" class="form-control" id="txtLocalidadB1" name="txtLocalidadB1">
         </div>
     </div>
 
     <div class="form-row">
         <div class="form-group col-md-8">
-            <label for="beneficiario1_colonia">Colonia / Fraccionamiento</label>
-            <select class="form-control" id="beneficiario1_colonia"></select>
+            <label for="txtFraccionamientoB1">Colonia / Fraccionamiento</label>
+            <select class="form-control" id="txtFraccionamientoB1" name="txtFraccionamientoB1"></select>
         </div>
     </div>
 
@@ -436,51 +436,51 @@
         <h4 class="mt-4">Beneficiario 2</h4>
         <div class="form-row">
             <div class="form-group col-md-4">
-                <label for="beneficiario2_nombre">Nombre completo</label>
-                <input type="text" class="form-control" id="beneficiario2_nombre" name="beneficiario2_nombre" required>
+                <label for="txtNombreB2">Nombre completo</label>
+                <input type="text" class="form-control" id="txtNombreB2" name="txtNombreB2" required>
             </div>
             <div class="form-group col-md-4">
-                <label for="beneficiario2_telefono">Teléfono</label>
-                <input type="text" class="form-control" id="beneficiario2_telefono" name="beneficiario2_telefono" maxlength="10" placeholder="4499128686" required>
+                <label for="txtTelefonoB2">Teléfono</label>
+                <input type="text" class="form-control" id="txtTelefonoB2" name="txtTelefonoB2" maxlength="10" required>
             </div>
             <div class="form-group col-md-4">
-                <label for="beneficiario2_calle">Calle</label>
-                <input type="text" class="form-control" id="beneficiario2_calle" name="beneficiario2_calle" required>
+                <label for="txtCalleB2">Calle</label>
+                <input type="text" class="form-control" id="txtCalleB2" name="txtCalleB2" required>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-md-4">
-                <label for="beneficiario2_numExt">Número exterior</label>
-                <input type="text" class="form-control" id="beneficiario2_numExt" name="beneficiario2_numExt">
+                <label for="txtNumeroExteriorB2">Número exterior</label>
+                <input type="text" class="form-control" id="txtNumeroExteriorB2" name="txtNumeroExteriorB2">
             </div>
             <div class="form-group col-md-4">
-                <label for="beneficiario2_numInt">Número interior</label>
-                <input type="text" class="form-control" id="beneficiario2_numInt" name="beneficiario2_numInt">
+                <label for="txtNumeroInteriorB2">Número interior</label>
+                <input type="text" class="form-control" id="txtNumeroInteriorB2" name="txtNumeroInteriorB2">
             </div>
             <div class="form-group col-md-4">
-                <label for="beneficiario2_cp">CP</label>
-                <input type="text" class="form-control" id="beneficiario2_cp" maxlength="5" name="beneficiario2_cp" required>
+                <label for="txtCodigoPostalB2">CP</label>
+                <input type="text" class="form-control" id="txtCodigoPostalB2" maxlength="5" name="txtCodigoPostalB2" required>
             </div>
         </div>
     
         <div class="form-row">
             <div class="form-group col-md-4">
-                <label for="beneficiario2_estado">Estado</label>
-                <input type="text" class="form-control" id="beneficiario2_estado" name="beneficiario2_estado">
+                <label for="txtEstadoB2">Estado</label>
+                <input type="text" class="form-control" id="txtEstadoB2" name="txtEstadoB2">
             </div>
             <div class="form-group col-md-4">
-                <label for="beneficiario2_municipio">Municipio</label>
-                <input type="text" class="form-control" id="beneficiario2_municipio" name="beneficiario2_municipio">
+                <label for="txtMunicipioB2">Municipio</label>
+                <input type="text" class="form-control" id="txtMunicipioB2" name="txtMunicipioB2">
             </div>  
             <div class="form-group col-md-4">
-                <label for="beneficiario2_localidad">Localidad</label>
-                <input type="text" class="form-control" id="beneficiario2_localidad" name="beneficiario2_localidad">
+                <label for="txtLocalidadB2">Localidad</label>
+                <input type="text" class="form-control" id="txtLocalidadB2" name="txtLocalidadB2">
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-md-8">
-                <label for="beneficiario2_colonia">Colonia / Fraccionamiento</label>
-                <select class="form-control" id="beneficiario2_colonia"></select>
+                <label for="txtFraccionamientoB2">Colonia / Fraccionamiento</label>
+                <select class="form-control" id="txtFraccionamientoB2" name="txtFraccionamientoB2"></select>
             </div>
         </div>
     </div>
