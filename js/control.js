@@ -3045,6 +3045,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     $("#txtCelular").val(datos.celular);
                     $("#txtContacto").val(datos.contacto_emergencia_nombre);
                     $("#txtNcontacto").val(datos.contacto_emergencia_numero);
+                    $("#txtIdB1").val(datos.id_beneficiario1);
                     $("#txtNombreB1").val(datos.nombre_beneficiario1);
                     $("#txtTelefonoB1").val(datos.telefono_beneficiario1);
                     $("#txtCalleB1").val(datos.calle_b1);
@@ -3055,6 +3056,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     $("#txtMunicipioB1").val(datos.municipio_b1);
                     $("#txtEstadoB1").val(datos.estado_b1);
                     $("#txtLocalidadB1").val(datos.localidad_b1);
+                    $("#txtIdB2").val(datos.id_beneficiario2);
                     $("#txtNombreB2").val(datos.nombre_beneficiario2);
                     $("#txtTelefonoB2").val(datos.telefono_beneficiario2);
                     $("#txtCalleB2").val(datos.calle_b2);
@@ -3065,6 +3067,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     $("#txtMunicipioB2").val(datos.municipio_b2);
                     $("#txtEstadoB2").val(datos.estado_b2);
                     $("#txtLocalidadB2").val(datos.localidad_b2);
+
 
                     setTimeout(function () {
                         $("#txtSucursal").val(datos.id_sucursal);
@@ -3185,7 +3188,29 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     curpini = curp.substr(0, 4),
                     curpfin = curp.substr(10, 8),
                     rfcini = rfc.substr(0, 4),
-                    rfcfin = rfc.substr(10, 3);
+                    rfcfin = rfc.substr(10, 3),
+                    idB1 = $('#txtIdB1').val(),
+                    nombreB1 = $('#txtNombreB1').val(),
+                    telefonoB1 = $('#txtTelefonoB1').val(),
+                    calleB1 = $('#txtCalleB1').val(),
+                    numeroExteriorB1 = $('#txtNumeroExteriorB1').val(),
+                    numeroInteriorB1 = $('#txtNumeroInteriorB1').val(),
+                    codigoPostalB1 = $('#txtCodigoPostalB1').val(),
+                    estadoB1 = $('#txtEstadoB1').val(),
+                    municipioB1 = $('#txtMunicipioB1').val(),
+                    localidadB1 = $('#txtLocalidadB1').val(),
+                    fraccionamientoB1 = $('#txtFraccionamientoB1').val(),
+                    idB2 = $('#txtIdB2').val(),
+                    nombreB2 = $('#txtNombreB2').val(),
+                    telefonoB2 = $('#txtTelefonoB2').val(),
+                    calleB2 = $('#txtCalleB2').val(),
+                    numeroExteriorB2 = $('#txtNumeroExteriorB2').val(),
+                    numeroInteriorB2 = $('#txtNumeroInteriorB2').val(),
+                    codigoPostalB2 = $('#txtCodigoPostalB2').val(),
+                    estadoB2 = $('#txtEstadoB2').val(),
+                    municipioB2 = $('#txtMunicipioB2').val(),
+                    localidadB2 = $('#txtLocalidadB2').val(),
+                    fraccionamientoB2 = $('#txtFraccionamientoB2').val();
                 domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
 
                 if(reclutado_por !== ''){
@@ -3286,27 +3311,28 @@ $('#txtCodigoPostalB2').on('blur', function() {
                             contacto: contacto,
                             nContacto: nContacto,
                             empleado_activo: empleado_activo,
-                            empleado_activo: empleado_activo,
-                            txtNombreB1: NombreB1,
-                            txtTelefonoB1: TelefonoB1,
-                            txtCalleB1: CalleB1,
-                            txtNumeroExteriorB1: NumeroExteriorB1,
-                            txtNumeroInteriorB1: NumeroInteriorB1,
-                            txtFraccionamientoB1: FraccionamientoB1,
-                            txtCodigoPostalB1: CodigoPostalB1,
-                            txtEstadoB1: EstadoB1,
-                            txtMunicipioB1: MunicipioB1,
-                            txtLocalidadB1: LocalidadB1,
-                            txtNombreB2: NombreB2,
-                            txtTelefonoB2: TelefonoB2,
-                            txtCalleB2: CalleB2,
-                            txtNumeroExteriorB2: NumeroExteriorB2,
-                            txtNumeroInteriorB2: NumeroInteriorB2,
-                            txtFraccionamientoB2: FraccionamientoB2,
-                            txtCodigoPostalB2: CodigoPostalB2,
-                            txtEstadoB2: EstadoB2,
-                            txtMunicipioB2: MunicipioB2,
-                            txtLocalidadB2: LocalidadB2,
+                            idB1: idB1,
+                            nombreB1: nombreB1,
+                            telefonoB1: telefonoB1,
+                            calleB1: calleB1,
+                            numeroExteriorB1: numeroExteriorB1,
+                            numeroInteriorB1: numeroInteriorB1,
+                            codigoPostalB1: codigoPostalB1,
+                            estadoB1: estadoB1,
+                            municipioB1: municipioB1,
+                            localidadB1: localidadB1,
+                            fraccionamientoB1: fraccionamientoB1,
+                            idB2: idB2,
+                            nombreB2: nombreB2,
+                            telefonoB2: telefonoB2,
+                            calleB2: calleB2,
+                            numeroExteriorB2: numeroExteriorB2,
+                            numeroInteriorB2: numeroInteriorB2,
+                            codigoPostalB2: codigoPostalB2,
+                            estadoB2: estadoB2,
+                            municipioB2: municipioB2,
+                            localidadB2: localidadB2,
+                            fraccionamientoB2: fraccionamientoB2
                         },
                         success: function (response) {
                             var respuesta = JSON.parse(response);
