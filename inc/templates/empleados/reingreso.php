@@ -429,6 +429,7 @@
         <div class="form-group col-md-8">
             <label for="txtFraccionamientoB1">Colonia / Fraccionamiento</label>
             <select class="form-control" id="txtFraccionamientoB1" name="txtFraccionamientoB1"></select>
+            <input type="hidden" id="txtIdB1" name="txtIdB1">
         </div>
     </div>
 
@@ -481,6 +482,7 @@
             <div class="form-group col-md-8">
                 <label for="txtFraccionamientoB2">Colonia / Fraccionamiento</label>
                 <select class="form-control" id="txtFraccionamientoB2" name="txtFraccionamientoB2"></select>
+                <input type="hidden" id="txtIdB2" name="txtIdB2">
             </div>
         </div>
     </div>
