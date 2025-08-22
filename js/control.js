@@ -384,7 +384,7 @@ $(document).ready(function () {
                 $("#txtCalleB1").val(datos.calle_b1);
                 $("#txtNumeroExteriorB1").val(datos.numero_exterior_b1);
                 $("#txtNumeroInteriorB1").val(datos.numero_interior_b1);
-                $("#txtFraccionamientoB1").val(datos.fraccionamiento_b1);
+                llenarBeneficiarios1(datos.codigo_postal_b1)
                 $("#txtCodigoPostalB1").val(datos.codigo_postal_b1);
                 $("#txtMunicipioB1").val(datos.municipio_b1);
                 $("#txtEstadoB1").val(datos.estado_b1);
@@ -394,7 +394,7 @@ $(document).ready(function () {
                 $("#txtCalleB2").val(datos.calle_b2);
                 $("#txtNumeroExteriorB2").val(datos.numero_exterior_b2);
                 $("#txtNumeroInteriorB2").val(datos.numero_interior_b2);
-                $("#txtFraccionamientoB2").val(datos.fraccionamiento_b2);
+                llenarBeneficiarios2(datos.codigo_postal_b1)
                 $("#txtCodigoPostalB2").val(datos.codigo_postal_b2);
                 $("#txtMunicipioB2").val(datos.municipio_b2);
                 $("#txtEstadoB2").val(datos.estado_b2);
@@ -417,6 +417,11 @@ $(document).ready(function () {
                     $("#txtFraccionamiento").val(datos.fraccionamiento.toUpperCase());
                 }, 1000);
 
+                setTimeout(function () {
+                    $("#txtFraccionamientoB1").val(datos.fraccionamiento_b1.toUpperCase());
+                    $("#txtFraccionamientoB2").val(datos.fraccionamiento_b2.toUpperCase());
+                }, 1000);
+
                 $("#txtClasificacion").focusout(function () {
                     listarDepartamentos($("#txtSucursal").val(), $("#txtClasificacion").val());
                 });
@@ -427,6 +432,14 @@ $(document).ready(function () {
 
                 $("#txtCP").focusout(function () {
                     listarFraccionamientos($("#txtCP").val());
+                });
+
+                $("#txtCodigoPostalB1").focusout(function () {
+                    llenarBeneficiarios1($("#txtCodigoPostalB1").val());
+                });
+
+                $("#txtCodigoPostalB2").focusout(function () {
+                    llenarBeneficiarios2($("#txtCodigoPostalB2").val());
                 });
 
                 $("#txtClasificacion").focusout(function () {
@@ -3033,7 +3046,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     $("#txtNume").val(datos.numero_exterior);
                     $("#txtNumi").val(datos.numero_interior);
                     $("#txtCP").val(datos.codigo_postal);
-                    listarFraccionamientos(datos.codigo_postal)
+                    llenarBeneficiarios1(datos.codigo_postal)
                     $("#txtInfonavit").val(datos.infonavit);
                     $("#txtNinfonavit").val(datos.numero_infonavit);
                     $("#txtFonacot").val(datos.fonacot);
@@ -3051,7 +3064,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     $("#txtCalleB1").val(datos.calle_b1);
                     $("#txtNumeroExteriorB1").val(datos.numero_exterior_b1);
                     $("#txtNumeroInteriorB1").val(datos.numero_interior_b1);
-                    $("#txtFraccionamientoB1").val(datos.fraccionamiento_b1);
+                    llenarBeneficiarios1(datos.codigo_postal_b1)
                     $("#txtCodigoPostalB1").val(datos.codigo_postal_b1);
                     $("#txtMunicipioB1").val(datos.municipio_b1);
                     $("#txtEstadoB1").val(datos.estado_b1);
@@ -3062,7 +3075,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     $("#txtCalleB2").val(datos.calle_b2);
                     $("#txtNumeroExteriorB2").val(datos.numero_exterior_b2);
                     $("#txtNumeroInteriorB2").val(datos.numero_interior_b2);
-                    $("#txtFraccionamientoB2").val(datos.fraccionamiento_b2);
+                    llenarBeneficiarios2(datos.codigo_postal_b2)
                     $("#txtCodigoPostalB2").val(datos.codigo_postal_b2);
                     $("#txtMunicipioB2").val(datos.municipio_b2);
                     $("#txtEstadoB2").val(datos.estado_b2);
@@ -3087,6 +3100,11 @@ $('#txtCodigoPostalB2').on('blur', function() {
                         $("#txtFraccionamiento").val(datos.fraccionamiento.toUpperCase());
                     }, 1000);
 
+                    setTimeout(function () {
+                        $("#txtFraccionamientoB1").val(datos.fraccionamiento_b1.toUpperCase());
+                        $("#txtFraccionamientoB2").val(datos.fraccionamiento_b2.toUpperCase());
+                    }, 1000);
+
 
                 }
             });
@@ -3094,6 +3112,14 @@ $('#txtCodigoPostalB2').on('blur', function() {
             //EDITAR CP
             $("#txtCP").focusout(function () {
                 listarFraccionamientos($("#txtCP").val());
+            });
+
+            $("#txtCodigoPostalB1").focusout(function () {
+                llenarBeneficiarios1($("#txtCodigoPostalB1").val());
+            });
+
+            $("#txtCodigoPostalB2").focusout(function () {
+                llenarBeneficiarios2($("#txtCodigoPostalB2").val());
             });
 
             $("#txtClasificacion").focusout(function () {
@@ -3204,7 +3230,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 if (jefenomina.trim() === "-1") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes seleccionar el Jefe Directo',
                         showConfirmButton: false,
                         timer: 2000
@@ -3214,7 +3240,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 if (salarioDiario.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Salario Diario',
                         showConfirmButton: false,
                         timer: 2000
@@ -3224,7 +3250,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 if (celula.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Cédula',
                         showConfirmButton: false,
                         timer: 2000
@@ -3234,7 +3260,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 if (registro.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Registro',
                         showConfirmButton: false,
                         timer: 2000
@@ -3244,7 +3270,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 if (puesto.trim() === "-1") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes seleccionar el Puesto',
                         showConfirmButton: false,
                         timer: 2000
@@ -3254,7 +3280,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 if (nombre.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Nombre',
                         showConfirmButton: false,
                         timer: 2000
@@ -3264,7 +3290,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 if (aPaterno.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Apellido Paterno',
                         showConfirmButton: false,
                         timer: 2000
@@ -3274,7 +3300,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 if (aMaterno.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Apellido Materno',
                         showConfirmButton: false,
                         timer: 2000
@@ -3284,7 +3310,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 if (rfc.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el RFC',
                         showConfirmButton: false,
                         timer: 2000
@@ -3295,7 +3321,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 if (nss.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el NSS',
                         showConfirmButton: false,
                         timer: 2000
@@ -3306,7 +3332,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 if (correo.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Correo',
                         showConfirmButton: false,
                         timer: 2000
@@ -3317,7 +3343,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 if (telefono.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Teléfono',
                         showConfirmButton: false,
                         timer: 2000
@@ -3328,7 +3354,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 if (celular.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Celular',
                         showConfirmButton: false,
                         timer: 2000
@@ -3339,7 +3365,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 if (calle.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Calle',
                         showConfirmButton: false,
                         timer: 2000
@@ -3350,7 +3376,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 if (numE.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Número Exterior',
                         showConfirmButton: false,
                         timer: 2000
@@ -3361,7 +3387,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 if (cp.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Código Postal',
                         showConfirmButton: false,
                         timer: 2000
@@ -3372,7 +3398,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 if (nInfonavit.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Número Infonavit',
                         showConfirmButton: false,
                         timer: 2000
@@ -3383,7 +3409,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 if (nFonacot.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Número Fonacot',
                         showConfirmButton: false,
                         timer: 2000
@@ -3394,17 +3420,17 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 if (cuenta.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Cuenta Bancaria',
                         showConfirmButton: false,
                         timer: 2000
                     });
                     return;
                 }
-                if (NombreB1.trim() === "") {
+                if (nombreB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Nombre del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -3412,10 +3438,10 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (TelefonoB1.trim() === "") {
+                if (telefonoB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Teléfono del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -3423,10 +3449,10 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (CalleB1.trim() === "") {
+                if (calleB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Calle del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -3434,10 +3460,10 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (NumeroExteriorB1.trim() === "") {
+                if (numeroExteriorB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Número Exterior del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -3445,10 +3471,10 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (CodigoPostalB1.trim() === "") {
+                if (codigoPostalB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Código Postal del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -3456,10 +3482,10 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (EstadoB1.trim() === "") {
+                if (estadoB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Estado del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -3467,10 +3493,10 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (MunicipioB1.trim() === "") {
+                if (municipioB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Municipio del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -3478,10 +3504,10 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (LocalidadB1.trim() === "") {
+                if (localidadB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Localidad del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -3489,10 +3515,10 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (FraccionamientoB1.trim() === "") {
+                if (fraccionamientoB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Fraccionamiento del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -3500,10 +3526,10 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (NombreB2.trim() === "") {
+                if (nombreB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Nombre del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -3511,10 +3537,10 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (TelefonoB2.trim() === "") {
+                if (telefonoB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Teléfono del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -3522,10 +3548,10 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (CalleB2.trim() === "") {
+                if (calleB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Calle del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -3533,10 +3559,10 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (NumeroExteriorB2.trim() === "") {
+                if (numeroExteriorB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Número Exterior del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -3544,10 +3570,10 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (CodigoPostalB2.trim() === "") {
+                if (codigoPostalB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Código Postal del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -3555,10 +3581,10 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (EstadoB2.trim() === "") {
+                if (estadoB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Estado del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -3566,10 +3592,10 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (MunicipioB2.trim() === "") {
+                if (municipioB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Municipio del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -3577,10 +3603,10 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (LocalidadB2.trim() === "") {
+                if (localidadB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Localidad del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -3588,16 +3614,16 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
 
-if (FraccionamientoB2.trim() === "") {
-    Swal.fire({
-        position: 'center',
-        icon: 'warning',
-        title: 'Debes llenar el Fraccionamiento del Beneficiario 2',
-        showConfirmButton: false,
-        timer: 2000
-    });
-    return;
-}
+                if (fraccionamientoB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        type: 'warning',
+                        title: 'Debes llenar el Fraccionamiento del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
                     var nombreLargo = `${aPaterno} ${aMaterno} ${nombre}`;
                     $.ajax({
                         type: 'POST',
@@ -3951,6 +3977,16 @@ if (FraccionamientoB2.trim() === "") {
                 listarFraccionamientos(cp);
             });
 
+            $("#txtCodigoPostalB1").focusout(function () {
+                var codigoPostalB1 = $('#txtCodigoPostalB1').val();
+                llenarBeneficiarios1(codigoPostalB1);
+            });
+
+            $("#txtCodigoPostalB2").focusout(function () {
+                var codigoPostalB2 = $('#txtCodigoPostalB2').val();
+                llenarBeneficiarios2(codigoPostalB2);
+            });
+
             //Validar el puesto ingresado
             $('#txtPuesto').focusout(function () {
                 var pto = $('#txtPuesto').val();
@@ -4116,11 +4152,12 @@ if (FraccionamientoB2.trim() === "") {
                         reclutador = $('#txtout_lm').val();
                         control_reclutador = 'valor_ingresado';
                     }
+                }
 
                 if (jefenomina.trim() === "-1") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes seleccionar el Jefe Directo',
                         showConfirmButton: false,
                         timer: 2000
@@ -4130,7 +4167,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (salarioDiario.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Salario Diario',
                         showConfirmButton: false,
                         timer: 2000
@@ -4140,7 +4177,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (celula.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Cédula',
                         showConfirmButton: false,
                         timer: 2000
@@ -4150,7 +4187,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (registro.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Registro',
                         showConfirmButton: false,
                         timer: 2000
@@ -4160,7 +4197,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (puesto.trim() === "-1") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes seleccionar el Puesto',
                         showConfirmButton: false,
                         timer: 2000
@@ -4170,7 +4207,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (nombre.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Nombre',
                         showConfirmButton: false,
                         timer: 2000
@@ -4180,7 +4217,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (aPaterno.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Apellido Paterno',
                         showConfirmButton: false,
                         timer: 2000
@@ -4190,7 +4227,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (aMaterno.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Apellido Materno',
                         showConfirmButton: false,
                         timer: 2000
@@ -4200,7 +4237,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (rfc.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el RFC',
                         showConfirmButton: false,
                         timer: 2000
@@ -4211,7 +4248,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (nss.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el NSS',
                         showConfirmButton: false,
                         timer: 2000
@@ -4222,7 +4259,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (correo.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Correo',
                         showConfirmButton: false,
                         timer: 2000
@@ -4233,7 +4270,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (telefono.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Teléfono',
                         showConfirmButton: false,
                         timer: 2000
@@ -4244,7 +4281,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (celular.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Celular',
                         showConfirmButton: false,
                         timer: 2000
@@ -4255,7 +4292,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (calle.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Calle',
                         showConfirmButton: false,
                         timer: 2000
@@ -4266,7 +4303,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (numE.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Número Exterior',
                         showConfirmButton: false,
                         timer: 2000
@@ -4277,7 +4314,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (cp.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Código Postal',
                         showConfirmButton: false,
                         timer: 2000
@@ -4288,7 +4325,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (nInfonavit.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Número Infonavit',
                         showConfirmButton: false,
                         timer: 2000
@@ -4299,7 +4336,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (nFonacot.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Número Fonacot',
                         showConfirmButton: false,
                         timer: 2000
@@ -4310,17 +4347,17 @@ if (FraccionamientoB2.trim() === "") {
                 if (cuenta.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Cuenta Bancaria',
                         showConfirmButton: false,
                         timer: 2000
                     });
                     return;
                 }
-                if (NombreB1.trim() === "") {
+                if (nombreB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Nombre del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -4328,10 +4365,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (TelefonoB1.trim() === "") {
+                if (telefonoB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Teléfono del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -4339,10 +4376,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (CalleB1.trim() === "") {
+                if (calleB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Calle del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -4350,10 +4387,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (NumeroExteriorB1.trim() === "") {
+                if (numeroExteriorB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Número Exterior del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -4361,10 +4398,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (CodigoPostalB1.trim() === "") {
+                if (codigoPostalB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Código Postal del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -4372,10 +4409,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (EstadoB1.trim() === "") {
+                if (estadoB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Estado del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -4383,10 +4420,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (MunicipioB1.trim() === "") {
+                if (municipioB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Municipio del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -4394,10 +4431,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (LocalidadB1.trim() === "") {
+                if (localidadB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Localidad del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -4405,10 +4442,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (FraccionamientoB1.trim() === "") {
+                if (fraccionamientoB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Fraccionamiento del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -4416,10 +4453,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (NombreB2.trim() === "") {
+                if (nombreB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Nombre del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -4427,10 +4464,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (TelefonoB2.trim() === "") {
+                if (telefonoB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Teléfono del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -4438,10 +4475,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (CalleB2.trim() === "") {
+                if (calleB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Calle del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -4449,10 +4486,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (NumeroExteriorB2.trim() === "") {
+                if (numeroExteriorB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Número Exterior del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -4460,10 +4497,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (CodigoPostalB2.trim() === "") {
+                if (codigoPostalB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Código Postal del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -4471,10 +4508,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (EstadoB2.trim() === "") {
+                if (estadoB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Estado del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -4482,10 +4519,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (MunicipioB2.trim() === "") {
+                if (municipioB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Municipio del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -4493,10 +4530,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (LocalidadB2.trim() === "") {
+                if (localidadB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Localidad del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -4504,16 +4541,16 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
 
-if (FraccionamientoB2.trim() === "") {
-    Swal.fire({
-        position: 'center',
-        icon: 'warning',
-        title: 'Debes llenar el Fraccionamiento del Beneficiario 2',
-        showConfirmButton: false,
-        timer: 2000
-    });
-    return;
-}
+                if (fraccionamientoB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        type: 'warning',
+                        title: 'Debes llenar el Fraccionamiento del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
                     var nombreLargo = `${aPaterno} ${aMaterno} ${nombre}`;
                     $.ajax({
                         type: 'POST',
@@ -4629,7 +4666,7 @@ if (FraccionamientoB2.trim() === "") {
                             }
                         }
                     });
-                }
+                
             });
             break;
         //GUARDAR EMPLEADO  
@@ -4979,6 +5016,17 @@ if (FraccionamientoB2.trim() === "") {
                 listarFraccionamientos(cp);
             });
 
+            $("#txtCodigoPostalB1").focusout(function () {
+                var codigoPostalB1 = $('#txtCodigoPostalB1').val();
+                llenarBeneficiarios1(codigoPostalB1);
+            });
+
+            $("#txtCodigoPostalB2").focusout(function () {
+                var codigoPostalB2 = $('#txtCodigoPostalB2').val();
+                llenarBeneficiarios2(codigoPostalB2);
+            });
+
+
             $("#txtPaterno").focusout(function () {
                 var ap = $("#txtPaterno").val();
                 $("#txtAPp").val(ap);
@@ -5134,26 +5182,26 @@ if (FraccionamientoB2.trim() === "") {
                     contacto = $('#txtContacto').val(),
                     nContacto = $('#txtNcontacto').val(),
                     //Datos de beneficiarios
-                    NombreB1 = $('#txtNombreB1').val(),
-                    TelefonoB1 = $('#txtTelefonoB1').val(),
-                    CalleB1 = $('#txtCalleB1').val(),
-                    NumeroExteriorB1 = $('#txtNumeroExteriorB1').val(),
-                    NumeroInteriorB1 = $('#txtNumeroInteriorB1').val(),
-                    CodigoPostalB1 = $('#txtCodigoPostalB1').val(),
-                    EstadoB1 = $('#txtEstadoB1').val(),
-                    MunicipioB1 = $('#txtMunicipioB1').val(),
-                    LocalidadB1 = $('#txtLocalidadB1').val(),
-                    FraccionamientoB1 = $('#txtFraccionamientoB1').val(),
-                    NombreB2 = $('#txtNombreB2').val(),
-                    TelefonoB2 = $('#txtTelefonoB2').val(),
-                    CalleB2 = $('#txtCalleB2').val(),
-                    NumeroExteriorB2 = $('#txtNumeroExteriorB2').val(),
-                    NumeroInteriorB2 = $('#txtNumeroInteriorB2').val(),
-                    CodigoPostalB2 = $('#txtCodigoPostalB2').val(),
-                    EstadoB2 = $('#txtEstadoB2').val(),
-                    MunicipioB2 = $('#txtMunicipioB2').val(),
-                    LocalidadB2 = $('#txtLocalidadB2').val(),
-                    FraccionamientoB2 = $('#txtFraccionamientoB2').val(),
+                    nombreB1 = $('#txtNombreB1').val(),
+                    telefonoB1 = $('#txtTelefonoB1').val(),
+                    calleB1 = $('#txtCalleB1').val(),
+                    numeroExteriorB1 = $('#txtNumeroExteriorB1').val(),
+                    numeroInteriorB1 = $('#txtNumeroInteriorB1').val(),
+                    codigoPostalB1 = $('#txtCodigoPostalB1').val(),
+                    estadoB1 = $('#txtEstadoB1').val(),
+                    municipioB1 = $('#txtMunicipioB1').val(),
+                    localidadB1 = $('#txtLocalidadB1').val(),
+                    fraccionamientoB1 = $('#txtFraccionamientoB1').val(),
+                    nombreB2 = $('#txtNombreB2').val(),
+                    telefonoB2 = $('#txtTelefonoB2').val(),
+                    calleB2 = $('#txtCalleB2').val(),
+                    numeroExteriorB2 = $('#txtNumeroExteriorB2').val(),
+                    numeroInteriorB2 = $('#txtNumeroInteriorB2').val(),
+                    codigoPostalB2 = $('#txtCodigoPostalB2').val(),
+                    estadoB2 = $('#txtEstadoB2').val(),
+                    municipioB2 = $('#txtMunicipioB2').val(),
+                    localidadB2 = $('#txtLocalidadB2').val(),
+                    fraccionamientoB2 = $('#txtFraccionamientoB2').val(),
 
                     curpini = curp.substr(0, 4),
                     curpfin = curp.substr(10, 8);
@@ -5189,11 +5237,12 @@ if (FraccionamientoB2.trim() === "") {
                         $('#txtTabClave').focus();
                         $("html, body").animate({ scrollTop: 0 }, 500);
                     }
+                }
                     
                 if (jefenomina.trim() === "-1") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes seleccionar el Jefe Directo',
                         showConfirmButton: false,
                         timer: 2000
@@ -5203,7 +5252,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (salarioDiario.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Salario Diario',
                         showConfirmButton: false,
                         timer: 2000
@@ -5213,7 +5262,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (celula.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Cédula',
                         showConfirmButton: false,
                         timer: 2000
@@ -5223,7 +5272,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (registro.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Registro',
                         showConfirmButton: false,
                         timer: 2000
@@ -5233,7 +5282,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (puesto.trim() === "-1") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes seleccionar el Puesto',
                         showConfirmButton: false,
                         timer: 2000
@@ -5243,7 +5292,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (nombre.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Nombre',
                         showConfirmButton: false,
                         timer: 2000
@@ -5253,7 +5302,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (aPaterno.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Apellido Paterno',
                         showConfirmButton: false,
                         timer: 2000
@@ -5263,7 +5312,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (aMaterno.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Apellido Materno',
                         showConfirmButton: false,
                         timer: 2000
@@ -5273,7 +5322,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (rfc.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el RFC',
                         showConfirmButton: false,
                         timer: 2000
@@ -5284,7 +5333,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (nss.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el NSS',
                         showConfirmButton: false,
                         timer: 2000
@@ -5295,7 +5344,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (correo.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Correo',
                         showConfirmButton: false,
                         timer: 2000
@@ -5306,7 +5355,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (telefono.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Teléfono',
                         showConfirmButton: false,
                         timer: 2000
@@ -5317,7 +5366,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (celular.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Celular',
                         showConfirmButton: false,
                         timer: 2000
@@ -5328,7 +5377,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (calle.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Calle',
                         showConfirmButton: false,
                         timer: 2000
@@ -5339,7 +5388,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (numE.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Número Exterior',
                         showConfirmButton: false,
                         timer: 2000
@@ -5350,7 +5399,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (cp.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Código Postal',
                         showConfirmButton: false,
                         timer: 2000
@@ -5361,7 +5410,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (nInfonavit.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Número Infonavit',
                         showConfirmButton: false,
                         timer: 2000
@@ -5372,7 +5421,7 @@ if (FraccionamientoB2.trim() === "") {
                 if (nFonacot.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Número Fonacot',
                         showConfirmButton: false,
                         timer: 2000
@@ -5383,17 +5432,17 @@ if (FraccionamientoB2.trim() === "") {
                 if (cuenta.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Cuenta Bancaria',
                         showConfirmButton: false,
                         timer: 2000
                     });
                     return;
                 }
-                if (NombreB1.trim() === "") {
+                if (nombreB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Nombre del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -5401,10 +5450,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (TelefonoB1.trim() === "") {
+                if (telefonoB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Teléfono del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -5412,10 +5461,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (CalleB1.trim() === "") {
+                if (calleB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Calle del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -5423,10 +5472,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (NumeroExteriorB1.trim() === "") {
+                if (numeroExteriorB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Número Exterior del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -5434,10 +5483,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (CodigoPostalB1.trim() === "") {
+                if (codigoPostalB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Código Postal del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -5445,10 +5494,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (EstadoB1.trim() === "") {
+                if (estadoB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Estado del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -5456,10 +5505,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (MunicipioB1.trim() === "") {
+                if (municipioB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Municipio del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -5467,10 +5516,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (LocalidadB1.trim() === "") {
+                if (localidadB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Localidad del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -5478,10 +5527,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (FraccionamientoB1.trim() === "") {
+                if (fraccionamientoB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Fraccionamiento del Beneficiario 1',
                         showConfirmButton: false,
                         timer: 2000
@@ -5489,10 +5538,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (NombreB2.trim() === "") {
+                if (nombreB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Nombre del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -5500,10 +5549,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (TelefonoB2.trim() === "") {
+                if (telefonoB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Teléfono del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -5511,10 +5560,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (CalleB2.trim() === "") {
+                if (calleB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Calle del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -5522,10 +5571,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (NumeroExteriorB2.trim() === "") {
+                if (numeroExteriorB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Número Exterior del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -5533,10 +5582,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (CodigoPostalB2.trim() === "") {
+                if (codigoPostalB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Código Postal del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -5544,10 +5593,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (EstadoB2.trim() === "") {
+                if (estadoB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Estado del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -5555,10 +5604,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (MunicipioB2.trim() === "") {
+                if (municipioB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar el Municipio del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -5566,10 +5615,10 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
                 
-                if (LocalidadB2.trim() === "") {
+                if (localidadB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
-                        icon: 'warning',
+                        type: 'warning',
                         title: 'Debes llenar la Localidad del Beneficiario 2',
                         showConfirmButton: false,
                         timer: 2000
@@ -5577,16 +5626,16 @@ if (FraccionamientoB2.trim() === "") {
                     return;
                 }
 
-if (FraccionamientoB2.trim() === "") {
-    Swal.fire({
-        position: 'center',
-        icon: 'warning',
-        title: 'Debes llenar el Fraccionamiento del Beneficiario 2',
-        showConfirmButton: false,
-        timer: 2000
-    });
-    return;
-} 
+                if (fraccionamientoB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        type: 'warning',
+                        title: 'Debes llenar el Fraccionamiento del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                } 
                     var nombreLargo = `${aPaterno} ${aMaterno} ${nombre}`;
                     $.ajax({
                         type: 'POST',
@@ -5650,26 +5699,26 @@ if (FraccionamientoB2.trim() === "") {
                             contacto: contacto,
                             nContacto: nContacto,
                             empleado_activo: empleado_activo,
-                            txtNombreB1: NombreB1,
-                            txtTelefonoB1: TelefonoB1,
-                            txtCalleB1: CalleB1,
-                            txtNumeroExteriorB1: NumeroExteriorB1,
-                            txtNumeroInteriorB1: NumeroInteriorB1,
-                            txtFraccionamientoB1: FraccionamientoB1,
-                            txtCodigoPostalB1: CodigoPostalB1,
-                            txtEstadoB1: EstadoB1,
-                            txtMunicipioB1: MunicipioB1,
-                            txtLocalidadB1: LocalidadB1,
-                            txtNombreB2: NombreB2,
-                            txtTelefonoB2: TelefonoB2,
-                            txtCalleB2: CalleB2,
-                            txtNumeroExteriorB2: NumeroExteriorB2,
-                            txtNumeroInteriorB2: NumeroInteriorB2,
-                            txtFraccionamientoB2: FraccionamientoB2,
-                            txtCodigoPostalB2: CodigoPostalB2,
-                            txtEstadoB2: EstadoB2,
-                            txtMunicipioB2: MunicipioB2,
-                            txtLocalidadB2: LocalidadB2,
+                            nombreB1: nombreB1,
+                            telefonoB1: telefonoB1,
+                            calleB1: calleB1,
+                            numeroExteriorB1: numeroExteriorB1,
+                            numeroInteriorB1: numeroInteriorB1,
+                            fraccionamientoB1: fraccionamientoB1,
+                            codigoPostalB1: codigoPostalB1,
+                            estadoB1: estadoB1,
+                            municipioB1: municipioB1,
+                            localidadB1: localidadB1,
+                            nombreB2: nombreB2,
+                            telefonoB2: telefonoB2,
+                            calleB2: calleB2,
+                            numeroExteriorB2: numeroExteriorB2,
+                            numeroInteriorB2: numeroInteriorB2,
+                            fraccionamientoB2: fraccionamientoB2,
+                            codigoPostalB2: codigoPostalB2,
+                            estadoB2: estadoB2,
+                            municipioB2: municipioB2,
+                            localidadB2: localidadB2
                         },
                         success: function (response) {
                             var respuesta = JSON.parse(response);
@@ -5700,7 +5749,7 @@ if (FraccionamientoB2.trim() === "") {
                             }
                         }
                     });
-                }
+                
 
 
 
