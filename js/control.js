@@ -3196,32 +3196,404 @@ $('#txtCodigoPostalB2').on('blur', function() {
                         reclutador = $('#txtout_lm').val();
                         control_reclutador = 'valor_ingresado';
                     }
-                }
-                
-                if
-                    (
-                    jefenomina.trim() === '-1' ||
-                    salarioDiario.trim() === '' || celula.trim() === '' ||
-                    registro.trim() === '' || puesto.trim() === '-1' ||
-                    nombre.trim() === '' || aPaterno.trim() === '' ||
-                    aMaterno.trim() === '' || id.trim() === '' || nPadre.trim() === '' ||
-                    nMadre.trim() === '' || calle.trim() === '' ||
-                    numE.trim() === '' ||
-                    cp.trim() === '' || nInfonavit.trim() === '' ||
-                    nFonacot.trim() === '' || cuenta.trim() === '' ||
-                    correo.trim() === '' || telefono.trim() === '' ||
-                    celular.trim() === '' || contacto.trim() === '' ||
-                    nContacto.trim() === '' || control_reclutador.trim() === ''
-                ) {
+
+                if (jefenomina.trim() === "-1") {
                     Swal.fire({
                         position: 'center',
-                        type: 'warning',
-                        title: 'Debe llenar todos los datos',
+                        icon: 'warning',
+                        title: 'Debes seleccionar el Jefe Directo',
                         showConfirmButton: false,
-                        timer: 1000
-                    })
+                        timer: 2000
+                    });
+                    return;
                 }
-                else {
+                if (salarioDiario.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Salario Diario',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (celula.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Cédula',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (registro.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Registro',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (puesto.trim() === "-1") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes seleccionar el Puesto',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (nombre.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Nombre',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (aPaterno.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Apellido Paterno',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (aMaterno.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Apellido Materno',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (rfc.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el RFC',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (nss.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el NSS',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (correo.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Correo',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (telefono.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Teléfono',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (celular.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Celular',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (calle.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Calle',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (numE.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Número Exterior',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (cp.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Código Postal',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (nInfonavit.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Número Infonavit',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (nFonacot.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Número Fonacot',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (cuenta.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Cuenta Bancaria',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (NombreB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Nombre del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (TelefonoB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Teléfono del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (CalleB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Calle del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (NumeroExteriorB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Número Exterior del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (CodigoPostalB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Código Postal del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (EstadoB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Estado del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (MunicipioB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Municipio del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (LocalidadB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Localidad del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (FraccionamientoB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Fraccionamiento del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (NombreB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Nombre del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (TelefonoB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Teléfono del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (CalleB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Calle del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (NumeroExteriorB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Número Exterior del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (CodigoPostalB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Código Postal del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (EstadoB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Estado del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (MunicipioB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Municipio del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (LocalidadB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Localidad del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+
+if (FraccionamientoB2.trim() === "") {
+    Swal.fire({
+        position: 'center',
+        icon: 'warning',
+        title: 'Debes llenar el Fraccionamiento del Beneficiario 2',
+        showConfirmButton: false,
+        timer: 2000
+    });
+    return;
+}
                     var nombreLargo = `${aPaterno} ${aMaterno} ${nombre}`;
                     $.ajax({
                         type: 'POST',
@@ -3737,32 +4109,404 @@ $('#txtCodigoPostalB2').on('blur', function() {
                         reclutador = $('#txtout_lm').val();
                         control_reclutador = 'valor_ingresado';
                     }
-                }
 
-                if
-                    (
-                    jefenomina.trim() === '-1' ||
-                    salarioDiario.trim() === '' || celula.trim() === '' ||
-                    registro.trim() === '' || puesto.trim() === '-1' ||
-                    nombre.trim() === '' || aPaterno.trim() === '' ||
-                    aMaterno.trim() === '' || id.trim() === '' || nPadre.trim() === '' ||
-                    nMadre.trim() === '' || calle.trim() === '' ||
-                    numE.trim() === '' || puesto < 1 ||
-                    cp.trim() === '' || nInfonavit.trim() === '' ||
-                    nFonacot.trim() === '' || cuenta.trim() === '' ||
-                    correo.trim() === '' || telefono.trim() === '' ||
-                    celular.trim() === '' || contacto.trim() === '' ||
-                    nContacto.trim() === '' || control_reclutador.trim() === ''
-                ) {
+                if (jefenomina.trim() === "-1") {
                     Swal.fire({
                         position: 'center',
-                        type: 'warning',
-                        title: 'Debe llenar todos los datos',
+                        icon: 'warning',
+                        title: 'Debes seleccionar el Jefe Directo',
                         showConfirmButton: false,
-                        timer: 1000
-                    })
+                        timer: 2000
+                    });
+                    return;
                 }
-                else {
+                if (salarioDiario.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Salario Diario',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (celula.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Cédula',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (registro.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Registro',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (puesto.trim() === "-1") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes seleccionar el Puesto',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (nombre.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Nombre',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (aPaterno.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Apellido Paterno',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (aMaterno.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Apellido Materno',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (rfc.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el RFC',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (nss.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el NSS',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (correo.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Correo',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (telefono.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Teléfono',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (celular.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Celular',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (calle.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Calle',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (numE.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Número Exterior',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (cp.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Código Postal',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (nInfonavit.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Número Infonavit',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (nFonacot.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Número Fonacot',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (cuenta.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Cuenta Bancaria',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (NombreB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Nombre del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (TelefonoB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Teléfono del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (CalleB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Calle del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (NumeroExteriorB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Número Exterior del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (CodigoPostalB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Código Postal del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (EstadoB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Estado del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (MunicipioB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Municipio del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (LocalidadB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Localidad del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (FraccionamientoB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Fraccionamiento del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (NombreB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Nombre del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (TelefonoB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Teléfono del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (CalleB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Calle del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (NumeroExteriorB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Número Exterior del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (CodigoPostalB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Código Postal del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (EstadoB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Estado del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (MunicipioB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Municipio del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (LocalidadB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Localidad del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+
+if (FraccionamientoB2.trim() === "") {
+    Swal.fire({
+        position: 'center',
+        icon: 'warning',
+        title: 'Debes llenar el Fraccionamiento del Beneficiario 2',
+        showConfirmButton: false,
+        timer: 2000
+    });
+    return;
+}
                     var nombreLargo = `${aPaterno} ${aMaterno} ${nombre}`;
                     $.ajax({
                         type: 'POST',
@@ -4436,33 +5180,404 @@ $('#txtCodigoPostalB2').on('blur', function() {
                         $('#txtTabClave').focus();
                         $("html, body").animate({ scrollTop: 0 }, 500);
                     }
-                }
-                else if
-                    (
-                    jefenomina.trim() === '-1' ||
-                    salarioDiario.trim() === '' || celula.trim() === '' ||
-                    registro.trim() === '' || puesto.trim() === '-1' ||
-                    nombre.trim() === '' || aPaterno.trim() === '' ||
-                    aMaterno.trim() === '' || rfc.trim() === '' ||
-                    nss.trim() === '' || dv.trim() === '' ||
-                    id.trim() === '' || nPadre.trim() === '' ||
-                    nMadre.trim() === '' || calle.trim() === '' ||
-                    numE.trim() === '' ||
-                    cp.trim() === '' || nInfonavit.trim() === '' ||
-                    nFonacot.trim() === '' || cuenta.trim() === '' ||
-                    correo.trim() === '' || telefono.trim() === '' ||
-                    celular.trim() === '' || contacto.trim() === '' ||
-                    nContacto.trim() === '' || control_reclutador.trim() === ''
-                ) {
+                    
+                if (jefenomina.trim() === "-1") {
                     Swal.fire({
                         position: 'center',
-                        type: 'warning',
-                        title: 'Debe llenar todos los datos',
+                        icon: 'warning',
+                        title: 'Debes seleccionar el Jefe Directo',
                         showConfirmButton: false,
-                        timer: 1000
-                    })
+                        timer: 2000
+                    });
+                    return;
                 }
-                else {
+                if (salarioDiario.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Salario Diario',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (celula.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Cédula',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (registro.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Registro',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (puesto.trim() === "-1") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes seleccionar el Puesto',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (nombre.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Nombre',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (aPaterno.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Apellido Paterno',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (aMaterno.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Apellido Materno',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (rfc.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el RFC',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (nss.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el NSS',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (correo.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Correo',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (telefono.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Teléfono',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (celular.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Celular',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (calle.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Calle',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (numE.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Número Exterior',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (cp.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Código Postal',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (nInfonavit.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Número Infonavit',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (nFonacot.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Número Fonacot',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (cuenta.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Cuenta Bancaria',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                if (NombreB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Nombre del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (TelefonoB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Teléfono del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (CalleB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Calle del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (NumeroExteriorB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Número Exterior del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (CodigoPostalB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Código Postal del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (EstadoB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Estado del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (MunicipioB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Municipio del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (LocalidadB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Localidad del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (FraccionamientoB1.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Fraccionamiento del Beneficiario 1',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (NombreB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Nombre del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (TelefonoB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Teléfono del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (CalleB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Calle del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (NumeroExteriorB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Número Exterior del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (CodigoPostalB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Código Postal del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (EstadoB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Estado del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (MunicipioB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar el Municipio del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+                
+                if (LocalidadB2.trim() === "") {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'warning',
+                        title: 'Debes llenar la Localidad del Beneficiario 2',
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                    return;
+                }
+
+if (FraccionamientoB2.trim() === "") {
+    Swal.fire({
+        position: 'center',
+        icon: 'warning',
+        title: 'Debes llenar el Fraccionamiento del Beneficiario 2',
+        showConfirmButton: false,
+        timer: 2000
+    });
+    return;
+} 
                     var nombreLargo = `${aPaterno} ${aMaterno} ${nombre}`;
                     $.ajax({
                         type: 'POST',
