@@ -367,7 +367,8 @@ $(document).ready(function () {
                 $("#txtNume").val(datos.numero_exterior);
                 $("#txtNumi").val(datos.numero_interior);
                 $("#txtCP").val(datos.codigo_postal);
-                listarFraccionamientos(datos.codigo_postal)
+                // Codigo Postal Api listarFraccionamientos(datos.codigo_postal)
+                $("#txtFraccionamiento").val(datos.fraccionamiento.toUpperCase());
                 $("#txtInfonavit").val(datos.infonavit);
                 $("#txtNinfonavit").val(datos.numero_infonavit);
                 $("#txtFonacot").val(datos.fonacot);
@@ -384,7 +385,8 @@ $(document).ready(function () {
                 $("#txtCalleB1").val(datos.calle_b1);
                 $("#txtNumeroExteriorB1").val(datos.numero_exterior_b1);
                 $("#txtNumeroInteriorB1").val(datos.numero_interior_b1);
-                llenarBeneficiarios1(datos.codigo_postal_b1)
+                //Codigo Postal Api llenarBeneficiarios1(datos.codigo_postal_b1)
+                $("#txtFraccionamientoB1").val(datos.fraccionamiento_b1.toUpperCase());
                 $("#txtCodigoPostalB1").val(datos.codigo_postal_b1);
                 $("#txtMunicipioB1").val(datos.municipio_b1);
                 $("#txtEstadoB1").val(datos.estado_b1);
@@ -394,7 +396,8 @@ $(document).ready(function () {
                 $("#txtCalleB2").val(datos.calle_b2);
                 $("#txtNumeroExteriorB2").val(datos.numero_exterior_b2);
                 $("#txtNumeroInteriorB2").val(datos.numero_interior_b2);
-                llenarBeneficiarios2(datos.codigo_postal_b1)
+                // Codigo Postal Api llenarBeneficiarios2(datos.codigo_postal_b1)
+                $("#txtFraccionamientoB2").val(datos.fraccionamiento_b2.toUpperCase());
                 $("#txtCodigoPostalB2").val(datos.codigo_postal_b2);
                 $("#txtMunicipioB2").val(datos.municipio_b2);
                 $("#txtEstadoB2").val(datos.estado_b2);
@@ -413,14 +416,14 @@ $(document).ready(function () {
                     $("#txtTabNivel").val(vTabulador[2]);
                 }, 280);
 
-                setTimeout(function () {
+                /*Codigo Postal Api setTimeout(function () {
                     $("#txtFraccionamiento").val(datos.fraccionamiento.toUpperCase());
                 }, 1000);
 
                 setTimeout(function () {
                     $("#txtFraccionamientoB1").val(datos.fraccionamiento_b1.toUpperCase());
                     $("#txtFraccionamientoB2").val(datos.fraccionamiento_b2.toUpperCase());
-                }, 1000);
+                }, 1000); */
 
                 $("#txtClasificacion").focusout(function () {
                     listarDepartamentos($("#txtSucursal").val(), $("#txtClasificacion").val());
@@ -430,7 +433,7 @@ $(document).ready(function () {
                     listarPuestos($("#txtCelula").val(), $("#txtClasificacion").val());
                 });
 
-                $("#txtCP").focusout(function () {
+                /* Codigo Postal Api $("#txtCP").focusout(function () {
                     listarFraccionamientos($("#txtCP").val());
                 });
 
@@ -440,7 +443,7 @@ $(document).ready(function () {
 
                 $("#txtCodigoPostalB2").focusout(function () {
                     llenarBeneficiarios2($("#txtCodigoPostalB2").val());
-                });
+                }); */
 
                 $("#txtClasificacion").focusout(function () {
                     listarJefes($("#txtClasificacion").val());
@@ -581,6 +584,7 @@ $(document).ready(function () {
         xmlEmpleadoR.send(listaEmpleadosR);
     }
 
+    /*Codigo Postal API
     let listarFraccionamientos = (cp) => {
     if (cp.length === 5) {
         $.ajax({
@@ -691,7 +695,7 @@ $('#txtCodigoPostalB1').on('blur', function() {
 
 $('#txtCodigoPostalB2').on('blur', function() {
     llenarBeneficiarios2($(this).val());
-});
+}); */
 
     $("#exportInfo").click(function () {
         var action = 'json-empleados';
@@ -3046,7 +3050,8 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     $("#txtNume").val(datos.numero_exterior);
                     $("#txtNumi").val(datos.numero_interior);
                     $("#txtCP").val(datos.codigo_postal);
-                    llenarBeneficiarios1(datos.codigo_postal)
+                    //Codigo Postal Api listarFraccionamientos(datos.codigo_postal)
+                    $("#txtFraccionamiento").val(datos.fraccionamiento.toUpperCase());
                     $("#txtInfonavit").val(datos.infonavit);
                     $("#txtNinfonavit").val(datos.numero_infonavit);
                     $("#txtFonacot").val(datos.fonacot);
@@ -3064,7 +3069,8 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     $("#txtCalleB1").val(datos.calle_b1);
                     $("#txtNumeroExteriorB1").val(datos.numero_exterior_b1);
                     $("#txtNumeroInteriorB1").val(datos.numero_interior_b1);
-                    llenarBeneficiarios1(datos.codigo_postal_b1)
+                    //Codigo Postal Api llenarBeneficiarios1(datos.codigo_postal_b1)
+                    $("#txtFraccionamientoB1").val(datos.fraccionamiento_b1.toUpperCase());
                     $("#txtCodigoPostalB1").val(datos.codigo_postal_b1);
                     $("#txtMunicipioB1").val(datos.municipio_b1);
                     $("#txtEstadoB1").val(datos.estado_b1);
@@ -3075,7 +3081,8 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     $("#txtCalleB2").val(datos.calle_b2);
                     $("#txtNumeroExteriorB2").val(datos.numero_exterior_b2);
                     $("#txtNumeroInteriorB2").val(datos.numero_interior_b2);
-                    llenarBeneficiarios2(datos.codigo_postal_b2)
+                    //Codigo Postal Api llenarBeneficiarios2(datos.codigo_postal_b2)
+                    $("#txtFraccionamientoB2").val(datos.fraccionamiento_b2.toUpperCase());
                     $("#txtCodigoPostalB2").val(datos.codigo_postal_b2);
                     $("#txtMunicipioB2").val(datos.municipio_b2);
                     $("#txtEstadoB2").val(datos.estado_b2);
@@ -3096,21 +3103,21 @@ $('#txtCodigoPostalB2').on('blur', function() {
                         $("#txtTabNivel").val(vTabulador[2]);
                     }, 280);
 
-                    setTimeout(function () {
+                    /* Codigo Poastal Api setTimeout(function () {
                         $("#txtFraccionamiento").val(datos.fraccionamiento.toUpperCase());
                     }, 1000);
 
                     setTimeout(function () {
                         $("#txtFraccionamientoB1").val(datos.fraccionamiento_b1.toUpperCase());
                         $("#txtFraccionamientoB2").val(datos.fraccionamiento_b2.toUpperCase());
-                    }, 1000);
+                    }, 1000); */
 
 
                 }
             });
 
             //EDITAR CP
-            $("#txtCP").focusout(function () {
+            /* Codigo Postal Api $("#txtCP").focusout(function () {
                 listarFraccionamientos($("#txtCP").val());
             });
 
@@ -3119,8 +3126,8 @@ $('#txtCodigoPostalB2').on('blur', function() {
             });
 
             $("#txtCodigoPostalB2").focusout(function () {
-                llenarBeneficiarios2($("#txtCodigoPostalB2").val());
-            });
+                llenarBeneficiarios2($("#txtCodigoPostalB2").val()); 
+            }); */
 
             $("#txtClasificacion").focusout(function () {
                 listarDepartamentos($("#txtSucursal").val(), $("#txtClasificacion").val());
@@ -3972,7 +3979,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
             }, 530);
 
             //CONTROL CODIGO POSTAL
-            $("#txtCP").focusout(function () {
+            /* Codigo Postal Api $("#txtCP").focusout(function () {
                 var cp = $('#txtCP').val();
                 listarFraccionamientos(cp);
             });
@@ -3985,7 +3992,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
             $("#txtCodigoPostalB2").focusout(function () {
                 var codigoPostalB2 = $('#txtCodigoPostalB2').val();
                 llenarBeneficiarios2(codigoPostalB2);
-            });
+            }); */
 
             //Validar el puesto ingresado
             $('#txtPuesto').focusout(function () {
@@ -5011,7 +5018,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
 
 
             //CONTROL CODIGO POSTAL
-            $("#txtCP").focusout(function () {
+            /* Codigo Postal Api $("#txtCP").focusout(function () {
                 var cp = $('#txtCP').val();
                 listarFraccionamientos(cp);
             });
@@ -5024,7 +5031,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
             $("#txtCodigoPostalB2").focusout(function () {
                 var codigoPostalB2 = $('#txtCodigoPostalB2').val();
                 llenarBeneficiarios2(codigoPostalB2);
-            });
+            }); */
 
 
             $("#txtPaterno").focusout(function () {
