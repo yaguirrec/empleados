@@ -487,9 +487,8 @@
         <div class="form-row">
             <div class="form-group col-md-8">
                 <label for="txtFraccionamientoB2">Colonia / Fraccionamiento</label>
-                <!--  Codigo Postal Api <select class="form-control" id="txtFraccionamientoB2" name="txtFraccionamientoB2"></select> -->
+                <select class="form-control" id="txtFraccionamientoB2" name="txtFraccionamientoB2"></select>
                 <input type="hidden" id="txtIdB2" name="txtIdB2">  
-                <input type="text" class="form-control" id="txtFraccionamientoB2" name="txtFraccionamientoB2" required> 
             </div>
         </div>
     </div>

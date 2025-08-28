@@ -298,8 +298,7 @@
       </div>
       <div class="form-group col-md-6">
         <label for="txtFraccionamiento">Colonia / Fraccionamiento</label>
-        <!-- Codigo Postal Api <select class="form-control" id="txtFraccionamiento"></select> -->
-        <input type="text" class="form-control" id="txtFraccionamiento">
+        <select class="form-control" id="txtFraccionamiento"></select>
       </div>
     </div>
 
@@ -423,8 +422,7 @@
     <div class="form-row">
         <div class="form-group col-md-8">
             <label for="txtFraccionamientoB1">Colonia / Fraccionamiento</label>
-            <!-- Codigo Postal Api <select class="form-control" id="txtFraccionamientoB1" name="txtFraccionamientoB1"></select> -->
-            <input type="text" class="form-control" id="txtFraccionamientoB1" name="txtFraccionamientoB1" required>
+            <select class="form-control" id="txtFraccionamientoB1" name="txtFraccionamientoB1"></select> 
         </div>
     </div>
 
@@ -476,8 +474,7 @@
         <div class="form-row">
             <div class="form-group col-md-8">
                 <label for="txtFraccionamientoB2">Colonia / Fraccionamiento</label>
-                <!--  Codigo Postal Api <select class="form-control" id="txtFraccionamientoB2" name="txtFraccionamientoB2"></select> -->
-                <input type="text" class="form-control" id="txtFraccionamientoB2" name="txtFraccionamientoB2" required>
+                <select class="form-control" id="txtFraccionamientoB2" name="txtFraccionamientoB2"></select> 
             </div>
         </div>
     </div>
