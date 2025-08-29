@@ -17,7 +17,7 @@
       <div class="form-group col-md-4">
         <label for="txtClasificacion">Clasificación</label>
         <select class="form-control" id="txtClasificacion">
-          <option value="" selected required>Selecciona una Clasificación</option>
+          <option value="" selected >Selecciona una Clasificación</option>
           <option value="A">Administrativo</option>
           <option value="AO">Adm .Operativo</option>
           <option value="O">Operativo</option>
@@ -38,7 +38,7 @@
       <div class="form-group col-md-3">
         <label for="txtTipoNomina">Nomina</label>
         <select class="form-control" id="txtTipoNomina">
-          <option value="" selected required>Selecciona Nomina</option>
+          <option value="" selected>Selecciona Nomina</option>
           <option value="Q">QUIN</option>
           <option value="S">SEM</option>
         </select>
@@ -86,6 +86,10 @@
           <option value="D">D</option>
           <option value="E">E</option>
           <option value="F">F</option>
+          <option value="G">G</option>
+          <option value="H">H</option>
+          <option value="I">I</option>
+          <option value="J">J</option>
 
         </select>
       </div>
@@ -368,7 +372,114 @@
     </div>
   </div>
 
-  <hr>
-  <button type="submit" class="btn btn-primary btn-block" id="btnGuardarEmpleado">GUARDAR <i class="far fa-save"></i></button>
-  <br>
+<div class="bg-gradient-success p-5 text-white text-center rounded-right mt-5">
+    <h2>Beneficiarios</h2>
+    <h4 class="mt-3">Beneficiario 1</h4>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="txtNombreB1">Nombre completo</label>
+            <input type="text" class="form-control" id="txtNombreB1" name="txtNombreB1" required>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="txtTelefonoB1">Teléfono</label>
+            <input type="text" class="form-control" id="txtTelefonoB1" name="txtTelefonoB1" maxlength="10" required>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="txtCalleB1">Calle</label>
+            <input type="text" class="form-control" id="txtCalleB1" name="txtCalleB1" required>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="txtNumeroExteriorB1">Número exterior</label>
+            <input type="text" class="form-control" id="txtNumeroExteriorB1" name="txtNumeroExteriorB1" required>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="txtNumeroInteriorB1">Número interior</label>
+            <input type="text" class="form-control" id="txtNumeroInteriorB1" name="txtNumeroInteriorB1">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="txtCodigoPostalB1">CP</label>
+            <input type="text" class="form-control" id="txtCodigoPostalB1" maxlength="5" name="txtCodigoPostalB1" required>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="txtEstadoB1">Estado</label>
+            <input type="text" class="form-control" id="txtEstadoB1" name="txtEstadoB1" required>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="txtMunicipioB1">Municipio</label>
+            <input type="text" class="form-control" id="txtMunicipioB1" name="txtMunicipioB1" required>
+        </div>
+        <div class="form-group col-md-4">
+            <label for="txtLocalidadB1">Localidad</label>
+            <input type="text" class="form-control" id="txtLocalidadB1" name="txtLocalidadB1" required>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-8">
+            <label for="txtFraccionamientoB1">Colonia / Fraccionamiento</label>
+            <select class="form-control" id="txtFraccionamientoB1" name="txtFraccionamientoB1"></select> 
+        </div>
+    </div>
+
+    <div id="beneficiario2Container">
+        <h4 class="mt-4">Beneficiario 2</h4>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="txtNombreB2">Nombre completo</label>
+                <input type="text" class="form-control" id="txtNombreB2" name="txtNombreB2" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="txtTelefonoB2">Teléfono</label>
+                <input type="text" class="form-control" id="txtTelefonoB2" name="txtTelefonoB2" maxlength="10" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="txtCalleB2">Calle</label>
+                <input type="text" class="form-control" id="txtCalleB2" name="txtCalleB2" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="txtNumeroExteriorB2">Número exterior</label>
+                <input type="text" class="form-control" id="txtNumeroExteriorB2" name="txtNumeroExteriorB2" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="txtNumeroInteriorB2">Número interior</label>
+                <input type="text" class="form-control" id="txtNumeroInteriorB2" name="txtNumeroInteriorB2">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="txtCodigoPostalB2">CP</label>
+                <input type="text" class="form-control" id="txtCodigoPostalB2" maxlength="5" name="txtCodigoPostalB2" required>
+            </div>
+        </div>
+    
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="txtEstadoB2">Estado</label>
+                <input type="text" class="form-control" id="txtEstadoB2" name="txtEstadoB2" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="txtMunicipioB2">Municipio</label>
+                <input type="text" class="form-control" id="txtMunicipioB2" name="beneficiario2_municipio" required>
+            </div>  
+            <div class="form-group col-md-4">
+                <label for="txtLocalidadB2">Localidad</label>
+                <input type="text" class="form-control" id="txtLocalidadB2" name="txtLocalidadB2" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-8">
+                <label for="txtFraccionamientoB2">Colonia / Fraccionamiento</label>
+                <select class="form-control" id="txtFraccionamientoB2" name="txtFraccionamientoB2"></select> 
+            </div>
+        </div>
+    </div>
+</div>
+      <hr>
+      <button type="submit" class="btn btn-primary btn-block" id="btnGuardarEmpleado">GUARDAR <i class="far fa-save"></i></button>
+      <br>
 </form>
