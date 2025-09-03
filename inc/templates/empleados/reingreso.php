@@ -308,8 +308,7 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label for="txtFraccionamiento">Colonia / Fraccionamiento</label>
-                        <!-- Codigo Postal Api <select class="form-control" id="txtFraccionamiento"></select> -->
-                        <input type="text" class="form-control" id="txtFraccionamiento" required>
+                        <select class="form-control" id="txtFraccionamiento"></select>
                     </div>
                 </div>
 
@@ -389,21 +388,21 @@
     <div class="form-row">
         <div class="form-group col-md-4">
             <label for="txtNombreB1">Nombre completo</label>
-            <input type="text" class="form-control" id="txtNombreB1" name="txtNombreB1" required>
+            <input type="text" class="form-control" id="txtNombreB1" name="txtNombreB1">
         </div>
         <div class="form-group col-md-4">
             <label for="txtTelefonoB1">Teléfono</label>
-            <input type="text" class="form-control" id="txtTelefonoB1" name="txtTelefonoB1" maxlength="10" required>
+            <input type="text" class="form-control" id="txtTelefonoB1" name="txtTelefonoB1" maxlength="10">
         </div>
         <div class="form-group col-md-4">
             <label for="txtCalleB1">Calle</label>
-            <input type="text" class="form-control" id="txtCalleB1" name="txtCalleB1" required>
+            <input type="text" class="form-control" id="txtCalleB1" name="txtCalleB1">
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-4">
             <label for="txtNumeroExteriorB1">Número exterior</label>
-            <input type="text" class="form-control" id="txtNumeroExteriorB1" name="txtNumeroExteriorB1" required>
+            <input type="text" class="form-control" id="txtNumeroExteriorB1" name="txtNumeroExteriorB1">
         </div>
         <div class="form-group col-md-4">
             <label for="txtNumeroInteriorB1">Número interior</label>
@@ -411,31 +410,30 @@
         </div>
         <div class="form-group col-md-4">
             <label for="txtCodigoPostalB1">CP</label>
-            <input type="text" class="form-control" id="txtCodigoPostalB1" maxlength="5" name="txtCodigoPostalB1" required>
+            <input type="text" class="form-control" id="txtCodigoPostalB1" maxlength="5" name="txtCodigoPostalB1">
         </div>
     </div>
 
     <div class="form-row">
         <div class="form-group col-md-4">
             <label for="txtEstadoB1">Estado</label>
-            <input type="text" class="form-control" id="txtEstadoB1" name="txtEstadoB1" required>
+            <input type="text" class="form-control" id="txtEstadoB1" name="txtEstadoB1">
         </div>
         <div class="form-group col-md-4">
             <label for="txtMunicipioB1">Municipio</label>
-            <input type="text" class="form-control" id="txtMunicipioB1" name="txtMunicipioB1" required>
+            <input type="text" class="form-control" id="txtMunicipioB1" name="txtMunicipioB1">
         </div>
         <div class="form-group col-md-4">
             <label for="txtLocalidadB1">Localidad</label>
-            <input type="text" class="form-control" id="txtLocalidadB1" name="txtLocalidadB1" required>
+            <input type="text" class="form-control" id="txtLocalidadB1" name="txtLocalidadB1">
         </div>
     </div>
 
     <div class="form-row">
         <div class="form-group col-md-8">
             <label for="txtFraccionamientoB1">Colonia / Fraccionamiento</label>
-            <!-- Codigo Postal Api <select class="form-control" id="txtFraccionamientoB1" name="txtFraccionamientoB1"></select> -->
+            <select class="form-control" id="txtFraccionamientoB1" name="txtFraccionamientoB1"></select>
             <input type="hidden" id="txtIdB1" name="txtIdB1">  
-            <input type="text" class="form-control" id="txtFraccionamientoB1" name="txtFraccionamientoB1" required>
         </div>
     </div>
 
@@ -444,21 +442,21 @@
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="txtNombreB2">Nombre completo</label>
-                <input type="text" class="form-control" id="txtNombreB2" name="txtNombreB2" required>
+                <input type="text" class="form-control" id="txtNombreB2" name="txtNombreB2">
             </div>
             <div class="form-group col-md-4">
                 <label for="txtTelefonoB2">Teléfono</label>
-                <input type="text" class="form-control" id="txtTelefonoB2" name="txtTelefonoB2" maxlength="10" required>
+                <input type="text" class="form-control" id="txtTelefonoB2" name="txtTelefonoB2" maxlength="10">
             </div>
             <div class="form-group col-md-4">
                 <label for="txtCalleB2">Calle</label>
-                <input type="text" class="form-control" id="txtCalleB2" name="txtCalleB2" required>
+                <input type="text" class="form-control" id="txtCalleB2" name="txtCalleB2">
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="txtNumeroExteriorB2">Número exterior</label>
-                <input type="text" class="form-control" id="txtNumeroExteriorB2" name="txtNumeroExteriorB2" required>
+                <input type="text" class="form-control" id="txtNumeroExteriorB2" name="txtNumeroExteriorB2">
             </div>
             <div class="form-group col-md-4">
                 <label for="txtNumeroInteriorB2">Número interior</label>
@@ -466,22 +464,22 @@
             </div>
             <div class="form-group col-md-4">
                 <label for="txtCodigoPostalB2">CP</label>
-                <input type="text" class="form-control" id="txtCodigoPostalB2" maxlength="5" name="txtCodigoPostalB2" required>
+                <input type="text" class="form-control" id="txtCodigoPostalB2" maxlength="5" name="txtCodigoPostalB2">
             </div>
         </div>
     
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="txtEstadoB2">Estado</label>
-                <input type="text" class="form-control" id="txtEstadoB2" name="txtEstadoB2" required>
+                <input type="text" class="form-control" id="txtEstadoB2" name="txtEstadoB2">
             </div>
             <div class="form-group col-md-4">
                 <label for="txtMunicipioB2">Municipio</label>
-                <input type="text" class="form-control" id="txtMunicipioB2" name="txtMunicipioB2" required>
+                <input type="text" class="form-control" id="txtMunicipioB2" name="txtMunicipioB2">
             </div>  
             <div class="form-group col-md-4">
                 <label for="txtLocalidadB2">Localidad</label>
-                <input type="text" class="form-control" id="txtLocalidadB2" name="txtLocalidadB2" required>
+                <input type="text" class="form-control" id="txtLocalidadB2" name="txtLocalidadB2" >
             </div>
         </div>
         <div class="form-row">

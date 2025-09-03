@@ -4745,13 +4745,13 @@ $('#txtCodigoPostalB2').on('blur', function() {
                             } else {
                                 localStorage.setItem('codigoEmpleado', ctrlEmpleado);
                                 vcurp.addClass('d-none');
-                                Swal.fire({
+                                /*Swal.fire({
                                     position: 'top-end',
                                     type: 'info',
                                     title: 'El CURP ya existe en la base de datos',
                                     showConfirmButton: false,
                                     timer: 1500
-                                })
+                                })*/
                                 window.location.href = 'index.php?request=reingreso-empleado';
                             }
                         }
