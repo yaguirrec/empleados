@@ -1,5 +1,6 @@
 //IMPORTAR URL DEL BACKEND
 let backendURL = `${serverurl}controller.php`;
+let localBackend = `inc/model/`;
 //VARIABLE QUE GUARADARA LOS PARAMETROS DE LA URL
 let searchParams = new URLSearchParams(window.location.search);
 let check = searchParams.has('emp'); // SI ALGUN PARAMETRO ES IGUAL A emp LA VARIABLE SERA true
