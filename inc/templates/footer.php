@@ -21,8 +21,9 @@
 <script type="text/javascript" src="//unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 
 <!-- LOCAL JS -->
- <script type="text/javascript">
+<script type="text/javascript">
     const serverurl = '<?php echo serverurl; ?>';
+    const siteurl = '<?php echo siteurl; ?>';
 </script>
 <script src="js/chart.js"></script>           
 <script src="js/control.js"></script>
