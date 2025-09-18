@@ -1,5 +1,6 @@
 <?php
 $action  = $_POST['action'];
+$url = siteurl;
 
 switch ($action){
         
@@ -32,7 +33,7 @@ switch ($action){
                                 $data
                                 .'</p>
 								<p>En el siguiente link podra acceder sistema web de empleados</p>
-								<center><h2><a href="http://mexq.mx/empleados">Verificar altas</a></h2></center>
+								<center><h2><a href="'.$url.'">Verificar altas</a></h2></center>
 							</body>
 						</html>
                         ';
@@ -66,7 +67,7 @@ switch ($action){
                                 $data
                                 .'</p>
 								<p>En el siguiente link podra acceder sistema web de empleados</p>
-								<center><h2><a href="http://mexq.mx/empleados">Verificar bajas</a></h2></center>
+								<center><h2><a href="'.$url.'">Verificar bajas</a></h2></center>
 							</body>
 						</html>
                         ';
