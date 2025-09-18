@@ -5,6 +5,7 @@ let searchParams = new URLSearchParams(window.location.search);
 let check = searchParams.has('emp'); // SI ALGUN PARAMETRO ES IGUAL A emp LA VARIABLE SERA true
 let botonImprimir = $('#btnPrint');
 let seccionBotonImprimir = $('.seccionBotonImprimir');
+let localBackend = 'inc/model/';
 const uppercaseWords = str => str.replace(/^(.)|\s+(.)/g, c => c.toUpperCase());
 
 if (check) {
