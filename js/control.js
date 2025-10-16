@@ -580,7 +580,7 @@ $(document).ready(function () {
     }
 
     let listarFraccionamientos = (cp) => {
-    if (cp.length === 5) {
+    if (cp?.length === 5) {
         $.ajax({
             type: "GET",
             url: `https://api.copomex.com/query/info_cp/${cp}?type=simplified&token=e5ecaba1-8182-4a09-80fd-dbd5781e7e3d`,
@@ -615,7 +615,7 @@ $(document).ready(function () {
 };
 
     /*let llenarBeneficiarios1 = (cp) => {
-    if (cp.length === 5) {
+    if (cp?.$length === 5) {
         $.ajax({
             type: "GET",
             url: `https://api.copomex.com/query/info_cp/${cp}?type=simplified&token=e5ecaba1-8182-4a09-80fd-dbd5781e7e3d`,
@@ -650,7 +650,7 @@ $(document).ready(function () {
 };
 
 let llenarBeneficiarios2 = (cp) => {
-    if (cp.length === 5) {
+    if (cp?.length === 5) {
         $.ajax({
             type: "GET",
             url: `https://api.copomex.com/query/info_cp/${cp}?type=simplified&token=e5ecaba1-8182-4a09-80fd-dbd5781e7e3d`,
