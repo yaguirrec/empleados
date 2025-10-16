@@ -375,6 +375,7 @@ $(document).ready(function () {
                 $("#txtCelular").val(datos.celular);
                 $("#txtContacto").val(datos.contacto_emergencia_nombre);
                 $("#txtNcontacto").val(datos.contacto_emergencia_numero);
+                $("#txtIdB1").val(datos.id_beneficiario1);
                 $("#txtNombreB1").val(datos.nombre_beneficiario1);
                 $("#txtTelefonoB1").val(datos.telefono_beneficiario1);
                 /*$("#txtCalleB1").val(datos.calle_b1);
@@ -385,6 +386,7 @@ $(document).ready(function () {
                 $("#txtMunicipioB1").val(datos.municipio_b1);
                 $("#txtEstadoB1").val(datos.estado_b1);
                 $("#txtLocalidadB1").val(datos.localidad_b1);*/
+                $("#txtIdB2").val(datos.id_beneficiario2);
                 $("#txtNombreB2").val(datos.nombre_beneficiario2);
                 $("#txtTelefonoB2").val(datos.telefono_beneficiario2);
                 /*$("#txtCalleB2").val(datos.calle_b2);

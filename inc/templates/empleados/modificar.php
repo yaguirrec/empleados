@@ -392,6 +392,7 @@
                     <div class="form-group col-md-6">
                         <label for="txtTelefonoB1">Teléfono</label>
                         <input type="text" class="form-control" id="txtTelefonoB1" name="txtTelefonoB1" maxlength="10">
+                        <input type="hidden" id="txtIdB1" name="txtIdB2"> 
                     </div>
                     <!-- COMENTADO <div class="form-group col-md-4">
                         <label for="txtCalleB1">Calle</label>
@@ -446,6 +447,7 @@
                         <div class="form-group col-md-6">
                             <label for="txtTelefonoB2">Teléfono</label>
                             <input type="text" class="form-control" id="txtTelefonoB2" name="txtTelefonoB2" maxlength="10">
+                            <input type="hidden" id="txtIdB2" name="txtIdB2"> 
                         </div>
                         <!-- COMENTADO <div class="form-group col-md-4">
                             <label for="txtCalleB2">Calle</label>
@@ -485,7 +487,6 @@
                         <div class="form-group col-md-8">
                             <label for="txtFraccionamientoB2">Colonia / Fraccionamiento</label>
                             <select class="form-control" id="txtFraccionamientoB2" name="txtFraccionamientoB2"></select>
-                            <input type="hidden" id="txtIdB2" name="txtIdB2"> 
                         </div>
                     </div> -->
                 </div>
