@@ -377,24 +377,24 @@ $(document).ready(function () {
                 $("#txtNcontacto").val(datos.contacto_emergencia_numero);
                 $("#txtNombreB1").val(datos.nombre_beneficiario1);
                 $("#txtTelefonoB1").val(datos.telefono_beneficiario1);
-                $("#txtCalleB1").val(datos.calle_b1);
+                /*$("#txtCalleB1").val(datos.calle_b1);
                 $("#txtNumeroExteriorB1").val(datos.numero_exterior_b1);
                 $("#txtNumeroInteriorB1").val(datos.numero_interior_b1);
                 llenarBeneficiarios1(datos.codigo_postal_b1)
                 $("#txtCodigoPostalB1").val(datos.codigo_postal_b1);
                 $("#txtMunicipioB1").val(datos.municipio_b1);
                 $("#txtEstadoB1").val(datos.estado_b1);
-                $("#txtLocalidadB1").val(datos.localidad_b1);
+                $("#txtLocalidadB1").val(datos.localidad_b1);*/
                 $("#txtNombreB2").val(datos.nombre_beneficiario2);
                 $("#txtTelefonoB2").val(datos.telefono_beneficiario2);
-                $("#txtCalleB2").val(datos.calle_b2);
+                /*$("#txtCalleB2").val(datos.calle_b2);
                 $("#txtNumeroExteriorB2").val(datos.numero_exterior_b2);
                 $("#txtNumeroInteriorB2").val(datos.numero_interior_b2);
                 llenarBeneficiarios2(datos.codigo_postal_b1)
                 $("#txtCodigoPostalB2").val(datos.codigo_postal_b2);
                 $("#txtMunicipioB2").val(datos.municipio_b2);
                 $("#txtEstadoB2").val(datos.estado_b2);
-                $("#txtLocalidadB2").val(datos.localidad_b2);
+                $("#txtLocalidadB2").val(datos.localidad_b2);*/
 
                 setTimeout(function () {
                     $("#txtSucursal").val(datos.id_sucursal);
@@ -413,10 +413,10 @@ $(document).ready(function () {
                     $("#txtFraccionamiento").val(datos.fraccionamiento.toUpperCase());
                 }, 1000);
 
-                setTimeout(function () {
+                /*setTimeout(function () {
                     $("#txtFraccionamientoB1").val(datos.fraccionamiento_b1.toUpperCase());
                     $("#txtFraccionamientoB2").val(datos.fraccionamiento_b2.toUpperCase());
-                }, 1000); 
+                }, 1000); */
 
                 $("#txtClasificacion").focusout(function () {
                     listarDepartamentos($("#txtSucursal").val(), $("#txtClasificacion").val());
@@ -430,13 +430,13 @@ $(document).ready(function () {
                     listarFraccionamientos($("#txtCP").val());
                 });
 
-                $("#txtCodigoPostalB1").focusout(function () {
+                /*$("#txtCodigoPostalB1").focusout(function () {
                     llenarBeneficiarios1($("#txtCodigoPostalB1").val());
                 });
 
                 $("#txtCodigoPostalB2").focusout(function () {
                     llenarBeneficiarios2($("#txtCodigoPostalB2").val());
-                }); 
+                }); */
 
                 $("#txtClasificacion").focusout(function () {
                     listarJefes($("#txtClasificacion").val());
@@ -612,7 +612,7 @@ $(document).ready(function () {
     }
 };
 
-    let llenarBeneficiarios1 = (cp) => {
+    /*let llenarBeneficiarios1 = (cp) => {
     if (cp.length === 5) {
         $.ajax({
             type: "GET",
@@ -680,14 +680,14 @@ let llenarBeneficiarios2 = (cp) => {
             timer: 1000
         });
     }
-};
+}; 
 $('#txtCodigoPostalB1').on('blur', function() {
     llenarBeneficiarios1($(this).val());
 });
 
 $('#txtCodigoPostalB2').on('blur', function() {
     llenarBeneficiarios2($(this).val());
-}); 
+}); */
 
     $("#exportInfo").click(function () {
         var action = 'json-empleados';
@@ -1886,10 +1886,10 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 row.append($("<td class='d-none'>" + rowInfo.telefono + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.nombre_beneficiario1  + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.telefono_beneficiario1 + " </td>"));
-                row.append($("<td class='d-none'>" + rowInfo.domicilio_beneficiario1 + " </td>"));
+                //row.append($("<td class='d-none'>" + rowInfo.domicilio_beneficiario1 + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.nombre_beneficiario2 + " </td>"));
                 row.append($("<td class='d-none'>" + rowInfo.telefono_beneficiario2 + " </td>"));
-                row.append($("<td class='d-none'>" + rowInfo.domicilio_beneficiario2 + " </td>"));
+                //row.append($("<td class='d-none'>" + rowInfo.domicilio_beneficiario2 + " </td>"));
             }
 
             break;
@@ -3057,25 +3057,25 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     $("#txtIdB1").val(datos.id_beneficiario1);
                     $("#txtNombreB1").val(datos.nombre_beneficiario1);
                     $("#txtTelefonoB1").val(datos.telefono_beneficiario1);
-                    $("#txtCalleB1").val(datos.calle_b1);
+                    /*$("#txtCalleB1").val(datos.calle_b1);
                     $("#txtNumeroExteriorB1").val(datos.numero_exterior_b1);
                     $("#txtNumeroInteriorB1").val(datos.numero_interior_b1);
                     llenarBeneficiarios1(datos.codigo_postal_b1)
                     $("#txtCodigoPostalB1").val(datos.codigo_postal_b1);
                     $("#txtMunicipioB1").val(datos.municipio_b1);
                     $("#txtEstadoB1").val(datos.estado_b1);
-                    $("#txtLocalidadB1").val(datos.localidad_b1);
-                    $("#txtIdB2").val(datos.id_beneficiario2);
+                    $("#txtLocalidadB1").val(datos.localidad_b1); */
+                    $("#txtIdB2").val(datos.id_beneficiario2); 
                     $("#txtNombreB2").val(datos.nombre_beneficiario2);
                     $("#txtTelefonoB2").val(datos.telefono_beneficiario2);
-                    $("#txtCalleB2").val(datos.calle_b2);
+                    /*$("#txtCalleB2").val(datos.calle_b2);
                     $("#txtNumeroExteriorB2").val(datos.numero_exterior_b2);
                     $("#txtNumeroInteriorB2").val(datos.numero_interior_b2);
                     llenarBeneficiarios2(datos.codigo_postal_b2)
                     $("#txtCodigoPostalB2").val(datos.codigo_postal_b2);
                     $("#txtMunicipioB2").val(datos.municipio_b2);
                     $("#txtEstadoB2").val(datos.estado_b2);
-                    $("#txtLocalidadB2").val(datos.localidad_b2);
+                    $("#txtLocalidadB2").val(datos.localidad_b2);*/
 
 
                     setTimeout(function () {
@@ -3096,10 +3096,10 @@ $('#txtCodigoPostalB2').on('blur', function() {
                         $("#txtFraccionamiento").val(datos.fraccionamiento.toUpperCase());
                     }, 1000);
 
-                    setTimeout(function () {
+                    /*setTimeout(function () {
                         $("#txtFraccionamientoB1").val(datos.fraccionamiento_b1.toUpperCase());
                         $("#txtFraccionamientoB2").val(datos.fraccionamiento_b2.toUpperCase());
-                    }, 1000); 
+                    }, 1000); */
 
 
                 }
@@ -3110,13 +3110,13 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 listarFraccionamientos($("#txtCP").val());
             });
 
-            $("#txtCodigoPostalB1").focusout(function () {
+            /*$("#txtCodigoPostalB1").focusout(function () {
                 llenarBeneficiarios1($("#txtCodigoPostalB1").val());
             });
 
             $("#txtCodigoPostalB2").focusout(function () {
                 llenarBeneficiarios2($("#txtCodigoPostalB2").val()); 
-            });
+            }); */
 
             $("#txtClasificacion").focusout(function () {
                 listarDepartamentos($("#txtSucursal").val(), $("#txtClasificacion").val());
@@ -3193,25 +3193,25 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     idB1 = $('#txtIdB1').val(),
                     nombreB1 = $('#txtNombreB1').val(),
                     telefonoB1 = $('#txtTelefonoB1').val(),
-                    calleB1 = $('#txtCalleB1').val(),
+                    /*calleB1 = $('#txtCalleB1').val(),
                     numeroExteriorB1 = $('#txtNumeroExteriorB1').val(),
                     numeroInteriorB1 = $('#txtNumeroInteriorB1').val(),
                     codigoPostalB1 = $('#txtCodigoPostalB1').val(),
                     estadoB1 = $('#txtEstadoB1').val(),
                     municipioB1 = $('#txtMunicipioB1').val(),
                     localidadB1 = $('#txtLocalidadB1').val(),
-                    fraccionamientoB1 = $('#txtFraccionamientoB1').val(),
+                    fraccionamientoB1 = $('#txtFraccionamientoB1').val(),*/
                     idB2 = $('#txtIdB2').val(),
                     nombreB2 = $('#txtNombreB2').val(),
-                    telefonoB2 = $('#txtTelefonoB2').val(),
-                    calleB2 = $('#txtCalleB2').val(),
+                    telefonoB2 = $('#txtTelefonoB2').val();
+                    /*calleB2 = $('#txtCalleB2').val(),
                     numeroExteriorB2 = $('#txtNumeroExteriorB2').val(),
                     numeroInteriorB2 = $('#txtNumeroInteriorB2').val(),
                     codigoPostalB2 = $('#txtCodigoPostalB2').val(),
                     estadoB2 = $('#txtEstadoB2').val(),
                     municipioB2 = $('#txtMunicipioB2').val(),
                     localidadB2 = $('#txtLocalidadB2').val(),
-                    fraccionamientoB2 = $('#txtFraccionamientoB2').val();
+                    fraccionamientoB2 = $('#txtFraccionamientoB2').val(); */
                 domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
 
                 if(reclutado_por !== ''){
@@ -3445,7 +3445,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (calleB1.trim() === "") {
+                /*if (calleB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
                         type: 'warning',
@@ -3520,7 +3520,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                         timer: 2000
                     });
                     return;
-                }
+                } */
                 
                 if (nombreB2.trim() === "") {
                     Swal.fire({
@@ -3544,7 +3544,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (calleB2.trim() === "") {
+                /*if (calleB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
                         type: 'warning',
@@ -3619,7 +3619,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                         timer: 2000
                     });
                     return;
-                }
+                } */
                     var nombreLargo = `${aPaterno} ${aMaterno} ${nombre}`;
                     $.ajax({
                         type: 'POST',
@@ -3687,25 +3687,25 @@ $('#txtCodigoPostalB2').on('blur', function() {
                             idB1: idB1,
                             nombreB1: nombreB1,
                             telefonoB1: telefonoB1,
-                            calleB1: calleB1,
+                            /*calleB1: calleB1,
                             numeroExteriorB1: numeroExteriorB1,
                             numeroInteriorB1: numeroInteriorB1,
                             codigoPostalB1: codigoPostalB1,
                             estadoB1: estadoB1,
                             municipioB1: municipioB1,
                             localidadB1: localidadB1,
-                            fraccionamientoB1: fraccionamientoB1,
+                            fraccionamientoB1: fraccionamientoB1, */
                             idB2: idB2,
                             nombreB2: nombreB2,
-                            telefonoB2: telefonoB2,
-                            calleB2: calleB2,
+                            telefonoB2: telefonoB2
+                            /*calleB2: calleB2,
                             numeroExteriorB2: numeroExteriorB2,
                             numeroInteriorB2: numeroInteriorB2,
                             codigoPostalB2: codigoPostalB2,
                             estadoB2: estadoB2,
                             municipioB2: municipioB2,
                             localidadB2: localidadB2,
-                            fraccionamientoB2: fraccionamientoB2
+                            fraccionamientoB2: fraccionamientoB2 */
                         },
                         success: function (response) {
                             var respuesta = JSON.parse(response);
@@ -3973,7 +3973,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 listarFraccionamientos(cp);
             });
 
-            $("#txtCodigoPostalB1").focusout(function () {
+            /*$("#txtCodigoPostalB1").focusout(function () {
                 var codigoPostalB1 = $('#txtCodigoPostalB1').val();
                 llenarBeneficiarios1(codigoPostalB1);
             });
@@ -3981,7 +3981,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
             $("#txtCodigoPostalB2").focusout(function () {
                 var codigoPostalB2 = $('#txtCodigoPostalB2').val();
                 llenarBeneficiarios2(codigoPostalB2);
-            }); 
+            }); */
 
             //Validar el puesto ingresado
             $('#txtPuesto').focusout(function () {
@@ -4114,25 +4114,25 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     idB1 = $('#txtIdB1').val(),
                     nombreB1 = $('#txtNombreB1').val(),
                     telefonoB1 = $('#txtTelefonoB1').val(),
-                    calleB1 = $('#txtCalleB1').val(),
+                    /*calleB1 = $('#txtCalleB1').val(),
                     numeroExteriorB1 = $('#txtNumeroExteriorB1').val(),
                     numeroInteriorB1 = $('#txtNumeroInteriorB1').val(),
                     codigoPostalB1 = $('#txtCodigoPostalB1').val(),
                     estadoB1 = $('#txtEstadoB1').val(),
                     municipioB1 = $('#txtMunicipioB1').val(),
                     localidadB1 = $('#txtLocalidadB1').val(),
-                    fraccionamientoB1 = $('#txtFraccionamientoB1').val(),
+                    fraccionamientoB1 = $('#txtFraccionamientoB1').val(), */
                     idB2 = $('#txtIdB2').val(),
                     nombreB2 = $('#txtNombreB2').val(),
                     telefonoB2 = $('#txtTelefonoB2').val(),
-                    calleB2 = $('#txtCalleB2').val(),
+                    /*calleB2 = $('#txtCalleB2').val(),
                     numeroExteriorB2 = $('#txtNumeroExteriorB2').val(),
                     numeroInteriorB2 = $('#txtNumeroInteriorB2').val(),
                     codigoPostalB2 = $('#txtCodigoPostalB2').val(),
                     estadoB2 = $('#txtEstadoB2').val(),
                     municipioB2 = $('#txtMunicipioB2').val(),
                     localidadB2 = $('#txtLocalidadB2').val(),
-                    fraccionamientoB2 = $('#txtFraccionamientoB2').val(),
+                    fraccionamientoB2 = $('#txtFraccionamientoB2').val(), */
 
                     curpini = curp.substr(0, 4),
                     curpfin = curp.substr(10, 8),
@@ -4372,7 +4372,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (calleB1.trim() === "") {
+                /*if (calleB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
                         type: 'warning',
@@ -4447,7 +4447,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                         timer: 2000
                     });
                     return;
-                }
+                } */
                 
                 if (nombreB2.trim() === "") {
                     Swal.fire({
@@ -4471,7 +4471,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (calleB2.trim() === "") {
+                /*if (calleB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
                         type: 'warning',
@@ -4546,7 +4546,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                         timer: 2000
                     });
                     return;
-                }
+                } */
                     var nombreLargo = `${aPaterno} ${aMaterno} ${nombre}`;
                     $.ajax({
                         type: 'POST',
@@ -4614,25 +4614,25 @@ $('#txtCodigoPostalB2').on('blur', function() {
                             idB1: idB1,
                             nombreB1: nombreB1,
                             telefonoB1: telefonoB1,
-                            calleB1: calleB1,
+                            /*calleB1: calleB1,
                             numeroExteriorB1: numeroExteriorB1,
                             numeroInteriorB1: numeroInteriorB1,
                             codigoPostalB1: codigoPostalB1,
                             estadoB1: estadoB1,
                             municipioB1: municipioB1,
                             localidadB1: localidadB1,
-                            fraccionamientoB1: fraccionamientoB1,
-                            idB2: idB2,
+                            fraccionamientoB1: fraccionamientoB1, */
+                            idB2: idB2, 
                             nombreB2: nombreB2,
-                            telefonoB2: telefonoB2,
-                            calleB2: calleB2,
+                            telefonoB2: telefonoB2
+                            /*calleB2: calleB2,
                             numeroExteriorB2: numeroExteriorB2,
                             numeroInteriorB2: numeroInteriorB2,
                             codigoPostalB2: codigoPostalB2,
                             estadoB2: estadoB2,
                             municipioB2: municipioB2,
                             localidadB2: localidadB2,
-                            fraccionamientoB2: fraccionamientoB2
+                            fraccionamientoB2: fraccionamientoB2 */
                         },
                         success: function (response) {
                             var respuesta = JSON.parse(response);
@@ -5012,7 +5012,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 listarFraccionamientos(cp);
             });
 
-            $("#txtCodigoPostalB1").focusout(function () {
+            /*$("#txtCodigoPostalB1").focusout(function () {
                 var codigoPostalB1 = $('#txtCodigoPostalB1').val();
                 llenarBeneficiarios1(codigoPostalB1);
             });
@@ -5020,7 +5020,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
             $("#txtCodigoPostalB2").focusout(function () {
                 var codigoPostalB2 = $('#txtCodigoPostalB2').val();
                 llenarBeneficiarios2(codigoPostalB2);
-            }); 
+            }); */
 
 
             $("#txtPaterno").focusout(function () {
@@ -5180,24 +5180,25 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     //Datos de beneficiarios
                     nombreB1 = $('#txtNombreB1').val(),
                     telefonoB1 = $('#txtTelefonoB1').val(),
-                    calleB1 = $('#txtCalleB1').val(),
+                    /*calleB1 = $('#txtCalleB1').val(),
                     numeroExteriorB1 = $('#txtNumeroExteriorB1').val(),
                     numeroInteriorB1 = $('#txtNumeroInteriorB1').val(),
                     codigoPostalB1 = $('#txtCodigoPostalB1').val(),
                     estadoB1 = $('#txtEstadoB1').val(),
                     municipioB1 = $('#txtMunicipioB1').val(),
                     localidadB1 = $('#txtLocalidadB1').val(),
-                    fraccionamientoB1 = $('#txtFraccionamientoB1').val(),
+                    fraccionamientoB1 = $('#txtFraccionamientoB1').val(), */
+                    
                     nombreB2 = $('#txtNombreB2').val(),
                     telefonoB2 = $('#txtTelefonoB2').val(),
-                    calleB2 = $('#txtCalleB2').val(),
+                    /*calleB2 = $('#txtCalleB2').val(),
                     numeroExteriorB2 = $('#txtNumeroExteriorB2').val(),
                     numeroInteriorB2 = $('#txtNumeroInteriorB2').val(),
                     codigoPostalB2 = $('#txtCodigoPostalB2').val(),
                     estadoB2 = $('#txtEstadoB2').val(),
                     municipioB2 = $('#txtMunicipioB2').val(),
                     localidadB2 = $('#txtLocalidadB2').val(),
-                    fraccionamientoB2 = $('#txtFraccionamientoB2').val(),
+                    fraccionamientoB2 = $('#txtFraccionamientoB2').val(),*/
 
                     curpini = curp.substr(0, 4),
                     curpfin = curp.substr(10, 8);
@@ -5457,7 +5458,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (calleB1.trim() === "") {
+                /*if (calleB1.trim() === "") {
                     Swal.fire({
                         position: 'center',
                         type: 'warning',
@@ -5532,7 +5533,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                         timer: 2000
                     });
                     return;
-                }
+                } */
                 
                 if (nombreB2.trim() === "") {
                     Swal.fire({
@@ -5556,7 +5557,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     return;
                 }
                 
-                if (calleB2.trim() === "") {
+                /*if (calleB2.trim() === "") {
                     Swal.fire({
                         position: 'center',
                         type: 'warning',
@@ -5631,7 +5632,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                         timer: 2000
                     });
                     return;
-                } 
+                } */
                     var nombreLargo = `${aPaterno} ${aMaterno} ${nombre}`;
                     $.ajax({
                         type: 'POST',
@@ -5697,24 +5698,24 @@ $('#txtCodigoPostalB2').on('blur', function() {
                             empleado_activo: empleado_activo,
                             nombreB1: nombreB1,
                             telefonoB1: telefonoB1,
-                            calleB1: calleB1,
+                            /*calleB1: calleB1,
                             numeroExteriorB1: numeroExteriorB1,
                             numeroInteriorB1: numeroInteriorB1,
                             fraccionamientoB1: fraccionamientoB1,
                             codigoPostalB1: codigoPostalB1,
                             estadoB1: estadoB1,
                             municipioB1: municipioB1,
-                            localidadB1: localidadB1,
+                            localidadB1: localidadB1, */
                             nombreB2: nombreB2,
-                            telefonoB2: telefonoB2,
-                            calleB2: calleB2,
+                            telefonoB2: telefonoB2
+                            /*calleB2: calleB2,
                             numeroExteriorB2: numeroExteriorB2,
                             numeroInteriorB2: numeroInteriorB2,
                             fraccionamientoB2: fraccionamientoB2,
                             codigoPostalB2: codigoPostalB2,
                             estadoB2: estadoB2,
                             municipioB2: municipioB2,
-                            localidadB2: localidadB2
+                            localidadB2: localidadB2*/
                         },
                         success: function (response) {
                             var respuesta = JSON.parse(response);
