@@ -180,6 +180,7 @@ $(document).ready(function () {
             rfc = $('#txtRFC').val(),
             nss = $('#txtNSS').val(),
             dv = $('#txtDV').val(),
+            clinica = $('#txtClinica').val(),
             fechaNacimiento = $('#txtfechaNacimiento').val(),
             lNacimiento = $('#txtLnacimiento').val(),
             genero = $('#txtGenero').val(),
@@ -240,6 +241,7 @@ $(document).ready(function () {
             RFCINI: rfcfin,
             NSS: nss,
             DV: dv,
+            clinica: clinica,
             fecha_nacimiento: fechaNacimiento,
             lugar_nacimiento: lNacimiento,
             sexo: genero,
@@ -342,6 +344,7 @@ $(document).ready(function () {
                 $("#txtRFC").val(datos.RFC);
                 $("#txtNSS").val(datos.nss);
                 $("#txtDV").val(datos.dv);
+                $("#txtClinica").val(datos.clinica);
                 $("#txtfechaNacimiento").val((datos.fecha_nacimiento.date).substr(0, 10));
                 $("#txtLnacimiento").val(datos.lugar_nacimiento);
                 $("#txtGenero").val(datos.sexo);
@@ -1990,6 +1993,13 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     $('#lsegOnboarding').html('SDC');
                 }
 
+                if(rowInfo.sucursal === 'JAL' && rowInfo.planta.toLowerCase().includes('hella')){
+                    $('#btnGafeteC').removeClass('d-none');
+                } else {
+                    $('#btnGafeteC').addClass('d-none');
+                }
+
+
                 let urlImagenEmpleado = await getImageUrl(rowInfo.numero_nomina)
                 let urlAcuse = await getFileUrl(rowInfo.lote_acuse, 'Acuses')
                 let urlProcesada = await getFileUrl(rowInfo.lote, 'Procesadas')
@@ -2016,6 +2026,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 $('#txtCURP').html('<strong> CURP: </strong>' + rowInfo.CURP);
                 $('#txtRFC').html('<strong> RFC: </strong>' + rowInfo.RFC);
                 $('#txtNSS').html('<strong> IMSS: </strong>' + rowInfo.nss + rowInfo.dv);
+                $('#txtClinica').html('<strong> Clinica: </strong>' + clinica);
                 $('#txtGenero').html('<strong> Genero: </strong>' + labelGenero);
                 $('#txtFechaN').html('<strong> Fecha de Nacimiento: </strong>' + rowInfo.fechaNacimiento);
                 $('#txtLugarN').html('<strong> Lugar de Nacimiento: </strong>' + rowInfo.lugar_nacimiento);
@@ -2170,6 +2181,10 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     newTab.focus();
                 } else if(btnID == 'btnGafeteM'){
                     var url = siteurl + "gafeteM.php?emp=" + numero_nomina,
+                    newTab = window.open(url, '_blank');
+                    newTab.focus();
+                } else if (btnID == 'btnGafeteC'){
+                    var url = siteurl + "gafeteC.php?emp=" + numero_nomina,
                     newTab = window.open(url, '_blank');
                     newTab.focus();
                 }
@@ -3022,6 +3037,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     $("#txtRFC").val(datos.RFC);
                     $("#txtNSS").val(datos.nss);
                     $("#txtDV").val(datos.dv);
+                    $("#txtClinica").val(datos.clinica);
                     $("#txtfechaNacimiento").val((datos.fecha_nacimiento.date).substr(0, 10));
                     $("#txtLnacimiento").val(datos.lugar_nacimiento);
                     $("#txtGenero").val(datos.sexo);
@@ -3159,6 +3175,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     rfc = $('#txtRFC').val(),
                     nss = $('#txtNSS').val(),
                     dv = $('#txtDV').val(),
+                    clinica = $('#txtClinica').val(),
                     fechaNacimiento = $('#txtfechaNacimiento').val(),
                     lNacimiento = $('#txtLnacimiento').val(),
                     genero = $('#txtGenero').val(),
@@ -3646,6 +3663,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                             puesto: puesto,
                             nss: nss,
                             dv: dv,
+                            clinica: clinica,
                             comentario: comentario,
                             nombre: nombre,
                             aPaterno: aPaterno,
@@ -4082,6 +4100,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     rfc = $('#txtRFC').val(),
                     nss = $('#txtNSS').val(),
                     dv = $('#txtDV').val(),
+                    clinica = $('#txtClinica').val(),
                     fechaNacimiento = $('#txtfechaNacimiento').val(),
                     lNacimiento = $('#txtLnacimiento').val(),
                     genero = $('#txtGenero').val(),
@@ -4573,6 +4592,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                             puesto: puesto,
                             nss: nss,
                             dv: dv,
+                            clinica: clinica,
                             comentario: comentario,
                             nombre: nombre,
                             aPaterno: aPaterno,
@@ -5150,6 +5170,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                     rfc = `${$('#txtRFC').val()}${$('#txtHClave').val()}`,
                     nss = $('#txtNSS').val(),
                     dv = $('#txtDV').val(),
+                    clinica = $('#txtClinica').val(),
                     fechaNacimiento = $('#txtfechaNacimiento').val(),
                     lNacimiento = $('#txtLnacimiento').val(),
                     genero = $('#txtGenero').val(),
@@ -5207,6 +5228,9 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 rfcini = rfc.substr(0, 4);
                 rfcfin = rfc.substr(10, 3);
                 domicilio = `${calle} #${numE} Int.${numI} ${fraccionamiento}`;
+
+                console.log('Clinica: ' + clinica);
+                console.log('PASO 1');
 
                 if(reclutado_por !== ''){
                     if(reclutado_por === 'reclutador' || reclutado_por === 'recomendo'){
@@ -5667,6 +5691,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                             rfcfin: rfcfin,
                             nss: nss,
                             dv: dv,
+                            clinica: clinica,
                             fechaNacimiento: fechaNacimiento,
                             lNacimiento: lNacimiento,
                             genero: genero,

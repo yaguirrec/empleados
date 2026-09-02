@@ -2496,6 +2496,7 @@
                     $nContacto =  $_POST['nContacto'];
                     $posicion =  0;
                     $empleado_activo = $_POST['empleado_activo'];
+                    $clinica = $_POST['clinica'];
 
 
                     $fechaControl =  date('Y-m-d H:i:s');
@@ -2558,12 +2559,13 @@
                                                         @contacto_emergencia_nombre  = ?,
                                                         @contacto_emergencia_numero  = ?,
                                                         @posicion = ?,
-                                                        @nominaControl = ?";
+                                                        @nominaControl = ?,
+                                                        @clinica = ?";
 
 
                     $params = array($nomina,$jefeNomina,$claveTabulador,$nombreLargo,$nombre,$aPaterno,$aMaterno,$genero,$curpini,$curpfin,$rfcini,$rfcfin,$nss,$fechaNacimiento,$fechaAlta,$fechaBaja,$status,$sucursal,$area,$celula,$puesto,
                                     $clasificacion,$salarioDiario,$salarioMensual,$tipoNomina,$comentario,$registro,$lote,$dv,$lNacimiento,$tIdentificacion,$id,$eCivil,$escolaridad,$cEscolaridad,$nPadre,$nMadre,$calle,$numE,$numI,$fraccionamiento,
-                                    $domicilio,$cp,$edo,$municipio,$localidad,$infonavit,$nInfonavit,$fonacot,$nFonacot,$banco,$cuenta,$correo,$telefono,$celular,$contacto,$nContacto,$posicion,$empleado_activo);
+                                    $domicilio,$cp,$edo,$municipio,$localidad,$infonavit,$nInfonavit,$fonacot,$nFonacot,$banco,$cuenta,$correo,$telefono,$celular,$contacto,$nContacto,$posicion,$empleado_activo,$clinica);
                     
                     $stmt = sqlsrv_query( $con, $insert, $params);
 
@@ -2991,7 +2993,7 @@
             case 'datos-gafete':
                 // die(json_encode($_POST));
                 $nomina =  $_POST['nomina'];
-                $query = "SELECT te.nombre_largo,fecha_alta,te.numero_nomina,te.nss,td.dv,td.contacto_emergencia_numero,td.codigo_postal,td.calle,td.numero_exterior,td.fraccionamiento,td.estado,td.municipio,td.domicilio_completo,tp.nombre puesto
+                $query = "SELECT te.nombre_largo,fecha_alta,te.numero_nomina,te.nss,te.clinica,td.dv,td.contacto_emergencia_numero,td.codigo_postal,td.calle,td.numero_exterior,td.fraccionamiento,td.estado,td.municipio,td.domicilio_completo,tp.nombre puesto
                             FROM tbempleados AS te
                             INNER JOIN tbdatos_empleados AS td
                             ON te.numero_nomina = td.numero_nomina
