@@ -37,10 +37,10 @@
             flex-shrink: 0;
         }
         #panelFrente {
-            background-image: url("gafete-frente.png");
+            background-image: url("./img/gafeteC/gafete-frente.png");
         }
         #panelReverso {
-            background-image: url("gafete-reverso.png");
+            background-image: url("./img/gafeteC/gafete-reverso.png");
         }
         /* #panelEtiquetas {
             background-image: url("gafete-etiquetas.png");
@@ -351,7 +351,7 @@
                             d.vigencia || ''
                         );
                         $('#imgCompania')
-                            .attr('src', 'logo.png')
+                            .attr('src', './img/gafeteC/logo.png')
                             .show();
                         getImageUrl(
                             $.trim(d.numero_nomina)
