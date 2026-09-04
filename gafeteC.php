@@ -93,9 +93,9 @@
         .fotoContratista {
             position: absolute;
             left: 5.68cm;
-            top: 1.165cm;
+            top: 1.17cm;
             width: 3.22cm;
-            height: 2.6cm;
+            height: 2.59cm;
             z-index: 20;
             display: flex;
             align-items: center;
