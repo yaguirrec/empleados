@@ -78,17 +78,17 @@
         }
         #empIMSS {
             left: 0.75cm;
-            top: 3.3cm;
+            top: 3.33cm;
             width: 6cm;
             height: 0.8cm;
-            font-size: 14px;
+            font-size: 13px;
         }
         #empClinica {
             left: 4.15cm;
-            top: 3.3cm;
+            top: 3.33cm;
             width: 6cm;
             height: 0.8cm;
-            font-size: 14px;
+            font-size: 13px;
         }
         .fotoContratista {
             position: absolute;
