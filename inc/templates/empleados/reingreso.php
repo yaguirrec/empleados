@@ -166,17 +166,37 @@
                     </div>
                     <div class="form-group col-md-4">
                         <label for="txtRFC">RFC</label>
-                        <input type="text" class="form-control" id="txtRFC">
+                        <input type="text" class="form-control" id="txtRFC" minlength="10" maxlength="10">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtHClave">HomoClave</label>
+                        <input type="text" class="form-control" id="txtHClave" minlength="3" maxlength="3">
+                    </div>
+                    </div>
+                    <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="txtNSS">NSS</label>
+                        <input type="text" class="form-control" id="txtNSS" minlength="10" maxlength="10">
                     </div>
 
-                    <div class="form-group col-md-3">
-                        <label for="txtNSS">NSS</label>
-                        <input type="text" class="form-control" minlength="10" maxlength="10" id="txtNSS" required>
-                    </div>
-                    <div class="form-group col-md-1">
+                    <div class="form-group col-md-4">
                         <label for="txtDV">DV</label>
-                        <input type="text" class="form-control" maxlength="1" minlength="1" id="txtDV" required>
+                        <input type="text" class="form-control" id="txtDV"
+                            minlength="1" maxlength="1">
                     </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="txtClinica">Clínica</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="txtClinica"
+                            minlength="1"
+                            inputmode="numeric"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                        >
+                    </div>
+
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-2">

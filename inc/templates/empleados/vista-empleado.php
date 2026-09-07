@@ -52,6 +52,7 @@
                 <div class="col-sm"><p id="txtCURP"></p></div>
                 <div class="col-sm"><p id="txtRFC"></p></div>
                 <div class="col-sm"><p id="txtNSS"></p></div>
+                <div class="col-sm"><p id="txtClinica"></p></div>
                 <div class="col-sm"><p id="txtGenero"></p></div>
             </div>
             <div class="row">

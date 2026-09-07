@@ -22,6 +22,7 @@
       <h4 class="card-title">Gafetes</h4>
       <button class="btn btn-md btn-info btnGafete" id="btnGafeteQ">QOBRO <i class="fas fa-id-badge"></i></button>
       <button class="btn btn-md btn-success btnGafete" id="btnGafeteM">MEXQ <i class="far fa-id-badge"></i></button>
+      <button class="btn btn-md btn-warning btnGafete d-none mt-2" id="btnGafeteC">CONTRATISTA <i class="far fa-id-badge"></i></button>
       <!-- <button class="btn btn-md btn-secondary" id="btnGafeteP">Premium <i class="far fa-id-badge"></i></button> -->
     </div>
   </div>
