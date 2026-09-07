@@ -27,7 +27,7 @@
         }
         .gafete {
             position: relative;
-            width: 9cm;
+            width: 8.5cm;
             height: 16.5cm;
             overflow: hidden;
             background-repeat: no-repeat;
@@ -55,11 +55,11 @@
         }
         #empNombre {
             position: absolute;
-            left: 2.1cm;
+            left: 1.93cm;
             top: 2.05cm;
             width: 3.5cm;
             height: auto;
-            font-size: 12px;
+            font-size: 11.5px;
             font-weight: bold;
             color: #000;
             z-index: 10;
@@ -73,18 +73,18 @@
 
         #empNombre .renglon2 {
             display: block;
-            margin-left: -1.9cm;
+            margin-left: -1.7cm;
             white-space: nowrap;
         }
         #empIMSS {
-            left: 0.8cm;
+            left: 0.75cm;
             top: 3.3cm;
             width: 6cm;
             height: 0.8cm;
             font-size: 14px;
         }
         #empClinica {
-            left: 4.45cm;
+            left: 4.15cm;
             top: 3.3cm;
             width: 6cm;
             height: 0.8cm;
@@ -92,9 +92,9 @@
         }
         .fotoContratista {
             position: absolute;
-            left: 5.68cm;
+            left: 5.35cm;
             top: 1.17cm;
-            width: 3.22cm;
+            width: 3.05cm;
             height: 2.59cm;
             z-index: 20;
             display: flex;
@@ -134,7 +134,7 @@
         }
         #empCompania {
             position: absolute;
-            left: 4.95cm;
+            left: 4.50cm;
             top: 4.25cm;
             width: 4.65cm;
             height: 0.75cm;
@@ -169,7 +169,7 @@
             }
             .gafete {
                 position: relative;
-                width: 9cm;
+                width: 8.5cm;
                 height: 16.5cm;
                 flex-shrink: 0;
                 overflow: hidden;
