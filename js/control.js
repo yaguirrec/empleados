@@ -2027,7 +2027,7 @@ $('#txtCodigoPostalB2').on('blur', function() {
                 $('#txtRFC').html('<strong> RFC: </strong>' + rowInfo.RFC);
                 $('#txtNSS').html('<strong> IMSS: </strong>' + rowInfo.nss + rowInfo.dv);
                 // console.log("ANTES DE PONER CLINICA:", rowInfo);
-                $('#txtClinica').html('<strong> Clinica: </strong>' + String(rowInfo.clinica).padStart(2, '0'));
+                $('#txtClinica').html('<strong> Clinica: </strong>' + (rowInfo.clinica ?? ''));
                 // console.log("INPUT CLINICA:", $("#txtClinica").val());
                 $('#txtGenero').html('<strong> Genero: </strong>' + labelGenero);
                 $('#txtFechaN').html('<strong> Fecha de Nacimiento: </strong>' + rowInfo.fechaNacimiento);
