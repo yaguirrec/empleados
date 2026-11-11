@@ -52,11 +52,8 @@
   }
 
   function formatearSalario(datos) {
-    var diario = parseFloat(datos.salario_diario) || 0;
     var mensual = parseFloat(datos.salario_mensual) || 0;
-    datos.salario_diario = diario ? dinero(diario) : '';
     datos.salario_mensual = mensual ? dinero(mensual) : '';
-    datos.salario_diario_letra = diario ? pesosALetras(diario) : '';
     datos.salario_mensual_letra = mensual ? pesosALetras(mensual) : '';
     return datos;
   }
