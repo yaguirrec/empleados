@@ -51,6 +51,24 @@
   </div>
 </div>
 <div class="card">
+  <img src="img/misc/04.png" class="card-img-top" height="350" alt="...">
+    <div class="card-body text-center laborales d-none">
+    <h5 class="card-title">Contratos</h5>
+    <p class="card-text">Descarga el contrato en Word con los datos del empleado</p>
+    <button type="button" class="btn btn-info btn-block" data-contrato="capacitacion">
+      Capacitación inicial (90 días)
+    </button>
+    <button type="button" class="btn btn-info btn-block" data-contrato="indeterminado">
+      Tiempo indeterminado
+    </button>
+    <button type="button" class="btn btn-info btn-block" data-contrato="obra">
+      Obra determinada
+    </button>
+</div>
+
+<script src="js/vendor/pizzip.min.js"></script>
+<script src="js/vendor/docxtemplater.min.js"></script>
+<script src="js/contratos.js"></script>
   <!-- <img src="..." class="card-img-top" alt="...">
   <div class="card-body">
     <h5 class="card-title">Card title</h5>

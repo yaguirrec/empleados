@@ -32,7 +32,7 @@
         <input type="text" class="form-control" id="txtSalarioDiario" placeholder="Salario Diario">
       </div>
       <div class="form-group col-md-3">
-        <label for="txtSalarioMensual">Salario Mensual</label>
+        <label for="txtSalarioMensual">Salario Bruto</label>
         <input type="text" class="form-control" id="txtSalarioMensual" placeholder="Salario Mensual">
       </div>
       <div class="form-group col-md-3">
