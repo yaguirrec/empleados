@@ -41,18 +41,18 @@
     <!-- <small class="text-muted">Last updated 3 mins ago</small> -->
   </div>
 </div>
-<div class="card">
+<div class="card laborales d-none">
   <img src="img/misc/03.jfif" class="card-img-top" height="350" alt="...">
-  <div class="card-body text-center laborales d-none">
+  <div class="card-body text-center">
     <h5 class="card-title">Seguimiento</h5>
     <div class="btn-group-vertical">
       <button class="btn btn-block btn-lg btn-info" id="btnSeguimiento">Seguimiento</button>
     </div>
   </div>
 </div>
-<div class="card">
+<div class="card coordinadora d-none laborales">
   <img src="img/misc/04.png" class="card-img-top" height="350" alt="...">
-    <div class="card-body text-center laborales d-none">
+  <div class="card-body text-center">
     <h5 class="card-title">Contratos</h5>
     <p class="card-text">Descarga el contrato en Word con los datos del empleado</p>
     <button type="button" class="btn btn-info btn-block" data-contrato="capacitacion">
@@ -64,6 +64,7 @@
     <button type="button" class="btn btn-info btn-block" data-contrato="obra">
       Obra determinada
     </button>
+  </div>
 </div>
 
 <script src="js/vendor/pizzip.min.js"></script>
